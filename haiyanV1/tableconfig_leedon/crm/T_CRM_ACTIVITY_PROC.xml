@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Haiyan xsi:noNamespaceSchemaLocation="../../haiyan.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<table name="T_CRM_ACTIVITY_PROC" description="CRM活动-审批流程明细">
+		<id name="ID" javaType="string"/>
+		<field name="HEADID" javaType="string" description="CRM�ID">
+			<component type="hidden" referenceTable="T_APP_OTHERS" referenceField="ID" url="#"/>
+		</field>
+		<field name="NODE_NAME" javaType="string" description="审批流程操作">
+			<component type="text" url="#"/>
+		</field>
+		<field name="PROC_USER_ID" javaType="string" description="审批流程操作人">
+			<component type="richSelect" referenceTable="SYSOPERATOR_VIEW" referenceField="ID" displayReferenceField="NAME" url="#"/>
+		</field>
+		<field name="WORKFLOW_NAME" javaType="string" description="审批流程名">
+			<component type="text" url="#"/>
+		</field>
+		<field name="PROC_ACTION" javaType="string" description="审批流程动作">
+			<component type="text" url="#"/>
+		</field>
+		<field name="PROC_TIME" javaType="date" description="审批时间" dataStyle="yyyy-MM-dd hh:mm:ss">
+			<component type="text" url="#"/>
+		</field>
+		<field name="PROC_REASON" javaType="string" description="审批理由">
+			<component type="textArea" url="#"/>
+		</field>
+		<!-- -->
+		<Operation queryPageDelete="false" queryPageAdd="false"/>
+	</table>
+</Haiyan>

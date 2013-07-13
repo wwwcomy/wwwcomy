@@ -1,0 +1,14 @@
+void removekc() throws Throwable {
+	DBManager dbm = context.getDBM();
+	String sql = "select PRODUCT_ID,GOODS_ID,NAME,STORE from SDB_PRODUCTS where PRODUCT_ID in (select PRODUCT_ID from V_WM_SDBPRODUCT where ID='"+form.get("PRODUCTID")+"') ";
+	String[][] rs = dbm.getResultStrArray(sql,4,null);
+	DebugUtil.debug("商品 ["+rs[0][2]+"] 库存:"+rs[0][3]+"+"+form.get("PRO_COUNT"));
+	//if (rs.length>0) {
+	String sql1 = "update SDB_PRODUCTS set STORE=STORE+"+form.get("PRO_COUNT")+" where PRODUCT_ID="+rs[0][0];
+	dbm.executeUpdate(sql1,null);
+	String sql2 = "update SDB_GOODS set STORE=STORE+"+form.get("PRO_COUNT")+" where GOODS_ID="+rs[0][1];
+	dbm.executeUpdate(sql2,null);
+	//}
+	//throw new Warning(filter);
+}
+removekc();

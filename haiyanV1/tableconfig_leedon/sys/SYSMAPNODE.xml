@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Haiyan xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../haiyan.xsd">
+	<table name="SYSMAPNODE" description="节点关系">
+		<id name="ID" javaType="string"/>
+		<field name="CODE" description="编码" javaType="string">
+			<component type="text"/>
+		</field>
+		<field name="NAME" description="名称" javaType="string">
+			<component type="text"/>
+		</field>			
+		<field name="MEMO" description="备注" javaType="string" length="250">
+			<component type="textArea"/>
+			<queryCondition type="none"/>
+		</field>	
+		<!--
+		<saveInterceptor className="haiyan.interceptor.FlowmisInterceptor" methodName="sClearMap"/>
+		<deleteInterceptor className="haiyan.interceptor.FlowmisInterceptor" methodName="dClearMap"/>
+		-->
+		<pluginInterceptor className="haiyan.interceptor.SaveInterceptor" methodName="complete" pluginName="save" type="after"/>
+		<pluginInterceptor className="haiyan.interceptor.DeleteInterceptor" methodName="complete" pluginName="delete" type="after"/>
+	</table>
+</Haiyan>

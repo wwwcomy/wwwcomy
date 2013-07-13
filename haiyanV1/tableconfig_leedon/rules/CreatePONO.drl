@@ -1,0 +1,54 @@
+<rule-set declaration="" name="Tests assignment rules" xmlns="http://drools.org/rules" xmlns:java="http://drools.org/semantics/java" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<!-- -->
+	<java:import>com.haiyan.genmis.core.*</java:import>
+	<java:import>com.haiyan.genmis.core.db.*</java:import>
+	<java:import>com.haiyan.genmis.core.struts.*</java:import>
+	<java:import>com.haiyan.genmis.core.right.*</java:import>
+	<java:import>com.haiyan.genmis.core.exception.*</java:import>
+	<java:import>com.haiyan.genmis.castorgen.*</java:import>
+	<java:import>com.haiyan.genmis.util.*</java:import>
+	<java:import>java.lang.*</java:import>
+	<java:import>java.util.*</java:import>
+	<!-- -->
+	<application-data identifier="context">SrvContext</application-data>
+	<application-data identifier="table">Table</application-data>
+	<application-data identifier="form">Qbq3Form</application-data>
+	<!-- 自定义方法 -->
+	<java:functions>
+	    public static Qbq3Form getForm(Qbq3Form form) {
+	        return form;
+	    }
+	</java:functions>
+	<!-- 规则 -->
+	<rule name="main" salience="0">
+		<!-- 
+		<parameter identifier="dForm">
+			<java:class>Qbq3Form</java:class>
+		</parameter>
+		-->
+		<java:condition>1==1</java:condition>
+		<java:consequence>
+			try {
+				String PONO = form.get("PONO");
+				String DATE = DateUtil.getLastTime("yyyyMMdd");
+				String SALES = form.get("EST_SALES");
+				String prefix = "LD"+DATE+SALES;
+				// User user = context.getUser();
+				if (StringUtil.isBlankOrNull(PONO)) {
+					String[][] rs = context.getDBM().getResultStrArray("select MAX(PONO) from T_DIC_ORGA where PONO like '"+prefix+"%'", 1, null);
+					if (rs.length==0 || rs[0].length==0) {
+						PONO = prefix+"001";
+					} else {
+						PONO = rs[0][0];
+						String tmp = PONO.substring(prefix.length());
+						PONO = prefix+(Double.valueOf(tmp).intValue()+1);
+					}
+				}
+				form.set("PONO", PONO);
+			} catch(Throwable e) {
+				e.printStackTrace();
+				throw e;
+			}
+		</java:consequence>
+	</rule>
+</rule-set>

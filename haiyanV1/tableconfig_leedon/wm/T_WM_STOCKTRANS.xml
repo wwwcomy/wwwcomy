@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Haiyan xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../haiyan.xsd">
+	<table name="T_WM_STOCKTRANS" description="移库单" colspan="6">
+		<id name="ID" javaType="string"/>
+		<field name="TRANS_NO" description="移库单号" displayOnly="false" javaType="string" lazyLoad="false">
+			<component type="text" readOnly="true" colspan="1"/>
+			<listColumn noedit="false" noquery="false" width="150"/>
+		</field>
+		<field name="TRANS_ID" description="移库单头" displayOnly="false" javaType="string" lazyLoad="false">
+			<component type="hidden" readOnly="true"/>
+			<listColumn noedit="true" noquery="true"/>
+		</field>
+		<!-- -->
+		<field name="TRANS_DATE" description="移库时间" displayOnly="false" javaType="date" lazyLoad="false" nullAllowed="false">
+			<component type="date" readOnly="false" colspan="1"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="WAREHOUSE" description="移库仓库" displayOnly="false" javaType="string" lazyLoad="false" nullAllowed="false">
+			<component type="combo" readOnly="true" colspan="1" displayReferenceField="NAME" referenceField="ID" referenceTable="T_DIC_WAREHOUSE_COMBO"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="WHOWNER" description="库主" displayOnly="false" javaType="string" lazyLoad="false">
+			<component type="combo" readOnly="false" colspan="6" displayReferenceField="NAME" referenceField="ID" referenceTable="T_WM_OPERATOR"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		
+		<field name="SUBGRID" javaType="string" description="移库明细" displayOnly="true">
+			<component type="grid" readOnly="false" colspan="6" style="width:950;height:255;" displayReferenceField="ID,HEADID,PRO_WH,PRODUCTID,SUPP_CODE,BATCH,PRO_COUNT,TO_WH,PRO_NAME,PRO_IN_PRICE,PRO_OUT_PRICE" referenceField="HEADID" referenceTable="T_WM_TRANSDETAIL" parameter="{&amp;HEADID=}&amp;If(IsEmpty(Get(ID)),-1,Get(ID))"/>
+			<queryCondition type="none"/>
+			<listColumn noquery="true"/>
+		</field>
+		<!-- -->
+		<field name="CREATE_USER_ID" javaType="string" description="创建人" updateable="false">
+			<component type="hidden" quickQueryConditionField="NAME" referenceTable="SYSOPERATOR_VIEW" referenceField="ID" displayReferenceField="NAME" readOnly="true"/>
+			<listColumn noquery="true" nowrap="true"/>
+		</field>
+		<field name="CREATE_TIME" javaType="date" dataStyle="yyyy-MM-dd HH:mm:ss" description="创建时间" updateable="false">
+			<component type="hidden" readOnly="true"/>
+			<queryCondition type="region"/>
+			<listColumn noquery="false" nowrap="true"/>
+		</field>
+		<field name="AUDIT_USER_ID" javaType="string" description="审批人">
+			<component type="combo" quickQueryConditionField="NAME" referenceTable="SYSOPERATOR_VIEW" referenceField="ID" displayReferenceField="NAME" readOnly="true"/>
+			<listColumn noquery="false" nowrap="true"/>
+		</field>
+		<field name="BILL_STATUS" javaType="string" description="单据状态">
+			<component type="dropdown" readOnly="true">
+				<option displayName="待批" value="init"/>
+				<option displayName="已审核" value="audit"/>
+			</component>
+		</field>
+		<field name="AUDIT_TIME" javaType="date" dataStyle="yyyy-MM-dd HH:mm:ss" description="审批时间">
+			<component type="date" readOnly="true"/>
+			<queryCondition type="region"/>
+			<listColumn noquery="true" nowrap="true"/>
+		</field>
+		<!-- -->
+		<queryFilter>
+			<pluggedFilter methodName="exp" parameter="{ and t_1.WAREHOUSE='}&amp;GetUser(WAREHOUSEID)&amp;{' }"/>
+		</queryFilter>
+		<!-- 
+		<role name="user sp">
+		</role>
+		-->
+		<role name="admin boss manager wm pe ac"/>
+		<!-- -->
+		<javascript hostPage="edit"><![CDATA[
+			(function() {
+				var c=Ext.getCmp('__BILL_STATUS__Option__');
+				if (c) {
+					$$('div#__helper')[0].setStyle({
+						color: c.getValue()=='audit'?'RED':'GREEN'
+					});
+					$$('div#__helper')[0].update('当前单据状态:'+c.getRawValue());
+				}
+			})()
+		]]></javascript>
+		<!-- -->
+		<pluginInterceptor methodName="exp" parameter="
+			If(IsEmpty(Get(ID)),Set(ID,GetNewID()),true)
+			+SetCreate(BILL_STATUS,{init},WAREHOUSE,GetUser(WAREHOUSEID),__WAREHOUSE__NAME,GetUser(WAREHOUSENAME))
+			+If(Get(BILL_STATUS)={audit},DisBtns(select,save,audit,saveAll)+DisFlds(SUBGRID),true)
+			" pluginName="edit" type="after"/>
+			
+		<pluginInterceptor methodName="exp" parameter="
+			If(IsEmpty(Get(WAREHOUSE)),Warning({缺少必填项}),true)
+			+SetCreateTime(CREATE_TIME,{yyyy-MM-dd HH:mm:ss})
+			+SetCreate(TRANS_NO,{YK_}&amp;LeftPad(Get(ID),12))
+			+SetCreate(TRANS_ID,{YK}&amp;Get(ID))
+			+SetCreate(CREATE_USER_ID,GetUser(ID),__CREATE_USER_ID__NAME,GetUser(NAME))
+			" pluginName="save" type="before"/>
+			
+		<pluginInterceptor methodName="exp" parameter="
+			Set(AUDIT_USER_ID,GetUser(ID),BILL_STATUS,{audit})
+			+SetCreateTime(AUDIT_TIME,{yyyy-MM-dd HH:mm:ss})
+			+If(Get(BILL_STATUS)={audit},DisBtns(select,save,audit,saveAll)+DisFlds(SUBGRID),true)
+			+bsh(T_WM_STOCKTRANS.bsh)
+			" pluginName="audit" type="before"/>
+			
+		<pluginOperation name="saveAll" oprName="保存All" hostPage="edit" tblevel="1" img="save" action="Save({},{},{SUBGRID})+brk()"/>
+		<pluginOperation name="audit" oprName="移库审批" hostPage="edit" tblevel="1" img="settings" action="If(Confirm({确认审批后,不可恢复,确认审批?}),Save({},{audit},{SUBGRID1}),true)+brk()"/>
+		
+		<Operation queryPageDelete="false" save="false" saveAndAdd="false" saveAndAddCopy="false"/>
+		<!-- -->
+		<doc>
+			<help>&lt;div id=&quot;__helper&quot;&gt;&lt;div&gt;</help>
+		</doc>
+	</table>
+</Haiyan>

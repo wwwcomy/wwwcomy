@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Haiyan xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../haiyan.xsd">
+	<table name="SDB_GOODS_CAT" description="产品分类" colspan="6">
+		<id name="CAT_ID" description="cat_id" javaType="string">
+			<component type="hidden" url="#"/>
+		</id>
+		<field name="CAT_NAME" description="cat_name" displayOnly="false" javaType="string" lazyLoad="false">
+			<component type="text" readOnly="true"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="ADDON" description="addon" displayOnly="false" javaType="string" lazyLoad="false">
+			<component type="text" readOnly="true"/>
+			<listColumn noedit="false" noquery="false" width="255"/>
+		</field>
+		<field name="GOODS_COUNT" description="goods_count" displayOnly="false" javaType="string" lazyLoad="false">
+			<component type="text" readOnly="true"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="CHILD_COUNT" description="child_count" displayOnly="false" javaType="string" lazyLoad="false">
+			<component type="text" readOnly="true"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="FINDER" description="finder" displayOnly="false" javaType="string" lazyLoad="false">
+			<component type="text" readOnly="true"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="TABS" description="tabs" displayOnly="false" javaType="string" lazyLoad="false">
+			<component type="text" readOnly="true"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="PARENT_ID" description="父节点ID" displayOnly="false" javaType="string" lazyLoad="false">
+			<component type="text" readOnly="true"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="SUPPLIER_ID" description="供应商ID" displayOnly="false" javaType="string" lazyLoad="false">
+			<component type="text" readOnly="true"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="SUPPLIER_CAT_ID" description="供应商分类ID" displayOnly="false" javaType="string" lazyLoad="false">
+			<component type="text" readOnly="false" colspan="1"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="CAT_PATH" description="分类路径" displayOnly="false" javaType="string" lazyLoad="false">
+			<component type="text" readOnly="true" colspan="1"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="IS_LEAF" description="is_leaf" displayOnly="false" javaType="string" lazyLoad="false">
+			<component type="text" readOnly="true"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="TYPE_ID" description="type_id" displayOnly="false" javaType="string" lazyLoad="false">
+			<component type="text" readOnly="true"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="DISABLED" description="disabled" displayOnly="false" javaType="string" lazyLoad="false">
+			<component type="text" readOnly="true"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="P_OPRDER" description="p_order" displayOnly="false" javaType="string" lazyLoad="false">
+			<component type="text" readOnly="true"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<!-- 
+		<javascript hostPage="query"><![CDATA[
+		]]></javascript>
+		<javascript hostPage="edit"><![CDATA[
+		]]></javascript>
+		-->
+		<!--
+		<pluginInterceptor methodName="exp" parameter="DisBtns(delete,add,save,saveAndAdd,saveAndAddCopy)" pluginName="query" type="after"/>
+		<pluginInterceptor methodName="exp" parameter="DisBtns(delete,add,save,saveAndAdd,saveAndAddCopy)" pluginName="edit" type="after"/>
+		<pluginInterceptor methodName="exp" parameter="CheckCircle()+Set(CODE,PY(Get(NAME)))" pluginName="edit"/>
+		<pluginInterceptor methodName="exp" parameter="DBSQL({delete from T_DIC_PRODUCT_TYPE where ID='}&amp;Get(ID)&amp;{' })+DBSQL({update T_DIC_PRODUCT_TYPE set PARENTID=null where PARENTID='}&amp;Get(ID)&amp;{' })" pluginName="deleteTree"/>
+		<pluginOperation name="deleteTree" oprName="强制删除" hostPage="edit" tblevel="1" img="delete" action="alert({警告，强制删除会导致数据混乱。})"/>
+		 -->
+		<Operation queryPageDelete="false" queryPageAdd="false" save="false" saveAndAdd="false" saveAndAddCopy="false"/>
+	</table>
+	<!-- -->
+	<table name="V_DIC_SDBPROTYPE" description="产品分类" realTable="SDB_GOODS_CAT" colspan="6">
+		<id name="CAT_ID" description="cat_id" javaType="string">
+			<component type="hidden" url=""/>
+		</id>
+		<field name="CAT_NAME" description="名称" displayOnly="false" javaType="string" lazyLoad="false">
+			<component type="text" readOnly="true"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="PARENT_ID" description="父节点ID" displayOnly="false" javaType="string" lazyLoad="false">
+			<component type="combo" readOnly="true" displayReferenceField="CAT_NAME" referenceField="CAT_ID" referenceTable="V_DIC_SDBPROTYPE"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="SUPPLIER_ID" description="供应商ID" displayOnly="false" javaType="string" lazyLoad="false">
+			<component type="text" readOnly="true"/>
+			<listColumn noedit="false" noquery="true"/>
+		</field>
+		<field name="SUPPLIER_CAT_ID" description="供应商分类ID" displayOnly="false" javaType="string" lazyLoad="false">
+			<component type="text" readOnly="true" colspan="1"/>
+			<listColumn noedit="false" noquery="true"/>
+		</field>
+		<field name="CAT_PATH" description="分类路径" displayOnly="false" javaType="string" lazyLoad="false">
+			<component type="text" readOnly="true" colspan="1"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="IS_LEAF" description="is_leaf" displayOnly="false" javaType="string" lazyLoad="false">
+			<component type="text" readOnly="true"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="TYPE_ID" description="type_id" displayOnly="false" javaType="string" lazyLoad="false">
+			<component type="text" readOnly="true"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="DISABLED" description="disabled" displayOnly="false" javaType="string" lazyLoad="false">
+			<component type="text" readOnly="true"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="P_OPRDER" description="p_order" displayOnly="false" javaType="string" lazyLoad="false">
+			<component type="text" readOnly="true"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="GOODS_COUNT" description="goods_count" displayOnly="false" javaType="string" lazyLoad="false">
+			<component type="text" readOnly="true"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="TABS" description="tabs" displayOnly="false" javaType="string" lazyLoad="false">
+			<component type="text" readOnly="true"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="FINDER" description="finder" displayOnly="false" javaType="string" lazyLoad="false">
+			<component type="text" readOnly="true"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="ADDON" description="addon" displayOnly="false" javaType="string" lazyLoad="false">
+			<component type="text" readOnly="true"/>
+			<listColumn noedit="false" noquery="false" width="255"/>
+		</field>
+		<field name="CHILD_COUNT" description="child_count" displayOnly="false" javaType="string" lazyLoad="false">
+			<component type="text" readOnly="true"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<!-- 
+		<javascript hostPage="query"><![CDATA[
+		]]></javascript>
+		<javascript hostPage="edit"><![CDATA[
+		]]></javascript>
+		-->
+		<!--
+		<pluginInterceptor methodName="exp" parameter="DisBtns(delete,add,save,saveAndAdd,saveAndAddCopy)" pluginName="query" type="after"/>
+		<pluginInterceptor methodName="exp" parameter="DisBtns(delete,add,save,saveAndAdd,saveAndAddCopy)" pluginName="edit" type="after"/>
+		<pluginInterceptor methodName="exp" parameter="CheckCircle()+Set(CODE,PY(Get(NAME)))" pluginName="edit"/>
+		<pluginInterceptor methodName="exp" parameter="DBSQL({delete from T_DIC_PRODUCT_TYPE where ID='}&amp;Get(ID)&amp;{' })+DBSQL({update T_DIC_PRODUCT_TYPE set PARENTID=null where PARENTID='}&amp;Get(ID)&amp;{' })" pluginName="deleteTree"/>
+		<pluginOperation name="deleteTree" oprName="强制删除" hostPage="edit" tblevel="1" img="delete" action="alert({警告，强制删除会导致数据混乱。})"/>
+		 -->
+		<Operation queryPageDelete="false" queryPageAdd="false" save="false" saveAndAdd="false" saveAndAddCopy="false"/>
+	</table>
+</Haiyan>

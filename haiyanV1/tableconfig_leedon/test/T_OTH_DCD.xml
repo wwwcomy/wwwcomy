@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Haiyan xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../haiyan.xsd"><table name="T_OTH_DCD" description="订餐单" realTable="T_OTH_DCD"><id name="ID" description="ID" javaType="string"/><field name="NAME" description="NAME" displayOnly="false" javaType="string" lazyLoad="false"><component type="text" readOnly="false"/></field><field name="CODE" description="CODE" displayOnly="false" javaType="string" lazyLoad="false"><component type="text" readOnly="false" colspan="1"/><listColumn noedit="false" noquery="false"/></field><field name="STATUS" description="状态" displayOnly="false" javaType="string" lazyLoad="false"><component type="text" readOnly="false"/><queryCondition type="equal"/><listColumn noedit="false" noquery="false"/></field><pluginOperation oprName="审批" name="sp" className="haiyan.plugin.CommonBshPlugin" accessKey="s" hostPage="edit" tblevel="1" img="other">com.haiyan.genmis.core.wf.WorkflowEngine wf = new com.haiyan.genmis.core.wf.WorkflowEngine();
+wf.execute(dbm, table, form, context, &quot;test&quot;, &quot;TEST.wfe&quot;);
+
+</pluginOperation></table></Haiyan>

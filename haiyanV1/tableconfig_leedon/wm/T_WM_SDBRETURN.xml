@@ -1,0 +1,216 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Haiyan xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../haiyan.xsd">
+	<table name="T_WM_SDBRETURN" description="退货单" colspan="6">
+		<id name="ID" javaType="string"/>
+		<field name="TH_NO" description="退货单号" displayOnly="false" javaType="string" lazyLoad="false">
+			<component type="text" readOnly="true" />
+			<listColumn noedit="false" noquery="false" width="150"/>
+		</field>
+		<!-- -->
+		<field name="TH_PRE_DATE" description="预退货时间" displayOnly="false" javaType="date" lazyLoad="false">
+			<component type="date" readOnly="false" />
+			<queryCondition type="region"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="TH_DATE" description="实际退货时间" displayOnly="false" javaType="date" lazyLoad="false">
+			<component type="date" readOnly="false" />
+			<queryCondition type="region"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<!--
+		<field name="SHIP_SUPPLIER" description="供应商" displayOnly="false" javaType="string" lazyLoad="false">
+			<component type="combo" readOnly="false" colspan="1" displayReferenceField="NAME" referenceField="ID" referenceTable="T_DIC_SUPPLIER"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		-->
+		<field name="WAREHOUSE" description="收货仓库" displayOnly="false" javaType="string" lazyLoad="true" loadType="cache" nullAllowed="false">
+			<component type="combo" readOnly="true" colspan="1" displayReferenceField="NAME" referenceField="ID" referenceTable="T_DIC_WAREHOUSE_COMBO"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="WHOWNER" description="库主" displayOnly="false" javaType="string" lazyLoad="true" loadType="cache" nullAllowed="true">
+			<component type="combo" readOnly="false" colspan="6" displayReferenceField="NAME" referenceField="ID" referenceTable="T_WM_OPERATOR"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="LOGISTICS" description="退货物流信息" displayOnly="false" javaType="string" lazyLoad="false">
+			<component type="text" readOnly="false" />
+			<queryCondition type="blurMatching"/>
+			<listColumn noedit="false" noquery="false" width="150"/>
+		</field>
+		<field name="MEMO" description="备注" displayOnly="false" javaType="string" lazyLoad="false">
+			<component type="text" readOnly="false" colspan="6"/>
+			<listColumn noedit="false" noquery="false" width="150"/>
+		</field>
+		<!-- -->
+		<field name="SUBGRID2" javaType="string" description="----------------------------------------------------------------应退货明细----------------------------------------------------------------" displayOnly="true">
+			<component type="grid" readOnly="false" colspan="6" style="width:960;height:255;plugins:undefined;view:undefined;grouping:false;" displayReferenceField="ID,HEADID,OUT_CODE,ORDER_ID,WMCODE,PRO_NAME,SUPP_CODE,SUPPLIER,RETURN_RCOUNT,RETURN_COUNT,OUT_COUNT,IN_PRICE,OUT_PRICE,OUT_ALL_PRICE,EDP_RETURN_PRICE,EDP_OTHERPRICE,SUP_RETURN_PRICE,SUP_OTHERPRICE,SUP_ALL_RETURNRPRICE,EDP_ALL_RETURNRPRICE" referenceField="HEADID" referenceTable="T_WM_SDBRETURNPRE" parameter="{&amp;HEADID=}&amp;If(IsEmpty(Get(ID)),-1,Get(ID))"/>
+			<queryCondition type="none"/>
+			<listColumn noquery="true"/>
+		</field>
+		<field name="PRODUCTID" description="退货商品" displayOnly="true" javaType="string" lazyLoad="true" loadType="cache">
+			<component type="combo" readOnly="false" displayReferenceField="CODE,NAME" referenceField="ID" referenceTable="V_WM_SDBPRODUCT" associatedFields="HIDDEN_CODE,PRO_PACKINGNUM,SUPP_CODE,PRO_CAPACITYNUM,PRO_WEIGHTNUM,HIDDEN_WMCODE" parameter="{&amp;RETURNID=}&amp;If(IsEmpty(Get(ID)),-1,Get(ID))" action="getbatchinfo()"/>
+			<listColumn noedit="false" noquery="true"/>
+		</field>
+		<field name="PRO_COUNT" description="退货数量(个)" displayOnly="true" javaType="bigDecimal" defaultValue="0">
+			<component type="text" readOnly="false" action="Set(XIANSHU,Get(PRO_COUNT)/Get(PRO_PACKINGNUM))" appendStr="个"/>
+			<listColumn noedit="false" noquery="true"/>
+		</field>
+		<field name="REMAINDER_NUM" description="余数" displayOnly="true" javaType="bigDecimal" lazyLoad="false">
+			<component type="text" readOnly="true"/>
+			<listColumn noedit="false" noquery="true"/>
+		</field>
+		<field name="TEST1" description="预入库" displayOnly="true" javaType="string" lazyLoad="false">
+			<component type="button" readOnly="false" colspan="1" action="testPreBtn()"/>
+			<listColumn noedit="false" noquery="true"/>
+		</field>
+		<field name="TEST2" description="明细入库" displayOnly="true" javaType="string" lazyLoad="false">
+			<component type="button" readOnly="false" colspan="6" action="test2()"/>
+			<listColumn noedit="false" noquery="true"/>
+		</field>
+		<field name="BATCHINFO" description="批次信息" displayOnly="true" javaType="string">
+			<component type="text" readOnly="true" colspan="6" style="width:320px"/>
+		</field>
+		<field name="SUBGRID1" javaType="string" description="----------------------------------------------------------------退货预处理----------------------------------------------------------------" displayOnly="true">
+			<component type="grid" readOnly="false" colspan="6" style="width:950;height:300;toolbar:no;treecol:CODE;leafcol:ISLEAF;pidcol:PARENTID;" displayReferenceField="ID,HEADID,PARENTID,PRODUCTID,SUPP_CODE,BATCH,CODE,PRO_WMCODE,PRO_COUNT,INPACK_NUM,IN_TIME,PRO_IN_PRICE,PRO_OUT_PRICE,REM_PRE" referenceField="HEADID" referenceTable="T_WM_SDBWAREWHERE" parameter="{&amp;PARENTID=-1}" action=""/>
+			<queryCondition type="none"/>
+			<listColumn noquery="true"/>
+		</field>
+		<field name="SUBGRID" javaType="string" description="----------------------------------------------------------------实际退货明细(保存后只显示前20条)-------------------------------------------" displayOnly="true">
+			<component type="grid" readOnly="false" colspan="6" style="pageSize:20;width:950;height:255;plugins:undefined;view:undefined;grouping:false;" displayReferenceField="ID,HEADID,PRODUCTID,ORDER_ID,PRO_NAME,SUPP_CODE,PRO_WMCODE,PRO_WH,PRO_COUNT,BATCH,INPACK_COUNT,PRO_IN_PRICE,ALL_IN_COST,PRO_OUT_PRICE,ALL_OUT_COST" referenceField="HEADID" referenceTable="T_WM_SDBRETURNDETAIL" parameter="{&amp;HEADID=}&amp;If(IsEmpty(Get(ID)),-1,Get(ID))"/>
+			<queryCondition type="none"/>
+			<listColumn noquery="true"/>
+		</field>
+		<field name="COST_YF" description="应付" displayOnly="false" javaType="bigDecimal" lazyLoad="false">
+			<component type="hidden" readOnly="true" colspan="1" subQuerySQL="(select sum(All_COST) from T_WM_SDBINPRE t_2 where t_2.HEADID=t_1.ID)"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="COST_SF" description="实付" displayOnly="false" javaType="bigDecimal" lazyLoad="false">
+			<component type="hidden" readOnly="false" colspan="1"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<!-- -->
+		<field name="CREATE_USER_ID" javaType="string" description="创建人" updateable="false" lazyLoad="true"  loadType="cache">
+			<component type="hidden" quickQueryConditionField="NAME" referenceTable="SYSOPERATOR_VIEW" referenceField="ID" displayReferenceField="NAME" readOnly="true"/>
+			<listColumn noquery="true" nowrap="true"/>
+		</field>
+		<field name="CREATE_TIME" javaType="date" dataStyle="yyyy-MM-dd HH:mm:ss" description="创建时间" updateable="false">
+			<component type="hidden" readOnly="true"/>
+			<queryCondition type="region"/>
+			<listColumn noquery="false" nowrap="true"/>
+		</field>
+		<!-- -->
+		<field name="XIANSHU" description="箱数估算(箱)" displayOnly="true" javaType="bigDecimal" defaultValue="0">
+			<component type="hidden" readOnly="false" maxFractionDigit="3" minFractionDigit="3" appendStr="箱"/>
+			<listColumn noedit="false" noquery="true"/>
+		</field>
+		<field name="HIDDEN_CODE" description="hidden商品编号" displayOnly="true" javaType="string" lazyLoad="false">
+			<component type="hidden" readOnly="true" displayReferenceField="CODE"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="SUPP_CODE" description="hidden供应商自有货号编号" displayOnly="true" javaType="string" lazyLoad="false">
+			<component type="hidden" readOnly="true" displayReferenceField="SUPP_CODE"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="BATCH" description="hidden批次" displayOnly="true" javaType="string">
+			<component type="hidden" readOnly="true" />
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="ORDER_ID" description="hidden出库单编号" displayOnly="true" javaType="string">
+			<component type="hidden" readOnly="true" />
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="PRO_PACKINGNUM" description="hidden每箱个数" displayOnly="true" javaType="bigDecimal" lazyLoad="false">
+			<component type="hidden" readOnly="false" displayReferenceField="PACKING_NUM" maxFractionDigit="3" minFractionDigit="3"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="PRO_CAPACITYNUM" description="hidden单位体积" displayOnly="true" javaType="bigDecimal" lazyLoad="false">
+			<component type="hidden" readOnly="true" displayReferenceField="CAPACITYNUM" maxFractionDigit="3" minFractionDigit="3"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="PRO_WEIGHTNUM" description="hidden单位重量" displayOnly="true" javaType="bigDecimal" lazyLoad="false">
+			<component type="hidden" readOnly="true" displayReferenceField="WEIGHTNUM" maxFractionDigit="3" minFractionDigit="3"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="PRO_IN_PRICE" description="hidden进货单价" displayOnly="true" javaType="bigDecimal" lazyLoad="false">
+			<component type="hidden" readOnly="true" colspan="1" maxFractionDigit="3" minFractionDigit="3"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="PRO_OUT_PRICE" description="hidden单位售价" displayOnly="true" javaType="bigDecimal" lazyLoad="false">
+			<component type="hidden" readOnly="true" colspan="1" maxFractionDigit="3" minFractionDigit="3"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="HIDDEN_WMCODE" description="hidden货号" displayOnly="true" javaType="string" lazyLoad="false">
+			<component type="hidden" readOnly="true" displayReferenceField="WMCODE" colspan="6"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="AUDIT_USER_ID" javaType="string" description="审批人" lazyLoad="true" loadType="cache">
+			<component type="combo" quickQueryConditionField="NAME" referenceTable="SYSOPERATOR_VIEW" referenceField="ID" displayReferenceField="NAME" readOnly="true"/>
+			<listColumn noquery="false" nowrap="true"/>
+		</field>
+		<field name="BILL_STATUS" javaType="string" description="单据状态">
+			<component type="dropdown" readOnly="true">
+				<option displayName="待批" value="init"/>
+				<option displayName="已审批" value="audit"/>
+			</component>
+		</field>
+		<field name="AUDIT_TIME" javaType="date" dataStyle="yyyy-MM-dd HH:mm:ss" description="审批时间">
+			<component type="date" readOnly="true"/>
+			<queryCondition type="region"/>
+			<listColumn noquery="true" nowrap="true"/>
+		</field>
+		<!-- -->
+		<queryFilter>
+			<pluggedFilter methodName="exp" parameter="{ and t_1.WAREHOUSE='}&amp;GetUser(WAREHOUSEID)&amp;{' }"/>
+		</queryFilter>
+		<!-- -->
+		<role name="user sp">
+			<disComponent name="SUBGRID SUBGRID1 PRODUCTID PRO_COUNT TEST1 TEST2 REMAINDER_NUM"/>
+			<readOnlyComponent name="WAREHOUSE"/>
+			<disOperation name="audit"/>
+			<disOperation name="unaudit"/>
+		</role>
+		<role name="admin boss manager wm pe ac">
+			<disOperation name="unaudit"/>
+		</role>
+		<!-- 
+		-->
+		<javascript hostPage="edit" src="project/leedon/T_WM_SDBRETURN.js"><![CDATA[
+			(function() {
+				var c=Ext.getCmp('__BILL_STATUS__Option__');
+				if (c) {
+					$$('div#__helper')[0].setStyle({
+						color: c.getValue()=='audit'?'RED':'GREEN'
+					});
+					$$('div#__helper')[0].update('当前单据状态:'+c.getRawValue());
+				}
+			})();
+		]]></javascript>
+		<pluginInterceptor methodName="exp" parameter="
+			If(IsEmpty(Get(ID)),Set(ID,GetNewID()),true)
+			+SetCreate(BILL_STATUS,{init},WAREHOUSE,GetUser(WAREHOUSEID),__WAREHOUSE__NAME,GetUser(WAREHOUSENAME))
+			+If(Get(BILL_STATUS)={audit},DisBtns(select,saveAll,audit)+DisFlds(SUBGRID,SUBGRID2,IN_PRE_DATE,IN_DATE,IMAGE,WHOWNER,SHIP_ORGA,SHIP_NO,SHIP_CON)+HidFlds(SUBGRID1,BATCHINFO,TEST1,TEST2,TEST,XIANSHU,PRO_COUNT,PRODUCTID,REMAINDER_NUM),true)
+			" pluginName="edit" type="after"/>
+		<pluginInterceptor methodName="exp" parameter="
+			If(IsEmpty(Get(WAREHOUSE)),Warning({缺少必填项}),true)
+			+SetCreateTime(CREATE_TIME,{yyyy-MM-dd HH:mm:ss})
+			+SetCreate(CREATE_USER_ID,GetUser(ID),__CREATE_USER_ID__NAME,GetUser(NAME),TH_NO,{TH_}&amp;LeftPad(Get(ID),12),BILL_STATUS,{init})
+			" pluginName="save" type="before"/>
+		<pluginInterceptor methodName="exp" parameter="
+			bsh(RETURNCHECK.bsh)
+			+Set(AUDIT_USER_ID,User(ID),BILL_STATUS,{audit})
+			+SetCreateTime(AUDIT_TIME,{yyyy-MM-dd HH:mm:ss})
+			+If(Get(BILL_STATUS)={audit},DisBtns(select,saveAll,audit)+DisFlds(SUBGRID,SUBGRID2,IN_PRE_DATE,IN_DATE,IMAGE,WHOWNER,SHIP_ORGA,SHIP_NO,SHIP_CON)+HidFlds(SUBGRID1,BATCHINFO,TEST1,TEST2,TEST,XIANSHU,PRO_COUNT,PRODUCTID,REMAINDER_NUM),true)
+			" pluginName="audit" type="before"/>
+		<pluginInterceptor methodName="exp" parameter="
+			Set(BILL_STATUS,{init},AUDIT_USER_ID,{})
+			" pluginName="unaudit"/>
+		<!-- -->
+		<pluginOperation name="saveAll" oprName="保存A" hostPage="edit" tblevel="1" img="save" action="if(checkeq()=1,Save({},{},{SUBGRID2},{SUBGRID}),true)+brk()"/>
+		<pluginOperation name="audit" oprName="退货审批" hostPage="edit" tblevel="1" img="settings" action="If(Confirm({确认审批后,不可恢复,确认审批?}),Save({},{audit},{SUBGRID}),true)+brk()"/>
+		<pluginOperation name="unaudit" oprName="取消审核" hostPage="edit" action="If(Confirm({请确认是否要取消审核?}),Save({},{unaudit},{SUBGRID},{SUBGRID2}),true)+brk()"/>
+		<Operation queryPageDelete="false" save="false" saveAndAdd="false" saveAndAddCopy="false"/>
+		<!-- -->
+		<doc>
+			<help>&lt;div id=&quot;__helper&quot;&gt;&lt;div&gt;</help>
+		</doc>
+	</table>
+</Haiyan>

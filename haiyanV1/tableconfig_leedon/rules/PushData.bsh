@@ -1,0 +1,46 @@
+void test(SrvContext context) throws Throwable {
+}
+try {
+	String ruleKey = context.getParameter("__ruleKey");
+	System.out.println("........................." + ruleKey+";");
+	Table mapTable = ConfigUtil.getTable("SYSMAP");
+	DataRules[] ds = mapTable.getDataRules();
+	Ref ruleRef = new Ref();
+	for (int i=0;i<ds.length;i++) {
+		System.out.println("........................." + ds[i].getName()+";");
+		if (ds[i].getName().equals(ruleKey)) {
+			ruleRef.setValue(ds[i]);
+			break;
+		}
+	}
+	DataRules rule = ruleRef.getValue();
+	if (rule==null)
+		throw new Warning("数据流规则 ["+ruleKey+"]不存在.");
+	Rule[] r = rule.getRule();
+	String l = table.getId().getJavaType()==AbstractFieldJavaTypeType.BIGDECIMAL?"":"'";
+	String idsSQL = StringUtil.join(ids, ",", l);
+	Page page = context.getDBM().findByFilter(table, " and t_1."+table.getId().getName()+" in ("+idsSQL+")", 5000, 1, context, null);
+	ExpUtil exp = new ExpUtil(context);
+	net.sf.json.JSONArray json = new net.sf.json.JSONArray();
+	Ref flds = new Ref();
+	Ref exps = new Ref();
+	ArrayList list = page.getData();
+	for (int i=0;i<list.size();i++) {
+		Qbq3Form f = (Qbq3Form)list.get(i);
+		exp.setForm(f);
+		for (int j=0;j<r.length;j++) {
+			flds.setValue(StringUtil.split(r[j].getField(),";"));
+			exps.setValue(StringUtil.split(r[j].getFormula(),";"));
+			Qbq3Form n = new MapForm();
+			for (int k=0;k<flds.getValue().length;k++) {
+				n.set(flds.getValue()[k], ""+exp.evalExp(exps.getValue()[k]));
+			}
+			json.add(n.toJSon());
+		}
+	}
+	context.write(json.toString());
+	// test(context);
+} catch(Throwable e) {
+	// DebugUtil.error(e);
+	throw e;
+}

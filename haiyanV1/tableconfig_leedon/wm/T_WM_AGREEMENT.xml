@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Haiyan xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../haiyan.xsd">
+	<table name="T_WM_AGREEMENT" description="EDP供应商合作协议">
+		<id name="ID" description="ID" javaType="string">
+			<component type="hidden" url="#"/>
+		</id>
+		<field name="VALID_PERIOD" description="合作有效期" displayOnly="false" javaType="date" lazyLoad="false" nullAllowed="false">
+			<component type="date" readOnly="false" colspan="1"/>
+			<queryCondition type="region"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="SUPPLIER" description="供应商" javaType="string">
+			<component type="combo" readOnly="false" displayReferenceField="NAME" referenceField="ID" referenceTable="T_DIC_SUPPLIER"/>
+		</field>
+		<field name="IMAGE" description="附件" displayOnly="false" javaType="string" length="255" lazyLoad="false">
+			<component type="file" readOnly="false" renderer="renderIMAGE" multipleSelect="true" action="if(isEmpty(Get(IMAGE)),Set(STATUS,{0}),Set(STATUS,{1}))"/>
+			<listColumn noedit="false" noquery="false" nowrap="true" width="165"/>
+		</field>
+		<field name="STATUS" javaType="string" description="状态" nullAllowed="false" defaultValue="0">
+			<component type="dropdown">
+				<option displayName="申请中" value="0"/>
+				<option displayName="完成" value="1"/>
+			</component>
+		</field>
+		<!-- -->
+		<queryFilter>
+			<pluggedFilter methodName="exp" parameter="If(InRole(sp),{ and t_1.SUPPLIER='}&amp;GetUser(SUPPLIER)&amp;{'},{})"/>
+		</queryFilter>
+		<!--
+		<queryFilter>
+			<pluggedFilter><![CDATA[
+			]]></pluggedFilter>
+		</queryFilter>
+		-->
+		<javascript hostPage="query"><![CDATA[
+			function renderIMAGE(v) {
+				var vals=v.split(',');
+				var t='';
+				vals.each(function(_s, _index){
+					if (!Ext.isEmpty(_s))
+						// <img src="'+_s+'" style="width:30;height30;" width=30 height=30> </img>
+						t+='<a href="'+_s+'" target="_blank">附件'+_index+'</a>';
+				});
+				return t;
+			}
+		]]></javascript>
+		<!-- -->
+
+		<pluginInterceptor methodName="exp" parameter="
+			If(InRole(sp),DisFlds(SUPPLIER)+Set(SUPPLIER,GetUser(SUPPLIER),__SUPPLIER__NAME,GetUser(__SUPPLIER__NAME)),true)
+			" pluginName="edit" type="after"/>
+		<pluginInterceptor methodName="exp" parameter="
+			SetPara(ADDRESS,DBFindValue({select ADDRESS from T_DIC_ORGA where ID='}&amp;Get(SUPPLIER)&amp;{'}, 1, 0, 0, {无}))
+			+SetPara(PHONE,DBFindValue({select PHONE from T_DIC_ORGA where ID='}&amp;Get(SUPPLIER)&amp;{'}, 1, 0, 0, {无}))
+			+SetPara(FIX,DBFindValue({select FAX from T_DIC_ORGA where ID='}&amp;Get(SUPPLIER)&amp;{'}, 1, 0, 0, {无}))
+			+ReportPDF({},ConfigPath()&amp;{/report/T_WM_AGREEMENT.jasper},{AGREEMENT_}&amp;Get(ID)&amp;{.pdf})
+			+WriteJS({Hy.showBill(Hy.upload_service+'/upload/report/AGREEMENT_}&amp;Get(ID)&amp;{.pdf','Title','test')})" 
+			pluginName="ReportPDF3Batch" type="after"/>
+			
+		<pluginOperation name="ReportPDF3" oprName="主从打印" hostPage="edit" tblevel="1" action="Plugin({},{ReportPDF3})+brk()"/>
+	</table>
+</Haiyan>

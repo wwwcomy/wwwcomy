@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Haiyan xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../haiyan.xsd">
+	<table name="T_DIC_PRODUCT" description="商品" realTable="T_DIC_PRODUCT" colspan="6">
+		<id name="ID" description="ID" javaType="string">
+			<component type="hidden" url="#"/>
+		</id>
+		<field name="NAME" description="名称" displayOnly="false" javaType="string" lazyLoad="false">
+			<component type="text" readOnly="false"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="CODE" description="编号" displayOnly="false" javaType="string" lazyLoad="false">
+			<component type="text" readOnly="false"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="PACKING_NUM" description="每箱个数" displayOnly="false" javaType="bigDecimal" lazyLoad="false">
+			<component type="text" readOnly="false"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<!--
+		<field name="PACKING" description="默认计量单位" javaType="string">
+			<component type="richSelect" readOnly="false" displayReferenceField="NAME" referenceField="ID" referenceTable="T_DIC_PACKING" associatedFields="PACKING_NAME"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="PACKING_NAME" description="计量单位" javaType="string">
+			<component type="hidden" readOnly="false" displayReferenceField="NAME"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		-->
+		<field name="C1" description="外箱长(cm)" javaType="bigDecimal">
+			<component type="text" readOnly="false"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="C2" description="外箱宽(cm)" javaType="bigDecimal">
+			<component type="text" readOnly="false"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="C3" description="外箱高(cm)" javaType="bigDecimal">
+			<component type="text" readOnly="false"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="CAPACITYNUM" description="外箱体积(m3)" javaType="bigDecimal">
+			<component type="text" readOnly="false" maxFractionDigit="3" minFractionDigit="3"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="WEIGHTNUM" description="重量(g)" javaType="bigDecimal">
+			<component type="text" readOnly="false"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="WMCODE" description="货号" displayOnly="false" javaType="string" lazyLoad="false">
+			<component type="text" readOnly="false"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="COLOR" description="颜色" displayOnly="false" javaType="string" lazyLoad="false">
+			<component type="text" readOnly="false"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="SPEC" description="包装规格" displayOnly="false" javaType="string" lazyLoad="false">
+			<component type="text" readOnly="false"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="MODEL" description="材质" displayOnly="false" javaType="string" lazyLoad="false">
+			<component type="text" readOnly="false"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="BHZQ" description="补货周期" displayOnly="false" javaType="string" lazyLoad="false">
+			<component type="text" readOnly="false"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<!--
+		<field name="BZQ" description="保质期" displayOnly="false" javaType="bigDecimal" lazyLoad="false">
+			<component type="text" readOnly="false" appendStr="天"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="SCRQ" description="生产日期" displayOnly="false" javaType="date" lazyLoad="false">
+			<component type="date" readOnly="false"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		-->
+		<field name="IMAGE1" description="图片" displayOnly="false" javaType="string" length="255" lazyLoad="false">
+			<component type="image" readOnly="false" renderer="renderIMAGE"/>
+			<listColumn noedit="false" noquery="false" nowrap="true" width="65" height="65"/>
+		</field>
+		<field name="IN_PRICE" description="参考进价" displayOnly="false" javaType="bigDecimal" lazyLoad="false" dataStyle="###.##">
+			<component type="text" readOnly="false" maxFractionDigit="2" minFractionDigit="2"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="OUT_PRICE" description="参考售价" displayOnly="false" javaType="bigDecimal" lazyLoad="false" dataStyle="###.##">
+			<component type="text" readOnly="false" maxFractionDigit="2" minFractionDigit="2"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="BOTTOM_KC" description="最低库存" defaultValue="0" displayOnly="false" javaType="bigDecimal" lazyLoad="false">
+			<component type="text" readOnly="false" action="
+				If(IsEmpty(Get(TOP_KC)),Set(TOP_KC,0),true)
+				+
+				If(Get(TOP_KC)&lt;Get(BOTTOM_KC),Error({最低库存不可大于最高库存}),true)"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="TOP_KC" description="最高库存" defaultValue="9999" displayOnly="false" javaType="bigDecimal" lazyLoad="false">
+			<component type="text" readOnly="false" action="
+				If(IsEmpty(Get(TOP_KC)),Set(TOP_KC,0),true)
+				+
+				If(Get(TOP_KC)&lt;Get(BOTTOM_KC),Error({最低库存不可大于最高库存}),true)"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="TYPE_0" description="产品分类" displayOnly="false" javaType="string" lazyLoad="false" nullAllowed="false">
+			<component type="richSelect" readOnly="false" colspan="5" quickQueryConditionField="NAME,CODE" displayReferenceField="NAME" referenceField="ID" referenceTable="T_DIC_PRODUCT_TYPE"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<!-- 只看不存 
+		<field name="SUBGRID" javaType="string" description="库位明细" displayOnly="true">
+			<component type="grid" readOnly="true" referenceField="PRODUCTID" referenceTable="V_WM_PRODUCT3" parameter="{&amp;PRODUCTID=}&amp;If(IsEmpty(Get({ID})),-1,Get({ID}))" style="width:90%;height:200;" colspan="6"/>
+			<queryCondition type="none"/>
+			<listColumn noquery="true"/>
+		</field> -->
+		<field name="MEMO" description="备注" displayOnly="false" javaType="string" lazyLoad="false" length="512">
+			<component type="textArea" readOnly="false" colspan="6" style="width:550;height:30;"/>
+			<listColumn noedit="false" noquery="true" nowrap="true"/>
+		</field>
+		<field name="USEDSTATUS" description="被占用" javaType="string" defaultValue="0">
+			<component type="dropdown" readOnly="true">
+				<option displayName="是" value="1"/>
+				<option displayName="否" value="0"/>
+			</component>
+			<listColumn noquery="false"/>
+		</field>
+		<!-- -->
+		<queryFilter>
+			<pluggedFilter methodName="exp" parameter="If(IsEmpty(GetPara(_T)),{},{ and MEMO like '}&amp;GetPara(_T)&amp;{'})"/>
+		</queryFilter>
+		<!-- -->
+		<javascript hostPage="query"><![CDATA[
+			function renderIMAGE(v) {
+				var vals=v.split(',');
+				var t='';
+				vals.each(function(_s, _index){
+					if (!Ext.isEmpty(_s))
+						t+='<img src="'+_s+'" style="width:30;height30;" width=30 height=30><a href="'+_s+'" target="_blank">图片'+_index+'</a></img>';
+				});
+				return t;
+			}
+		]]></javascript>
+		<javascript hostPage="edit"><![CDATA[
+			function renderIMAGE(v) {
+				var vals=v.split(',');
+				var t='';
+				vals.each(function(_s, _index){
+					if (!Ext.isEmpty(_s))
+						t+='<img src="'+_s+'" style="width:30;height30;" width=30 height=30><a href="'+_s+'" target="_blank">原图</a></img>&nbsp;';
+				});
+				return t;
+			}
+			Ext.grid.GroupSummary.Calculations['sumPRO_COST'] = function(v, rec, fldName) {
+				if (fldName=='PRO_OUT_COST') {
+					if (rec.data.OUT_TYPE=='init')
+						return 0;
+					else
+						return parseFloat(v) + parseFloat(rec.data.PRO_OUT_COST);
+				}
+				if (fldName=='PRO_IN_COST') {
+					if (rec.data.OUT_TYPE=='init')
+						return parseFloat(v) + parseFloat(rec.data.PRO_IN_COST);
+					else
+						return 0;
+				}
+				return v;
+			}
+			function sumPRO_COST(v, params, data, fldName) {
+				return '总计:'+parseFloat(v).toFixed(2); // 汇总行
+			}
+		]]></javascript>
+		<!-- -->
+		<pluginInterceptor methodName="exp" parameter="Set(CAPACITYNUM,Get(C1)*Get(C2)*Get(C3)/1000000)" pluginName="save" type="before"/>
+		<pluginInterceptor methodName="exp" parameter="If(IsEmpty(Get(NAME)),Set(NAME,{haiyan-product}),true)" pluginName="test" type="before"/>
+		<!--
+		<pluginInterceptor methodName="exp" parameter="DisButtons(saveAndAdd,saveAndAddCopy)" pluginName="query" type="after"/>
+		<pluginInterceptor methodName="exp" parameter="DisButtons(saveAndAdd,saveAndAddCopy)" pluginName="edit" type="after"/>
+		-->
+		<!-- -->
+		<pluginOperation name="test" oprName="test" hostPage="edit" tblevel="1" img="test" action="plugin({},{test})+brk()"/>	
+		<!--
+		<pluginOperation name="saveProtocol" oprName="保存" hostPage="edit" tblevel="1" img="save" action="save({},{})+brk()"/>	
+		-->
+		<Operation saveAndAdd="false" saveAndAddCopy="false"/>
+	</table>
+</Haiyan>

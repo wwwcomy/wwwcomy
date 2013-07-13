@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Haiyan xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../haiyan.xsd">
+	<table name="T_DIC_CUSMAIN" description="客户信息" childTable="T_DIC_CUSVISITRECORD">
+		<id name="ID" javaType="string"/>
+		<field name="NAME" description="名称" javaType="string">
+			<component type="text" colspan="3"/>
+		</field>
+		<field name="CODE" description="编码" javaType="string">
+			<component type="text" readOnly="true" colspan="3"/>
+		</field>
+		<field name="SHORTNAME" description="简称" javaType="string">
+			<component type="text" colspan="3"/>
+		</field>
+		<field name="ADDRESS" description="地址" javaType="string">
+			<component type="text" colspan="3" style="width:500"/>
+		</field>
+		<field name="CONNECTU1" description="联系人1" javaType="string">
+			<component type="text" colspan="3"/>
+		</field>
+		<field name="CONNECTM1" description="联系方式1" javaType="string">
+			<component type="text" colspan="3"/>
+		</field>
+		<field name="CONNECTU2" description="联系人2" javaType="string">
+			<component type="text" colspan="3"/>
+		</field>
+		<field name="CONNECTM2" description="联系方式2" javaType="string">
+			<component type="text" colspan="3"/>
+		</field>
+		<field name="CONNECTU3" description="联系人3" javaType="string">
+			<component type="text" colspan="3"/>
+		</field>
+		<field name="CONNECTM3" description="联系方式3" javaType="string">
+			<component type="text" colspan="3"/>
+		</field>
+		<field name="PID" description="上级客户" javaType="string">
+			<component type="richSelect" referenceTable="T_DIC_CUSMAIN" displayReferenceField="NAME" referenceField="ID"/>
+		</field>
+		<field name="TYPE" description="客户类型" javaType="string">
+			<component type="dropdown" referenceTable="T_DIC_CUSTYPE" displayReferenceField="NAME" referenceField="ID"/>
+		</field>
+		<field name="VOCATION" description="客户行业" javaType="string">
+			<component type="dropdown" referenceTable="T_DIC_CUSVOCATION" displayReferenceField="NAME" referenceField="ID"/>
+		</field>
+		<field name="LEVELS" description="客户等级" javaType="string">
+			<component type="dropdown" referenceTable="T_DIC_CUSLEVELS" displayReferenceField="NAME" referenceField="ID"/>
+		</field>
+		<field name="USERID" description="信息员" javaType="string">
+			<component type="richSelect" readOnly="true" referenceTable="SYSOPERATOR" displayReferenceField="Name"/>
+		</field>
+		<field name="MEMO" description="备注" javaType="string">
+			<component type="textArea" colspan="3"/>
+		</field>
+		<field name="CREATEDATE" description="创建时间" javaType="date" dataStyle="yyyy-MM-dd hh:mm:ss">
+			<component type="date" readOnly="true"/>
+		</field>
+		<queryFilter>
+			<pluggedFilter> and </pluggedFilter>
+			<pluggedFilter className="haiyan.filter.DataFilter" methodName="byUserID" parameter="USERID"/>
+		</queryFilter>
+		<!--
+		<pluginInterceptor className="financetwo.interceptor.TestInterceptor" methodName="test" pluginName="check" type="before"/>
+		<pluginInterceptor className="financetwo.interceptor.TestInterceptor" methodName="test" pluginName="check" type="latter"/>
+		<pluginOperation name="check" className="financetwo.plugin.TestPlugin" type="query"/>
+		-->
+		<pluginInterceptor className="haiyan.interceptor.SaveInterceptor" methodName="setCreateCode" pluginName="save" parameter="CODE"/>
+		<pluginInterceptor className="haiyan.interceptor.SaveInterceptor" methodName="setCreateTime" pluginName="save" parameter="CREATEDATE,yyyy-MM-dd hh:mm:ss"/>
+		<pluginInterceptor className="haiyan.interceptor.DataInterceptor" methodName="putCreateUserInfo" pluginName="edit" parameter="USERID,__USERID__Name"/>
+		<pluginInterceptor className="haiyan.interceptor.TreeSaveInterceptor" methodName="checkCircle" pluginName="save"/>
+		<pluginInterceptor className="haiyan.interceptor.SaveInterceptor" methodName="complete" pluginName="save" type="after"/>
+		<pluginInterceptor className="haiyan.interceptor.DeleteInterceptor" methodName="complete" pluginName="delete" type="after"/>
+		<Operation queryPageAdd="true" queryPageDelete="true" queryPageQueryEdit="false"/>
+	</table>
+</Haiyan>

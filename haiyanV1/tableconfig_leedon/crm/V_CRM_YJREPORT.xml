@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Haiyan xsi:noNamespaceSchemaLocation="../../haiyan.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<table description="业绩报表" name="V_CRM_YJREPORT" realTable="V_CRM_YJREPORT">
+		<id name="ID" javaType="string"/>
+		<field name="USER_ID" javaType="string" description="经纪人ID">
+			<component type="hidden" readOnly="true"/>
+			<queryCondition type="equal"/>
+			<listColumn noquery="false"/>
+		</field>
+		<field name="USER_NAME" javaType="string" description="经纪人">
+			<component type="text" readOnly="true"/>
+			<queryCondition type="blurMatching"/>
+			<listColumn noquery="false" width="200"/>
+		</field>
+		<field name="CUS_ID" javaType="string" description="客户ID">
+			<component type="hidden" readOnly="true"/>
+			<queryCondition type="equal"/>
+			<listColumn noquery="false"/>
+		</field>
+		<field name="CUS_NAME" javaType="string" description="客户全称" nullAllowed="false">
+			<component type="text" readOnly="true" renderer="rendererCUS"/>
+			<queryCondition type="blurMatching"/>
+			<listColumn noquery="false" width="200"/>
+		</field>
+		<field name="CONT_ID" javaType="string" description="合同ID">
+			<component type="hidden" readOnly="true"/>
+			<queryCondition type="equal"/>
+			<listColumn noquery="false"/>
+		</field>
+		<field name="CONT_NAME" javaType="string" description="合同名称" nullAllowed="false">
+			<component type="text" readOnly="true" renderer="rendererCON"/>
+			<queryCondition type="blurMatching"/>
+			<listColumn noquery="false" width="200"/>
+		</field>
+		<field name="CONT_MONEY" javaType="bigDecimal" description="合同金额" nullAllowed="false">
+			<component type="text" readOnly="true" maxFractionDigit="2" minFractionDigit="2" numberGrouping="true" style="align:right"/>
+			<queryCondition type="equal"/>
+			<listColumn noquery="false" width="200"/>
+		</field>
+		<field name="CONT_KX" javaType="string" defaultValue="0" description="收款状态">
+			<component type="dropdown" readOnly="true">
+				<option displayName="未结清" value="0"/>
+				<option displayName="已结清" value="1"/>
+			</component>
+			<listColumn noquery="false"/>
+		</field>
+		<!--
+		<field name="USER_ID" javaType="string" description="经纪人" nullAllowed="false">
+			<component type="treeComb" referenceTable="SYSOPERATOR_VIEW" referenceField="ID" displayReferenceField="NAME" quickQueryConditionField="NAME,CODE"/>
+			<queryCondition type="blurMatching"/>
+			<listColumn noquery="false" nowrap="true"/>
+		</field> 
+		-->
+		<javascript hostPage="ids"><![CDATA[
+			function rendererCUS(value, metaData, record, rowIndex, colIndex, store, displayValue, refValue, fieldName) {
+				// alert(record.data.CUS_ID);
+				return String.format(
+						'<div><a href="javascript:showDetailFrame(\'{0}\', \'{1}\', \'{4}\');"><font color={3}>{2}</font></a></div>',
+						'edit', record.data.CUS_ID, value, 'blur', 'T_CRM_CUSTOMER_QY');
+			}
+			function rendererCON(value, metaData, record, rowIndex, colIndex, store, displayValue, refValue, fieldName) {
+				return String.format(
+						'<div><a href="javascript:showDetailFrame(\'{0}\', \'{1}\', \'{4}\');"><font color={3}>{2}</font></a></div>',
+						'edit', record.data.CONT_ID, value, 'blur', 'T_CRM_CONTRACT_MODEL');
+			}
+			// test renderer
+			function rendererHJ(value, metaData, record, rowIndex, colIndex, store,
+					displayValue, refValue, fieldName) { // 行renderer // renderer="rendererHJ"
+				var ret = 0;
+				try {
+					ret = (record.data.NUM * record.data.DJ).toFixed(2);
+					return ret;
+				} catch (E) {
+					return ret;
+				}
+			}
+			function rendererHJ2(value, params, data, fldName) {
+				return (value * 1).toFixed(2); // 合计renderer // summaryRenderer="rendererHJ2"
+			}
+			Ext.grid.GroupSummary.Calculations['totalCost'] = function(v, record, field) { // 合计计算 // summaryType="totalCost" // average sum count min max
+				return v + (record.data.NUM * record.data.DJ);
+			}
+      ]]></javascript>
+		<pluginInterceptor methodName="__initDB" pluginName="__initDB" type="before"><![CDATA[
+create or replace view V_CRM_YJREPORT as
+(select t3.ID as ID, t2.ID as USER_ID, t2.NAME as USER_NAME, t1.ID as CUS_ID, t1.NAME as CUS_NAME, t3.ID as CONT_ID, t3.NAME as CONT_NAME, t3.MONEY as CONT_MONEY, t3.KX as CONT_KX
+from T_DIC_ORGA t1 left join SYSOPERATOR t2 on t2.ID=t1.USER_ID_2 left join T_DIC_CONTRACT t3 on t1.ID=t3.CUSTOMER_ID  
+where t1.USER_ID_2 is not null and t3.MONEY is not null 
+order by t2.NAME)
+		]]></pluginInterceptor>
+		<!-- -->
+		<Operation save="false" queryPageAdd="false" queryPageDelete="false" saveAndAdd="false" saveAndAddCopy="false" customizeColumns="true"/>
+	</table>
+</Haiyan>

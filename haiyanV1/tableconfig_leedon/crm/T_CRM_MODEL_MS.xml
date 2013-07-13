@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Haiyan xsi:noNamespaceSchemaLocation="../../haiyan.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<table description="筛选面试模特" name="T_CRM_MODEL_MS" realTable="T_DIC_MODELINFO">
+		<id name="ID" javaType="string">
+			<component type="hidden" url="#"/>
+		</id>
+		<field name="ACTIVITY_ID" description="客户活动" javaType="string">
+			<component type="richSelect" referenceTable="T_CRM_ACTIVITY" referenceField="ID" displayReferenceField="NAME"/>
+			<queryCondition type="none"/>
+		</field>
+		<field name="CUSTOMER_ID" description="参与客户" javaType="string" displayOnly="false">
+			<component type="richSelect" referenceTable="T_CRM_CUSTOMER_QY" referenceField="ID" displayReferenceField="NAME"/>
+			<queryCondition type="none"/>
+		</field>
+		<field name="MODEL_NAME" javaType="string" description="模特姓名">
+			<component type="text"/>
+			<queryCondition type="blurMatching"/>
+		</field>
+		<field name="MODEL_ADDRESS" javaType="string" description="模特地址">
+			<component type="text"/>
+			<queryCondition type="blurMatching"/>
+		</field>
+		<field name="MODEL_CROP" javaType="string" description="模特公司">
+			<component type="text"/>
+			<queryCondition type="blurMatching"/>
+		</field>
+		<field name="MODEL_DEPA" description="模特部门" javaType="string">
+			<component type="text"/>
+			<queryCondition type="blurMatching"/>
+		</field>
+		<field name="MODEL_PHONE" javaType="string" description="电话">
+			<component type="text"/>
+			<queryCondition type="blurMatching"/>
+		</field>
+		<field name="MODEL_QQ" javaType="string" description="QQ">
+			<component type="text"/>
+			<queryCondition type="blurMatching"/>
+		</field>
+		<field name="MODEL_MSN" javaType="string" description="MSN">
+			<component type="text"/>
+			<queryCondition type="blurMatching"/>
+		</field>
+		<field name="MODEL_EMAIL" javaType="string" description="EMAIL">
+			<component type="text"/>
+			<queryCondition type="blurMatching"/>
+		</field>
+		<!-- 需要有档期记录 -->
+		<field name="BEGIN_DATE" javaType="date" dataStyle="yyyy-MM-dd HH:mm:ss" description="工作起始时间">
+			<component type="dateTime"/>
+			<listColumn noquery="false"/>
+		</field>
+		<field name="FINISH_DATE" javaType="date" dataStyle="yyyy-MM-dd HH:mm:ss" description="工作结束时间">
+			<component type="dateTime"/>
+			<listColumn noquery="false"/>
+		</field>
+		<queryFilter>
+			<pluggedFilter methodName="exp" parameter=" { and t_1.FINISH_DATE is null or t_1.FINISH_DATE&lt;}&amp;SQLCurrDate() "/>
+		</queryFilter>
+		<!--  
+			<queryFilter>
+			<pluggedFilter>
+			and 
+			(
+			(
+			t_1.CREATE_USER_ID=@USERID@ 
+			or 
+			t_1.USER_ID=@USERID@ 
+			or 
+			(t_1.CREATE_USER_ID in (select ID from SYSOPERATOR where ORGAID=@DEPTID@) and 6 in (@ROLEID@)) 
+			or
+			14 in (@ROLEID@)
+			or
+			1 in (@ROLEID@) 
+			) 
+			)
+			</pluggedFilter>
+			</queryFilter> -->
+		<!--
+			<pluginInterceptor className="haiyan.interceptor.SaveInterceptor" methodName="setDefaultByHeadID" pluginName="edit" parameter="CUSTOMER_ID,T_DIC_ORGA,CUSTOMER_ID,ID,__CUSTOMER_ID__NAME,NAME"/>
+		-->
+		<!--
+		<pluginInterceptor methodName="setDefaultValByHeadID" pluginName="edit" parameter="CUSTOMER_ID,T_DIC_ORGA,ID,CUSTOMER_ID,NAME,__CUSTOMER_ID__NAME"/>
+		<pluginInterceptor methodName="setCreateTime" parameter="CREATE_TIME,yyyy-MM-dd HH:mm:ss" pluginName="save"/>
+		-->
+		<!-- -->
+		<pluginInterceptor className="haiyan.model.Interceptor" methodName="affrimModel" pluginName="affirm"/>
+		<pluginOperation name="affirm" oprName="确认模特" accessKey="C" hostPage="query" tblevel="1"/>
+		<!-- -->
+		<Operation queryPageAdd="false" queryPageDelete="false" save="false" saveAndAdd="false" saveAndAddCopy="false" customizeColumns="true"/>
+	</table>
+</Haiyan>

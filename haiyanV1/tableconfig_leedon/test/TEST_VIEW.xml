@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Haiyan xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../haiyan.xsd">
+	<table name="TEST_VIEW" description="VIEW测试" realTable="TEST_DBM" colspan="8">
+		<!-- colspan="4" -->
+		<id name="ID" description="ID" javaType="string">
+			<component type="hidden" url="#"/>
+		</id>
+		<field name="SUBGRID" javaType="string" description="显示或隐藏" displayOnly="true" style="display:block;">
+			<component type="grid" displayReferenceField="NAME" referenceTable="TEST_VIEW_GRID" style="width:850;height:350;toolbar:no;editor:no;link:yes;"/>
+			<!-- parameter="HEADID={0},ID" referenceField="HEADID" -->
+			<queryCondition type="none"/>
+			<listColumn noquery="true"/>
+		</field>
+		<!--
+		<field name="CODE" description="编码" displayOnly="false" javaType="string" lazyLoad="false" nullAllowed="false">
+			<component type="text" readOnly="false" colspan="1" rowspan="1"/>
+			<queryCondition type="equal"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="NAME" description="名称" displayOnly="false" javaType="string" lazyLoad="false" nullAllowed="false">
+			<component type="text" readOnly="false" colspan="1" rowspan="1"/>
+			<queryCondition type="equal"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="STATUS" description="状态" displayOnly="false" javaType="string" lazyLoad="false">
+			<component type="dropdown" readOnly="false" colspan="1" rowspan="1">
+				<option displayName="编制" value="0"/>
+				<option displayName="人事审批" value="1"/>
+				<option displayName="总经理审批" value="2"/>
+				<option displayName="公司下达" value="3"/>
+			</component>
+			<queryCondition type="equal"/>
+		</field>
+		<field name="TYPE" description="动态表选择" displayOnly="false" javaType="string" lazyLoad="false">
+			<component type="dropdown" readOnly="false" colspan="1" rowspan="1">
+				<option displayName="操作员" value="SYSOPERATOR"/>
+				<option displayName="组织机构" value="SYSORGA"/>
+			</component>
+			<queryCondition type="equal"/>
+		</field>
+		<field name="MONEY" description="金额" displayOnly="false" javaType="bigDecimal" lazyLoad="false">
+			<component type="text" readOnly="false" colspan="1" rowspan="1" validator="^-?\d+.\d{2}$" validatorText="“名称“ 必须为数字金额"/>
+			<queryCondition type="equal"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="CDATE" description="时间" displayOnly="false" javaType="date" lazyLoad="false">
+			<component type="date" colspan="1" rowspan="1" readOnly="false"/>
+			<queryCondition type="equal"/>
+		</field>
+		-->
+		<!-- 
+		<javascript hostPage="edit" src="test/TEST_DETAIL_EDIT.js"><![CDATA[
+		]]></javascript>
+		-->
+		<!-- 
+		<pluginInterceptor methodName="exp" pluginName="save" parameter="SetValue(CODE,PY(GetValue(NAME)))" type="before"/>
+		<pluginInterceptor methodName="exp" pluginName="edit" parameter="If(IsEmpty(GetValue(ID)),SetValue(ID,UUID()),false)" type="after"/>
+		<pluginInterceptor methodName="exp" pluginName="save" parameter="SetValue(__one2oneID,GetValue(ID))" type="before"/>
+		<pluginInterceptor methodName="exp" pluginName="save" parameter="SetValue(CODE,Rmb(GetDouble(NAME)))" type="before"/>
+		-->
+		<!--
+		<pluginOperation name="saveProtocol" oprName="保存" hostPage="edit" tblevel="1" img="save" action="save(\'\',\'\',\'SUBGRID\');brk();"/>
+		-->
+		<Operation save="false" saveAndAdd="false" saveAndAddCopy="false"/>
+		<doc>
+			<help>这个是列表视图,以后任何界面都可以通过editOne.do来实现</help>
+		</doc>
+	</table>
+	<table name="TEST_VIEW_GRID" description="VIEW表格测试" realTable="TEST_DETAIL" colspan="6">
+		<id name="ID" description="ID" javaType="string">
+			<component type="hidden" url="#"/>
+		</id>
+		<field name="CODE" description="编码" displayOnly="false" javaType="string" lazyLoad="false" nullAllowed="false">
+			<component type="text" readOnly="false" rowspan="1" colspan="1"/>
+			<queryCondition type="equal"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="HEADID" description="REFID" javaType="string">
+			<component type="richSelect" readOnly="false" rowspan="1" colspan="1" referenceField="ID" referenceTable="TEST_GRID" displayReferenceField="NAME" url="#"/>
+		</field>
+		<field name="NAME" description="名称" displayOnly="false" javaType="string" lazyLoad="false" nullAllowed="false">
+			<component type="text" readOnly="false" rowspan="1" colspan="1" validator="^[\w-]+(\.[\w-]+)*@[\w-]+(\.[\w-]+)+$" validatorText="必须为email类型"/>
+			<queryCondition type="equal"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="STATUS" javaType="string" description="STATUS" defaultValue="0">
+			<component type="dropdown" readOnly="false" rowspan="1" colspan="1" style="width:100;">
+				<option displayName="编制" value="0"/>
+				<option displayName="人事审批" value="1"/>
+				<option displayName="总经理审批" value="2"/>
+				<option displayName="公司下达" value="3"/>
+			</component>
+			<listColumn noquery="true"/>
+		</field>
+		<field name="ORGAID" description="单位" displayOnly="false" javaType="string" lazyLoad="false" nullAllowed="false">
+			<component type="combo" readOnly="false" rowspan="1" colspan="1" renderer="rendererORGA" referenceTable="SYSORGA" referenceField="ID" displayReferenceField="NAME"/>
+			<queryCondition type="equal"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="OPRID" description="操作员" displayOnly="false" javaType="string" lazyLoad="false" nullAllowed="false">
+			<component type="richSelect" readOnly="false" rowspan="1" colspan="1" renderer="rendererOPRT" referenceTable="SYSOPERATOR_VIEW" referenceField="ID" displayReferenceField="NAME"/>
+			<queryCondition type="equal"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="MONEY" description="金额" displayOnly="false" javaType="bigDecimal" lazyLoad="false" nullAllowed="false">
+			<component type="text" readOnly="false" rowspan="1" colspan="1"/>
+			<queryCondition type="equal"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="READONLY" description="只读计算" displayOnly="false" javaType="string" lazyLoad="false" nullAllowed="false" defaultValue="0">
+			<component type="text" readOnly="true" rowspan="1" colspan="1" renderer="rendererREADONLY"/>
+			<queryCondition type="equal"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<javascript hostPage="edit" src="test/TEST_DETAIL_EDIT.js"><![CDATA[
+			//
+		]]></javascript>
+		<pluginInterceptor methodName="exp" pluginName="save" parameter="SetValue(CODE,PY(GetValue(NAME)))" type="before"/>
+	</table>
+</Haiyan>

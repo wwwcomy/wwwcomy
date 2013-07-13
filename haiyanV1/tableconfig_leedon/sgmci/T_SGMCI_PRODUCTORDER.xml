@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Haiyan xsi:noNamespaceSchemaLocation="../../haiyan.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<table description="Product orders" name="T_SGMCI_PRODUCTORDER" realTable="T_SGMCI_PRODUCTORDER">
+		<id name="ID" description="主键" javaType="string">
+			<component type="hidden" readOnly="false" url="#"/>
+		</id>
+		<field name="HEADID" description="外键" javaType="string">
+			<component type="text" readOnly="true"/>
+		</field>
+		<field name="SHOP" javaType="string" description="4S店" nullAllowed="false" defaultValue="$Get(SHOP)">
+			<component readOnly="true" type="richSelect" referenceTable="T_SGMCI_SHOP" referenceField="ID" displayReferenceField="NAME" quickQueryConditionField="NAME"/>
+			<listColumn noquery="false" nowrap="false" width="250"/>
+		</field>
+		<field name="PRODUCT" javaType="string" description="产品" nullAllowed="true">
+			<component type="richSelect" referenceTable="T_SGMCI_PRODUCT" referenceField="ID" displayReferenceField="PRODUCT_NAME,PRODUCT_PRICE" quickQueryConditionField="PRODUCT_NAME" associatedFields="SALE_PRICE,FIXED_QUANTITY,PICTURE" readOnly="true"/>
+		</field>
+		<field name="SALE_PRICE" javaType="bigDecimal" description="4S店订购价" displayOnly="false">
+			<component type="text" readOnly="true" displayReferenceField="PRODUCT_PRICE"/>
+			<listColumn noquery="false" nowrap="false"/>
+		</field>
+		<field name="FIXED_QUANTITY" javaType="bigDecimal" description="固定订购数量" displayOnly="false">
+			<component type="text" readOnly="true" displayReferenceField="DEFAULT_QUANTITY"/>
+			<listColumn noquery="false" nowrap="false"/>
+		</field>
+		<field name="ADD_QUANTITY" javaType="bigDecimal" description="增订数量" defaultValue="0" nullAllowed="false">
+			<component type="text" readOnly="false" validator="^((\d{1,3}(,\d{3})*?)|\d+)(\.\d{1,2})?$" validatorText="必须为正数"/>
+			<listColumn noquery="false" nowrap="false"/>
+		</field>
+		<field name="PICTURE" javaType="string" description="产品图片" displayOnly="true">
+			<component type="text" readOnly="true" displayReferenceField="PICTURE"/>
+			<listColumn noquery="false" nowrap="false"/>
+		</field>
+		<field name="TOTAL" javaType="bigDecimal" description="小计金额">
+			<component type="text" readOnly="true" maxFractionDigit="2" minFractionDigit="2"/>
+			<listColumn noquery="false" nowrap="false"/>
+		</field>
+		<field name="STATUS" javaType="string" description="状态">
+			<component type="dropdown" readOnly="true">
+				<option displayName="未发货" value="0"/>
+				<option displayName="已发货" value="1"/>
+			</component>
+			<listColumn noquery="true"/>
+		</field>
+		<field name="BILL_NO" javaType="string" description="快递单号">
+			<component type="text" readOnly="true"/>
+			<listColumn noquery="true" nowrap="false"/>
+		</field>
+		<field name="CREATE_TIME" javaType="date" dataStyle="yyyy-MM-dd HH:mm:ss" description="创建时间">
+			<component type="dateTime" readOnly="true"/>
+			<queryCondition type="none"/>
+			<listColumn noquery="false" nowrap="true"/>
+		</field>
+		<javascript hostPage="ids"><![CDATA[
+			function renderValue(value, metaData, record, rowIndex, colIndex, store, displayValue, refValue, fieldName) {
+				if (fieldName=='HEADID') {
+					if (Ext.isEmpty(value)||value=='-1') 
+						return String.format('<div><a style="color:red">外键丢失</a></div>');
+					else
+						return String.format('<div><a style="color:green">正常</a></div>');
+				}
+				else if (fieldName=='PICTURE' && !Ext.isEmpty(value)) 
+					return String.format('<div ext:qtip="点击查看"><a href="{0}" target="_blank">图片</a></div>', value);
+				return value;
+			}
+		]]></javascript>
+		<!-- -->
+		<pluginInterceptor methodName="exp" parameter="If(IsEmpty(Get(HEADID)),true,Warning({被引用数据不可删除}))" pluginName="delete"/>
+		<pluginInterceptor methodName="exp" parameter="If(InRole(admin),true,DisBtns(delete))" pluginName="query"/>
+		<pluginInterceptor methodName="exp" parameter="SetCreateTime(CREATE_TIME)+Set(TOTAL,Get(SALE_PRICE)*(Get(FIXED_QUANTITY)+Get(ADD_QUANTITY)))" pluginName="save"/>
+		<!-- -->
+		<Operation queryPageAdd="false" queryPageDelete="true" save="false" saveAndAdd="false" saveAndAddCopy="false"/>
+	</table>
+</Haiyan>

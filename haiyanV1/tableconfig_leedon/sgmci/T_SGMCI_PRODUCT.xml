@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Haiyan xsi:noNamespaceSchemaLocation="../../haiyan.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<table description="CI products" name="T_SGMCI_PRODUCT" realTable="T_SGMCI_PRODUCT">
+		<id name="ID" description="ID" javaType="string">
+			<component type="hidden" readOnly="false" url="#"/>
+		</id>
+		<field name="PRODUCT_NAME" javaType="string" description="产品名称">
+			<component type="text"/>
+			<queryCondition type="blurMatching"/>
+			<listColumn noquery="false" nowrap="false"/>
+		</field>
+		<field name="PRODUCT_PRICE" javaType="bigDecimal" description="4S店订购价">
+			<component type="text"/>
+			<listColumn noquery="false" nowrap="false"/>
+		</field>
+		<field name="DEFAULT_QUANTITY" javaType="bigDecimal" description="默认订购数量">
+			<component type="text"/>
+			<listColumn noquery="false" nowrap="false"/>
+		</field>
+		<field name="PSTATUS" javaType="bigDecimal" description="产品状态">
+			<component type="dropdown">
+				<option displayName="往期产品" value="0"/>
+				<option displayName="可用产品" value="1"/>
+			</component>
+			<listColumn noquery="false" nowrap="false"/>
+		</field>
+		<field name="PICTURE" javaType="string" description="产品图片">
+			<component type="image" multipleSelect="false"/>
+			<listColumn noquery="false" nowrap="false"/>
+		</field>
+		<field name="DESCRIPTION" javaType="string" description="产品描述">
+			<component type="textArea" style="width:300;height:60;"/>
+			<listColumn noquery="false" nowrap="true"/>
+		</field>
+		<field name="CREATE_TIME" javaType="date" dataStyle="yyyy-MM-dd HH:mm:ss" description="创建时间">
+			<component type="dateTime" readOnly="true"/>
+			<queryCondition type="none"/>
+			<listColumn noquery="false" nowrap="true"/>
+		</field>
+		<pluginInterceptor methodName="exp" parameter="SetCreateTime(CREATE_TIME)" pluginName="save" type="before"/>
+		<Operation save="true" saveAndAdd="false" saveAndAddCopy="false"/>
+	</table>
+</Haiyan>

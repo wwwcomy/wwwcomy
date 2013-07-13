@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Haiyan xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../haiyan.xsd">
+	<table name="SYSSTATIONUSERROLE" realTable="SYSSTATIONUSERROLE" description="机构\部门-岗位-用户-角色">
+		<id name="ID" javaType="string"/>
+		<field name="NAME" description="权限组名称" javaType="string" nullAllowed="false">
+			<component type="text"/>
+		</field>
+		<field name="ORGAID" description="机构\部门" javaType="string" nullAllowed="false">
+			<component type="richSelect" className="haiyan.component.TreeFieldComponent" referenceTable="SYSORGA" displayReferenceField="NAME"/>
+			<queryCondition type="none"/>
+		</field>
+		<field name="STATIONID" description="岗位" javaType="string" nullAllowed="false">
+			<component type="richSelect" className="haiyan.component.TreeFieldComponent" referenceTable="SYSSTATION" displayReferenceField="NAME"/>
+			<queryCondition type="none"/>
+		</field>
+		<!-- 角色可以为空，这样在一些特殊的地方可以由用户配置，例如某部门某岗位的人能干什么，而不是由具体某个权限组决定，这样是否合理有待研究 -->
+		<field name="SYSTEMROLE" description="角色" javaType="string" displayOnly="true" mappingTable="SYSSTATIONROLEMAP">
+			<component type="richSelect" className="haiyan.component.TreeFieldComponent" multipleSelect="true" referenceTable="SYSROLE" displayReferenceField="NAME"/>
+			<queryCondition type="none"/>
+		</field>
+		<field name="SYSTEMUSER" description="用户" javaType="string" displayOnly="true" mappingTable="SYSSTATIONUSERMAP" nullAllowed="false">
+			<component type="richSelect" quickQueryConditionField="CODE,NAME" className="haiyan.component.PagingLovFieldComponent" multipleSelect="true" referenceTable="SYSOPERATOR_COMBO" displayReferenceField="NAME"/>
+			<queryCondition type="none"/>
+		</field>
+		<!-- -->
+		<pluginInterceptor className="haiyan.interceptor.SaveInterceptor" methodName="complete" pluginName="save" type="after"/>
+		<pluginInterceptor className="haiyan.interceptor.DeleteInterceptor" methodName="complete" pluginName="delete" type="after"/>
+		<Operation selectedHidden="true" queryPageQueryEdit="true" queryPageDelete="true"/>
+	</table>
+</Haiyan>

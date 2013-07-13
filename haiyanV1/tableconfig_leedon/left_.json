@@ -1,0 +1,118 @@
+[
+{
+	text : '库存分析', // http for Outer
+	cataUrl : Hy.getHostName() + '/haiyan_olap/olap.jsp?query=wm_product',
+	leaf : true
+}, {
+	text : '在线用户', id:'userlist',
+	cataUrl : 'showUserListPage.do?',
+	leaf : true
+}, {
+	text : '搜索条件',
+	cataUrl : 'query.do?__opr_data=SYSSEARCHINDEX',
+	leaf : true
+}, {
+	text : '银行账户',
+	cataUrl : 'query.do?__opr_data=T_DIC_ACCOUNT&__displayName=ACC_CODE,ACC_NAME,ACC_NUM',
+	leaf : true
+}, {
+	text : 'Payment Request',
+	cataUrl : 'query.do?__opr_data=T_PO_PAYREQUEST&__displayName=PO_NAME',
+	leaf : true
+}, {
+	text : 'WM包装单位',
+	cataUrl : 'query.do?__opr_data=T_DIC_PACKING',
+	leaf : true
+}, {
+	text : 'WM商品分类',
+	cataUrl : 'tree.do?__opr_data=T_DIC_PRODUCT_TYPE&__displayName=NAME',
+	leaf : true
+}, {
+	text : 'WM_SDB供应商',
+	cataUrl : 'query.do?__opr_data=T_DIC_SUPPLIER&__displayName=NAME',
+	leaf : true
+}, {
+	text : 'WM_SDB商品分类',
+	cataUrl : 'view.do?__opr_data=V_DIC_SDBPROTYPE',
+	leaf : true
+}, {	
+	text : 'WM_SDB商品',
+	cataUrl : 'view.do?__opr_data=V_WM_SDBPRODUCT',
+	leaf : true
+}, {
+	text : 'WM_SDB合同',
+	cataUrl : 'query.do?__opr_data=T_WM_SDBCONTRACT',
+	leaf : true
+}, {	
+	text : 'WM_SDB入库',
+	cataUrl : 'query.do?__opr_data=T_WM_SDBIN',
+	leaf : true
+}, {
+	text : 'WM_SDB出库',
+	cataUrl : 'query.do?__opr_data=V_WM_OUT',
+	leaf : true
+}, {
+	text : 'WM_SDB合作协议',
+	cataUrl : 'query.do?__opr_data=T_WM_AGREEMENT',
+	leaf : true
+}, {
+	text : 'WM_SDB库存汇总',
+	cataUrl : 'query.do?__opr_data=V_WM_STOCK1',
+	leaf : true
+}, {
+	text : 'WM_SDB库存销售',
+	cataUrl : 'query.do?__opr_data=V_WM_STORESALE',
+	leaf : true
+}, {
+	text : 'WM商品',
+	cataUrl : 'query.do?__opr_data=T_DIC_PRODUCT',
+	leaf : true
+}, {
+	text : 'WM库主',
+	cataUrl : 'query.do?__opr_data=T_WM_OPERATOR&__displayName=NAME',
+	leaf : true
+}, {
+	text : 'WM仓库',
+	cataUrl : 'query.do?__opr_data=T_DIC_WAREHOUSE',
+	leaf : true
+}, {
+	text : 'WM仓位',
+	cataUrl : 'tree.do?__opr_data=T_DIC_WAREWHERE&__displayName=CODE',
+	leaf : true
+}, {
+	text : 'WM入库单',
+	cataUrl : 'query.do?__opr_data=T_WM_IN&__displayName=IN_NO',
+	leaf : true
+}, {
+	text : 'WM出库单',
+	cataUrl : 'query.do?__opr_data=T_WM_OUT&__displayName=OUT_NO',
+	leaf : true
+}, {
+	text : 'WM库存汇总(所有)',
+	cataUrl : 'query.do?__opr_data=V_WM_PRODUCT&__displayName=PRO_CODE',
+	leaf : true
+}, {
+	text : 'WM库存汇总(按仓位)',
+	cataUrl : 'query.do?__opr_data=V_WM_PRODUCT2&__displayName=PRO_CODE',
+	leaf : true
+}, {
+	text : 'WM库存汇总(按产品)',
+	cataUrl : 'query.do?__opr_data=V_WM_PRODUCT3&__displayName=PRO_CODE',
+	leaf : true
+}, {
+	text : 'WM库存预警',
+	cataUrl : 'query.do?__opr_data=V_WM_PRODUCT4&__displayName=PRO_CODE',
+	leaf : true
+}, {
+	text : 'WM合同',
+	cataUrl : 'query.do?__opr_data=T_WM_CONTRACT',
+	leaf : true
+}, {
+	text : '销售借样',
+	cataUrl : 'query.do?__opr_data=T_PO_LOAN',
+	leaf : true
+}, {
+	text : '销售合同',
+	cataUrl : 'query.do?__opr_data=T_PO_CONTRACT',
+	leaf : true
+}]

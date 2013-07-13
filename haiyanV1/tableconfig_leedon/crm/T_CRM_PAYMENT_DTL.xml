@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Haiyan xsi:noNamespaceSchemaLocation="../../haiyan.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<table description="收款明细" name="T_CRM_PAYMENT_DTL" realTable="T_CRM_PAYMENT_DTL" colspan="6">
+		<id name="ID" javaType="string">
+			<component type="hidden" url="#"/>
+		</id>
+		<field name="PAY_MONEY" javaType="bigDecimal" description="收款金额">
+			<component type="regText" validator="^-?((\d{1,3}(,\d{3})*?)|\d+)(\.\d{1,2})?$" validatorText="必须为金额数字" maxFractionDigit="2" minFractionDigit="2" numberGrouping="true" style="align:right"/>
+		</field>
+		<field name="RECEIVER_ID" javaType="string" description="收款经办人">
+			<component type="richSelect" referenceTable="SYSOPERATOR_VIEW" referenceField="ID" displayReferenceField="NAME"/>
+		</field>
+		<field name="PAY_DATE" javaType="date" description="收款日期" dataStyle="yyyy-MM-dd">
+			<component type="date"/>
+		</field>
+		<field name="REMARK" javaType="string" description="备注">
+			<component type="textArea" colspan="3" style="width:560;height:75"/>
+		</field>
+		<field name="CREATE_USER_ID" javaType="string" description="创建人">
+			<component type="richSelect" quickQueryConditionField="NAME" referenceTable="SYSOPERATOR_VIEW" referenceField="ID" displayReferenceField="NAME" readOnly="true"/>
+			<listColumn noquery="false" nowrap="true"/>
+		</field>
+		<field name="CREATE_TIME" javaType="date" dataStyle="yyyy-MM-dd HH:mm:ss" description="创建时间">
+			<component type="dateTime" readOnly="true"/>
+			<queryCondition type="none"/>
+			<listColumn noquery="false" width="150" nowrap="true"/>
+		</field>
+		<field name="HEADID" javaType="string" description="收款主表ID">
+			<component type="hidden" readOnly="true" referenceTable="T_CRM_PAYMENT" referenceField="ID" displayReferenceField="CODE"/>
+			<queryCondition type="none"/>
+			<listColumn noquery="true"/>
+		</field>
+		<!-- -->
+		<queryFilter>
+			<pluggedFilter methodName="exp" parameter=" { and t_1.HEADID='}&amp;GetPara({HEADID})&amp;{' } "/>
+		</queryFilter>
+		<!-- -->
+		<pluginInterceptor className="haiyan.crm.interceptor.CRMPaymentDtlInterceptor" methodName="updateMoneyAfterAddOrEdit" parameter="" pluginName="save" type="after"/>
+		<pluginInterceptor className="haiyan.crm.interceptor.CRMPaymentDtlInterceptor" methodName="updateMoneyAfterDelete" parameter="" pluginName="delete" type="before"/>
+		<pluginInterceptor methodName="setCreateUser" parameter="CREATE_USER_ID" pluginName="save"/>
+		<pluginInterceptor methodName="setCreateTime" parameter="CREATE_TIME,yyyy-MM-dd HH:mm:ss" pluginName="save"/>
+		<pluginInterceptor methodName="onlyByMaker" parameter="CREATE_USER_ID" pluginName="save"/>
+		<pluginInterceptor methodName="onlyByMaker" parameter="CREATE_USER_ID" pluginName="delete"/>
+		<pluginInterceptor methodName="setCreateUser" parameter="RECEIVER_ID" pluginName="edit"/>
+		<pluginInterceptor methodName="setCreateTime" parameter="PAY_DATE,yyyy-MM-dd" pluginName="edit"/>
+	</table>
+</Haiyan>

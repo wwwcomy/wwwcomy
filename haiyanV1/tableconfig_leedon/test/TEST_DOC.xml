@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Haiyan xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../haiyan.xsd">
+	<table name="TEST_DOC" description="DOC测试" realTable="TEST_DBM">
+		<!--  colspan="4" -->
+		<id name="ID" description="ID" javaType="string">
+			<component type="hidden" url="$"/>
+		</id>
+		<field name="CODE" description="模板(默认Test)" displayOnly="false" javaType="string" lazyLoad="false" 
+			   one2oneField="CODE" one2oneTable="TEST_ONE2ONE">
+			<component type="text" readOnly="false"/>
+			<queryCondition type="equal"/>
+		</field>
+		<field name="NAME" description="目标文件名称" displayOnly="false" javaType="string" lazyLoad="false" 
+			   one2oneField="NAME" one2oneTable="TEST_ONE2ONE">
+			<component type="text" readOnly="false"/>
+			<queryCondition type="equal"/>
+		</field>
+		<javascript hostPage="edit"><![CDATA[
+            var __win_width=500;
+            var __metaWin=null;
+            function interceptorOnItemClick(item, checked) {
+                if (item.name=='close') {
+					window.close();
+					return false;
+				}
+			}
+	    ]]></javascript>
+		<!-- className="haiyan.interceptor.DroolsInterceptor" Doc(模板名 文件名 数据 是否覆盖,否则追加) -->
+		<pluginInterceptor methodName="exp" parameter="
+			 Set({__opr_data},{SYSOPERATOR})
+			+Doc(Get(CODE),Get(NAME),Page(SYSOPERATOR,{}),true)
+			+Set({__opr_data},{SYSORGA})
+			+Doc(Get(CODE),Get(NAME),Page(SYSORGA,{}),false)
+			+ClearDoc(Get(NAME))
+			+WriteJS(&quot;alert('successful')&quot;,{edit})" 
+		pluginName="testDOC" type="before"/>
+		<!-- 
+		{window.open('http://localhost:8087/haiyan/upload/docfile/Test.doc','_blank');}
+		<pluginInterceptor methodName="exp" parameter="Set(MEMO,{upload/docfile/Test.doc})" pluginName="edit" type="after"/>
+		-->
+		<!--
+		<pluginOperation name="testDOC" oprName="EXP生成DOC" hostPage="edit" tblevel="1" action="Hy.mask();"/>
+		<pluginOperation name="downDoc" oprName="下载DOC" hostPage="edit" tblevel="1" action="Hy.openWin(Hy.getContextName()+\'/upload/docfile/\'+Hy.getValue(NAME)+\'.doc\');brk();"/>
+		-->
+		<pluginOperation name="testDOC" oprName="EXP生成DOC" hostPage="edit" tblevel="1" action="mask()"/>
+		<pluginOperation name="downDoc" oprName="下载DOC" hostPage="edit" tblevel="1" 
+			action="OpenWin(ContextName()&amp;{/upload/docfile/}&amp;Get(NAME)&amp;{.doc},{},{},{modal})+brk()"/>
+	</table>
+</Haiyan>

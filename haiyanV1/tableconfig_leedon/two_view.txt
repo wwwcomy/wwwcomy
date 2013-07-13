@@ -1,0 +1,12 @@
+create or replace view V_WM_SDBITEMCOUNT as (
+select t2.ID AS PRODUCTID,t1.PRODUCT_ID AS SDB_PRODUCT_ID,t1.FREEZ AS NUMS 
+from SDB_PRODUCTS t1 join T_WM_PRO t2 on t1.PRODUCT_ID = t2.SDB_PRODUCT_ID
+)
+
+
+
+create or replace view V_WM_IN as
+(select sum(t_1.PRO_COUNT) AS PRO_COUNT,t_1.PRODUCTID AS PRODUCTID
+from T_WM_SDBINPRE t_1 left join T_WM_SDBIN t_2 on t_1.HEADID = t_2.ID
+where t_2.BILL_STATUS = 'init'
+group by t_1.PRO_COUNT,t_1.PRODUCTID)

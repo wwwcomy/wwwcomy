@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Haiyan xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../haiyan.xsd">
+<table name="T_DIC_DEPARTMENT" description="部门" >
+        <id name="ID" javaType="string"/>
+        <field name="CODE" description="部门编码" javaType="string">
+		<component type="text"/>
+	</field>
+	<field name="NAME" description="部门名称" javaType="string">
+		<component type="text"/>
+	</field>
+	<field name="LEADER" description="部门领导" javaType="string">
+		<component type="text"/>
+	</field>
+	<field name="DESCRIPTION" description="说明" javaType="string">
+		<component type="text"/>
+	</field>
+</table>
+</Haiyan>

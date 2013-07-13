@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rule-set declaration="" name="Tests assignment rules" xmlns="http://drools.org/rules" xmlns:java="http://drools.org/semantics/java" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<!-- -->
+	<java:import>com.haiyan.genmis.core.db.DBManager</java:import>
+	<java:import>com.haiyan.genmis.core.SrvContext</java:import>
+	<java:import>com.haiyan.genmis.core.struts.*</java:import>
+	<java:import>com.haiyan.genmis.core.right.*</java:import>
+	<java:import>com.haiyan.genmis.core.*</java:import>
+	<java:import>com.haiyan.genmis.core.exception.*</java:import>
+	<java:import>com.haiyan.genmis.castorgen.Table</java:import>
+	<java:import>com.haiyan.genmis.util.*</java:import>
+	<java:import>com.haiyan.genmis.util.string.*</java:import>
+	<java:import>haiyan.wfe.jbpm.intf.*</java:import>
+	<java:import>haiyan.wfe.jbpm.*</java:import>
+	<java:import>haiyan.interceptor.*</java:import>
+	<java:import>java.util.*</java:import>
+	<java:import>java.io.*</java:import>
+	<!-- -->
+	<application-data identifier="context">SrvContext</application-data>
+	<application-data identifier="dbm">DBManager</application-data>
+	<application-data identifier="table">Table</application-data>
+	<application-data identifier="form">Qbq3Form</application-data>
+	<!-- -->
+	<java:functions/>
+	<rule name="confirm" salience="0">
+		<parameter identifier="dForm">
+			<java:class>Qbq3Form</java:class>
+		</parameter>
+		<java:condition>"1".equals(dForm.getParameter("STATUS"))</java:condition>
+		<!-- STATUS==1没有流转 -->
+		<java:consequence>
+			if (StringUtil.isBlankOrNull(dForm.getParameter("USER_ID"))) {
+				context.addException(new DBBreakonAlert("客户经理不能为空!"));
+				return;
+			}
+			crm.interceptor.StartProcess.createAreaInfo(dbm, table, dForm, context, "T_CRM_CUSTOMER_QY_XS", "客户升级流程", "升级流程");	    
+      </java:consequence>
+	</rule>
+</rule-set>

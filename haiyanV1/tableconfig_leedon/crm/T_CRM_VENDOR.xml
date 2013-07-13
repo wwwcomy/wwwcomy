@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Haiyan xsi:noNamespaceSchemaLocation="../../haiyan.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<table description="Leedon vendor info" name="T_CRM_VENDOR" realTable="T_CRM_VENDOR">
+		<id name="ID" javaType="string"/>
+		<field name="NAME" javaType="string" description="供应商名称" nullAllowed="false">
+			<component type="text"/>
+			<queryCondition type="blurMatching"/>
+			<listColumn noquery="false" width="100"/>
+		</field>
+		<field name="INDUSTRY" javaType="string" description="行业">
+			<component type="richSelect" referenceTable="T_CRM_HANGYE" referenceField="ID" displayReferenceField="NAME" quickQueryConditionField="NAME,CODE" associatedFields=""/>
+			<queryCondition type="equal"/>
+			<listColumn noquery="false" nowrap="false" width="80"/>
+		</field>
+		<field name="TELEPHONE" javaType="string" description="公司电话">
+			<component type="text"/>
+			<listColumn noquery="false" nowrap="false" width="100"/>
+		</field>
+		<field name="FAX" javaType="string" description="公司传真">
+			<component type="text"/>
+			<listColumn noquery="false" nowrap="false" width="100"/>
+		</field>
+		<field name="INVOICEINFO" javaType="string" description="发票信息">
+			<component type="textArea"/>
+			<listColumn noquery="false" nowrap="false"/>
+		</field>
+		<!--		<field name="JQ" javaType="string" description="需要精确地址">
+			<component type="text" readOnly="true" displayReferenceField="JQ"/>
+			<listColumn noquery="true" nowrap="false"/>
+		</field>
+-->
+		<field name="WEBURL" javaType="string" description="官方网址">
+			<component type="text"/>
+			<listColumn noquery="false" nowrap="false"/>
+		</field>
+		<field name="AREACODE" javaType="string" description="地区">
+			<component type="richSelect" referenceTable="T_DIC_COMMON_CITY" referenceField="ID" displayReferenceField="NAME" quickQueryConditionField="NAME,CODE"/>
+			<!--<associatedFields="PROVINCE_NAME"/>-->
+			<queryCondition type="blurMatching"/>
+			<listColumn noquery="false" nowrap="false" width="75"/>
+		</field>
+		<field name="CREATE_USER_ID" javaType="string" description="创建人">
+			<component type="richSelect" quickQueryConditionField="NAME" referenceTable="SYSOPERATOR_VIEW" referenceField="ID" displayReferenceField="NAME" readOnly="true"/>
+			<listColumn noquery="false" nowrap="true"/>
+		</field>
+		<field name="CREATE_TIME" javaType="date" dataStyle="yyyy-MM-dd HH:mm:ss" description="修改时间">
+			<component type="dateTime" readOnly="true"/>
+			<queryCondition type="none"/>
+			<listColumn noquery="true" nowrap="true"/>
+		</field>
+		<field name="CON_LASTTIME" javaType="date" dataStyle="yyyy-MM-dd HH:mm:ss" description="最近联系时间">
+			<component type="dateTime" readOnly="true"/>
+			<queryCondition type="region"/>
+			<listColumn noquery="false"/>
+		</field>
+		<PageView showField="*" methodName="editPageView" parameter="queryByForm.do?__opr_data=T_CRM_CONTACT&amp;CUS_ID={0},ID" hostPage="edit" type="userdefined" title="供应商联系人"/>
+		<!--		<PageView showField="*" methodName="editPageView" parameter="queryByForm.do?__opr_data=T_CRM_CONTACT&amp;CUS_ID={0},ID" hostPage="edit" type="userdefined" title="客户联系人"/>-->
+		<queryFilter>
+			<!--		
+			<pluggedFilter methodName="exp" parameter="If( InRole({manager},{boss}), {}, { and ( t_1.CREATE_USER_ID='}&amp;GetUser({ID})&amp;{' or t_1.USER_ID='}&amp;GetUser({ID})&amp;{' or t_1.USER_ID_1='}&amp;GetUser({ID})&amp;{' or t_1.USER_ID_2='}&amp;GetUser({ID})&amp;{' or t_1.USER_ID_3='}&amp;GetUser({ID})&amp;{' ) } )"/>
+-->
+		</queryFilter>
+	</table>
+</Haiyan>

@@ -1,0 +1,26 @@
+//自动生成批次号
+void genBatch() throws Throwable {
+	DBManager dbm = context.getDBM();
+	String ID = form.get("ID");
+	String PRODUCTID = form.get("PRODUCTID");
+	String HEADID = form.get("HEADID");
+	String batch = form.get("BATCH");
+	if(!StringUtil.isBlankOrNull(batch)){
+		java.util.regex.Pattern ptn = java.util.regex.Pattern.compile("\\d{8}");
+		java.util.regex.Matcher matcher = ptn.matcher(batch);
+		if(!matcher.matches()&&batch!="-1")
+			throw new Warning("请检查批次格式:'"+batch+"',应当为8位数字.");
+	} else{
+		String sql = "select max(BATCH) from T_WM_SDBINPRE where PRODUCTID="+PRODUCTID;
+		String[][] rs = dbm.getResultStrArray(sql, 1, null);
+		String maxBatch = rs[0][0];
+		String date = new java.text.SimpleDateFormat("yyMMdd").format(new java.util.Date());
+		//如果以当前日期开头,则直接加一
+		if(!StringUtil.isBlankOrNull(maxBatch) && maxBatch.startsWith(date))
+			form.set("BATCH",(TypeConvert.toInt(maxBatch)+1).toString());
+		else
+			form.set("BATCH",date+"01");
+	}
+}
+
+genBatch();

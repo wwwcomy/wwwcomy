@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Haiyan xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../haiyan.xsd">
+	<table name="T_DIC_PRICE_CTL" description="产品价格类">
+		<id name="ID" javaType="string"/>
+		<field name="PRODUCT" description="产品" javaType="string">
+			<component type="text"/>
+		</field>
+		<field name="PRICETYPE" description="产品类型" javaType="string">
+			<component type="dropdown" defaultValue="0">
+				<option displayName="A价" value="0"/>
+				<option displayName="B价" value="1"/>
+				<option displayName="C价" value="2"/>
+			</component>
+		</field>
+		<field name="PRICE" description="价格" javaType="string">
+			<component type="text"/>
+		</field>
+	</table>
+</Haiyan>

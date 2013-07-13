@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Haiyan xsi:noNamespaceSchemaLocation="../../haiyan.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<table description="系统资源表" name="SYSRESOURCE">
+		<id name="ID" javaType="string">
+			<component type="hidden" url="#"/>
+		</id>
+		<!--
+		<field name="NAME" javaType="string" description="名称">
+			<component type="text"/>
+		</field>
+		-->
+		<field name="SHORTNAME" javaType="string" description="简称">
+			<component type="text" colspan="3" style="width:300;"/>
+		</field>
+		<!--
+		<field name="CODE" javaType="string" description="编号">
+			<component type="text"/>
+		</field>
+		-->
+		<field name="F" javaType="string" description="文件">
+			<component type="image" colspan="3"/>
+			<listColumn width="65" height="65"/>
+		</field>
+		<field name="CREATETIME" javaType="date" description="创建时间">
+			<component type="date" readOnly="true"/>
+		</field>
+		<field name="CREATOR" javaType="string" description="创建人">
+			<component type="richSelect" readOnly="true" referenceTable="SYSOPERATOR" displayReferenceField="NAME" quickQueryConditionField="NAME" url="#"/>
+		</field>
+		<javascript hostPage="ids"><![CDATA[
+			// default custom renderer function
+			function renderImage(value, metaData, record) {
+				return '<img src="'+Hy.getHostName()+'/'+record.data.F+'" width=55 height=55/>';
+			}
+		]]></javascript>
+		<!--
+		<pluginInterceptor className="haiyan.interceptor.ResourceInterceptor" methodName="createUrl" pluginName="save" type="after"/>
+		-->
+		<pluginInterceptor methodName="completeAlert" pluginName="save" type="after"/>
+		<pluginInterceptor methodName="completeAlert" pluginName="delete" type="after"/>
+		<pluginInterceptor methodName="setCreateUser" parameter="CREATOR" pluginName="save"/>
+		<pluginInterceptor methodName="setCreateTime" parameter="CREATETIME,yyyy-MM-dd" pluginName="save"/>
+	</table>
+</Haiyan>

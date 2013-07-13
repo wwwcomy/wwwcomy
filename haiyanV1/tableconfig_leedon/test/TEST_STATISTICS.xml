@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Haiyan xsi:noNamespaceSchemaLocation="../../haiyan.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<table description="预算" name="TEST_STATISTICS">
+		<id name="ID" javaType="string"/>
+		<field name="PID" javaType="string" description="PID">
+			<component type="hidden" referenceTable="TEST_STATISTICS" referenceField="ID" displayReferenceField="NAME"/>
+		</field>
+		<field name="LEVELCODE" javaType="string" description="层次编码(规范)">
+			<component type="hidden"/>
+		</field>
+		<field name="CANEDIT" javaType="string" description="是否可编辑">
+			<component type="hidden"/>
+		</field>
+		<field name="NAME" javaType="string" description="名称">
+			<component type="text" readOnly="true"/>
+		</field>
+		<field name="MONEY" javaType="string" description="金额" defaultValue="0">
+			<component type="text"/>
+		</field>
+		<field name="MEMO" javaType="string" description="备注">
+			<component type="text" readOnly="true"/>
+		</field>
+		<!-- -->
+		<PageView showField="query.do?__opr_data=TEST_STATISTICS_EDIT" type="userdefined" title="新增项目"/>
+		<PageView showField="plugin.do?__pluginName=statistics&amp;__opr_data=TEST_STATISTICS" type="userdefined" title="编辑预算"/>
+		<!--
+		<StatisticsView levelCodeField="LEVELCODE" canWrittenField="CANEDIT" sumDetailField="MONEY" retractField="NAME"/>
+		-->
+		<pluginOperation name="statistics" oprName="编辑预算" accessKey="B" className="com.haiyan.genmis.statistics.StatisticsPlugin" hostPage="query"/>
+		<Operation queryPageQueryEdit="false" queryPageAdd="false" queryPageDelete="false" customizeColumns="false"/>
+	</table>
+	<table description="预算项目" name="TEST_STATISTICS_EDIT" realTable="TEST_STATISTICS">
+		<id name="ID" javaType="string"/>
+		<field name="NAME" javaType="string" description="名称">
+			<component type="text"/>
+		</field>
+		<field name="MEMO" javaType="string" description="备注">
+			<component type="text"/>
+		</field>
+		<field name="MONEY" javaType="string" description="金额" defaultValue="0.00">
+			<component type="readOnlyText"/>
+		</field>
+		<field name="PID" javaType="string" description="上级">
+			<component type="richSelect" referenceTable="TEST_STATISTICS_EDIT" referenceField="ID" displayReferenceField="NAME"/>
+		</field>
+		<field name="LEVELCODE" javaType="string" description="层次编码(规范)" defaultValue="0000">
+			<component type="text"/>
+		</field>
+		<field name="CANEDIT" javaType="string" description="是否可编辑" defaultValue="0">
+			<component type="dropdown" colspan="3" url="#">
+				<option displayName="不可编辑" value="0"/>
+				<option displayName="可编辑" value="1"/>
+			</component>
+		</field>
+	</table>
+</Haiyan>

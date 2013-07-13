@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Haiyan xsi:noNamespaceSchemaLocation="../../haiyan.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<table description="Product orders" name="T_SGMCI_ORDERPACK" realTable="T_SGMCI_ORDERPACK" colspan="6">
+		<id name="ID" description="主键" javaType="string">
+			<component type="hidden" readOnly="false" url=""/>
+		</id>
+		<!--
+		<field name="SHOWID" javaType="string" description="主键显示" displayOnly="true">
+			<component type="text" readOnly="true"  subQuerySQL="(select t_1.ID from T_SGMCI_ORDERPACK)"/>
+			<listColumn noedit="true" nowrap="true"/>
+		</field>
+		-->
+		<field name="SHOP" javaType="string" description="4S店" nullAllowed="true">
+			<component type="richSelect" referenceTable="T_SGMCI_SHOP" referenceField="ID" displayReferenceField="NAME" quickQueryConditionField="NAME" colspan="5" action="reloadproduct()"/>
+			<listColumn noedit="false" noquery="false" width="200"/>
+		</field>
+		<!--		
+		<field name="PRODUCT_ORDER" javaType="string" description="订购产品清单" nullAllowed="true">
+			<component type="grid" colspan="4" referenceField="SHOP" referenceTable="T_SGMCI_PRODUCTORDER" parameter="{&amp;SHOP=}&amp;If(IsEmpty(Get({SHOP})),-1,Get({SHOP}))" style="width:900;height:270;"/>
+			<queryCondition type="none"/>
+			<listColumn noquery="true"/>
+		</field>
+		-->
+		<field name="PRODUCT_ORDER" javaType="string" description="订购产品" displayOnly="true">
+			<component type="grid" referenceField="HEADID" referenceTable="T_SGMCI_PRODUCTORDER" parameter="{&amp;HEADID=}&amp;If(IsEmpty(Get(ID)),-1,Get(ID))" style="width:990;height:460;toolbar:no;" colspan="6" action="createproduct()"/>
+			<!-- referenceField 指定该列不管如何都隐藏可以作为外键使用 -->
+			<queryCondition type="none"/>
+			<listColumn noquery="true"/>
+		</field>
+		<field name="TOTAL" javaType="bigDecimal" description="总计金额" displayOnly="false">
+			<component type="text" readOnly="true" maxFractionDigit="2" minFractionDigit="2"/>
+			<listColumn noquery="false" nowrap="false"/>
+		</field>
+		<field name="STATUS" javaType="string" description="状态" defaultValue="0">
+			<component type="dropdown" readOnly="true">
+				<option displayName="征订中" value="0"/>
+				<option displayName="提交待审" value="1"/>
+				<option displayName="待审通过" value="2"/>
+				<option displayName="待审失败" value="3"/>
+				<option displayName="已付款可发货" value="4"/>
+			</component>
+			<listColumn noquery="false"/>
+		</field>
+		<field name="CREATE_TIME" javaType="date" dataStyle="yyyy-MM-dd HH:mm:ss" description="创建时间">
+			<component type="dateTime" readOnly="true"/>
+			<queryCondition type="none"/>
+			<listColumn noquery="false" nowrap="true" width="150"/>
+		</field>
+		<!-- -->
+		<queryFilter>
+			<pluggedFilter methodName="exp" parameter="IF(InRole(admin),{},{ and t_1.SHOP='}&amp;GetUser(DEPT)&amp;{'})"/>
+			<!--可以用公式过滤-->
+		</queryFilter>
+		<!-- -->
+		<javascript hostPage="edit"><![CDATA[
+			/*function renderTOTAL(value, metaData, record, rowIndex, colIndex, store, displayValue, refValue, fieldName) { // 列描绘
+				try {
+					var p = record.get('SALE_PRICE');
+					var f = record.get('FIXED_QUANTITY');
+					var a = record.get('ADD_QUANTITY');
+					return p*(f+a);
+				} catch(E) {
+					return 0;
+				}
+			}*/
+			function renderNum(value, metaData, record, rowIndex, colIndex, store, displayValue, refValue, fieldName) {
+				if (fieldName=='ADD_QUANTITY') 
+					return String.format('<div ext:qtip="填写数量" style="background:{0}">{1}</div>', '#EEFFEE', value);
+				else
+					return value;
+			}
+			function renderValue(value, metaData, record, rowIndex, colIndex, store, displayValue, refValue, fieldName) {
+				if (fieldName=='PICTURE' && !Ext.isEmpty(value)) 
+					return String.format('<div ext:qtip="点击查看"><a href="{0}" target="_blank">图片</a></div>', value);
+				else
+					return value;
+			}
+			Hy_UIFunction.reloadproduct = function(_paras) { // 自定义公式
+				gridField_PRODUCT_ORDER.getStore().reload();
+			};
+			Hy_UIFunction.createproduct = function(_paras) { // 自定义公式
+				//(function(){
+				if ($('ID').value=='-1') {
+					alert('不允许此模式下新增订单,ID为空(请使用edit模式新增)');
+					return;
+				}
+				if (!Ext.isEmpty(Ext.getCmp('CREATE_TIME').getValue()))
+					return;
+				if (Ext.isEmpty(comboField_SHOP.getValue()))
+				   return;
+				//if (gridField_PRODUCT_ORDER.getStore().getTotalCount()>0 || gridField_PRODUCT_ORDER.getStore().getCount()>0)
+				//   return;
+				Ext.Ajax.request({ // 设置默认明细行
+					url: Hy.getContextName() + '/ext_jsonlist.do?&__opr_data=T_SGMCI_PRODUCT&__out=json' , 
+					method : 'post' , 
+				   success : function(response, options) {
+				   		try {
+					   		var str = transMidJson(response.responseText);
+					   		var jsonObj = Ext.util.JSON.decode(str);
+					   		var rs = [],c = 0;
+					   		jsonObj.T_SGMCI_PRODUCT.each(function(product) {
+					   			var r=new Ext.data.Record({ 
+				                __operation:'NEW' 
+				                , __flag:'insert' 
+				                , ID:'' 
+				                , HEADID : $('ID').value 
+				                , SHOP : comboField_SHOP.getValue() 
+				                , __SHOP__NAME : comboField_SHOP.getRawValue()
+				                , PRODUCT : product.ID
+				                , __PRODUCT__PRODUCT_NAME : product.PRODUCT_NAME
+						         , PICTURE : product.PICTURE
+				                , SALE_PRICE : product.PRODUCT_PRICE
+				                , FIXED_QUANTITY : product.DEFAULT_QUANTITY
+				                , ADD_QUANTITY : '0'
+				                , STATUS : '0'
+				                , TOTAL : '0'
+				                , BILL_NO : ''
+				                , CREATE_TIME : ''
+				             });
+				             rs[c++]=r;
+					   		});
+					   		gridField_PRODUCT_ORDER.stopEditing();
+					   		gridField_PRODUCT_ORDER.getStore().removeAll();
+					   		gridField_PRODUCT_ORDER.getStore().insert(0, rs);
+					   	} finally {
+				   		}
+				   }
+				});
+				//}).defer(100);
+			};
+			//var F = Ext.ux.grid.MetaEditorGridPanel.prototype.load;
+			//F = F.createSequence(function() {});
+			//Ext.onReady(function() {});
+			//Ext.getCmp('PRODUCT_ORDER').getStore().each(function(rec){
+			//	  rec.data.__SHOP__NAME = comboField_SHOP.getRawValue(), rec.data.SHOP = comboField_SHOP.getValue();
+			//});
+		]]></javascript>
+		<!-- 操作拦截器 -->
+		<!-- <pluginInterceptor methodName="exp" parameter="Set(__one2oneID,Get(ID))" pluginName="save" type="before"/> -->
+		<!-- <pluginInterceptor methodName="exp" pluginName="edit" parameter="DisBtns(save,saveAndAdd,saveAndAddCopy);" type="before"/> -->
+		<!-- saveAll必须要进行__one2oneID的设置 -->
+		<pluginInterceptor methodName="exp" parameter="
+			 If(IsEmpty(Get(ID)),Set(ID,UUID()),true)
+			+SetPara(__one2oneID,Get(ID))
+			+If(IsEmpty(Get(CREATE_TIME)),Set(SHOP,GetUser(DEPT),__SHOP__NAME,DBFindValue({select NAME from SYSORGA where ID='}&amp;GetUser(DEPT)&amp;{'},1,0,0)),DisFlds(SHOP))
+			+If(And(Int(Get(STATUS))&gt;0,Not(Get(STATUS)={3})),If(InRole(admin),true,DisBtns(saveAll,submit)),true)
+		" pluginName="edit" type="before"/>
+		<pluginInterceptor methodName="exp" parameter="
+			If(
+				Size(
+					DBFilter(T_SGMCI_ORDERPACK,{ and t_1.STATUS in ('0','1') and t_1.SHOP='}&amp;Get(SHOP)&amp;{' and t_1.ID&lt;&gt;'}&amp;Get(ID)&amp;{'},10)
+				)&gt;0
+				,Warning({不允许新增订单,当前4S店尚有未处理的订单})
+				,true
+			)
+			+SetCreateTime(CREATE_TIME)" pluginName="save" type="before"/>
+		<pluginInterceptor methodName="exp" parameter="
+			Set(TOTAL,DBFilterSum(T_SGMCI_PRODUCTORDER,TOTAL,{and t_1.HEADID='}&amp;Get(ID)&amp;{'},5000))
+		" pluginName="cal" type="before"/>
+		<!-- 操作按钮 -->
+		<pluginOperation name="saveAll" oprName="保存" hostPage="edit" tblevel="1" img="save" action="
+			Save({},{},{PRODUCT_ORDER})+Brk();
+		"/>
+		<pluginOperation name="submit" oprName="保存并提交" hostPage="edit" tblevel="1" img="save" action="
+			Set(STATUS,1)+Save({},{},{PRODUCT_ORDER})+Brk();
+		"/>
+		<pluginOperation name="cal" oprName="计算总金额" hostPage="edit" tblevel="1" img="save"/>
+		<!-- 扩展参数 -->
+		<Operation queryPageDelete="false" save="false" saveAndAdd="false" saveAndAddCopy="false"/>
+	</table>
+</Haiyan>

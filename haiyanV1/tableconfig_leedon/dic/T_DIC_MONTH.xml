@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Haiyan xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../haiyan.xsd">
+	<table name="T_DIC_MONTH" description="月份">
+		<id name="ID" javaType="string">
+			<component type="hidden" url="#"/>
+		</id>
+		<field name="CODE" description="编码" javaType="string">
+			<component type="text"/>
+		</field>
+		<field name="NAME" description="名称" javaType="string">
+			<component type="text"/>
+		</field>
+	</table>
+</Haiyan>

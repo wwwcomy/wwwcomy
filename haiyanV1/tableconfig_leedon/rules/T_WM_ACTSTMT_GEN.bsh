@@ -1,0 +1,56 @@
+String getMonth(String date){
+	if(date.length()!=8)
+		throw new Warning("日期"+date+"格式错误，正确格式为20120101");
+	String re = "";
+	String month = date.substring(4, 6);
+	String year = date.substring(0, 4);
+	if (TypeConvert.toInt(date.substring(6)) > 20) {
+		if (month.equals("12"))
+			re = "" + (TypeConvert.toInt(year) + 1) + "01";
+		else {
+			month = "" + (TypeConvert.toInt(month) + 1);
+			month = month.length() == 1 ? ("0" + month) : month;
+			re = year + month;
+		}
+	} else
+		re = year + month;
+	return re;
+}
+void genSupplierData(){
+
+	DBManager dbm = context.getDBM();
+	String month=null;
+	String date = new java.text.SimpleDateFormat("yyyyMMdd").format(new java.util.Date());
+	month = getMonth(date);
+	//month = "201301";
+	String sql = "select count(*) from T_WM_ACCOUNTSTATEMENT where SUPP_MONTH like '%"+month+"'";
+	String[][] rs1 = dbm.getResultStrArray(sql, 1, null);
+	if(rs1.length>0) {
+		String count = rs1[0][0];
+		if(TypeConvert.toInt(count)>0){
+			throw new Warning("月份"+month+"的数据已经初始化，请检查自动任务");
+		}
+	}
+	
+	
+	//String ID = form.get("ID");
+	String sql = "select ID,CODE,NAME from T_DIC_ORGA where SUPP_CODE<>''";
+	String[][] rs = dbm.getResultStrArray(sql, 3, null);
+	if(rs.length>0) {
+		int l = rs.length;
+		for(int i = 0; i<l;i++){
+			String suppID = rs[i][0];
+			String suppCode = rs[i][1];
+			String suppName = rs[i][2];
+		
+			Table outDetail = ConfigUtil.getTable("T_WM_ACCOUNTSTATEMENT");
+			Qbq3Form form = new MapForm();
+			form.set("SUPP_MONTH", suppID+"_"+month);
+			form.set("MONTH",month);
+			form.set("SUPPLIER",suppID);
+			form.set("__SUPPLIER__NAME",suppName);
+			context.getDBM().insert(outDetail, form, context, null);
+		}
+	}
+}
+genSupplierData();

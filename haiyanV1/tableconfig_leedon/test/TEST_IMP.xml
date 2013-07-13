@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Haiyan xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../haiyan.xsd">
+	<!-- -->
+	<table name="TEST_IMP" description="测试导入" realTable="TEST_UPLOAD" colspan="4">
+		<id name="ID" description="ID" javaType="string">
+			<component type="hidden" readOnly="false" url="#"/>
+		</id>
+		<field name="MEMO" description="说明" javaType="string" nullAllowed="false">
+			<component type="text"/>
+		</field>
+		<field name="FILES" description="上传文件" displayOnly="false" javaType="string" lazyLoad="false">
+			<component type="file" readOnly="false"/>
+			<!-- pathTable="TEST_IMP" -->
+			<queryCondition type="equal"/>
+			<listColumn width="400"/>
+		</field>
+		<javascript hostPage="ids"><![CDATA[
+			function renderFile(value, metaData, record, rowIndex, colIndex, store, displayValue, refValue, fieldName) {
+				return value;
+			}
+		]]></javascript>
+		<pluginInterceptor className="haiyan.xls.ExcelInterceptor" methodName="importData" pluginName="imp" parameter="FILES,,TEST_DBM,0" type="before"/>
+		<pluginInterceptor className="haiyan.xls.ExcelInterceptor" methodName="importData" pluginName="impShop" parameter="FILES,,T_SGMCI_SHOP,0" type="before"/>
+		<pluginInterceptor className="haiyan.xls.ExcelInterceptor" methodName="importData" pluginName="impUser" parameter="FILES,,T_SGMCI_USER,0" type="before"/>
+		<pluginOperation name="imp" oprName="导入测试" hostPage="edit" tblevel="1"/>
+		<pluginOperation name="impShop" oprName="导入商店" hostPage="edit" tblevel="1"/>
+		<pluginOperation name="impUser" oprName="导入用户" hostPage="edit" tblevel="1"/>
+	</table>
+	<!-- xls里第一列就是编码 第二列就是名称 第三列就是一个外键名称或者编码 
+	<table name="TEST_DBM" description="导入的表" realTable="GIFT_LIST">
+		<id name="ID" description="主键" javaType="string">
+			<component type="hidden" url="$"/>
+		</id>
+		<field name="CODE" description="编码" displayOnly="false" javaType="string" >
+			<component type="password" readOnly="false"/>
+			<queryCondition type="equal"/>
+		</field>
+		<field name="NAME" description="名称" displayOnly="false" javaType="string" >
+			<component type="text" readOnly="false"/>
+			<queryCondition type="equal"/>
+		</field>
+		<field name="ORGA_ID" description="所属机构" displayOnly="false" javaType="string" >
+			<component type="richSelect" readOnly="false" quickQueryConditionField="NAME" displayReferenceField="NAME" referenceField="ID" referenceTable="SYSORGA"/>
+			<queryCondition type="equal"/>
+		</field>
+	</table>-->
+</Haiyan>

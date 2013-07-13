@@ -1,0 +1,24 @@
+void updatePrice() {
+	String ID = form.get("ID");
+	DBManager dbm = context.getDBM();
+	String sql = "select distinct(t_2.PRODUCTID),t_1.CONTRA_INPRICE,t_1.NAME,t_1.CODE from T_WM_OUTDETAIL t_2 left join T_WM_PRO t_1 on t_1.id = t_2.PRODUCTID where t_2.HEADID='"+ID+"'";
+	String[][] result = dbm.getResultStrArray(sql, 4, null);
+	if (result.length>0) {
+		int l = result.length;
+		for(int i = 0; i<l;i++){
+			int price = -1;
+			price = TypeConvert.toInt(result[i][1]);
+			String proName = result[i][2];
+			String proWmcode = result[i][3];
+			if(price<0){
+				throw new Warning("审批失败,商品 '"+proWmcode+"' 的价格为-1，没有有效合同价格!请在合同中查找此商品的有效价格");
+			}
+		}
+		String sql1 = "update T_WM_OUTDETAIL t_2 left join T_WM_PRO t_1 on t_1.ID = t_2.PRODUCTID set t_2.PRO_CALC_PRICE = t_1.CONTRA_INPRICE where t_2.HEADID='"+ID+"'";
+		dbm.executeUpdate(sql1,null);
+	}else{
+		throw new Warning("商品表中没有对应商品");
+	}
+	// 更新T_WM_OUTDETAIL表中的价格
+}
+updatePrice();

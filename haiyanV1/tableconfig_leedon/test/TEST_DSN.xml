@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Haiyan xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../haiyan.xsd">
+	<table name="GP_OPERATOR" description="DSN数据源测试2" realTable="GP_OPERATOR" dbSource="local_mysql">
+		<id name="ID" description="ID" javaType="string">
+			<component type="hidden" readOnly="false" url="#"/>
+		</id>
+		<field name="CODE" description="CODE" displayOnly="false" javaType="string" lazyLoad="false">
+			<component type="text" readOnly="false"/>
+			<queryCondition type="equal"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="NAME" description="NAME" displayOnly="false" javaType="string" lazyLoad="false">
+			<component type="text" readOnly="false"/>
+			<queryCondition type="equal"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+	</table>
+	<table name="TEST_DSN" description="DSN数据源测试" realTable="TEST_DSN" dbSource="soap_jndi">
+		<id name="ID" description="ID" javaType="string">
+			<component type="hidden" readOnly="false" url="#"/>
+		</id>
+		<field name="CODE" description="CODE" displayOnly="false" javaType="string" lazyLoad="false">
+			<component type="text" readOnly="false"/>
+			<queryCondition type="equal"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="NAME" description="NAME" displayOnly="false" javaType="string" lazyLoad="false">
+			<component type="text" readOnly="false"/>
+			<queryCondition type="equal"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="MONEY" description="MONEY" displayOnly="false" javaType="bigDecimal" lazyLoad="false">
+			<component type="text" readOnly="false"/>
+			<queryCondition type="equal"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="MYERP_USER_ID" javaType="string" description="MYERP用户" lazyLoad="true" dsn="local_mysql">
+			<component type="richSelect" quickQueryConditionField="NAME" referenceTable="GP_OPERATOR" referenceField="ID" displayReferenceField="NAME" readOnly="false"/>
+		</field>
+		<!-- -->
+		<pluginOperation name="close" className="haiyan.plugin.CommonPlugin" oprName="调试close" hostPage="edit" tblevel="1"/>
+		<!-- -->
+		<!--
+		<role name="manager director sourcing_manager">
+			<disComponent name="CODE"/>
+			<disOperation name="save saveAndCopy close"/>
+		</role>
+		-->
+	</table>
+</Haiyan>

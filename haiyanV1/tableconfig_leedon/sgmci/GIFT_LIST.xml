@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Haiyan xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../haiyan.xsd">
+	<table name="GIFT_LIST" description="CI礼品部分" realTable="GIFT_LIST">
+		<id name="ID" description="ID" javaType="bigDecimal">
+			<component type="text" readOnly="true"/>
+		</id>
+		<field name="CODE" description="ASC代码" displayOnly="false" javaType="string" lazyLoad="false">
+			<component type="text" readOnly="false"/>
+			<queryCondition type="equal"/>
+		</field>
+		<field name="NAME" description="公司名" displayOnly="false" javaType="string" lazyLoad="false">
+			<component type="text" readOnly="false"/>
+			<queryCondition type="blurMatching"/>
+			<listColumn noedit="false" noquery="false" width="200"/>
+		</field>
+		<field name="ADDRESS" description="地址" displayOnly="false" javaType="string" lazyLoad="false">
+			<component type="text" readOnly="false"/>
+			<queryCondition type="blurMatching"/>
+		</field>
+		<field name="TEL" description="电话" displayOnly="false" javaType="string" lazyLoad="false">
+			<component type="text" readOnly="false"/>
+			<queryCondition type="equal"/>
+		</field>
+		<field name="MUG_10" description="马克杯10周年版" displayOnly="false" javaType="bigDecimal" lazyLoad="false">
+			<component type="text" readOnly="false"/>
+			<queryCondition type="none"/>
+		</field>
+		<field name="MUG_CARE" description="马克杯关怀版" displayOnly="false" javaType="bigDecimal" lazyLoad="false">
+			<component type="text" readOnly="false"/>
+			<queryCondition type="none"/>
+		</field>
+		<field name="MUG_TRACK_NO" description="马克杯快递单号" displayOnly="false" javaType="string" lazyLoad="false">
+			<component type="text" readOnly="false"/>
+			<queryCondition type="equal"/>
+		</field>
+		<field name="COASTER" description="杯垫" displayOnly="false" javaType="bigDecimal" lazyLoad="false">
+			<component type="text" readOnly="false"/>
+			<queryCondition type="none"/>
+		</field>
+		<field name="COASTER_TRACK_NO" description="杯垫快递单号" displayOnly="false" javaType="string" lazyLoad="false">
+			<component type="text" readOnly="false"/>
+			<queryCondition type="equal"/>
+		</field>
+		<field name="UMBERLLA" description="雨伞" displayOnly="false" javaType="bigDecimal" lazyLoad="false">
+			<component type="text" readOnly="false"/>
+			<queryCondition type="none"/>
+		</field>
+		<field name="UMBRELLA_TRACK_NO" description="雨伞快递单号" displayOnly="false" javaType="string" lazyLoad="false">
+			<component type="text" readOnly="false"/>
+			<queryCondition type="equal"/>
+		</field>
+		<field name="TISSUEBOX" description="纸巾盒" displayOnly="false" javaType="bigDecimal" lazyLoad="false">
+			<component type="text" readOnly="false"/>
+			<queryCondition type="none"/>
+		</field>
+		<field name="TISSUEBOX_TRACK_NO" description="纸巾盒单号" displayOnly="false" javaType="string" lazyLoad="false">
+			<component type="text" readOnly="false"/>
+			<queryCondition type="equal"/>
+		</field>
+		<field name="CARPET" description="地垫" displayOnly="false" javaType="bigDecimal" lazyLoad="false">
+			<component type="text" readOnly="false"/>
+			<queryCondition type="none"/>
+		</field>
+		<field name="CARPET_TRACK_NO" description="地垫单号" displayOnly="false" javaType="string" lazyLoad="false">
+			<component type="text" readOnly="false"/>
+			<queryCondition type="equal"/>
+		</field>
+		<field name="PAPERCUP_10" description="纸杯十周年" displayOnly="false" javaType="bigDecimal" lazyLoad="false">
+			<component type="text" readOnly="false"/>
+			<queryCondition type="none"/>
+		</field>
+		<field name="PAPERCUP_CARE" description="纸杯别克关怀" displayOnly="false" javaType="bigDecimal" lazyLoad="false">
+			<component type="text" readOnly="false"/>
+			<queryCondition type="none"/>
+		</field>
+		<field name="PAPERCUP_TRACK_NO" description="纸杯单号" displayOnly="false" javaType="string" lazyLoad="false">
+			<component type="text" readOnly="false"/>
+			<queryCondition type="equal"/>
+		</field>
+		<field name="ASHTRAY" description="烟灰缸" displayOnly="false" javaType="bigDecimal" lazyLoad="false">
+			<component type="text" readOnly="false"/>
+			<queryCondition type="none"/>
+		</field>
+		<field name="ASHTRAY_TRACK_NO" description="烟灰缸单号" displayOnly="false" javaType="string" lazyLoad="false">
+			<component type="text" readOnly="false"/>
+			<queryCondition type="equal"/>
+		</field>
+		<field name="NCHODER" description="名片座" displayOnly="false" javaType="bigDecimal" lazyLoad="false">
+			<component type="text" readOnly="false"/>
+			<queryCondition type="none"/>
+		</field>
+		<field name="NCHODER_TRACK_NO" description="名片座单号" displayOnly="false" javaType="string" lazyLoad="false">
+			<component type="text" readOnly="false"/>
+			<queryCondition type="equal"/>
+		</field>
+		<field name="DESK_TAG" description="业务接待卡" displayOnly="false" javaType="bigDecimal" lazyLoad="false">
+			<component type="text" readOnly="false"/>
+			<queryCondition type="none"/>
+		</field>
+		<field name="NOSMOKE1" description="禁烟提醒" displayOnly="false" javaType="bigDecimal" lazyLoad="false">
+			<component type="text" readOnly="false"/>
+			<queryCondition type="none"/>
+		</field>
+		<field name="NOSMOKE2" description="禁烟提醒小" displayOnly="false" javaType="bigDecimal" lazyLoad="false">
+			<component type="text" readOnly="false"/>
+			<queryCondition type="none"/>
+		</field>
+		<field name="PLAY" description="播放指示牌" displayOnly="false" javaType="bigDecimal" lazyLoad="false">
+			<component type="text" readOnly="false"/>
+			<queryCondition type="none"/>
+		</field>
+		<field name="3TAGS" description="旧件回收等3个指示牌" displayOnly="false" javaType="bigDecimal" lazyLoad="false">
+			<component type="text" readOnly="false"/>
+			<queryCondition type="none"/>
+		</field>
+		<field name="2PROT" description="防护类(2个)" displayOnly="false" javaType="bigDecimal" lazyLoad="false">
+			<component type="text" readOnly="false"/>
+			<queryCondition type="none"/>
+		</field>
+		<field name="REST" description="客户休息指引牌" displayOnly="false" javaType="bigDecimal" lazyLoad="false">
+			<component type="text" readOnly="false"/>
+			<queryCondition type="none"/>
+		</field>
+		<field name="KEEP_BELONG" description="物品保管提醒牌" displayOnly="false" javaType="bigDecimal" lazyLoad="false">
+			<component type="text" readOnly="false"/>
+			<queryCondition type="none"/>
+		</field>
+		<field name="SAVE_WATER" description="节约用水提醒牌" displayOnly="false" javaType="bigDecimal" lazyLoad="false">
+			<component type="text" readOnly="false"/>
+			<queryCondition type="none"/>
+		</field>
+		<field name="RECEPTION" description="客户接待卡" displayOnly="false" javaType="bigDecimal" lazyLoad="false">
+			<component type="text" readOnly="false"/>
+			<queryCondition type="none"/>
+		</field>
+		<field name="FAST_BALANCE" description="快速结算指引" displayOnly="false" javaType="bigDecimal" lazyLoad="false">
+			<component type="text" readOnly="false"/>
+			<queryCondition type="none"/>
+		</field>
+		<field name="PLANT1" description="车间标语1" displayOnly="false" javaType="bigDecimal" lazyLoad="false">
+			<component type="text" readOnly="false"/>
+			<queryCondition type="equal"/>
+		</field>
+		<field name="PLANT2" description="车间标语2" displayOnly="false" javaType="bigDecimal" lazyLoad="false">
+			<component type="text" readOnly="false"/>
+			<queryCondition type="none"/>
+		</field>
+		<field name="PLANT3" description="车间标语3" displayOnly="false" javaType="bigDecimal" lazyLoad="false">
+			<component type="text" readOnly="false"/>
+			<queryCondition type="none"/>
+		</field>
+		<field name="PLANT4" description="车间标语4" displayOnly="false" javaType="bigDecimal" lazyLoad="false">
+			<component type="text" readOnly="false"/>
+			<queryCondition type="none"/>
+		</field>
+		<field name="ARC_TRACK_NO" description="压克力产品单号1" displayOnly="false" javaType="string" lazyLoad="false">
+			<component type="text" readOnly="false"/>
+			<queryCondition type="equal"/>
+		</field>
+		<field name="ARC_TRACK_NO2" description="压克力产品单号2" displayOnly="false" javaType="string" lazyLoad="false">
+			<component type="text" readOnly="false"/>
+			<queryCondition type="equal"/>
+		</field>
+		<field name="SUB_TOTAL1" description="办公产品小计" displayOnly="false" javaType="bigDecimal" lazyLoad="false">
+			<component type="text" readOnly="false"/>
+			<queryCondition type="equal"/>
+		</field>
+		<field name="SUB_TOTAL2" description="车间指示牌产品小计" displayOnly="false" javaType="bigDecimal" lazyLoad="false" defaultValue="">
+			<component type="text" readOnly="false"/>
+			<queryCondition type="equal"/>
+		</field>
+		<field name="TOTAL" description="总计" displayOnly="false" javaType="bigDecimal" lazyLoad="false">
+			<component type="text" readOnly="false"/>
+			<queryCondition type="equal"/>
+		</field>
+		<field name="INVOICE" description="开票资料" displayOnly="false" javaType="string" lazyLoad="false">
+			<component type="textArea" readOnly="false" colspan="3" style="height:80px;width:90%;"/>
+			<queryCondition type="blurMatching"/>
+		</field>
+		<field name="MEMO" description="备注" displayOnly="false" javaType="string" lazyLoad="false">
+			<component type="textArea" readOnly="false" colspan="3" style="height:80px;width:90%;"/>
+			<queryCondition type="blurMatching"/>
+		</field>
+		<field name="PAYMENT" description="付款情况" displayOnly="false" javaType="bigDecimal" lazyLoad="false">
+			<component type="text" readOnly="false"/>
+			<queryCondition type="equal"/>
+		</field>
+		<field name="OK" description="是否可以发货" displayOnly="false" javaType="string" lazyLoad="false" defaultValue="0">
+			<component type="dropdown" readOnly="false">
+				<option displayName="确认可发" value="1"/>
+				<option displayName="待确认" value="0"/>
+			</component>
+			<queryCondition type="equal"/>
+		</field>
+		<field name="VAT" description="赠票以及手册发送" displayOnly="false" javaType="string" lazyLoad="false" defaultValue="0">
+			<component type="dropdown" readOnly="false">
+				<option displayName="待发送" value="0"/>
+				<option displayName="已发送" value="1"/>
+			</component>
+			<queryCondition type="equal"/>
+		</field>
+		<!--
+		<pluginInterceptor methodName="initDB" pluginName="initDB" type="before"><![CDATA[
+create or replace view V_TEST_DBM as
+(select * from TEST_DBM)
+		]]></pluginInterceptor>
+
+		<pluginOperation name="testSQL" className="haiyan.plugin.BshPlugin" oprName="调试SQL" hostPage="edit" tblevel="1"><![CDATA[
+		    dbm.executeUpdate(form.getParameter("TESTSQL"),null);
+		]]></pluginOperation>
+		-->
+	</table>
+</Haiyan>

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Haiyan xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../haiyan.xsd">
+	<table name="SYSUPDATEINFO" description="系统更新信息">
+		<id name="ID" javaType="string"/>
+		<field name="UPDATEDATE" description="更新时间" javaType="date">
+			<component type="date" colspan="3" url="#"/>
+		</field>
+		<field name="MAKEBILLERID" description="编制人" javaType="string">
+			<component quickQueryConditionField="NAME" type="richSelect" colspan="3" readOnly="true" referenceTable="SYSOPERATOR" displayReferenceField="NAME" url="#"/>
+			<queryCondition type="none"/>
+			<listColumn noquery="true"/>
+		</field>
+		<field name="UPDATEMEMO" description="更新内容" javaType="string">
+			<component type="fckeditor" colspan="3" style="rows:7"/>
+		</field>
+		<!--
+		<field name="BMEMO" description="大对象内容" javaType="blob">
+			<component type="fckeditor" colspan="3" style="rows:7"/>
+		</field>
+		-->
+		<pluginInterceptor pluginName="edit" className="haiyan.interceptor.DataInterceptor" methodName="putCreateUserInfo" parameter="MAKEBILLERID,__MAKEBILLERID__NAME"/>
+		<pluginInterceptor className="haiyan.interceptor.SaveInterceptor" methodName="complete" pluginName="save" type="after"/>
+		<pluginInterceptor className="haiyan.interceptor.DeleteInterceptor" methodName="complete" pluginName="delete" type="after"/>
+		<!--
+		<Operation useFlowEngine="true"/>
+		-->
+		<!--
+		<role name="admin">
+			<roleOperation name="listResult query edit queryOne save add delete"/>
+		</role>
+		<role name="developer bussiness test design guest practice instructor maintenance_assign officer drop sales finance">
+			<roleOperation name="query queryOne"/>
+		</role>
+		-->
+		<!-- -->
+		<Operation queryPageDelete="false" queryPageQueryEdit="false" saveAndAdd="false" saveAndAddCopy="false"/>
+	</table>
+</Haiyan>

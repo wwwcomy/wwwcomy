@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Haiyan xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../haiyan.xsd">
+	<table name="T_DIC_CSZL_PROVINCE" realTable="T_DIC_COMMON" description="省份">
+		<id name="ID" javaType="string">
+			<component type="hidden" url="#"/>
+		</id>
+		<field name="CODE" javaType="string" description="编号">
+			<component type="text"/>
+		</field>
+		<field name="NAME" javaType="string" description="名称">
+			<component type="text"/>
+		</field>
+		<field name="SHORTNAME" javaType="string" description="简称">
+			<component type="text"/>
+		</field>
+		<field name="PID" javaType="string" description="上级">
+			<component type="richSelect" referenceTable="T_DIC_COMMON" referenceField="ID" displayReferenceField="NAME"/>
+			<listColumn noquery="true"/>
+		</field>
+		<field name="MEMO" javaType="string" description="备注">
+			<component type="textArea" colspan="3"/>
+			<queryCondition type="none"/>
+			<listColumn noquery="true"/>
+		</field>
+		<field name="LABEL" javaType="string" description="分类标签1" defaultValue="CSZL">
+			<component type="hidden"/>
+			<queryCondition type="none"/>
+			<listColumn noquery="true"/>
+		</field>
+		<field name="LABEL2" javaType="string" description="分类标签2" defaultValue="PROVINCE">
+			<component type="hidden"/>
+			<queryCondition type="none"/>
+			<listColumn noquery="true"/>
+		</field>
+		<field name="LABEL3" javaType="string" description="分类标签3">
+			<component type="hidden"/>
+			<queryCondition type="none"/>
+			<listColumn noquery="true"/>
+		</field>
+		<field name="DATALEVEL" javaType="string" description="数据等级">
+			<component type="hidden"/>
+			<queryCondition type="none"/>
+			<listColumn noquery="true"/>
+		</field>
+		<queryFilter>
+			<pluggedFilter> and t_1.LABEL='CSZL' and t_1.LABEL2='PROVINCE' </pluggedFilter>
+		</queryFilter>
+		<!--
+                <pluginInterceptor className="haiyan.interceptor.SaveInterceptor" methodName="setCode" pluginName="save"/>
+                -->
+		<pluginInterceptor className="haiyan.interceptor.SaveInterceptor" methodName="complete" pluginName="save" type="after"/>
+		<pluginInterceptor className="haiyan.interceptor.DeleteInterceptor" methodName="complete" pluginName="delete" type="after"/>
+		<Operation queryPageAdd="true" queryPageDelete="true" queryPageQueryEdit="true"/>
+	</table>
+	<table name="T_DIC_CSZL_CITY" realTable="T_DIC_COMMON" description="城市">
+		<id name="ID" javaType="string">
+			<component type="hidden" url="#"/>
+		</id>
+		<field name="CODE" javaType="string" description="编号">
+			<component type="text"/>
+		</field>
+		<field name="NAME" javaType="string" description="名称">
+			<component type="text"/>
+		</field>
+		<field name="SHORTNAME" javaType="string" description="简称">
+			<component type="text"/>
+		</field>
+		<field name="PID" javaType="string" description="上级">
+			<component type="richSelect" referenceTable="T_DIC_COMMON" referenceField="ID" displayReferenceField="NAME"/>
+			<listColumn noquery="true"/>
+		</field>
+		<field name="MEMO" javaType="string" description="备注">
+			<component type="textArea" colspan="3"/>
+			<queryCondition type="none"/>
+			<listColumn noquery="true"/>
+		</field>
+		<field name="LABEL" javaType="string" description="分类标签1" defaultValue="CSZL">
+			<component type="hidden"/>
+			<queryCondition type="none"/>
+			<listColumn noquery="true"/>
+		</field>
+		<field name="LABEL2" javaType="string" description="分类标签2" defaultValue="CITY">
+			<component type="hidden"/>
+			<queryCondition type="none"/>
+			<listColumn noquery="true"/>
+		</field>
+		<field name="LABEL3" javaType="string" description="分类标签3">
+			<component type="hidden"/>
+			<queryCondition type="none"/>
+			<listColumn noquery="true"/>
+		</field>
+		<field name="DATALEVEL" javaType="string" description="数据等级">
+			<component type="hidden"/>
+			<queryCondition type="none"/>
+			<listColumn noquery="true"/>
+		</field>
+		<queryFilter>
+			<pluggedFilter> and t_1.LABEL='CSZL' and t_1.LABEL2='CITY' </pluggedFilter>
+		</queryFilter>
+		<!--
+       <pluginInterceptor className="haiyan.interceptor.SaveInterceptor" methodName="setCode" pluginName="save"/>
+       -->
+		<pluginInterceptor className="haiyan.interceptor.SaveInterceptor" methodName="complete" pluginName="save" type="after"/>
+		<pluginInterceptor className="haiyan.interceptor.DeleteInterceptor" methodName="complete" pluginName="delete" type="after"/>
+		<Operation queryPageAdd="true" queryPageDelete="true" queryPageQueryEdit="true"/>
+	</table>
+</Haiyan>

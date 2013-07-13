@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Haiyan xsi:noNamespaceSchemaLocation="../../haiyan.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<table name="T_OA_WORKPLAN" description="工作计划" realTable="T_OA_WORKPLAN">
+		<id name="ID" description="ID" javaType="string"/>
+		<field name="YEAR" description="年" javaType="string" displayOnly="false" lazyLoad="false">
+			<component type="dropdown" referenceTable="T_DIC_COMMON_YEAR" referenceField="NAME" displayReferenceField="NAME"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="MONTH" description="月" javaType="string" displayOnly="false" lazyLoad="false">
+			<component type="dropdown">
+				<option displayName="01" value="01"/>
+				<option displayName="02" value="02"/>
+				<option displayName="03" value="03"/>
+				<option displayName="04" value="04"/>
+				<option displayName="05" value="05"/>
+				<option displayName="06" value="06"/>
+				<option displayName="07" value="07"/>
+				<option displayName="08" value="08"/>
+				<option displayName="09" value="09"/>
+				<option displayName="10" value="10"/>
+				<option displayName="11" value="11"/>
+				<option displayName="12" value="12"/>
+			</component>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="SDATE" description="日" javaType="string" displayOnly="false" lazyLoad="false">
+			<component type="text" readOnly="false" colspan="3"/>
+		</field>
+		<field name="MEMO" description="地点和主要内容" javaType="string" displayOnly="false" lazyLoad="false">
+			<component type="textArea" readOnly="false" style="width:100%;height:100;" colspan="3"/>
+			<queryCondition type="none"/>
+			<listColumn noedit="false" noquery="true"/>
+		</field>
+		<field name="CREATE_USER_ID" description="撰稿人" javaType="string" displayOnly="false" lazyLoad="false">
+			<component type="richSelect" colspan="3" referenceTable="SYSOPERATOR" referenceField="ID" displayReferenceField="NAME" readOnly="true"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="COPY_TO" description="抄送" javaType="string" displayOnly="false" lazyLoad="true">
+			<component type="richSelect" colspan="3" referenceTable="SYSOPERATOR" referenceField="ID" displayReferenceField="NAME" multipleSelect="true"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="REASON" description="审批意见" javaType="string" displayOnly="false" lazyLoad="false">
+			<component type="textArea" readOnly="false" style="width:100%;height:100;" colspan="3"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<pluginInterceptor className="haiyan.interceptor.SaveInterceptor" methodName="setCreateUser" parameter="CREATE_USER_ID,__CREATE_USER_ID__NAME" pluginName="save"/>
+	</table>
+</Haiyan>

@@ -1,0 +1,106 @@
+[
+/*
+ * { text : 'OLAP库存分析', // http for Outer cataUrl : Hy.getHostName() +
+ * '/haiyan_olap/olap.jsp?query=wm_product', leaf : true },
+ */{
+			text : '在线用户',
+			id : 'userlist',
+			cataUrl : 'showUserListPage.do?',
+			leaf : true
+		}, {
+			text : '报表测试',
+			cataUrl : 'quick.do?__opr_data=TEST_REPORT',
+			leaf : true
+		}, {
+			text : '计划任务',
+			cataUrl : 'query.do?__opr_data=SYSTASK',
+			leaf : true
+		}, {
+			text : 'WM_EDP仓库',
+			cataUrl : 'query.do?__opr_data=T_DIC_WAREHOUSE',
+			leaf : true
+		}, {
+			text : 'WM_EDP仓位',
+			cataUrl : 'tree.do?__opr_data=T_DIC_WAREWHERE&__displayName=CODE',
+			leaf : true
+		}, {
+			text : 'WM_EDP仓位2',
+			cataUrl : 'tree.do?__opr_data=V_DIC_WAREWHERE&__displayName=CODE',
+			leaf : true
+		}, {
+			text : 'WM_SDB商品分类',
+			cataUrl : 'tree.do?__opr_data=V_DIC_SDBPROTYPE&__displayName=CAT_NAME',
+			leaf : true
+		}, {
+			text : 'WM_SDB商品查询',
+			cataUrl : 'view.do?__opr_data=V_DIC_SDBPROGOODS',
+			leaf : true
+		}, {
+			text : 'WM_EDP供应商',
+			cataUrl : 'query.do?__opr_data=T_DIC_SUPPLIER&__displayName=NAME',
+			leaf : true
+		}, {
+			text : 'WM_EDP合作协议',
+			cataUrl : 'query.do?__opr_data=T_WM_AGREEMENT',
+			leaf : true
+		}, {
+			text : 'WM_EDP商品',
+			cataUrl : 'view.do?__opr_data=V_WM_SDBPRODUCT',
+			leaf : true
+		}, {
+			text : 'WM_EDP合同',
+			cataUrl : 'query.do?__opr_data=T_WM_SDBCONTRACT',
+			leaf : true
+		}, {
+			text : 'WM_EDP入库',
+			cataUrl : 'query.do?__opr_data=T_WM_SDBIN',
+			leaf : true
+		}, {
+			text : 'WM_EDP出库',
+			cataUrl : 'query.do?__opr_data=V_WM_OUT',
+			leaf : true
+		}, {
+			text : 'WM_EDP出库(已审批)',
+			cataUrl : 'query.do?__opr_data=V_WM_OUT_HISTORY',
+			leaf : true
+		}, {
+			text : 'WM_EDP移库',
+			cataUrl : 'query.do?__opr_data=T_WM_STOCKTRANS',
+			leaf : true
+		}, {
+			text : 'WM_EDP退货',
+			cataUrl : 'query.do?__opr_data=T_WM_SDBRETURN',
+			leaf : true
+		}, {
+			text : '库存汇总(按仓库)',
+			cataUrl : 'view.do?__opr_data=V_WM_STOCK3',
+			leaf : true
+		}, {
+			text : '库存汇总(按仓位)',
+			cataUrl : 'view.do?__opr_data=V_WM_STOCKWHERE',
+			leaf : true
+		}, {
+			text : '库存汇总(按仓位,包括批次信息)',
+			cataUrl : 'view.do?__opr_data=V_WM_STOCKWHEREBATCH',
+			leaf : true
+		}, {
+			text : '所有出入库明细(包括批次信息)',
+			cataUrl : 'view.do?__opr_data=V_WM_STOCK1',
+			leaf : true
+		}, {
+			text : 'WM_EDP库存销售',
+			cataUrl : 'view.do?__opr_data=V_WM_STORESALE',
+			leaf : true
+		}, {
+			text : 'WM_EDP退货统计',
+			cataUrl : 'view.do?__opr_data=V_WM_STOCKRETURN',
+			leaf : true
+		}, {
+			text : 'V_WM_MONTHDTL',
+			cataUrl : 'view.do?__opr_data=V_WM_MONTHDTL',
+			leaf : true
+		}, {
+			text : 'T_WM_ACCOUNTSTATEMENT',
+			cataUrl : 'query.do?__opr_data=T_WM_ACCOUNTSTATEMENT',
+			leaf : true
+		}]

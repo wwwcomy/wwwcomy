@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<process-definition name="JBPM_SUB">
+	<swimlane name="starter" xmlns="urn:jbpm.org:jpdl-3.1">
+		<assignment class="haiyan.wfe.jbpm.handler.WfeAssignmentHandler">
+			<handlerClassName>haiyan.wfe.jbpm.WfeStarter</handlerClassName>
+		</assignment>
+	</swimlane>
+	<start-state name="Start">
+		<task swimlane="starter" xmlns="urn:jbpm.org:jpdl-3.1"/>
+		<transition id="16a895b8-aec3-4f5e-b367-de7a362aad5a" name="16a895b8-aec3-4f5e-b367-de7a362aad5a" to="Node"/>
+	</start-state>
+	<node name="Node">
+		<transition id="bbaf628a-6c28-4881-86e5-b944f9fd11ff" name="bbaf628a-6c28-4881-86e5-b944f9fd11ff" to="TaskNode_"/>
+	</node>
+	<task-node name="TaskNode_">
+		<event type="node-enter">
+			<action class="haiyan.wfe.jbpm.handler.WfeActionHandler">
+				<handlerClassName>haiyan.wfe.jbpm.WfeActionQZ</handlerClassName>
+				<handlerSettings>
+					<entry>
+						<key>transitionmap</key>
+						<value>[{'name':'2ddf94d4-2837-4e75-9af0-5fab68068cb3','code':'2ddf94d4-2837-4e75-9af0-5fab68068cb3','to':'End','btname':'Commit'}]</value>
+					</entry>
+				</handlerSettings>
+			</action>
+		</event>
+		<task xmlns="urn:jbpm.org:jpdl-3.1">
+			<assignment class="haiyan.wfe.jbpm.WfeAssignmentQZ">
+				<expression>${shenpijuese}1${#}admin(admin)${/shenpijuese}${shifouhuiqian}0${/shifouhuiqian}${kejianhuiqianyijian}0${/kejianhuiqianyijian}</expression>
+			</assignment>
+		</task>
+		<transition id="2ddf94d4-2837-4e75-9af0-5fab68068cb3" name="2ddf94d4-2837-4e75-9af0-5fab68068cb3" to="End"/>
+	</task-node>
+	<end-state name="End"/>
+	<event type="process-end">
+		<action class="haiyan.wfe.jbpm.handler.WfeActionHandler">
+			<handlerClassName>haiyan.wfe.jbpm.WfeProcessEnd</handlerClassName>
+		</action>
+	</event>
+</process-definition>

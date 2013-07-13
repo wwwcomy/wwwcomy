@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Haiyan xsi:noNamespaceSchemaLocation="../../haiyan.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<table description="付款申请表" name="T_PO_PAYREQUEST" realTable="T_PO_PAYREQUEST" >
+		<id name="ID" javaType="string">
+			<component type="hidden" url="#"/>
+		</id>
+		<field name="PAY_ACCOUNT" javaType="string" description="付款帐户">
+			<component type="dropdown" readOnly="false">
+				<option displayName="礼当.ICBC" value="1"/>
+				<option displayName="丽敦.CMB" value="2"/>
+				<option displayName="丽晶坊.BOC" value="3"/>
+			</component>
+		</field>
+		<field name="CREATE_TIME" javaType="date" dataStyle="yyyy-MM-dd HH:mm:ss" description="创建时间">
+			<component type="dateTime" readOnly="true"/>
+			<queryCondition type="none"/>
+			<listColumn noquery="false" nowrap="true"/>
+		</field>
+		<field name="CREATE_USER_ID" javaType="string" description="创建人">
+			<component type="richSelect" quickQueryConditionField="NAME" referenceTable="SYSOPERATOR_VIEW" referenceField="ID" displayReferenceField="NAME" readOnly="true"/>
+			<listColumn noquery="false" nowrap="true"/>
+		</field>
+		<field name="F_INCOMING" javaType="string" description="收入说明">
+			<component type="text"/>
+		</field>
+		<field name="CATE" javaType="string" description="分类说明">
+			<component type="text"/>
+		</field>
+		<field name="PAYMENT_MONEY" javaType="bigDecimal" defaultValue="0" description="支出金额" nullAllowed="false">
+			<component type="text" maxFractionDigit="2" minFractionDigit="2" numberGrouping="true" style="align:right" summaryType="sum2"/>
+			<queryCondition type="none"/>
+		</field>
+		<field name="PAYMENT_CATE" javaType="string" description="支出分类" nullAllowed="false">
+			<component type="dropdown" readOnly="false">
+				<option displayName="PO" value="PO"/>
+				<option displayName="固定开支" value="1"/>
+			</component>
+		</field>
+		<field name="MEMO" javaType="string" description="事宜" nullAllowed="false">
+			<component type="text"/>
+		</field>
+		<field name="PO_NUM" javaType="string" description="对应PO NUM" >
+			<component type="text"/>
+			<!--style="nowrap:true;font-weight:"
+			<listColumn nowrap="true"/>
+			-->
+		</field>
+		<field name="PO_CATE" javaType="string" description="PO支出项目">
+			<component type="dropdown" readOnly="false">
+				<option displayName="SampleFee 样品费" value="SampleFee"/>
+				<option displayName="AllPayment 全款" value="AllPayment"/>
+				<option displayName="DownPayment 预付款" value="DownPayment"/>
+				<option displayName="RemainingPayment 尾款" value="RemainingPayment"/>
+				<option displayName="RemainingPayment 尾款" value="RemainingPayment"/>
+				<option displayName="Transport 运费" value="Transport"/>
+				<option displayName="OtherPayment 其他款" value="OtherPayment"/>
+				<option displayName="SampleFeeReturn 退还样品费" value="SampleFeeReturn"/>
+				<option displayName="Other 其他杂费" value="Other"/>
+				<option displayName="KB" value="KB"/>
+				<option displayName="TAX" value="TAX"/>
+				<option displayName="VAT" value="VAT"/>
+				<option displayName="SalesInsentive" value="SalesInsentive"/>
+			</component>
+		</field>
+		<field name="REC_ACCOUNT" javaType="string" description="收款帐户">
+			<component type="richSelect" referenceField="ID" referenceTable="T_DIC_ACCOUNT" displayReferenceField="ACC_NAME,ACC_CODE,ACC_NUM" associatedFields="ACC_CODE,ACC_NAME" action="Set(SUP_NAME, FindValue({select NAME from T_DIC_ORGA where ID in (select SUPPLIER from T_DIC_SUP_ACC where ACCOUNT='}&amp;Get(REC_ACCOUNT)&amp;{')},1))"/>
+			<!-- 
+If(
+	IsEmpty(Get(REC_ACCOUNT))
+	, true
+	, Set(SUP_NAME, FindValue({select NAME from T_DIC_ORGA where ID in (select SUPPLIER from T_DIC_SUP_ACC where ACCOUNT='}&amp;Get(REC_ACCOUNT)&amp;{')},1)) 
+)" 
+-->
+		</field>
+		<field name="ACC_CODE" javaType="string" description="银行名">
+			<component type="readOnlyText" displayReferenceField="ACC_CODE"/>
+		</field>
+		<field name="ACC_NAME" javaType="string" description="银行开户名">
+			<component type="readOnlyText" displayReferenceField="ACC_NAME"/>
+		</field>
+		<field name="SUP_NAME" javaType="string" description="供应商名称" lazyLoad="true">
+			<component type="readOnlyText" subQuerySQL="(select NAME from T_DIC_ORGA where ID=(select SUPPLIER from T_DIC_SUP_ACC where ACCOUNT=t_1.REC_ACCOUNT))"/>
+		</field>
+		<field name="STATUS" javaType="string" defaultValue="init" description="状态">
+			<component type="dropdown" readOnly="true">
+				<option displayName="初始" value="init"/>
+				<option displayName="审批通过" value="audit"/>
+				<option displayName="拒绝" value="refuse"/>
+			</component>
+		</field>
+		<!-- -->
+		<Panel name="root" description="ROOT">
+			<Panel name="pan1" description="pan1"> 
+				<Group name="g01" description="必填信息" collapse="true" fields="PAY_ACCOUNT PAYMENT_MONEY PAYMENT_CATE MEMO PO_NUM PO_CATE REC_ACCOUNT ACC_CODE ACC_NAME SUP_NAME"/>
+				<Group name="g02" description=" " collapse="false" fields="CREATE_TIME CREATE_USER_ID F_INCOMING CATE STATUS HYVERSION"/>
+			</Panel>
+		</Panel>
+		<!--
+		<PageView showField="*" methodName="editPageView" parameter="queryByForm.do?__opr_data=T_CRM_PAYMENT_DTL&amp;HEADID={0},ID" hostPage="edit" type="userdefined" title="收款明细"/>
+		<queryFilter>
+			<pluggedFilter methodName="exp" parameter="If(InRole({manager},{boss}),{},{ and t_1.CREATE_USER_ID='}&amp;GetUser({ID})&amp;{'})"/>
+		</queryFilter>
+		-->
+		<!-- -->
+		<javascript hostPage="edit"><![CDATA[
+			</script>
+			<style>
+				.x-grid-record-green{
+					background: #00FFFF;
+				}
+			</style>
+			<script>
+				Ext.onReady(function(){
+					if (typeof(__grid)!='undefined') {
+						__grid.getView().getRowClass=function(rec, rowIndex, rowParams, store){
+							if (rec.data.STATUS=='audit') 
+								return 'x-grid-record-green';
+							else
+								return '';
+						}
+					}
+				});
+				Ext.grid.GroupSummary.Calculations['sum2'] = function(v, rec, fldName) {
+					return parseFloat(v) + parseFloat(rec.data.PAYMENT_MONEY.replace(',',''));			
+				}
+		]]></javascript>
+		<!--
+		<pluginInterceptor methodName="setDefaultValByHeadID" pluginName="edit" parameter="CUSTOMER_ID,T_DIC_ORGA,ID,CUSTOMER_ID,NAME,AutoNaming__CUSTOMER_ID__NAME"/>
+		<pluginInterceptor methodName="exp" parameter="Set(CODE,Datetime({yyyy-MM-dd HH:mm:ss}))" pluginName="save" type="before"/>
+		-->
+		<pluginInterceptor methodName="exp" parameter="Set(STATUS,{init})" pluginName="refuse" type="before"/>
+		<pluginInterceptor methodName="exp" parameter="Set(STATUS,{audit})" pluginName="audit" type="before"/>
+		<pluginInterceptor methodName="setCreateUser" parameter="CREATE_USER_ID" pluginName="save"/>
+		<pluginInterceptor methodName="setCreateTime" parameter="CREATE_TIME,yyyy-MM-dd HH:mm:ss" pluginName="save"/>
+		<!--
+		<pluginInterceptor methodName="onlyByMaker" parameter="CREATE_USER_ID" pluginName="save"/>
+		<pluginInterceptor methodName="onlyByMaker" parameter="CREATE_USER_ID" pluginName="delete"/>
+		-->
+		<pluginOperation name="refuse" oprName="撤销审批" hostPage="edit" tblevel="1" img="settings"/>
+		<pluginOperation name="audit" oprName="审批" hostPage="edit" tblevel="1" img="settings"/>
+		<!-- action="Save('','auditOut','SUBGRID')+SetVisible({audit},false,{saveProtocol},false)+brk(),brk())" -->
+		<Operation queryPageAdd="true" queryPageDelete="true"/>
+	</table>
+</Haiyan>

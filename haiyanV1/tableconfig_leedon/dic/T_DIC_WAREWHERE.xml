@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Haiyan xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../haiyan.xsd">
+	<table name="T_DIC_WAREWHERE" description="库位信息">
+		<id name="ID" javaType="string">
+			<component type="hidden" url="#"/>
+		</id>
+		<field name="CODE" description="仓位编码" javaType="string" nullAllowed="false">
+			<component type="text"/>
+		</field>
+		<field name="HEADID" description="所属仓库" javaType="string" nullAllowed="false">
+			<component type="richSelect" referenceTable="T_DIC_WAREHOUSE" referenceField="ID" displayReferenceField="NAME" quickQueryConditionField="CODE"/>
+			<queryCondition type="in"/>
+		</field>
+		<field name="PARENTID" description="上级仓位" javaType="string" defaultValue="-1">
+			<component type="richSelect" referenceTable="T_DIC_WAREWHERE" referenceField="ID" displayReferenceField="CODE" quickQueryConditionField="CODE"/>
+			<queryCondition type="equal"/>
+		</field>
+		<field name="L1" description="货排" javaType="string">
+			<component type="text"/>
+		</field>
+		<field name="L2" description="货列" javaType="string">
+			<component type="text"/>
+		</field>
+		<field name="L3" description="货层" javaType="string">
+			<component type="text"/>
+		</field>
+		<field name="CAPACITYNUM" description="仓位容量(m3)" javaType="bigDecimal" defaultValue="0" dataStyle="###">
+			<component type="text"/>
+		</field>
+		<field name="WEIGHT" description="仓位承量(g)" javaType="bigDecimal" defaultValue="0" dataStyle="###">
+			<component type="text"/>
+		</field>
+		<field name="MEMO" description="说明" javaType="string">
+			<component type="text"/>
+		</field>
+		<field name="USED" description="是否使用" javaType="string" defaultValue="1">
+			<component type="dropdown" readOnly="true">
+				<option displayName="是" value="1"/>
+				<option displayName="否" value="0"/>
+			</component>
+			<listColumn noquery="true"/>
+		</field>
+		<!--
+		<field name="USEDSTATUS" description="被占用" javaType="string" defaultValue="0">
+			<component type="dropdown" readOnly="true">
+				<option displayName="是" value="1"/>
+				<option displayName="否" value="0"/>
+			</component>
+		</field>
+		-->
+		<!-- sysfield -->
+		<field name="ISLEAF" description="ISLEAF" javaType="string" defaultValue="1">
+			<component type="dropdown" readOnly="true">
+				<option displayName="是" value="1"/>
+				<option displayName="否" value="0"/>
+			</component>
+			<listColumn noquery="false"/>
+		</field>
+		<!-- -->
+		<queryFilter>
+			<!--
+			<pluggedFilter methodName="exp" parameter="
+				If( 
+					InRole({manager},{boss},{admin}), {}, { and t_1.HEADID='}&amp;GetUser(WAREHOUSEID)&amp;{' }
+				)
+				"/>-->
+			<pluggedFilter methodName="exp" parameter="If(IsEmpty(GetPara(GRID)),{},{ and t_1.ISLEAF=1 })"/>
+			<pluggedFilter methodName="exp" parameter="{ and t_1.HEADID='}&amp;GetUser(WAREHOUSEID)&amp;{' }"/>
+		</queryFilter>
+		<!-- -->
+		<pluginInterceptor methodName="exp" parameter="
+			Set(HEADID,GetUser(WAREHOUSEID),__HEADID__NAME,GetUser(WAREHOUSENAME))" pluginName="edit" type="after"/>
+		<pluginInterceptor methodName="exp" parameter="
+			CheckCircle()
+			+If(Length(Get(CODE))&gt;=2,Set(L1,Substring(Get(CODE),0,2)),true)
+			+If(Length(Get(CODE))&gt;=4,Set(L2,Substring(Get(CODE),2,4)),true)
+			+If(Length(Get(CODE))&gt;=6,Set(L3,Substring(Get(CODE),4,6)),true)" pluginName="save" type="before"/>
+		<pluginInterceptor methodName="exp" parameter="
+			If(IsEmpty(Get(HEADID)),Warning({请选择仓库}),DBSQL({update T_DIC_WAREWHERE set ISLEAF='0' where ID='}&amp;Get(PARENTID)&amp;{' }))" pluginName="save" type="after"/>
+		<!-- USEDSTATUS='0' and     +DBSQL({update T_DIC_WAREWHERE set PARENTID='-1' where CODE like '}&amp;Get(CODE)&amp;{%'}) -->
+		<pluginInterceptor methodName="exp" parameter="
+			DBSQL({delete from T_DIC_WAREWHERE where CODE like '}&amp;Get(CODE)&amp;{%' and HEADID='}&amp;GetUser(WAREHOUSEID)&amp;{'})" pluginName="deleteTree"/>
+		<pluginInterceptor methodName="bsh" parameter="T_DIC_WAREWHERE.bsh" pluginName="batch" type="before"/>
+		<!--
+		<pluginInterceptor methodName="exp" parameter="leedon_batch()" pluginName="batch2" type="before"/>
+		-->
+		<pluginOperation name="deleteTree" oprName="强制删除" hostPage="edit" tblevel="1" img="delete" action="If(confirm({警告，强制删除会导致数据混乱。确认删除?}),true,brk())"/>
+		<pluginOperation name="batch" oprName="批量生成" accessKey="G" hostPage="edit" tblevel="1"/>
+		<!--
+		<pluginOperation name="batch2" oprName="批量生成2" accessKey="G" hostPage="edit" tblevel="1"/>
+		-->
+		<Operation save="true" saveAndAdd="false" saveAndAddCopy="false"/>
+		<!-- -->
+		<doc>
+			<help>批量添加只能在新增最底层的仓位例如:020304后，点击工具栏上的&lt;font color=red&gt;批量生成&lt;/font&gt;，如果操作不当会有提示。</help>
+		</doc>
+	</table>
+</Haiyan>

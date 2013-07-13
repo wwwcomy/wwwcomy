@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Haiyan xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../haiyan.xsd">
+	<table name="T_SYS_ZZ" description="T_SYS_ZZ" realTable="SYSORGA" colspan="2">
+		<id name="ID" description="ID" javaType="string">
+			<component type="hidden" url="#"/>
+		</id>
+		<field name="CODE" description="组织编码" displayOnly="false" javaType="string" lazyLoad="false">
+			<component type="text" readOnly="false" colspan="1"/>
+			<queryCondition type="blurMatching"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="NAME" description="组织名称" displayOnly="false" javaType="string" lazyLoad="false">
+			<component type="text" readOnly="false" colspan="1"/>
+			<queryCondition type="blurMatching"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="ORDER_BY" description="显示顺序" displayOnly="false" javaType="string" lazyLoad="false">
+			<component type="text" readOnly="false" colspan="1"/>
+			<queryCondition type="equal"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="ORGATYPE" description="机构类型" displayOnly="false" javaType="string" lazyLoad="false">
+			<component type="dropdown" readOnly="false" colspan="1">
+				<option displayName="企业" value="1"/>
+				<option displayName="分公司" value="2"/>
+				<option displayName="事业部" value="3"/>
+				<option displayName="部门" value="4"/>
+				<option displayName="其他" value="0，"/>
+			</component>
+			<queryCondition type="equal"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="S_SUM" description="是否数据汇总" displayOnly="false" defaultValue="1" javaType="string" lazyLoad="false">
+			<component type="checkbox" readOnly="false" colspan="1">
+				<option displayName="是" value="1"/>
+			</component>
+			<queryCondition type="equal"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="PID" description="上级机构" displayOnly="false" javaType="string" lazyLoad="false">
+			<component type="richSelect" readOnly="false" colspan="1" quickQueryConditionField="CODE,NAME,SHORTNAME" displayReferenceField="NAME" referenceField="ID" referenceTable="SYSORGA" className="haiyan.component.PagingComboboxComponent" parameter=""/>
+			<queryCondition type="equal"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="USED" description="是否使用" displayOnly="false" defaultValue="1" javaType="string" lazyLoad="false">
+			<component type="checkbox" readOnly="false" colspan="1">
+				<option displayName="是" value="1"/>
+			</component>
+			<queryCondition type="equal"/>
+			<listColumn noedit="false" noquery="true"/>
+		</field>
+		<field name="LEAF" description="是否叶子节点" displayOnly="false" javaType="string" lazyLoad="false">
+			<component type="checkbox" readOnly="true" colspan="1">
+				<option displayName="是" value="1"/>
+			</component>
+			<queryCondition type="equal"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<PageView title="树形索引" showField="NAME,CODE" img="refresh" hostPage="query" type="gentree"/>
+		<PageView title="列表索引" showField="*" hostPage="query" type="querybyform"/>
+		<queryFilter>
+			<pluggedFilter>order by t_1.ORDER_BY</pluggedFilter>
+		</queryFilter>
+		<isSelectable className="haiyan.plugin.TestPlugin" methodName="test" parameter=""/>
+		<pluginInterceptor className="haiyan.interceptor.TreeSaveInterceptor" methodName="checkCircle" pluginName="save" type="before"/>
+		<pluginInterceptor className="haiyan.interceptor.TreeSaveInterceptor" methodName="setIsChildFlag" parameter="LEAF" pluginName="save" type="after"/>
+	</table>
+</Haiyan>

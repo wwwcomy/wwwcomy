@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Haiyan xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../haiyan.xsd">
+	<table name="T_WM_PRODUCTPRE" description="应入库存明细" colspan="6">
+		<id name="ID" javaType="string"/>
+		<field name="HEADID" description="入库单" javaType="string">
+			<component type="readOnlyText"/>
+			<queryCondition type="equal"/>
+		</field>
+		<!-- ,PRO_PACKING,PRO_PACKING_NAME -->
+		<!-- parameter="{&amp;_T=}&amp;Get(PRO_COUNT)" -->
+		<field name="CONTRACT_DID" description="合同-商品号" displayOnly="false" javaType="string" lazyLoad="false">
+			<component type="combo" readOnly="false" displayReferenceField="CONTRACT_CODE" referenceField="ID" referenceTable="T_WM_CONPRODUCT" associatedFields="CONTRACTID,PRODUCTID,PRO_NAME,PRO_CODE,PRO_COUNT,PRO_COUNT3,PRO_IN_COUNT,PRO_PACKINGNUM,PRO_CAPACITYNUM,PRO_WEIGHTNUM,PRO_WMCODE,All_WEIGHTNUM,All_CAPACITYNUM" parameter="{&amp;__filter=filter}"/>
+			<listColumn noedit="false" noquery="false" width="108"/>
+		</field>
+		<!-- ,PRO_PACKING,PRO_PACKING_NAME -->
+		<!-- parameter="{&amp;_T=}&amp;Get(PRO_COUNT)" -->
+		<!--
+		<field name="PRODUCTID" description="商品" displayOnly="false" javaType="string" lazyLoad="false">
+			<component type="combo" readOnly="true" displayReferenceField="NAME" referenceField="ID" referenceTable="T_DIC_PRODUCT" associatedFields="PRO_CODE,PRO_CAPACITYNUM,PRO_WEIGHTNUM,PRO_IN_PRICE,PRO_OUT_PRICE"/>
+			<listColumn noedit="false" noquery="false" width="178"/>
+		</field>
+		<field name="PRO_COUNT" description="数量" javaType="bigDecimal" defaultValue="0">
+			<component type="text" readOnly="false" summaryType="sum" action="Set(PRO_IN_COST,Get(PRO_COUNT)*Get(PRO_IN_PRICE))+Set(PRO_OUT_COST,Get(PRO_COUNT)*Get(PRO_OUT_PRICE))"/>
+			<listColumn noedit="false" noquery="false" width="60"/>
+		</field>
+		-->
+		<field name="CONTRACTID" description="合同ID" displayOnly="false" javaType="string" lazyLoad="false">
+			<component type="hidden" readOnly="true" displayReferenceField="CONTRACT_ID"/>
+			<listColumn noedit="false" noquery="false" width="110"/>
+		</field>
+		<field name="PRODUCTID" description="商品ID" displayOnly="false" javaType="string" lazyLoad="false">
+			<component type="hidden" readOnly="true" displayReferenceField="PRODUCTID"/>
+			<listColumn noedit="false" noquery="false" width="80"/>
+		</field>
+		<field name="PRO_CODE" description="商品编号" displayOnly="false" javaType="string" lazyLoad="false">
+			<component type="hidden" readOnly="true" displayReferenceField="PRO_CODE"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="PRO_NAME" description="商品名称" displayOnly="false" javaType="string" lazyLoad="false">
+			<component type="text" readOnly="true" displayReferenceField="PRO_NAME"/>
+			<listColumn noedit="false" noquery="false" width="65"/>
+		</field>
+		<field name="PRO_WMCODE" description="货号" displayOnly="false" javaType="string" lazyLoad="false">
+			<component type="text" readOnly="true" displayReferenceField="PRO_WMCODE"/>
+			<listColumn noedit="false" noquery="false" width="60"/>
+		</field>
+		<field name="PRO_COUNT" description="预入库数量" javaType="bigDecimal" defaultValue="0">
+			<component type="text" readOnly="false" action="Set(All_WEIGHTNUM,Get(PRO_COUNT)*Get(PRO_WEIGHTNUM)/1000)+Set(All_CAPACITYNUM,Get(PRO_COUNT)*Get(PRO_CAPACITYNUM))" displayReferenceField="PRO_COUNT"/>
+			<listColumn noedit="false" noquery="false" width="65"/>
+		</field>
+		<field name="PRO_COUNT3" description="未入库数量" javaType="bigDecimal" defaultValue="0">
+			<component type="text" readOnly="false" displayReferenceField="PRO_COUNT3"/>
+			<listColumn noedit="false" noquery="false" width="65"/>
+		</field>
+		<field name="PRO_IN_COUNT" description="已入库数量" javaType="bigDecimal" defaultValue="0">
+			<component type="text" readOnly="true" displayReferenceField="PRO_COUNT2"/>
+			<listColumn noedit="false" noquery="false" width="65"/>
+		</field>
+		<field name="IN_COUNT" description="实际入库数量" javaType="bigDecimal" defaultValue="0">
+			<component type="text" readOnly="true" />
+			<listColumn noedit="false" noquery="false" width="65"/>
+		</field>
+		<field name="PRO_PACKINGNUM" description="每箱数量" javaType="bigDecimal" defaultValue="0">
+			<component type="text" readOnly="true" displayReferenceField="PRO_PACKINGNUM"/>
+			<listColumn noedit="false" noquery="false" width="65"/>
+		</field>
+		<field name="PRO_CAPACITYNUM" description="单位体积(m3)" displayOnly="false" javaType="bigDecimal" lazyLoad="false">
+			<component type="text" readOnly="true" displayReferenceField="PRO_CAPACITYNUM" maxFractionDigit="3" minFractionDigit="3"/>
+			<listColumn noedit="false" noquery="false" width="100"/>
+		</field>
+		<field name="PRO_WEIGHTNUM" description="单位重量(g)" displayOnly="false" javaType="bigDecimal" lazyLoad="false">
+			<component type="text" readOnly="true" displayReferenceField="PRO_WEIGHTNUM" maxFractionDigit="2" minFractionDigit="2"/>
+			<listColumn noedit="false" noquery="false" width="95"/>
+		</field>
+		<field name="PRO_PRE" description="预处理" displayOnly="true" javaType="string">
+			<component type="text" readOnly="true" renderer="renderPRE"/>
+			<listColumn noedit="false" noquery="false" width="75"/>
+		</field>
+		<field name="PRO_IN" description="明细入库" displayOnly="true" javaType="string">
+			<component type="text" readOnly="true" renderer="renderIN"/>
+			<listColumn noedit="false" noquery="false" width="75"/>
+		</field>
+		<field name="All_CAPACITYNUM" description="总体积(m3)" displayOnly="false" javaType="bigDecimal" lazyLoad="false">
+			<component type="text" readOnly="true" maxFractionDigit="3" minFractionDigit="3" displayReferenceField="All_CAPACITYNUM"/>
+			<listColumn noedit="false" noquery="false" width="95"/>
+		</field>
+		<field name="All_WEIGHTNUM" description="总重量(Kg)" displayOnly="false" javaType="bigDecimal" lazyLoad="false">
+			<component type="text" readOnly="true"  maxFractionDigit="2" minFractionDigit="2" displayReferenceField="All_WEIGHTNUM"/>
+			<listColumn noedit="false" noquery="false" width="95"/>
+		</field>
+		<field name="REMAINDER_NUM" description="尾箱数量" javaType="bigDecimal" defaultValue="0">
+			<component type="text" readOnly="true"/>
+			<listColumn noedit="false" noquery="false" width="65"/>
+		</field>
+		
+		<!--
+		<field name="PRO_IN_PRICE" description="进货单价" displayOnly="true" javaType="bigDecimal" lazyLoad="false">
+			<component type="text" readOnly="true" displayReferenceField="IN_PRICE" action="Set(PRO_IN_COST,Get(PRO_COUNT)*Get(PRO_IN_PRICE))" maxFractionDigit="3" minFractionDigit="3"/>
+			<listColumn noedit="false" noquery="false" width="78"/>
+		</field>
+		<field name="PRO_IN_COST" description="进货总价" displayOnly="false" javaType="bigDecimal" lazyLoad="false">
+			<component type="text" readOnly="true" summaryType="sum" summaryRenderer="sumPRO_COST" subQuerySQL="(select t_1.PRO_COUNT*t_2.IN_PRICE from T_DIC_PRODUCT t_2 where t_1.PRODUCTID=t_2.ID)" maxFractionDigit="3" minFractionDigit="3"/>
+			<listColumn noedit="false" noquery="false" width="78"/>
+		</field>
+		<field name="PRO_OUT_PRICE" description="出货单价" displayOnly="true" javaType="bigDecimal" lazyLoad="false">
+			<component type="text" readOnly="true" displayReferenceField="OUT_PRICE" action="Set(PRO_OUT_COST,Get(PRO_COUNT)*Get(PRO_OUT_PRICE))" maxFractionDigit="3" minFractionDigit="3"/>
+			<listColumn noedit="false" noquery="false" width="78"/>
+		</field>
+		<field name="PRO_OUT_COST" description="出货总价" displayOnly="false" javaType="bigDecimal" lazyLoad="false">
+			<component type="text" readOnly="true" summaryType="sum" summaryRenderer="sumPRO_COST" subQuerySQL="(select t_1.PRO_COUNT*t_2.OUT_PRICE from T_DIC_PRODUCT t_2 where t_1.PRODUCTID=t_2.ID)" maxFractionDigit="3" minFractionDigit="3"/>
+			<listColumn noedit="false" noquery="false" width="78"/>
+		</field>
+		-->
+		<!--
+		<field name="PRE_COUNT" description="数量" javaType="bigDecimal" defaultValue="0">
+			<component type="text" readOnly="false"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="PRE_PACKING" description="包装单位" javaType="string">
+			<component type="richSelect" readOnly="false" displayReferenceField="NAME" referenceField="ID" referenceTable="T_DIC_PACKING"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		-->
+		<!--
+		<field name="PRO_PACKING" description="基础单位ID" javaType="string">
+			<component type="hidden" readOnly="true" displayReferenceField="PACKING"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="PRO_PACKING_NAME" description="基本包装单位" javaType="string">
+			<component type="readOnlyText" readOnly="true" displayReferenceField="PACKING_NAME"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		-->
+		<field name="PRO_MEMO" description="备注" javaType="string">
+			<component type="text"/>
+		</field>
+		<field name="USEDSTATUS" description="被占用" javaType="string" defaultValue="0">
+			<component type="dropdown" readOnly="true">
+				<option displayName="是" value="1"/>
+				<option displayName="否" value="0"/>
+			</component>
+			<listColumn noquery="true"/>
+		</field>
+		<!-- -->
+		<queryFilter>
+			<pluggedFilter><![CDATA[
+			]]></pluggedFilter>
+		</queryFilter>
+		<role name="user">
+		</role>
+		<!-- -->
+		<javascript hostPage="edit"><![CDATA[
+		]]></javascript>
+		<!-- -->
+		<pluginInterceptor methodName="exp" parameter="If(IsEmpty(GetPara(HEADID)),Warning({参数错误}),true)" pluginName="query" type="after"/>
+		<!--pluginInterceptor methodName="exp" parameter="Set(PRO_WEIGHTNUM,10)" pluginName="new" type="after"/-->
+		<pluginInterceptor methodName="exp" parameter="If(InRole(user),HidFlds(IN_COUNT,PRO_PACKINGNUM,PRO_PRE,PRO_IN),HidFlds(IN_COUNT))" pluginName="grid" type="before"/>
+		<!--<pluginInterceptor methodName="exp" parameter="HidFlds(PRO_PRE,PRO_IN)" pluginName="grid" type="before"/>-->
+		<pluginInterceptor methodName="exp" parameter="DataRules(T_WM_CONPRODUCT_2_T_WM_IN)" pluginName="save" type="before"/>
+		<!-- delete from T_WM_PRODUCT where HEADID not in (select id from T_WM_IN) and HEADID not in (select id from T_WM_OUT) -->
+		<!--
+		<pluginOperation name="saveProtocol" oprName="保存" hostPage="edit" tblevel="1" img="save" action="save('','')+brk()"/>	
+		-->
+		<Operation queryPageDelete="false" saveAndAdd="false" saveAndAddCopy="false" />
+	</table>
+</Haiyan>

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Haiyan xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../haiyan.xsd">
+	<table name="SYSSTATION" description="岗位">
+		<id name="ID" javaType="string">
+			<component type="hidden" url="#"/>
+		</id>
+		<field name="CODE" description="编码" javaType="string">
+			<component type="text"/>
+		</field>
+		<field name="NAME" description="名称" javaType="string">
+			<component type="text"/>
+		</field>
+		<!--
+		<field name="SYSTEMORGA" description="组织机构" javaType="string" displayOnly="true" mappingTable="SYSORGASTATION">
+			<component type="richSelect" multipleSelect="true" referenceTable="SYSORGA" displayReferenceField="NAME" colspan="3" style="width:90%;"/>
+			<queryCondition type="none"/>
+		</field>
+		<field name="SYSTEMUSER" description="用户" javaType="string" displayOnly="true" mappingTable="SYSUSERSTATION">
+			<component type="richSelect" multipleSelect="true" referenceTable="SYSOPERATOR" displayReferenceField="NAME" colspan="3" style="width:90%;"/>
+			<queryCondition type="none"/>
+		</field>
+		-->
+		<!--
+		<field name="DATALEVEL" description="数据等级" javaType="string">
+			<component type="hidden"/>
+		</field>
+		-->
+		<field name="PID" description="上级岗位" javaType="string">
+			<component type="richSelect" className="haiyan.component.PagingComboboxComponent" quickQueryConditionField="NAME" referenceTable="SYSSTATION" displayReferenceField="NAME"/>
+		</field>
+		<PageView showField="NAME,CODE" type="gentree" title="树形索引"/>
+		<PageView showField="NAME" type="querybyform" title="列表索引"/>
+		<pluginInterceptor className="haiyan.interceptor.TreeSaveInterceptor" methodName="checkCircle" pluginName="save"/>
+		<pluginInterceptor className="haiyan.interceptor.SaveInterceptor" methodName="complete" pluginName="save" type="after"/>
+		<pluginInterceptor className="haiyan.interceptor.DeleteInterceptor" methodName="complete" pluginName="delete" type="after"/>
+		<Operation selectedHidden="true" queryPageQueryEdit="true" queryPageDelete="false"/>
+	</table>
+</Haiyan>

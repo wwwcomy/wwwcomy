@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="GBK"?>
+<rule-set declaration="" name="Tests assignment rules" xmlns="http://drools.org/rules" xmlns:java="http://drools.org/semantics/java" xmlns:xsi="http://www.w3.org/2001/XMhaiyan-instance">
+	<java:import>com.haiyan.genmis.core.haiyan.*</java:import>
+	<java:import>haiyan.genmis.core.queryengine.*</java:import>
+	<java:import>haiyan.genmis.core.struts.*</java:import>
+	<java:import>haiyan.genmis.core.right.*</java:import>
+	<java:import>haiyan.genmis.core.exception.*</java:import>
+	<java:import>haiyan.genmis.core.paging.*</java:import>
+	<java:import>haiyan.genmis.core.*</java:import>
+	<java:import>com.haiyan.genmis.castorgen.haiyan.*</java:import>
+	<java:import>com.haiyan.genmis.*</java:import>
+	<java:import>haiyan.interceptor.*</java:import>
+	<java:import>haiyan.tools.*</java:import>
+	<java:import>java.lang.*</java:import>
+	<java:import>java.util.*</java:import>
+	<java:import>java.io.*</java:import>
+	<java:import>org.jfree.chart.*</java:import>
+	<java:import>org.jfree.data.*</java:import>
+	<java:import>org.jfree.data.general.*</java:import>
+	<application-data identifier="dbm">DBManager</application-data>
+	<application-data identifier="table">Table</application-data>
+	<application-data identifier="context">SrvContext</application-data>
+	<java:functions/>
+	<rule name="main" salience="0">
+		<parameter identifier="form">
+			<java:class>GenMisForm</java:class>
+		</parameter>
+		<java:condition>1==1</java:condition>
+		<java:consequence>
+				User user = context.getUser();
+				String COUNTRY= form.getParameter("COUNTRY");
+				String PROVINCE = form.getParameter("PROVINCE");
+				String CITY = form.getParameter("CITY");
+				String AREA = form.getParameter("AREA");
+				System.out.println(">param "+COUNTRY+" "+PROVINCE +" "+CITY +" "+AREA );
+				String[] areas = StringUtil.split(AREA,",");
+				int all = areas.length;
+				String[] info = new String[all];
+				double[] num = new double[all];
+				String temp = "";
+				int i=0;
+				for (i=0;i&lt;all;i++)  {
+					if (i!=0)
+						temp += "and";
+					temp += " t_1.AREA like '%"+areas[i].trim()+"%' ";
+					Filter filter = new Filter(" and t_1.AREA like '%"+areas[i].trim()+"%' ", null);
+					Collection col = dbm.findByFilter(ConfigUtil.getTable("T_CRM_CUSTOMER"), filter, 5000, 1, context, null).getData();								info[i] = areas[i].trim();
+				 	num[i] = col.size();
+                 // String sql = "select count(*) from T_CRM_CUSTOMER t_1 where t_1. "
+				}
+				/*
+				if  (!StringUtil.isBlankOrNull(temp)) {
+					Filter filter = new Filter(" and not  (" +temp+") " , null);
+					Collection col = dbm.findByFilter(ConfigUtil.getTable("T_CRM_CUSTOMER"), filter, 5000, 1, context, null).getData();								info[i] = "�������";
+				 	num[i] = col.size();
+			 	}
+			 	*/
+				//
+				String graphURL = "\\upload\\sys_users\\"+user.getID()+"\\customer_1.jpg";
+			   String filename = ConfigUtil.getPathName()+graphURL ;
+			   DefaultPieDataset data = JFreeChartUtil.getDataSet(info, num);			   													JFreeChart chart = ChartFactory.createPieChart3D("ȫ��ͻ��ֲ�ͼ", data, true, false, false);
+	          // дͼ������ļ���������״ͼ���Դ��
+	          File file = new File(filename);
+	          if (!file.getParentFile().exists())
+	          	file.getParentFile().mkdirs();
+             ChartUtilities.saveChartAsPNG(file, chart, 400, 300, null);
+             form.setParameter("IMAGE",graphURL);
+             // form.setParameter("AREA","dsdgagd");
+             System.out.println(">filename "+filename +" >"+info.length+" >"+num.length);
+             System.out.println(">graphURL "+graphURL);
+             drools.assertObject(form);
+		</java:consequence>
+	</rule>
+</rule-set>

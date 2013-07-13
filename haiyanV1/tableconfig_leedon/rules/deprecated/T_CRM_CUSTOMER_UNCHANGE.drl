@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="GBK"?>
+<rule-set declaration="" name="Tests assignment rules" xmlns="http://drools.org/rules" xmlns:java="http://drools.org/semantics/java" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<java:import>com.tornado.genmis.core.db.DBManager</java:import>
+	<java:import>com.tornado.genmis.core.struts.GenMisForm</java:import>
+	<java:import>com.tornado.genmis.core.SrvContext</java:import>
+	<java:import>com.tornado.genmis.core.right.User</java:import>
+	<java:import>com.tornado.genmis.core.exception.*</java:import>
+	<java:import>com.tornado.genmis.castorgen.Table</java:import>
+	<java:import>com.tornado.genmis.util.StringUtil</java:import>
+	<java:import>tornado.interceptor.DroolsInterceptor</java:import>
+	<java:import>java.lang.String</java:import>
+	<application-data identifier="dbm">DBManager</application-data>
+	<application-data identifier="table">Table</application-data>
+	<application-data identifier="context">SrvContext</application-data>
+	<java:functions>
+		public static boolean isUserInRoleName(User user, String[] roleNames) {
+			Role[] roles = user.getRoles();
+			if (roles ==null || roles.length==0) {
+			} else {
+				for (int i = 0; i &lt; roles.length; i++) {
+					for (int j=0;j&lt;roleNames.length;j++) {
+						if (roles[i].getRoleName()==roleNames[j])
+							return true;
+					}
+				}
+			}
+			return false;
+		}
+	</java:functions>
+	<rule name="unchange" salience="0">
+		<parameter identifier="dForm">
+			<java:class>GenMisForm</java:class>
+		</parameter>
+		<java:condition>"0".equals("0")</java:condition>
+		<java:consequence>
+			  User user = context.getUser();
+			  String[] roleNames = new String[] {"系统管理员","销售总监","总经理","总裁"};
+			  if (isUserInRoleName(user, roleNames)) {
+					String stage = dForm.getParameter("STAGE") ;
+	             if (!StringUtil.isBlankOrNull(stage)) {
+	                 int stagef = new Integer(stage).intValue();
+		              if (stagef==-1) {
+		                  stagef=3; 
+					    } else if (stagef ==1) {
+					        context.addException(new DBBreakonAlert("无权操作"));
+	                      return;
+					    }
+					    dForm.setParameter("STAGE",""+stagef);
+					    drools.assertObject(dForm);
+					    // context.addException(new DBGoonAlert("操作成功"));
+					}
+			  } else {
+                 context.addException(new DBBreakonAlert("无权操作"));
+                 return;
+			  }
+       </java:consequence>
+	</rule>
+</rule-set>

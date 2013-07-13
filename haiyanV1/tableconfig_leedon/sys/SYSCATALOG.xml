@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Haiyan xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../haiyan.xsd">
+	<table name="SYSCATALOG" description="目录设置" colspan="4">
+		<id name="ID" javaType="string">
+			<component type="hidden" url="#"/>
+		</id>
+		<field name="NAME" description="名称" javaType="string" nullAllowed="false">
+			<component type="text"/>
+		</field>
+		<field name="CODE" description="助记码" javaType="string">
+			<component type="text"/>
+		</field>
+		<field name="ROLE" description="角色" javaType="string" displayOnly="true" mappingTable="SYSCATAROLEMAP">
+			<component type="richSelect" quickQueryConditionField="NAME,CODE" referenceTable="SYSROLE" displayReferenceField="NAME" multipleSelect="true"/>
+			<queryCondition type="none"/>
+		</field>
+		<field name="ORGA" description="组织机构\部门" javaType="string" displayOnly="true" mappingTable="SYSCATAORGAMAP">
+			<component type="richSelect" quickQueryConditionField="NAME,CODE" referenceTable="SYSORGA_VIEW" displayReferenceField="NAME" multipleSelect="true"/>
+			<queryCondition type="none"/>
+		</field>
+		<!-- className="haiyan.component.PagingLovFieldComponent" -->
+		<!--
+		<field name="OPER" description="人员" javaType="string" displayOnly="true" mappingTable="SYSCATAOPERMAP">
+			<component type="richSelect" referenceTable="SYSOPERATOR_VIEW" displayReferenceField="NAME" multipleSelect="true"/>
+			<queryCondition type="none"/>
+		</field>
+		-->
+		<field name="SYS_ICON" description="图标" javaType="string">
+			<component type="richSelect" referenceTable="SYSRESOURCE" referenceField="SHORTNAME" displayReferenceField="SHORTNAME" quickQueryConditionField="SHORTNAME" multipleSelect="false"/>
+			<queryCondition type="none"/>
+			<listColumn noquery="true"/>
+		</field>
+		<field name="ORDERBY" description="模块显示顺序" javaType="string" defaultValue="1">
+			<component type="text"/>
+			<queryCondition type="none"/>
+			<listColumn noquery="true"/>
+		</field>
+		<field name="PID" description="上级目录" javaType="string">
+			<component type="treePComb" quickQueryConditionField="NAME" referenceTable="SYSCATALOG" referenceField="ID" displayReferenceField="NAME"/>
+		</field>
+		<field name="TABLENAME" javaType="string" description="表名">
+			<component type="dropdown" className="haiyan.component.TableComponent"/>
+			<listColumn noquery="true"/>
+		</field>
+		<field name="ACTION" description="入口界面" javaType="string" defaultValue="query.do">
+			<component type="dropdown" colspan="3">
+				<option displayName="默认界面(query)" value="query.do"/>
+				<option displayName="列表编辑(view)" value="view.do"/>
+				<option displayName="列表查询(quick)" value="quick.do"/>
+				<option displayName="编辑界面(edit)" value="edit.do"/>
+				<option displayName="树导航(tree)" value="tree.do"/>
+				<option displayName="异步树导航(navtree)" value="ext_showtree.do"/>
+				<option displayName="待办任务(mytask)" value="wf_listMyTask.do"/>
+				<option displayName="经办任务(histtask)" value="wf_listHisTask.do"/>
+			</component>
+			<queryCondition type="none"/>
+			<listColumn noquery="true"/>
+		</field>
+		<field name="URL" description="入口链接" javaType="string" length="250">
+			<component type="text" colspan="3" style="width:600;"/>
+			<queryCondition type="none"/>
+			<listColumn noquery="true"/>
+		</field>
+		<field name="EXP" description="入口公式" javaType="string" length="250">
+			<component type="text" colspan="3" style="width:600"/>
+			<queryCondition type="none"/>
+			<listColumn noquery="true"/>
+		</field>
+		<!--
+		<field name="MEMO" description="备注" javaType="string" length="250">
+			<component type="textArea" colspan="3" style="width:400;height:70;"/>
+			<queryCondition type="none"/>
+			<listColumn noquery="true"/>
+		</field>
+		-->
+		<field name="USED" description="是否使用" javaType="string" defaultValue="1">
+			<component type="dropdown">
+				<option displayName="否" value="0"/>
+				<option displayName="是" value="1"/>
+			</component>
+		</field>
+		<field name="HYVERSION" javaType="string" description="HYVERSION">
+			<component type="hidden"/>
+		</field>
+		<!--
+		<field name="MODELID" description="单据样式" javaType="string">
+			<component type="richSelect" referenceTable="SYSBILLCONFIG" displayReferenceField="CODE" associatedFields="MODELCODE"/>
+			<queryCondition type="none"/>
+			<listColumn noquery="true"/>
+		</field>
+		<field name="MODELCODE" description="单据样式编号" javaType="string">
+			<component type="hidden" displayReferenceField="CODE"/>
+		</field>		
+		<field name="TABLENAMECK" javaType="string" description="参考表名" displayOnly="true">
+			<component type="dropdown" colspan="3" className="haiyan.component.TableComponent"/>
+			<listColumn noquery="true"/>
+		</field>
+		<field name="TABLENAME" description="表名" javaType="string">
+			<component type="text" colspan="3"/>
+		</field>
+		<field name="CONDITION" description="简单条件过滤" javaType="string" length="250">
+			<component type="textArea" colspan="3"/>
+			<queryCondition type="none"/>
+			<listColumn noquery="true"/>
+		</field>
+		<field name="CONFIG" description="配置" javaType="string" displayOnly="true">
+			<component type="url" colspan="3" url="designer/tableDesigner.jsp?tablename=@F@" urlField="TABLENAME"/>
+			<queryCondition type="none"/>
+			<listColumn noquery="true"/>
+		</field>
+		-->
+		<!--
+		<role name="">
+		        <roleOperation>
+		        <rolePlugin>
+		        <roleComponent>
+		</role>
+	    <PageView showField="NAME,MEMO" type="gentree" title="普通树型列表"/>
+	    <PageView showField="NAME,MEMO" type="xloadtree" title="延迟加载树型列表"/>
+		<PageView showField="NAME,MEMO" type="complextree" title="复杂树型列表"/>
+		<PageView showField="NAME,MEMO" type="userdefined" title="自定义查询"/>
+		<PageView type="querybyform" title="按条件查询" img="./comResource/images/edit.gif"/>
+		<PageView type="userdefined" title="自定义标签1" img="./comResource/images/edit.gif" showField="http://www.google.com"/>
+		<PageView type="userdefined" title="自定义标签2" img="./comResource/images/edit.gif" class="xxxx.xxx.MyView"/>
+		<PageView showField="NAME,CODE" type="gentree" title="树型数据索引"/>
+		<PageView showField="NAME,CODE" type="comlextree" title="复杂树型数据索引"/>
+		<PageView title="树形索引" type="userdefined" showField="NAME,CODE" parameter="ext_showtree_prot.do?__opr_data=SYSCATALOG" hostPage="query" className="haiyan.pageview.PageView" methodName="queryPageView" img="refresh"/>
+		<PageView showField="*" type="querybyform" title="列表索引"/>
+		
+		group by t_1.ID, t_1.CODE,t_1.NAME,t_1.TABLENAME,t_1.ORDERBY,t_1.PID,t_1.ACTION,t_2.NAME,t_1.URL,t_1.MEMO,t_1.USED
+		-->
+		<PageView title="树形索引" type="userdefined" showField="true" parameter="{tree.do?__opr_data=SYSCATALOG&amp;__displayName=NAME,CODE}" hostPage="query" methodName="exp"/>
+		<!--
+		<PageView title="列表索引" type="userdefined" showField="NAME,CODE" parameter="{view.do?__opr_data=SYSCATALOG}" 
+				  hostPage="query" methodName="exp" img="refresh"/>
+		-->
+		<!-- -->
+		<queryFilter>
+			<pluggedFilter methodName="exp" parameter="{order by t_1.ORDERBY asc }"/>
+		</queryFilter>
+		<!-- -->
+		<javascript hostPage="edit"><![CDATA[
+			  function interceptorRenderLovColumn(value, metaData, record, rowIndex, colIndex, store) {
+		  		  if (!Ext.isEmpty(record.data.FILEURL) && colIndex==3)
+					    return '<img src="'+record.data.FILEURL+'" width=15 height=15/>';
+				  return value;
+		  	  }      
+		]]></javascript>
+		<!-- -->
+		<pluginInterceptor methodName="setCatalogUrl" pluginName="createURL" type="after"/>
+		<pluginInterceptor methodName="checkCircle" pluginName="save" type="after"/>
+		<pluginInterceptor methodName="exp" parameter="Delete()" pluginName="delete" type="after"/>
+		<pluginOperation name="delete" oprName="删除" accessKey="D" img="delete" hostPage="edit"/>
+		<pluginOperation name="createURL" oprName="生成URL" accessKey="C" hostPage="edit"/>
+		<!-- -->
+		<Operation selectedHidden="true" queryPageQueryEdit="true" saveAndAddCopy="true"/>
+	</table>
+</Haiyan>

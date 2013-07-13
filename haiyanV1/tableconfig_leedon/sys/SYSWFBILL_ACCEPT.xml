@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Haiyan xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../haiyan.xsd">
+	<table name="SYSWFBILL_ACCEPT" realTable="SYSWFBILL" description="代办文件">
+		<id name="ID" javaType="string"/>
+		<field name="CODE" description="流水号" javaType="string" nullAllowed="false">
+			<component type="readOnlyText"/>
+		</field>
+		<field name="NAME" description="名称" javaType="string" nullAllowed="false">
+			<component type="readOnlyText"/>
+		</field>
+		<!-- 此ID和工作流模板ID相同 -->
+		<field name="WFMODULEID" description="所走流程" javaType="string" nullAllowed="false" updateable="false">
+			<component type="richSelect" referenceTable="SYSWFMODULE" referenceField="ID" displayReferenceField="NAME" associatedFields="BILLID,BILLNAME,BILLCOMMENTS"/>
+		</field>
+		<field name="BILLCOMMENTS" description="使用表单" javaType="string" nullAllowed="false">
+			<component type="readOnlyText" displayReferenceField="BILLCOMMENTS"/>
+			<listColumn noquery="true" nowrap="true"/>
+		</field>
+		<field name="BILLNAME" description="表单名" javaType="string" nullAllowed="false">
+			<component type="hidden" displayReferenceField="BILLNAME"/>
+			<listColumn noquery="true" nowrap="true"/>
+		</field>
+		<field name="BILLID" description="表单ID" javaType="string" nullAllowed="false">
+			<component type="hidden" displayReferenceField="BILLID"/>
+			<listColumn noquery="true" nowrap="true"/>
+		</field>
+		<field name="PRENODE" description="转来节点" javaType="string">
+			<component type="readOnlyText"/>
+			<listColumn noquery="true" nowrap="true"/>
+		</field>
+		<field name="CURRNODE" description="当前节点" javaType="string">
+			<component type="readOnlyText"/>
+			<listColumn noquery="true" nowrap="true"/>
+		</field>
+		<field name="STATUS" description="办理状态" javaType="string" defaultValue="liuzhuan">
+			<component type="dropdown" readOnly="true">
+				<option displayName="初稿" value="chugao"/>
+				<option displayName="流转中" value="liuzhuan"/>
+				<option displayName="完成" value="wancheng"/>
+				<option displayName="挂起" value="guaqi"/>
+				<option displayName="作废" value="zuofei"/>
+			</component>
+		</field>
+		<field name="CREATE_USER_ID" javaType="string" description="创建人">
+			<component type="richSelect" className="haiyan.component.CreaterComponent" quickQueryConditionField="NAME" referenceTable="SYSOPERATOR" referenceField="ID" displayReferenceField="NAME" readOnly="true"/>
+		</field>
+		<field name="CREATE_TIME" javaType="date" dataStyle="yyyy-MM-dd hh:mm:ss" description="创建时间">
+			<component type="date" className="haiyan.component.DateTimeComponent" colspan="3" readOnly="true"/>
+		</field>
+		<field name="DETAILS" description="业务单据" displayOnly="true" javaType="string" lazyLoad="false">
+			<component type="userDefined" readOnly="false" style="width:100%;height:450;" colspan="3" className="haiyan.component.DetailFrameComponent" parameter="edit.do?__opr_data={0}&amp;ID={1},BILLNAME,ID"/>
+			<queryCondition type="equal"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<!-- BILLNAME &amp;__model_id={1} -->
+		<!--
+		<PageView showField="*" title="表单" hostPage="edit" type="userdefined" className="haiyan.pageview.PageView" methodName="editPageView" parameter="edit.do?__opr_data={0}&amp;ID={1},BILLNAME,ID" img="leaf"/>
+-->
+		<PageView showField="*" title="正文" hostPage="edit" type="userdefined" className="haiyan.pageview.PageView" methodName="editPageView" parameter="doc_main.do?__opr_data={0}&amp;__moduleID={1}&amp;ID={2},BILLNAME,WFMODULEID,ID" img="page"/>
+		<!-- or t_1.ACCEPT_USER_ID='@USERID@'  and t_1.ACCEPT_USER_ID='@USERID@' -->
+		<queryFilter>
+			<pluggedFilter>
+				and t_1.ID in (select tt.WFBILLID from SYSWFBILLUSERMAP tt where tt.USERID='@USERID@')
+			</pluggedFilter>
+		</queryFilter>
+		<javascript hostPage="edit"><![CDATA[
+		    function interceptorOnItemClick(item, checked) {
+		    	if (item.name=='lookupwf') {
+					// window.open('wf_design.jsp?__moduleID='+$('WFMODULEID').value+'&__tableName='+$('BILLNAME').value);											// window.open('plugin.do?__opr_data=SYSWFBILL&__pluginName=lookupwf&WFMODULEID='+$('WFMODULEID').value+'&ID='+$('ID').value);
+					addTab('plugin.do?__opr_data=SYSWFBILL&__pluginName=lookupwf&WFMODULEID='+$('WFMODULEID').value+'&ID='+$('ID').value,'流程图','lookupwf_iframe','todo');
+					return false;
+				}else if (item.name=='lookupbill') {
+					window.open('ext_designbill.jsp?__headID='+$('BILLID').value+'&__opr_data='+$('BILLNAME').value);				
+					return false;
+				}
+			}	
+		]]></javascript>
+		<!--
+		<pluginInterceptor className="haiyan.interceptor.SaveInterceptor" methodName="setCreateTime" parameter="CREATE_TIME,yyyy-MM-dd hh:mm:ss" pluginName="save" type="before"/>
+-->
+		<pluginInterceptor className="haiyan.interceptor.WfInterceptor" methodName="pass" parameter="" pluginName="pass" type="before"/>
+		<pluginInterceptor className="haiyan.interceptor.WfInterceptor" methodName="lookupwf" parameter="" pluginName="lookupwf" type="before"/>		
+		<!--
+		<pluginInterceptor className="haiyan.interceptor.WfInterceptor" methodName="changeStatus" parameter="" pluginName="pass" type="after"/>
+		-->
+		<pluginOperation name="pass" className="haiyan.plugin.CommonPlugin" oprName="审批通过" accessKey="T" hostPage="edit" tblevel="1"/>
+		<pluginOperation name="lookupwf" className="haiyan.plugin.CommonPlugin" oprName="查看流程" accessKey="W" hostPage="edit" tblevel="1"/>
+		<Operation queryPageAdd="false" queryPageDelete="false" inWorkFlow="true"/>
+	</table>
+</Haiyan>

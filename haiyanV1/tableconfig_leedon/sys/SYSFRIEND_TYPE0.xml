@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Haiyan xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../haiyan.xsd">
+	<table name="SYSFRIEND_TYPE0" description="分组" realTable="SYSFRIEND">
+		<id name="ID" javaType="string"/>
+		<field name="CODE" description="编号" javaType="string">
+			<component type="text" colspan="3"/>
+		</field>
+		<field name="NAME" description="别名" javaType="string">
+			<component type="text" colspan="3"/>
+		</field>
+		<field name="MEMO" description="备注" javaType="string" length="250">
+			<component type="textArea" url="#" colspan="3" style="width:100%;height:200;"/>
+			<queryCondition type="none"/>
+			<listColumn width="200" height="20" nowrap="true"/>
+		</field>
+		<field name="TYPE" description="分类" javaType="string" defaultValue="0">
+			<component type="hidden">
+				<option displayName="分组" value="0"/>
+				<option displayName="好友" value="1"/>
+			</component>
+		</field>
+		<field name="ISSYS" description="系统内" javaType="string" defaultValue="1">
+			<component type="hidden">
+				<option displayName="否" value="0"/>
+				<option displayName="是" value="1"/>
+			</component>
+		</field>
+		<field name="USER_ID" description="用户" javaType="string">
+			<component type="richSelect" readOnly="true" referenceTable="SYSOPERATOR" referenceField="ID" displayReferenceField="NAME"/>
+		</field>
+		<queryFilter>
+			<pluggedFilter>
+               and (t_1.USER_ID=@USERID@ or t_1.ISSYS=1) and t_1.TYPE=0
+	       </pluggedFilter>
+		</queryFilter>
+		<pluginInterceptor className="haiyan.interceptor.SaveInterceptor" methodName="setCreateUser" parameter="USER_ID" pluginName="save"/>
+	</table>
+</Haiyan>

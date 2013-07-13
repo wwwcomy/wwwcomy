@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Haiyan xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../haiyan.xsd">
+	<table name="T_WM_PRO" description="商品(HY)">
+		<id name="ID" description="ID" javaType="string">
+			<component type="hidden"/>
+		</id>
+		<field name="NAME" description="名称" displayOnly="false" javaType="string" lazyLoad="false">
+			<component type="text" readOnly="false"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="CODE" description="货号" displayOnly="false" javaType="string" lazyLoad="false">
+			<component type="text" readOnly="false"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="SUPP_CODE" description="供应商自有货号" displayOnly="false" javaType="string" lazyLoad="false">
+			<component type="text" readOnly="false"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="WAREHOUSE" description="产品所属仓库" displayOnly="false" javaType="string" lazyLoad="false" nullAllowed="false">
+			<component type="combo" readOnly="false" colspan="1" displayReferenceField="NAME" referenceField="ID" referenceTable="T_DIC_WAREHOUSE_COMBO"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="SUPPLIER" description="供应商" displayOnly="false" javaType="string" lazyLoad="false">
+			<component type="combo" readOnly="false" colspan="1" displayReferenceField="NAME" referenceField="ID" referenceTable="T_DIC_SUPPLIER"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="CONTRACT" description="产品合同" displayOnly="false" javaType="string" lazyLoad="false">
+			<component type="text"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="WHOWNER" description="库主" displayOnly="false" javaType="string" lazyLoad="false" >
+			<component type="combo" colspan="3" displayReferenceField="NAME" referenceField="ID" referenceTable="T_WM_OPERATOR"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="SDB_PRODUCT_ID" description="SDB_PRODUCT_ID" displayOnly="false" javaType="string" lazyLoad="false" nullAllowed="false">
+			<component type="text"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="COLOR" description="颜色" displayOnly="false" javaType="string" lazyLoad="false">
+			<component type="text" readOnly="true"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="ZDKC" description="最低库存" displayOnly="false" javaType="bigDecimal" lazyLoad="false">
+			<component type="text" readOnly="true"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="LATEST_BATCH" description="最新批次" displayOnly="false" javaType="bigDecimal">
+			<component type="text" readOnly="true"/>
+			<listColumn noedit="true" noquery="true"/>
+		</field>
+		<field name="EDPMODEL" description="材质" displayOnly="false" javaType="string" lazyLoad="false">
+			<component type="text" readOnly="true"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="P_27" description="原外箱尺寸规格" javaType="string">
+			<component type="text" readOnly="true"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="CAPACITYNUM" description="外箱体积(m3)" javaType="bigDecimal">
+			<component type="text" readOnly="false" maxFractionDigit="3" minFractionDigit="3"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="C1" description="外箱长(cm)" javaType="bigDecimal">
+			<component type="text" readOnly="false" maxFractionDigit="2" minFractionDigit="2"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="C2" description="外箱宽(cm)" javaType="bigDecimal">
+			<component type="text" readOnly="false" maxFractionDigit="2" minFractionDigit="2"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="C3" description="外箱高(cm)" javaType="bigDecimal">
+			<component type="text" readOnly="false" maxFractionDigit="2" minFractionDigit="2"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="CONTRA_INPRICE" description="合同有效进价" javaType="bigDecimal" defaultValue="-1">
+			<component type="text" readOnly="true" maxFractionDigit="3" minFractionDigit="3"/>
+			<listColumn noedit="true" noquery="true"/>
+		</field>
+		<field name="STATUS" description="状态" javaType="string" lazyLoad="false">
+			<component type="dropdown">
+				<option displayName="生效" value="0"/>
+				<option displayName="失效" value="1"/>
+				<option displayName="即将过期" value="2"/>
+			</component>
+		</field>
+		<!--
+		<queryFilter>
+			<pluggedFilter><![CDATA[
+			]]></pluggedFilter>
+		</queryFilter>
+		-->
+		<javascript hostPage="query"><![CDATA[
+		]]></javascript>
+	</table>
+</Haiyan>

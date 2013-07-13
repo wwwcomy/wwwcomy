@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Haiyan xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../haiyan.xsd">
+	<table name="T_ITEM_PRICE" description="产品价格">
+		<id name="ID" javaType="string"/>
+		<field name="HEADID" description="头表" javaType="string">
+			<component type="hidden" referenceTable="T_ITEM_PRICE_HEAD"/>
+		</field>
+		<field name="VERSION" description="版本" javaType="string">
+			<component type="text" readOnly="true"/>
+		</field>
+		<field name="CODE" description="价格定义单代码" javaType="string">
+			<component type="text" readOnly="true"/>
+		</field>
+		<field name="ITEM_ID" description="产品名称" javaType="string">
+			<component type="richSelect" readOnly="true" referenceTable="T_ITEM" displayReferenceField="NAME" referenceField="ID" quickQueryConditionField="CODE" associatedFields="SPEC,MODEL" url="edit.do@Q@__opr_data@E@T_ITEM@A@ID@E@@F@" urlField="ITEM_ID"/>
+		</field>
+		<field name="SPEC" description="规格" javaType="string" createable="false" updateable="false">
+			<component type="readOnlyText" readOnly="true" displayReferenceField="SPEC"/>
+		</field>
+		<field name="MODEL" description="型号" javaType="string" createable="false" updateable="false">
+			<component type="readOnlyText" readOnly="true" displayReferenceField="MODEL"/>
+		</field>
+		<field name="COST_PRICE" description="成本价" javaType="string">
+			<component type="text" minFractionDigit="2"/>
+		</field>
+		<field name="LOW_PRICE" description="最底价" javaType="string">
+			<component type="text" minFractionDigit="2"/>
+		</field>
+		<field name="FIRST_PRICE" description="A价" javaType="string">
+			<component type="text" minFractionDigit="2"/>
+		</field>
+		<field name="SECOND_PRICE" description="二级批发价" javaType="string">
+			<component type="text" minFractionDigit="2"/>
+		</field>
+		<field name="RETAIL_PRICE" description="零售价" javaType="string">
+			<component type="text" minFractionDigit="2"/>
+		</field>
+		<field name="TRANSFER_PRICE" description="内部调拨价格" javaType="string">
+			<component type="text" minFractionDigit="2"/>
+		</field>
+		<field name="B_PRICE" description="B价" javaType="string">
+			<component type="text" minFractionDigit="2"/>
+		</field>
+		<field name="C_PRICE" description="C价" javaType="string">
+			<component type="text" minFractionDigit="2"/>
+		</field>
+		<field name="BEGIN_TIME" description="开始时间" javaType="date">
+			<component type="date"/>
+		</field>
+		<field name="END_TIME" description="结束时间" javaType="date">
+			<component type="date"/>
+		</field>
+		<field name="REMARK" description="备注" javaType="string">
+			<component type="textArea"/>
+		</field>
+		<!--
+		<Operation queryPageQueryEdit="true"/>
+		<field name="AVAILABLE" description="是否有效" javaType="string">
+		        <component type="dropdown" defaultValue="1">
+				<option displayName="是" value="1"/>
+				<option displayName="否" value="0"/>
+			</component>
+		</field>
+		<field name="ITEM_CODE" description="产品编号" javaType="string">
+		        <component type="readOnlyText" displayReferenceField="CODE"/>
+		</field>
+		-->
+		<pluginInterceptor className="price.interceptor.TPriceDetailsInterceptor" methodName="save" pluginName="save"/>
+		<pluginInterceptor className="price.interceptor.TPriceDetailsInterceptor" methodName="delete" pluginName="dalete"/>
+		<pluginInterceptor className="haiyan.interceptor.SaveInterceptor" methodName="complete" pluginName="save" type="after"/>
+		<pluginInterceptor className="haiyan.interceptor.DeleteInterceptor" methodName="complete" pluginName="delete" type="after"/>
+		<Operation queryPageAdd="false" inWorkFlow="true"/>
+	</table>
+</Haiyan>

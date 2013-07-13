@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Haiyan xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../haiyan.xsd">
+	<table name="SYSOPERATORTREE" realTable="SYSOPERATOR" description="人员">
+		<id name="ID" javaType="string"/>
+		<!--
+		<field name="ORGAID" description="所属机构" javaType="string">
+			<component type="richSelect" quickQueryConditionField="NAME" referenceTable="SYSORGA" displayReferenceField="SHORTNAME" referenceField="ID"/>
+			<queryCondition type="none"/>
+			<listColumn noquery="true"/>
+		</field>
+		-->
+	</table>
+</Haiyan>

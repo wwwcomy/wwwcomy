@@ -1,0 +1,60 @@
+void removekc() throws Throwable {
+	String orderID = form.get("HEADID");
+
+	Qbq3Form formOut = context.getDBM().findByPK("T_WM_OUTPART", orderID, context);
+	String outType = formOut.get("OUT_TYPE");
+	
+	if(StringUtil.isBlankOrNull(orderID)||StringUtil.isBlankOrNull(outType)){
+		throw new Warning("出库ID和出库类型不能为空");
+	}
+	if(orderID.startsWith("CK_")&&("reject".equals(outType)||"loss".equals(outType))){
+		DBManager dbm = context.getDBM();
+		String sql = "select PRODUCT_ID,GOODS_ID,NAME,STORE from SDB_PRODUCTS where PRODUCT_ID in (select PRODUCT_ID from V_WM_SDBPRODUCT where ID='"+form.get("PRODUCTID")+"') ";
+		String[][] rs = dbm.getResultStrArray(sql,4,null);
+		DebugUtil.debug("商品 ["+rs[0][2]+"] 库存:"+rs[0][3]+"+"+form.get("PRO_COUNT"));
+		//if (rs.length>0) {
+		String sql1 = "update SDB_PRODUCTS set STORE=STORE-"+form.get("PRO_COUNT")+" where PRODUCT_ID="+rs[0][0];
+		dbm.executeUpdate(sql1,null);
+		String sql2 = "update SDB_GOODS set STORE=STORE-"+form.get("PRO_COUNT")+" where GOODS_ID="+rs[0][1];
+		dbm.executeUpdate(sql2,null);
+		//}
+		//throw new Warning(filter);
+	}
+}
+
+// now called by auditOut in V_WM_OUT
+void newRemoveKC() throws Throwable {
+	String orderID = form.get("ORDER_ID");
+	String outType = form.get("OUT_TYPE");
+	String ID = form.get("ID");
+	
+	if(StringUtil.isBlankOrNull(orderID)||StringUtil.isBlankOrNull(outType)){
+		throw new Warning("出库ID和出库类型不能为空");
+	}
+	
+	if(orderID.startsWith("CK_")&&("reject".equals(outType)||"loss".equals(outType))){
+		DBManager dbm = context.getDBM();
+		String sql = "select sum(t_1.PRO_COUNT),t_1.PRODUCTID,t_3.PRODUCT_ID,t_3.GOODS_ID,t_3.NAME,t_3.STORE,t_4.STORE as GOODS_STORE from T_WM_OUTDETAIL t_1 left join T_WM_PRO t_2 on t_1.PRODUCTID=t_2.ID left join SDB_PRODUCTS t_3 on t_3.PRODUCT_ID=t_2.SDB_PRODUCT_ID left join SDB_GOODS t_4 on t_3.GOODS_ID = t_4.GOODS_ID where HEADID ='"+ID+"' group by t_1.PRODUCTID";
+		//"select PRODUCT_ID,GOODS_ID,NAME,STORE from SDB_PRODUCTS where PRODUCT_ID in (select PRODUCT_ID from V_WM_SDBPRODUCT where ID='"+form.get("PRODUCTID")+"') ";
+		String[][] rs = dbm.getResultStrArray(sql,7,null);
+		if(rs.length>0) {
+			int l = rs.length;
+			for(int i = 0; i<l;i++){
+				if( TypeConvert.toInt(rs[i][0]) > TypeConvert.toInt(rs[i][5])){
+					throw new Warning("商品"+rs[i][4]+"在SDB中的数量不足以此次出库,请检查数据:SDB_PRODUCTS主键PRODUCT_ID:"+rs[i][2]+",需要出库"+rs[i][0]+",现库存"+rs[i][5]);
+				} else if(TypeConvert.toInt(rs[i][0]) > TypeConvert.toInt(rs[i][6])){
+					throw new Warning("商品"+rs[i][4]+"在SDB_GOODS中的数量不足以此次出库,请检查数据:SDB_GOODS主键GOODS_ID:"+rs[i][3]+",需要出库"+rs[i][0]+",现库存"+rs[i][6]);
+				}
+				//throw new Warning(""+rs[0][2]+",需要出库"+rs[0][0]+",现库存"+rs[0][5]);
+			}
+			for(int i = 0; i<l;i++){
+				String sql1 = "update SDB_PRODUCTS set STORE=STORE-"+rs[i][0]+" where PRODUCT_ID="+rs[i][2];
+				dbm.executeUpdate(sql1,null);
+				String sql2 = "update SDB_GOODS set STORE=STORE-"+rs[i][0]+" where GOODS_ID="+rs[i][3];
+				dbm.executeUpdate(sql2,null);
+			}
+		}
+	}
+}
+newRemoveKC();
+//removekc();

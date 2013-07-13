@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Haiyan xsi:noNamespaceSchemaLocation="../../haiyan.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<table name="T_DIC_COMMON_COUNTRY" description="通用字典-国家" realTable="T_DIC_COMMON">
+		<id name="ID" javaType="string">
+			<component type="hidden" url="#"/>
+		</id>
+		<field name="CODE" javaType="string" description="编号">
+			<component type="text"/>
+		</field>
+		<field name="NAME" javaType="string" description="名称">
+			<component type="text"/>
+		</field>
+		<field name="MEMO" javaType="string" description="备注">
+			<component type="textArea" colspan="3"/>
+		</field>
+		<field name="LABEL" description="字典分类" javaType="string" defaultValue="CSZL">
+			<component type="hidden"/>
+		</field>
+		<field name="LABEL2" description="字典分类" javaType="string" defaultValue="COUNTRY">
+			<component type="hidden"/>
+		</field>
+		<queryFilter>
+			<pluggedFilter> and t_1.LABEL='CSZL' and t_1.LABEL2='COUNTRY'</pluggedFilter>
+		</queryFilter>
+		<Operation saveAndAdd="false"/>
+	</table>
+</Haiyan>

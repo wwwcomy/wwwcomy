@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Haiyan xsi:noNamespaceSchemaLocation="../../haiyan.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<table name="T_DIC_COMMON_HY" description="行业类型" realTable="T_DIC_COMMON">
+		<id name="ID" javaType="string">
+			<component type="hidden" url="#"/>
+		</id>
+		<field name="CODE" javaType="string" description="编号">
+			<component type="text"/>
+		</field>
+		<field name="NAME" javaType="string" description="名称">
+			<component type="text"/>
+		</field>
+		<field name="MEMO" javaType="string" description="备注">
+			<component type="textArea" colspan="3" style="width:100%;"/>
+		</field>
+		<field name="LABEL" description="字典分类" javaType="string" defaultValue="HYLX">
+			<component type="hidden"/>
+		</field>
+		<field name="PID" javaType="string" description="所属">
+			<component type="richSelect" quickQueryConditionField="NAME" referenceTable="T_DIC_COMMON_HY" referenceField="ID" displayReferenceField="NAME"/>
+		</field>
+		<field name="NODETYPE" javaType="string" description="节点类型">
+			<component type="dropdown">
+				<option displayName="汇总" value="0"/>
+				<option displayName="明细" value="1"/>
+			</component>
+		</field>
+		<field name="USED" description="是否使用" javaType="string" defaultValue="1">
+			<component type="dropdown">
+				<option displayName="是" value="1"/>
+				<option displayName="否" value="0"/>
+			</component>
+		</field>
+		<PageView showField="true" type="gentree" title="树状检索"/>
+		<PageView showField="true" type="querybyform" title="列表"/>
+		<queryFilter>
+			<pluggedFilter> and t_1.LABEL='HYLX' order by t_1.CODE</pluggedFilter>
+		</queryFilter>
+		<isSelectable className="haiyan.interceptor.TreeSaveInterceptor" methodName="isSelectable"/>
+		<pluginInterceptor className="haiyan.interceptor.TreeSaveInterceptor" methodName="checkCircle" pluginName="save"/>
+	</table>
+</Haiyan>

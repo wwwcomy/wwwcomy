@@ -1,0 +1,318 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Haiyan xsi:noNamespaceSchemaLocation="../../haiyan.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<table description="超期联系预约" name="T_CRM_CUSTOMER_DTL_CQ" realTable="T_DIC_JOURNAL" colspan="6">
+		<id name="ID" javaType="string">
+			<component type="hidden" url="#"/>
+		</id>
+		<field name="USER_ID" javaType="string" description="经纪人">
+			<component type="richSelect" referenceTable="SYSOPERATOR_VIEW" referenceField="ID" displayReferenceField="NAME"/>
+		</field>
+		<field name="CUSTOMER_ID" javaType="string" description="联系客户" nullAllowed="false">
+			<component type="richSelect" referenceTable="T_CRM_CUSTOMER_QY" referenceField="ID" displayReferenceField="NAME,EMAIL,QQ,MSN" readOnly="false" associatedFields="LXTSJG,CQTS,JQ"/>
+			<listColumn noquery="false" width="200"/>
+		</field>
+		<field name="NEXT_CONTACT_DATE" javaType="date" description="预约联系时间" dataStyle="yyyy-MM-dd HH:mm:ss">
+			<component type="dateTime"/>
+			<queryCondition type="region"/>
+		</field>
+		<field name="JOURNAL_TIME" javaType="date" description="最终联系时间" dataStyle="yyyy-MM-dd HH:mm:ss">
+			<component type="dateTime"/>
+			<queryCondition type="region"/>
+		</field>
+		<field name="NEXT_CONTACT_TIME" javaType="date" description="下次联系时间" dataStyle="yyyy-MM-dd HH:mm:ss">
+			<component type="dateTime"/>
+			<queryCondition type="region"/>
+		</field>
+		<field name="LXTSJG" javaType="bigDecimal" description="默认超期天数">
+			<component type="hidden" readOnly="true" displayReferenceField="LXTSJG"/>
+			<listColumn noquery="true" nowrap="false"/>
+		</field>
+		<field name="CQTS" javaType="bigDecimal" description="默认超期天数">
+			<component type="hidden" readOnly="true" displayReferenceField="CQTS"/>
+			<listColumn noquery="true" nowrap="false"/>
+		</field>
+		<!-- associatedFields="CUSTOMER_ADDRESS" 
+			<field name="CUSTOMER_ADDRESS" javaType="string" description="客户地址">
+				<component type="readOnlyText" displayReferenceField="ADDRESS"/>
+			</field>
+			-->
+		<!--
+			<field name="ACTIVITY_ID" javaType="string" description="目标活动">
+				<component type="richSelect" referenceTable="T_CRM_ACTIVITY" restrictiveFields="CUSTOMER_ID" conditionFields="CUSTOMER_ID" referenceField="ID" displayReferenceField="NAME"/>
+			</field>
+			-->
+		<field name="ADDRESS" javaType="string" description="联系地点" nullAllowed="true" defaultValue=" ">
+			<component type="text"/>
+			<queryCondition type="blurMatching"/>
+			<listColumn noquery="true" nowrap="false"/>
+		</field>
+		<field name="ACTIVER" javaType="string" description="对方人员" nullAllowed="false">
+			<component type="text"/>
+			<queryCondition type="blurMatching"/>
+			<listColumn noquery="true" nowrap="false"/>
+		</field>
+		<field name="ACTIVER_POSITION" javaType="string" description="对方人员职位" nullAllowed="false">
+			<component type="text"/>
+			<queryCondition type="blurMatching"/>
+			<listColumn noquery="true" nowrap="false"/>
+		</field>
+		<field name="ACTIVER_PHONE" javaType="string" description="对方人员电话" nullAllowed="false">
+			<component type="text"/>
+			<queryCondition type="blurMatching"/>
+			<listColumn noquery="true" nowrap="false"/>
+		</field>
+		<!--
+			<field name="RESULT_STATUS" javaType="string" description="联系效果">
+				<component type="dropdown" colspan="3">
+					<option displayName="很好" value="perfect"/>
+					<option displayName="好" value="good"/>
+					<option displayName="一般" value="normal"/>
+					<option displayName="差" value="bad"/>
+				</component>
+				<queryCondition type="none"/>
+				<listColumn noquery="true" nowrap="true"/>
+			</field>
+			-->
+		<field name="CONTENT" javaType="string" description="备注" nullAllowed="false" defaultValue="(限2048字)">
+			<component type="textArea" colspan="5" style="width:600;height:80;"/>
+			<queryCondition type="none"/>
+			<listColumn width="40" height="20" noquery="true" nowrap="true"/>
+		</field>
+		<!--
+			<field name="MAININFO" javaType="string" description="主要信息" style="color:#990000;size:12;font-weight:bold;" defaultValue="(限2048字)1、沟通的主要事项  2、目前需要解决的主要问题">
+				<component type="textArea" colspan="3" style="width:100%;height:80;"/>
+				<queryCondition type="none"/>
+				<listColumn width="40" height="20" nowrap="true" noquery="true"/>
+			</field>
+			<field name="PLANCONTENT" javaType="string" description="解决方案" style="color:#990000;size:12;font-weight:bold;" defaultValue="(限2048字)1、具体的解决方案，具体落实的时间">
+				<component type="textArea" colspan="3" style="width:100%;height:80;"/>
+				<queryCondition type="none"/>
+				<listColumn width="40" height="20" nowrap="true" noquery="true"/>
+			</field>
+			-->
+		<!--
+			<field name="ACCESSORY" javaType="string" description="递交附件">
+				<component type="file" url="upload\T_DIC_JOURNAL\ACCESSORY\@F@\@F@" urlField="ID,ACCESSORY"/>
+			</field>
+			-->
+		<field name="JQ" javaType="string" description="需要精确地址">
+			<component type="text" readOnly="true" displayReferenceField="JQ">
+				<option displayName="是" value="1"/>
+				<option displayName="否" value="0"/>
+			</component>
+			<listColumn noquery="true" nowrap="false"/>
+		</field>
+		<field name="JDTYPE" javaType="string" defaultValue="0" description="客户合作阶段">
+			<component type="hidden">
+				<option displayName="合同" value="2"/>
+				<option displayName="呈现" value="1"/>
+				<option displayName="立项" value="0"/>
+			</component>
+		</field>
+		<field name="TYPE_" javaType="string" defaultValue="1" description="记录类型">
+			<component type="hidden">
+				<option displayName="客户联系记录" value="1"/>
+				<option displayName="经理指定预约" value="2"/>
+			</component>
+			<listColumn noquery="true"/>
+		</field>
+		<field name="STATUS" javaType="string" defaultValue="0" description="预约状态">
+			<component type="dropdown" readOnly="true">
+				<option displayName="未完成" value="0"/>
+				<option displayName="完成" value="1"/>
+			</component>
+			<queryCondition type="equal"/>
+		</field>
+		<field name="CQZT" javaType="string" defaultValue="0" description="完成时状态">
+			<component type="hidden" readOnly="true">
+				<option displayName="正常" value="0"/>
+				<option displayName="超期" value="1"/>
+			</component>
+			<queryCondition type="equal"/>
+		</field>
+		<field name="AVAILABLE" javaType="string" defaultValue="1" description="记录状态">
+			<component type="dropdown">
+				<option displayName="有效" value="1"/>
+				<option displayName="无效" value="0"/>
+			</component>
+			<queryCondition type="equal"/>
+			<listColumn noquery="false"/>
+		</field>
+		<!--
+			<field name="COMPLETE_USER_ID" javaType="string" description="完成人">
+				<component type="richSelect" referenceTable="SYSOPERATOR_VIEW" referenceField="ID" displayReferenceField="NAME" readOnly="true"/>
+				<queryCondition type="none"/>
+			</field>
+			-->
+		<field name="CREATE_USER_ID" javaType="string" description="填写人">
+			<component type="richSelect" referenceTable="SYSOPERATOR_VIEW" referenceField="ID" displayReferenceField="NAME" readOnly="true"/>
+			<queryCondition type="none"/>
+		</field>
+		<field name="CREATE_TIME" javaType="date" description="填写时间" dataStyle="yyyy-MM-dd HH:mm:ss">
+			<component type="dateTime" readOnly="true"/>
+			<queryCondition type="region"/>
+			<listColumn noquery="true"/>
+		</field>
+		<!-- -->
+		<PageView methodName="exp" parameter="{queryByForm.do?__opr_data=T_CRM_CUSTOMER_DTL&amp;STATUS=0&amp;AVAILABLE=1}" type="userdefined" title="未完成预约"/>
+		<PageView methodName="exp" parameter="{queryByForm.do?__opr_data=T_CRM_CUSTOMER_DTL_CQ}" type="userdefined" title="超期联系预约"/>
+		<PageView methodName="exp" parameter="{queryByForm.do?__opr_data=T_CRM_CUSTOMER_DTL}" type="userdefined" title="所有预约"/>
+		<!-- -->
+		<queryFilter>
+			<!-- 超期未完成的 和 超期完成的 -->
+			<pluggedFilter methodName="exp" parameter="
+				{ and t_3.TYPE_='1' and t_3.AVAILABLE='1' and (
+				(t_1.STATUS='0' and t_3.ID in 
+				(select tt.ID from T_DIC_ORGA tt where 
+				(
+				(DATEDIFF(}&amp;SQLCurrDate()&amp;{,tt.CREATE_TIME)>=LEAST(tt.CQTS,tt.LXTSJG) and tt.CON_LASTTIME is NULL) or (DATEDIFF(}&amp;SQLCurrDate()&amp;{,tt.CON_LASTTIME)>=LEAST(tt.CQTS,tt.LXTSJG) and tt.CON_LASTTIME is not NULL)
+				)
+				)
+				) or (t_1.STATUS='1' and t_1.CQZT='1')
+				) }
+				"/>
+			<!-- 有联系权限:是创建人或者是经纪人 -->
+			<pluggedFilter methodName="exp" parameter="
+				If(InRole({manager},{boss},{admin}),
+				{},
+				{ and ((t_1.CREATE_USER_ID='}&amp;GetUser({ID})&amp;{' or t_1.USER_ID='}&amp;GetUser({ID})&amp;{') or (t_1.CREATE_USER_ID='-1' and t_1.USER_ID is null)) }
+				)
+				"/>
+			<!-- 有客户权限:是创建人或者是经纪人 -->
+			<pluggedFilter methodName="exp" parameter="
+				If(InRole({manager},{boss},{admin}), 
+				{}, 
+				{ and ( t_3.CREATE_USER_ID='}&amp;GetUser({ID})&amp;{' or t_3.USER_ID='}&amp;GetUser({ID})&amp;{' or t_3.USER_ID_1='}&amp;GetUser({ID})&amp;{' or t_3.USER_ID_2='}&amp;GetUser({ID})&amp;{' or t_3.USER_ID_3='}&amp;GetUser({ID})&amp;{' ) } 
+				)
+				"/>
+			<!-- 排序 -->
+			<pluggedFilter><![CDATA[ and t_1.AVAILABLE='1' order by t_1.NEXT_CONTACT_DATE desc]]></pluggedFilter>
+			<!-- and (t_1.NEXT_CONTACT_DATE&lt;=}&amp;SQLCurrDate()&amp;{ or t_1.NEXT_CONTACT_DATE=}&amp;SQLCurrDate(false,1)&amp;{) -->
+		</queryFilter>
+		<!-- -->
+		<javascript hostPage="edit" src="project/crm/CUSTOMER_DTL_EDIT.js"><![CDATA[
+			function remoteValidate() {
+				if (!Hy.isEmpty(Hy.getValue('JOURNAL_TIME')) 
+					&& !Hy.isEmpty(Hy.getValue('NEXT_CONTACT_DATE'))
+					&& Hy.getValue('JOURNAL_TIME')<Hy.getValue('NEXT_CONTACT_DATE')) {
+					throw {
+						message : '最终联系时间不可小于预约联系时间'
+					};
+				}
+				return true;
+			}
+		]]></javascript>
+		<!-- src="project/crm/CUSTOMER_DTL_IDS.js" -->
+		<javascript hostPage="ids"><![CDATA[
+			Ext.onReady(function(){
+				// judgeDate2
+				function judgeDate2(dateJour, status, cqzt, available) {
+					if (available == 0) {
+						return 'x-gray'; // 无效
+					}
+					if (status == 1) {
+						if (cqzt == 1)
+							return 'x-grid-record-blur'; // 超期完成
+						return 'x-grid-record-green'; // 正常完成
+					}
+					// __currDateTime 服务器日期
+					if (Ext.isEmpty(__currDateTime))
+						return '';
+					if (Ext.isEmpty(dateJour))
+						return '';
+					var yN = __currDateTime.substring(0, 4);
+					var mN = __currDateTime.substring(6, 7);
+					var dN = __currDateTime.substring(9, 10);
+					var yJ = dateJour.substring(0, 4);
+					var mJ = dateJour.substring(6, 7);
+					var dJ = dateJour.substring(9, 10);
+					var dtN = 1 * replaceAll(__currDateTime.substring(0, 10), '-', '');
+					var dtJ = 1 * replaceAll(dateJour.substring(0, 10), '-', '');
+					if (dtN == dtJ) {
+						return 'x-grid-record-orange'; // 当日未完成
+					} else if (dtN > dtJ) { // 当前时间大于下次联系时间
+						return 'x-grid-record-red'; // 超期未完成
+					}
+					// else if (dtN < dtJ) {
+					// return 'x-grid-record-trunk'; // 正常未完成
+					// }
+					else {
+						return ''; // 其他
+					}
+				}
+				// (Date.parseDate('2009-01-23', 'yyyy-MM-dd'));
+				// ("2009-01-23 12:32:12" > "2009-01-23 12:32:00");
+				if (typeof(__grid)!='undefined') {
+					__grid.getView().getRowClass=function(rec, rowIndex, rowParams, store){
+						return judgeDate2(rec.get('NEXT_CONTACT_DATE'), rec.get('STATUS'),
+							rec.get('CQZT'), rec.get('AVAILABLE'));
+					}
+				}
+			});
+		]]></javascript>
+		<!-- CREATE_USER_ID,GetUser(ID), USER_ID,GetUser(ID), -->
+		<pluginInterceptor methodName="exp" pluginName="edit" parameter="
+			If(IsEmpty(GetPara(CUSTOMER_ID)), DBFindByPK(T_DIC_ORGA,Get(CUSTOMER_ID)), DBFindByPK(T_DIC_ORGA,GetPara(CUSTOMER_ID)));
+			If(IsEmpty(Get(GetVar(0),HYTYPE)), {}, DBFindByPK(T_CRM_HANGYE,Get(GetVar(0),HYTYPE)));
+			Set(CUSTOMER_ID,Get(GetVar(0),ID), __CUSTOMER_ID__NAME,Get(GetVar(0),NAME), ADDRESS,Get(GetVar(0),CUSTOMER_ADDRESS), LXTSJG,Get(GetVar(1),LXTSJG), JQ,Get(GetVar(1),JQ), CQTS,Get(GetVar(0),CQTS));
+			DBFindValue({select t.NEXT_CONTACT_DATE from T_DIC_JOURNAL t where t.CUSTOMER_ID='}&amp;Get(CUSTOMER_ID)&amp;{'},1,0,0);
+			If( And( Not(IsEmpty(Get(LXTSJG))), Get(LXTSJG)&lt;&gt;0, IsEmpty(Get(NEXT_CONTACT_DATE)), Not(IsEmpty(GetVar(3))) ),
+			Set(NEXT_CONTACT_DATE, Format( ToDate(GetVar(3), Get(LXTSJG)), {yyyy-MM-dd HH:mm:ss}) )
+			,true);
+			If(InRole({manager},{boss},{admin}),true,If(Get(STATUS)={1},DisTbl()+DisBtns(),DisFlds(AVAILABLE,USER_ID)));
+			" type="after"/>
+		<!-- Asert({TEST:}&amp;GetVar(0));+Set(COMPLETE_USER_ID,GetUser(ID)) -->
+		<pluginInterceptor methodName="exp" pluginName="save" parameter="
+			SetCreateTime(CREATE_TIME);
+			SetCreateUser(CREATE_USER_ID);
+			If(
+			Or(IsEmpty(Get(JOURNAL_TIME)),Get(JOURNAL_TIME)={,}),
+			Set(STATUS,{0}),
+			Set(STATUS,{1},CQZT,{1})
+			+DBSql({delete from SYSTODO where MEMO like '联系客户:}&amp;Get(__CUSTOMER_ID__NAME)&amp;{%' and SDATE like '}&amp;SubStr(Get(NEXT_CONTACT_DATE),0,10)&amp;{%'})
+			+If(IsEmpty(Get(NEXT_CONTACT_TIME)),true,
+			Interceptor(
+			T_CRM_CUSTOMER_DTL_CQ,DBUpdate(T_CRM_CUSTOMER_DTL_CQ,CopyForm(),ID,{},CREATE_TIME,DateTime({yyyy-MM-dd HH:mm:ss}),NEXT_CONTACT_DATE,Get(NEXT_CONTACT_TIME),NEXT_CONTACT_TIME,{},JOURNAL_TIME,{},STATUS,0),generate
+			)
+			)
+			);
+			" type="before"/>
+		<!-- SetCreateUser(USER_ID); -->
+		<pluginInterceptor methodName="exp" pluginName="save" parameter="
+			DBFindByPK(T_CRM_CUSTOMER_QY,Get(CUSTOMER_ID));
+			If(
+			Get(STATUS)={1},
+			Set(GetVar(0),CON_LASTTIME,Get(JOURNAL_TIME))+DBUpdate(T_CRM_CUSTOMER_QY,GetVar(0)),
+			false
+			);
+			If(GetPara({__next_opr})={__next_add},WriteJS({},{new}),true)
+			" type="after"/>
+		<!-- Set(GetVar(0), CON_LASTTIME, Get(NEXT_CONTACT_DATE)); Datetime({yyyy-MM-dd HH:mm:ss}) If(Get(STATUS)={1},DBUpdate(T_CRM_CUSTOMER_QY,GetVar(0)),false); -->
+		<pluginInterceptor methodName="exp" pluginName="del" parameter="
+			Set(AVAILABLE,{0});
+			DBUpdate(T_CRM_CUSTOMER_DTL_CQ,GetVar(0));
+			" type="before"/>
+		<pluginInterceptor methodName="exp" pluginName="cov" parameter="
+			Set(AVAILABLE,{1});
+			DBUpdate(T_CRM_CUSTOMER_DTL_CQ,GetVar(0));
+			" type="before"/>
+		<!--
+			Forward({/edit.do?__opr_data=T_CRM_CUSTOMER_DTL_CQ&amp;ID=}&amp;Get(ID));
+			<pluginInterceptor methodName="setDefaultValByHeadID" pluginName="edit" parameter="CUSTOMER_ID,T_DIC_ORGA,ID,CUSTOMER_ID,NAME,__CUSTOMER_ID__NAME,ADDRESS,CUSTOMER_ADDRESS"/>
+			<pluginInterceptor methodName="onlyByMaker" parameter="CREATE_USER_ID" pluginName="save"/>
+			<pluginInterceptor methodName="onlyByMaker" parameter="CREATE_USER_ID" pluginName="del"/>
+			-->
+		<pluginInterceptor className="haiyan.crm.interceptor.DICJournalInterceptor" methodName="generate" pluginName="generate" parameter="生成待办事宜" type="after"/>
+		<pluginInterceptor className="haiyan.crm.interceptor.DICJournalInterceptor" methodName="generate" pluginName="save" parameter="生成待办事宜" type="after"/>
+		<!-- -->
+		<pluginOperation name="saveAndAdd" oprName="保存新增" hostPage="edit" tblevel="1" img="save"/>
+		<pluginOperation name="del" oprName="删除" accessKey="D" hostPage="edit" tblevel="1"/>
+		<pluginOperation name="cov" oprName="恢复" accessKey="D" hostPage="edit" tblevel="1"/>
+		<!--
+			<pluginOperation name="TodoGen" oprName="生成待办" accessKey="G" hostPage="edit" tblevel="1"/>
+			<pluginOperation name="AddNew" oprName="拷贝新增" accessKey="N" hostPage="edit" tblevel="1"/>
+			-->
+		<!-- -->
+		<Operation queryPageAdd="false" queryPageDelete="false" saveAndAdd="false" saveAndAddCopy="false" customizeColumns="false"/>
+	</table>
+</Haiyan>

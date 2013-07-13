@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Haiyan xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../haiyan.xsd">
+	<table name="T_WM_OUT" description="出库单" colspan="6">
+		<id name="ID" javaType="string"/>
+		<field name="OUT_NO" description="出库单号" displayOnly="false" javaType="string" lazyLoad="false">
+			<component type="text" readOnly="true" colspan="1"/>
+			<listColumn noedit="false" noquery="false" width="250"/>
+		</field>
+		
+		<!-- 
+		<field name="SHIP_SUPPLIER" description="供应商" displayOnly="false" javaType="string" lazyLoad="false">
+			<component type="hidden" readOnly="false" colspan="6" displayReferenceField="NAME" referenceField="ID" referenceTable="T_DIC_SUPPLIER"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="OUT_SRCID" description="原始单ID" displayOnly="false" javaType="string" lazyLoad="false">
+			<component type="hidden" readOnly="false" colspan="1"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="OUT_SRCNO" description="原始单号" displayOnly="false" javaType="string" lazyLoad="false" nullAllowed="false">
+			<component type="text" readOnly="false" colspan="1"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="SHIP_NO" description="出货单号" displayOnly="false" javaType="string" lazyLoad="false" nullAllowed="false">
+			<component type="text" readOnly="false" colspan="1"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		-->
+		<field name="OUT_DATE" description="出库时间" displayOnly="false" javaType="date" lazyLoad="false">
+			<component type="date" readOnly="true" colspan="1"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="LOGISTICS_COST" description="物流费用" displayOnly="false" javaType="bigDecimal" lazyLoad="false" nullAllowed="false">
+			<component type="text" readOnly="false" colspan="6"  maxFractionDigit="2" minFractionDigit="2"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="LOGISTICS" description="物流" displayOnly="false" javaType="string" lazyLoad="false" nullAllowed="false">
+			<component type="text" readOnly="false" colspan="6" style="width:448px"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="CONSIGNEE" description="收货方" displayOnly="false" javaType="string" lazyLoad="false" nullAllowed="false">
+			<component type="text" readOnly="false" colspan="6" style="width:448px"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="WAREHOUSE" description="出货仓库" displayOnly="false" javaType="string" lazyLoad="false" nullAllowed="false">
+			<component type="richSelect" readOnly="true" colspan="1" displayReferenceField="NAME" referenceField="ID" referenceTable="T_DIC_WAREHOUSE"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="WHOWNER" description="库主" displayOnly="false" javaType="string" lazyLoad="false" nullAllowed="false">
+			<component type="richSelect" readOnly="true" colspan="1" displayReferenceField="NAME" referenceField="ID" referenceTable="SYSOPERATOR_COMBO"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="OUT_STATUS" javaType="string" description="出库性质" defaultValue="consign">
+			<component type="dropdown" readOnly="false" colspan="6">
+				<option displayName="出库" value="consign"/>
+				<option displayName="返厂" value="reject"/>
+			</component>
+		</field>
+		<field name="SUBGRID" javaType="string" description="应出库明细" displayOnly="true">
+			<component type="grid" readOnly="false" colspan="6" style="width:950;height:250;" displayReferenceField="ID,HEADID,ORDER_ID,PRODUCTID,PRO_CODE,PRO_WMCODE,PRO_COUNT,OUT_PACKINGNUM,PRO_PACKINGNUM,PRO_CAPACITYNUM,PRO_WEIGHTNUM,All_CAPACITYNUM,All_WEIGHTNUM,REMAINDER_NUM,ORDER_PRO_ID" referenceField="HEADID" referenceTable="T_WM_OUTPRE" parameter="{&amp;HEADID=}&amp;If(IsEmpty(Get({ID})),-1,Get({ID}))" action="If(Get(BILL_STATUS)={audit},SetVisible({auditOut},false,{saveProtocol},false),SetVisible({auditOut},true,{saveProtocol},true))"/>
+			<queryCondition type="none"/>
+			<listColumn noquery="true"/>
+		</field>
+		<field name="SUBGRID2" javaType="string" description="出库预处理" displayOnly="true">
+			<component type="grid" readOnly="false" colspan="6" style="width:950;height:330;toolbar:no;" displayReferenceField="ID,HEADID,PARENTID,CODE,WAREWHEREID,PRODUCTID,PRO_CODE,PRO_COUNT" referenceField="HEADID" referenceTable="V_WM_PRODUCT2" parameter="{&amp;PRODUCTID=-1}" action=""/>
+			<queryCondition type="none"/>
+			<listColumn noquery="true"/>
+		</field>
+		<field name="SUBGRID1" javaType="string" description="实际出库明细" displayOnly="true">
+			<component type="grid" readOnly="false" colspan="6" style="width:950;height:350;" displayReferenceField="ID,HEADID,ORDER_PRO_ID,PRODUCTID,PRO_WMCODE,PRO_CODE,PRO_WH,PRO_COUNT,OUT_TIME,OUT_TYPE,PRO_CAPACITYNUM,PRO_WEIGHTNUM" referenceField="HEADID" referenceTable="T_WM_PRODUCT2" parameter="{&amp;HEADID=}&amp;If(IsEmpty(Get({ID})),-1,Get({ID}))" action="If(Get(BILL_STATUS)={audit},SetVisible({auditOut},false,{saveProtocol},false),SetVisible({auditOut},true,{saveProtocol},true))"/>
+			<queryCondition type="none"/>
+			<listColumn noquery="true"/>
+		</field>
+		<!-- -->
+		<field name="CREATE_USER_ID" javaType="string" description="创建人" updateable="false">
+			<component type="richSelect" quickQueryConditionField="NAME" referenceTable="SYSOPERATOR_VIEW" referenceField="ID" displayReferenceField="NAME" readOnly="true"/>
+			<listColumn noquery="false" nowrap="true"/>
+		</field>
+		<field name="CREATE_TIME" javaType="date" dataStyle="yyyy-MM-dd HH:mm:ss" description="创建时间" updateable="false">
+			<component type="hidden" readOnly="true"/>
+			<queryCondition type="region"/>
+			<listColumn noquery="false" nowrap="true"/>
+		</field>
+		<!--
+		<field name="UPDATE_USER_ID" javaType="string" description="经办人">
+			<component type="richSelect" quickQueryConditionField="NAME" referenceTable="SYSOPERATOR_VIEW" referenceField="ID" displayReferenceField="NAME" readOnly="true"/>
+			<listColumn noquery="true" nowrap="true"/>
+		</field>
+		<field name="UPDATE_TIME" javaType="date" dataStyle="yyyy-MM-dd HH:mm:ss" description="经办时间">
+			<component type="hidden" readOnly="true"/>
+			<queryCondition type="region"/>
+			<listColumn noquery="true" nowrap="true"/>
+		</field>
+		-->
+		<field name="AUDIT_USER_ID" javaType="string" description="审批人">
+			<component type="richSelect" quickQueryConditionField="NAME" referenceTable="SYSOPERATOR_VIEW" referenceField="ID" displayReferenceField="NAME" readOnly="true"/>
+			<listColumn noquery="true" nowrap="true"/>
+		</field>
+		<field name="AUDIT_TIME" javaType="date" dataStyle="yyyy-MM-dd HH:mm:ss" description="审批时间">
+			<component type="hidden" readOnly="true"/>
+			<queryCondition type="region"/>
+			<listColumn noquery="true" nowrap="true"/>
+		</field>
+		<field name="BILL_STATUS" javaType="string" description="单据状态">
+			<component type="dropdown" readOnly="true">
+				<option displayName="待批" value="init"/>
+				<option displayName="审批确认" value="audit"/>
+			</component>
+		</field>
+		<!-- -->
+		<queryFilter>
+			<pluggedFilter methodName="exp" parameter="{ and t_1.WAREHOUSE='}&amp;GetUser(WAREHOUSEID)&amp;{' and t_1.WHOWNER='}&amp;GetUser(WHOWNERID)&amp;{' }"/>
+		</queryFilter>
+		<!-- -->
+		<javascript hostPage="edit" src="project/leedon/T_WM_OUT.js"><![CDATA[
+			(function() {
+				var c = Ext.getCmp('__BILL_STATUS__Option__');
+				if (c) {
+					$$('div#__helper')[0].setStyle({
+						color: c.getValue()=='audit'?'RED':'GREEN'
+					});
+					$$('div#__helper')[0].update('当前单据状态:'+c.getRawValue());
+				}
+			})()
+		]]></javascript>
+		<!-- -->
+		<pluginInterceptor methodName="exp" parameter="
+			If(IsEmpty(Get(ID)),Set(ID,GetNewID()),true)
+			+SetPara(__one2oneID,Get(ID))
+			+Set(WAREHOUSE,GetUser(WAREHOUSEID),__WAREHOUSE__NAME,GetUser(WAREHOUSENAME))
+			+Set(WHOWNER,GetUser(WHOWNERID),__WHOWNER__NAME,GetUser(WHOWNERNAME))
+			+If(Get(BILL_STATUS)={audit},DisBtns(delete,save,saveAndAdd,saveAndAddCopy,select,saveAll,auditOut),true)
+			+SetDesForm()
+			" pluginName="edit" type="after"/>
+		<pluginInterceptor methodName="exp" parameter="
+			If(Or(IsEmpty(Get(WAREHOUSE)),IsEmpty(Get(WHOWNER))),Warning({缺少必填项}),true)
+			+SetCreateTime(OUT_DATE,{yyyy-MM-dd HH:mm:ss})
+			+SetCreateTime(CREATE_TIME,{yyyy-MM-dd HH:mm:ss})
+			+SetCreate(CREATE_USER_ID,GetUser(ID))
+			+SetCreate(__CREATE_USER_ID__NAME,GetUser(NAME))
+			+SetCreate(OUT_NO,{CK_}&amp;LeftPad(Get(ID),12))
+			+SetCreate(BILL_STATUS,{init})
+			" pluginName="save" type="before"/>
+		<pluginInterceptor methodName="exp" parameter="
+			Set(BILL_STATUS,{audit})
+			+Set(AUDIT_USER_ID,User(ID))
+			" pluginName="auditOut" type="before"/>
+		<!-- -->
+		<pluginOperation name="saveAll" oprName="保存A" hostPage="edit" tblevel="1" img="save" action="Save({},{},{SUBGRID},{SUBGRID1})+brk()"/>
+		<pluginOperation name="auditOut" oprName="出库审批" hostPage="edit" tblevel="1" img="settings" action="If(Confirm({确认审批后,不可恢复,确认审批?}),Save({},{auditOut},{SUBGRID},{SUBGRID1})+SetVisible({auditOut},false,{saveAll},false),true)+brk()"/>
+		<!-- update T_WM_OUT where BILL_STATUS='init' -->
+		<Operation queryPageDelete="false" save="false" saveAndAdd="false" saveAndAddCopy="false"/>
+		<doc>
+			<help>&lt;div id=&quot;__helper&quot;&gt;&lt;div&gt;</help>
+		</doc>
+	</table>
+</Haiyan>

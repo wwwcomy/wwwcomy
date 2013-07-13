@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Haiyan xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../haiyan.xsd">
+	<table name="SYSPORTMODULE" description="SYSPORTMODULE">
+		<id name="ID" javaType="string">
+			<component type="hidden" url="#"/>
+		</id>
+		<field name="NAME" javaType="string" description="登陆系统">
+			<component type="text"/>
+		</field>
+		<field name="HOME" javaType="string" description="登陆系统HOME">
+			<component type="text"/>
+		</field>
+		<field name="USERCODE" javaType="string" description="登陆用户CODE">
+			<component type="text"/>
+		</field>
+		<field name="PASSWORD" javaType="string" description="登陆用户PASS(MD5)" createable="true" updateable="false" defaultValue="D033E22AE348AEB566FC214AEC3585C4DA997">
+			<component type="text"/>
+		</field>
+		<pluginInterceptor className="haiyan.interceptor.FlowmisInterceptor" methodName="transPassword" pluginName="save" type="before"/>
+		<!--
+		<PageView showField="*" type="querybyform" title="列表索引"/>
+		<PageView showField="AREA_CODE,AREA,__PROVINCE_ID__NAME,__SYSTEMUSER__NAME" type="gentree" title="树形索引"/>
+		<pluginInterceptor className="haiyan.interceptor.SaveInterceptor" methodName="complete" pluginName="save" type="after"/>
+		<pluginInterceptor className="haiyan.interceptor.DeleteInterceptor" methodName="complete" pluginName="delete" type="after"/>
+		-->
+		<Operation selectedHidden="true"/>
+	</table>
+</Haiyan>

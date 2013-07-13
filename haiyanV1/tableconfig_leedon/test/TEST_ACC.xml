@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Haiyan xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../haiyan.xsd">
+	<table name="TEST_ACC" description="附件测试" realTable="TEST_ACC" colspan="6">
+		<id name="ID" description="ID" javaType="string">
+			<component type="hidden" url="#"/>
+		</id>
+		<field name="CODE" description="编码" displayOnly="false" javaType="string" lazyLoad="false" nullAllowed="false">
+			<component type="text" readOnly="false" validator="^-?\d+$" validatorText="“编码“ 必须为数字类型"/>
+			<queryCondition type="equal"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="NAME" description="名称" displayOnly="false" javaType="string" lazyLoad="false" nullAllowed="false">
+			<component type="text" readOnly="false" validator="^[\w-]+(\.[\w-]+)*@[\w-]+(\.[\w-]+)+$" validatorText="“名称“ 必须为email类型"/>
+			<queryCondition type="equal"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="IMAGE1" description="图片1" displayOnly="false" javaType="string" lazyLoad="false" nullAllowed="false" length="250">
+			<component type="multiImage" readOnly="false"/>
+			<queryCondition type="equal"/>
+		</field>
+		<field name="FILES1" description="附件1" displayOnly="false" javaType="string" lazyLoad="false" nullAllowed="false" length="250">
+			<component type="multiFile" readOnly="false"/>
+			<queryCondition type="equal"/>
+		</field>
+		<field name="IMAGE2" description="图片2" displayOnly="false" javaType="string" lazyLoad="false" nullAllowed="true" length="250">
+			<component type="image" readOnly="false"/>
+			<queryCondition type="equal"/>
+		</field>
+		<field name="FILES2" description="附件2" displayOnly="false" javaType="string" lazyLoad="false" nullAllowed="true" length="250">
+			<component type="file" readOnly="false"/>
+			<queryCondition type="equal"/>
+		</field>
+		<!--
+		<field name="STATUS" description="状态" displayOnly="false" javaType="string" lazyLoad="false" nullAllowed="false">
+			<component type="text" readOnly="false"/>
+			<queryCondition type="equal"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		-->
+		<javascript hostPage="ids"><![CDATA[
+			 // default of custom renderer function
+			function renderFile(value, metaData, record, rowIndex, colIndex, store, disVal, colVal, fieldName) {
+				if (Ext.isEmpty(value))
+					return value;
+				var count = 0;
+				var str = '';
+				var array = value.split(',');
+				array.each(function(item) { // alert(item);	    
+				    if (item.startsWith('/haiyan')) {
+						  str += '<a href="'+item+'" target="_blank">file['+ (count++) +']</a>&nbsp;';
+				    } else if (item.startsWith('haiyan/')) {
+						  str += '<a href="/'+item+'" target="_blank">file['+ (count++) +']</a>&nbsp;';
+				    } else {
+				    	  str += '<a href="'+srvContextName+'/upload/TEST_ACC/'+fieldName+'/'+record.get('ID')+'/'+item+'" target="_blank">file['+ (count++) +']</a>&nbsp;';
+				    }
+				});
+				return str;
+			}
+			// default custom renderer function
+			function renderImage(value, metaData, record, rowIndex, colIndex, store, disVal, colVal, fieldName) {
+				if (Ext.isEmpty(value))
+					return value;
+				var str = '';
+				var array = value.split(',');
+				array.each(function(item) { // alert(item);
+				    if (item.startsWith('/haiyan')) {
+				        str += '<img src="'+item+'" target="_blank" style="width:30;height:30;"/>&nbsp;';
+				    } else if (item.startsWith('haiyan/')) {
+						 str += '<img src="/'+item+'" target="_blank" style="width:30;height:30;"/>&nbsp;';
+				    } else {
+				   	 	 str += '<img src="'+srvContextName+'/upload/TEST_ACC/'+fieldName+'/'+record.get('ID')+'/'+item+'" target="_blank" style="width:30;height:30;"/>&nbsp;';
+				    }
+				});
+				return str;
+			}
+      ]]></javascript>
+		<pluginOperation className="haiyan.plugin.CommonBshPlugin" name="test" oprName="模板SUBTEST启动当前表单流程" accessKey="T" hostPage="edit"><![CDATA[
+			try {
+			    com.haiyan.genmis.core.wf.WorkflowEngine wf = new com.haiyan.genmis.core.wf.WorkflowEngine();
+			    wf.execute(dbm, table, form, context, &quot;主流程&quot;, &quot;SUBTEST.wfe&quot;);
+			} finally {
+				//
+			}
+		]]></pluginOperation>
+	</table>
+</Haiyan>

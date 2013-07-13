@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Haiyan xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../haiyan.xsd">
+	<table name="TEST_ONE2ONE" description="ONE2ONE测试" realTable="TEST_ONE2ONE" colspan="2">
+		<!-- one2oneTable="TEST_ONE2ONE_2" one2oneField="ID" -->
+		<id name="ID" description="ID" javaType="string">
+			<component type="hidden" url="#"/>
+		</id>
+		<field name="CODE" description="被1to1的CODE" displayOnly="false" javaType="string" lazyLoad="false" one2oneTable="TEST_ONE2ONE_2" one2oneField="CODE">
+			<component type="text" readOnly="false"/>
+			<queryCondition type="equal"/>
+		</field>
+		<field name="NAME" description="被1to1的NAME" displayOnly="false" javaType="string" lazyLoad="false" one2oneTable="TEST_ONE2ONE_2" one2oneField="NAME">
+			<component type="text" readOnly="false"/>
+			<queryCondition type="equal"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="ORGA_ID" description="被1to1单选" displayOnly="false" javaType="string" lazyLoad="false" one2oneTable="TEST_ONE2ONE_2" one2oneField="ORGA_ID">
+			<component type="richSelect" readOnly="false" displayReferenceField="NAME" referenceField="ID" referenceTable="SYSORGA" quickQueryConditionField="NAME"/>
+			<queryCondition type="equal"/>
+		</field>
+		<field name="OPER_IDS" description="被1to1多选" displayOnly="false" javaType="string" lazyLoad="true" one2oneTable="TEST_ONE2ONE_2" one2oneField="OPER_IDS">
+			<component type="richSelect" readOnly="false" displayReferenceField="NAME" referenceField="ID" referenceTable="SYSOPERATOR" quickQueryConditionField="NAME" multipleSelect="true"/>
+			<queryCondition type="equal"/>
+		</field>
+		<field name="CREATE_USER_ID" description="创建人" displayOnly="false" javaType="string" lazyLoad="false" one2oneTable="TEST_ONE2ONE_2" one2oneField="CREATE_USER_ID">
+			<component type="richSelect" readOnly="true" colspan="1" displayReferenceField="NAME" referenceField="ID" referenceTable="SYSOPERATOR"/>
+			<queryCondition type="equal"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="CREATE_TIME" description="创建时间" displayOnly="false" dataStyle="yyyy-MM-dd HH:mm:ss" javaType="date" lazyLoad="false" one2oneTable="TEST_ONE2ONE_2" one2oneField="CREATE_TIME">
+			<component type="dateTime" readOnly="true" colspan="1"/>
+			<queryCondition type="equal"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<PageView showField="NAME" hostPage="edit" methodName="exp" parameter="{edit.do?__opr_data=TEST_ONE2ONE_2&amp;__one2oneID=}&amp;Value(ID)" title="查看1对1" type="userdefined" img="refresh"/>
+		<pluginInterceptor methodName="exp" parameter="SetCreateUser(CREATE_USER_ID);SetCreateTime(CREATE_TIME);" pluginName="save" type="before"/>
+	</table>
+	<!-- -->
+	<table name="TEST_ONE2ONE_2" description="ONE2ONE测试2" realTable="TEST_ONE2ONE_2" colspan="2">
+		<id name="ID" description="ID" javaType="string">
+			<component type="hidden" url="@"/>
+		</id>
+		<field name="CODE" description="被1to1的CODE" displayOnly="false" javaType="string" lazyLoad="false">
+			<component type="text" readOnly="false"/>
+			<queryCondition type="equal"/>
+		</field>
+		<field name="NAME" description="被1to1的NAME" displayOnly="false" javaType="string" lazyLoad="false">
+			<component type="readOnlyText" readOnly="false"/>
+			<queryCondition type="equal"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="ORGA_ID" description="被1to1单选" displayOnly="false" javaType="string" lazyLoad="false">
+			<component type="richSelect" readOnly="false" quickQueryConditionField="NAME" displayReferenceField="NAME" referenceField="ID" referenceTable="SYSORGA"/>
+			<queryCondition type="equal"/>
+		</field>
+		<field name="OPER_IDS" description="被1to1多选" displayOnly="false" javaType="string" lazyLoad="true">
+			<component type="richSelect" readOnly="false" multipleSelect="true" quickQueryConditionField="NAME" displayReferenceField="NAME" referenceField="ID" referenceTable="SYSOPERATOR"/>
+			<queryCondition type="equal"/>
+		</field>
+		<field name="CREATE_USER_ID" description="创建人" displayOnly="false" javaType="string" lazyLoad="false">
+			<component type="richSelect" readOnly="true" colspan="1" quickQueryConditionField="NAME" displayReferenceField="NAME" referenceField="ID" referenceTable="SYSOPERATOR"/>
+			<queryCondition type="equal"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="CREATE_TIME" description="创建时间" displayOnly="false" dataStyle="yyyy-MM-dd HH:mm:ss" javaType="date" lazyLoad="false">
+			<component type="dateTime" readOnly="true" colspan="1"/>
+			<queryCondition type="equal"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<pluginInterceptor methodName="exp" parameter="SetCreateUser(CREATE_USER_ID);SetCreateTime(CREATE_TIME);" pluginName="save" type="before"/>
+	</table>
+</Haiyan>
+<!--
+<PageView title="111" showField="NAME,CODE" img="user" hostPage="query" type="gentree"/>
+-->
+<!--
+<pluginInterceptor methodName="exp" parameter="CompleteAlert();" pluginName="save" type="after"/>
+-->

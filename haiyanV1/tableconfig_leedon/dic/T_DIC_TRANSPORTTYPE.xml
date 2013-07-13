@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Haiyan xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../haiyan.xsd">
+<table name="T_DIC_TRANSPORTTYPE" description="运输方式信息">
+                <id name="ID" javaType="string"/>
+                <field name="CODE" description="运输途径编码" javaType="string">
+			<component type="text"/>
+		</field>
+                <field name="NAME" description="名称" javaType="string">
+			<component type="text"/>
+		</field>
+		<field name="DESCRIPTION" description="说明" javaType="string">
+			<component type="text"/>
+		</field>
+		</table>
+		</Haiyan>

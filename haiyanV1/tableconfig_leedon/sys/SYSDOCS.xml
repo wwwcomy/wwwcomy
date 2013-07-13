@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Haiyan xsi:noNamespaceSchemaLocation="../haiyan.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<table description="文档" name="SYSDOCS">
+		<id name="ID" javaType="string"/>
+		<field name="TITLE" javaType="string" description="标题">
+			<component type="text" colspan="3"/>
+			<!--
+            url="queryOne.do?__opr_data=SYSDOCS&amp;ID=@FIELD@" 
+                urlField="ID"
+                -->
+		</field>
+		<field name="DOCCONTENT" javaType="blob" description="文档">
+			<component type="fckeditor" colspan="3" url="#"/>
+			<queryCondition type="none"/>
+			<listColumn noquery="false"/>
+		</field>
+		<field name="DOCTYPE" javaType="string" description="文档类型" defaultValue="operation">
+			<component type="dropdown">
+				<option displayName="开发文档" value="development"/>
+				<option displayName="测试文档" value="test"/>
+				<option displayName="操作文档" value="operation"/>
+			</component>
+			<listColumn noquery="true"/>
+		</field>
+		<field name="ACCESSORY" description="附件" javaType="string">
+			<component type="file" colspan="3" url="showDownloadFile.do?__opr_data=SYSDOCS&amp;field=ACCESSORY&amp;fileName=@FIELD@&amp;ID=@FIELD@" urlField="ACCESSORY,ID"/>
+			<queryCondition type="none"/>
+		</field>
+		<!--
+        <field name="TableNameCK" javaType="string" description="参考表名" displayOnly="true">
+	        <component type="dropdown" colspan="3"
+	            className="haiyan.component.TableComponent"/>
+                <listColumn noquery="true"/>
+                <queryCondition type="none"/>
+	</field>
+	-->
+		<field name="TABLENAME" description="表名" javaType="string">
+			<component type="text" colspan="3"/>
+			<listColumn noquery="true"/>
+		</field>
+		<field name="CREATOR" javaType="string" description="创建人">
+			<component readOnly="true" type="richSelect" referenceTable="SYSOPERATOR" referenceField="ID" displayReferenceField="NAME"/>
+			<queryCondition type="none"/>
+			<listColumn noquery="true"/>
+		</field>
+		<field name="CREATTIME" javaType="date" description="创建时间" dataStyle="yyyy-MM-dd hh:mm:ss">
+			<component type="text" readOnly="true"/>
+			<queryCondition type="none"/>
+			<listColumn noquery="true"/>
+		</field>
+		<!--
+        <field name="CODE" javaType="string" description="助记码">
+                <component type="text"/>
+                <listColumn noquery="true"/>
+                <queryCondition type="none"/>
+        </field>
+        <field name="CANEDIT" description="编辑" javaType="string">
+	        <component type="text" defaultValue="1"
+		        className="com.haiyan.genmis.view.component.CanEditComponent" 
+		        url="edit.do?__opr_data=SYSDOCS&amp;ID=@F@" 
+		        urlField="ID"/>
+	        <listColumn noquery="true"/>
+	        <queryCondition type="none"/>
+        </field>
+        -->
+		<pluginInterceptor className="haiyan.interceptor.SaveInterceptor" methodName="setCreateUser" parameter="CREATOR,__CREATOR__NAME" pluginName="save"/>
+		<pluginInterceptor className="haiyan.interceptor.SaveInterceptor" methodName="setCreateTime" parameter="CREATTIME,yyyy-MM-dd hh:mm:ss" pluginName="save"/>
+		<Order needOrder="false"/>
+	</table>
+</Haiyan>

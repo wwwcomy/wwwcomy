@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Haiyan xsi:noNamespaceSchemaLocation="../../haiyan.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<table description="超期联系预警" name="T_CRM_CONTACTION_CQ" realTable="T_DIC_JOURNAL" colspan="6">
+		<id name="ID" javaType="string">
+			<component type="hidden" url="@"/>
+		</id>
+		<field name="USER_ID" javaType="string" description="销售">
+			<component type="richSelect" referenceTable="SYSOPERATOR_VIEW" referenceField="ID" displayReferenceField="NAME"/>
+		</field>
+		<field name="NEXT_CONTACT_DATE" javaType="date" description="预约联系时间" dataStyle="yyyy-MM-dd HH:mm:ss">
+			<component type="dateTime"/>
+			<queryCondition type="region"/>
+		</field>
+		<field name="CUSTOMER_ID" javaType="string" description="联系客户" nullAllowed="false">
+			<component type="richSelect" referenceTable="T_CRM_CLIENT" referenceField="ID" displayReferenceField="NAME" readOnly="false"/>
+			<listColumn noquery="false" width="200"/>
+		</field>
+		<field name="CUSTOMER_CONTACT" javaType="string" description="对方联系人" nullAllowed="false">
+			<component type="richSelect" referenceTable="T_CRM_CONTACT" referenceField="ID" conditionFields="CUS_ID" restrictiveFields="CUSTOMER_ID" displayReferenceField="NAME,PHONE" readOnly="false"/>
+			<listColumn noquery="false" width="200"/>
+		</field>
+		<!-- associatedFields="CUSTOMER_ADDRESS" 
+			<field name="CUSTOMER_ADDRESS" javaType="string" description="客户地址">
+				<component type="readOnlyText" displayReferenceField="ADDRESS"/>
+			</field>
+			-->
+		<!--
+			<field name="ACTIVITY_ID" javaType="string" description="目标活动">
+				<component type="richSelect" referenceTable="T_CRM_ACTIVITY" restrictiveFields="CUSTOMER_ID" conditionFields="CUSTOMER_ID" referenceField="ID" displayReferenceField="NAME"/>
+			</field>
+			-->
+		<field name="ADDRESS" javaType="string" description="联系地点" nullAllowed="true">
+			<component type="text"/>
+			<queryCondition type="blurMatching"/>
+		</field>
+		<!--
+			<field name="RESULT_STATUS" javaType="string" description="联系效果">
+				<component type="dropdown" colspan="3">
+					<option displayName="很好" value="perfect"/>
+					<option displayName="好" value="good"/>
+					<option displayName="一般" value="normal"/>
+					<option displayName="差" value="bad"/>
+				</component>
+				<queryCondition type="none"/>
+				<listColumn nowrap="true"/>
+			</field>
+			-->
+		<field name="JOURNAL_TIME" javaType="date" description="最终联系时间" dataStyle="yyyy-MM-dd HH:mm:ss">
+			<component type="dateTime" colspan="3"/>
+			<queryCondition type="region"/>
+		</field>
+		<field name="CONTENT" javaType="string" description="备注" nullAllowed="false" defaultValue="(限2048字)">
+			<component type="textArea" colspan="3" style="width:100%;height:80;"/>
+			<queryCondition type="none"/>
+			<listColumn width="40" height="20" nowrap="true" noquery="true"/>
+		</field>
+		<!--
+			<field name="MAININFO" javaType="string" description="主要信息" style="color:#990000;size:12;font-weight:bold;" defaultValue="(限2048字)1、沟通的主要事项  2、目前需要解决的主要问题">
+				<component type="textArea" colspan="3" style="width:100%;height:80;"/>
+				<queryCondition type="none"/>
+				<listColumn width="40" height="20" nowrap="true" noquery="true"/>
+			</field>
+			<field name="PLANCONTENT" javaType="string" description="解决方案" style="color:#990000;size:12;font-weight:bold;" defaultValue="(限2048字)1、具体的解决方案，具体落实的时间">
+				<component type="textArea" colspan="3" style="width:100%;height:80;"/>
+				<queryCondition type="none"/>
+				<listColumn width="40" height="20" nowrap="true" noquery="true"/>
+			</field>
+			-->
+		<!--
+			<field name="ACCESSORY" javaType="string" description="递交附件">
+				<component type="file" url="upload\T_DIC_JOURNAL\ACCESSORY\@F@\@F@" urlField="ID,ACCESSORY"/>
+			</field>
+		<field name="JDTYPE" javaType="string" defaultValue="0" description="客户合作阶段">
+			<component type="hidden">
+				<option displayName="合同" value="2"/>
+				<option displayName="呈现" value="1"/>
+				<option displayName="立项" value="0"/>
+			</component>
+		</field>
+			-->
+		<field name="TYPE_" javaType="string" defaultValue="1" description="记录类型">
+			<component type="hidden">
+				<option displayName="客户联系记录" value="1"/>
+				<option displayName="经理指定预约" value="2"/>
+			</component>
+			<listColumn noquery="true"/>
+		</field>
+		<field name="STATUS" javaType="string" defaultValue="0" description="预约状态">
+			<component type="dropdown" readOnly="true">
+				<option displayName="完成" value="1"/>
+				<option displayName="未完成" value="0"/>
+			</component>
+			<queryCondition type="equal"/>
+		</field>
+		<field name="AVAILABLE" javaType="string" defaultValue="1" description="记录状态">
+			<component type="dropdown">
+				<option displayName="有效" value="1"/>
+				<option displayName="无效" value="0"/>
+			</component>
+			<queryCondition type="equal"/>
+			<listColumn noquery="false"/>
+		</field>
+		<field name="CREATE_USER_ID" javaType="string" description="填写人">
+			<component type="richSelect" referenceTable="SYSOPERATOR_VIEW" referenceField="ID" displayReferenceField="NAME" readOnly="true"/>
+			<queryCondition type="none"/>
+		</field>
+		<field name="CREATE_TIME" javaType="date" description="填写时间" dataStyle="yyyy-MM-dd HH:mm:ss">
+			<component type="dateTime" readOnly="true"/>
+			<queryCondition type="region"/>
+			<listColumn noquery="true"/>
+		</field>
+		<!--
+			<PageView showField="*" className="hyiis.crm.pageview.PageView" methodName="detail" parameter="queryByForm.do?__opr_data=T_DIC_WAB&amp;CUSTOMER_ID={0},CUSTOMER_ID" title="联系人" type="userdefined" hostPage="edit"/>
+			<PageView showField="*" className="hyiis.crm.pageview.PageView" methodName="detail" parameter="queryByForm.do?__opr_data=T_CRM_ACTCUS_MAP&amp;CUSTOMER_ID={0},CUSTOMER_ID" title="活动计划和历史费用" type="userdefined" hostPage="edit"/>
+			<PageView showField="*" className="hyiis.crm.pageview.PageView" methodName="detail" parameter="queryByForm.do?__opr_data=T_FIN_ACTMONEY&amp;CUSTOMER_ID={0},CUSTOMER_ID" title="活动费用明细" type="userdefined" hostPage="edit"/>
+			<PageView showField="*" title="联系记录" type="querybyform"/>
+			<PageView showField="queryByForm.do?__opr_data=T_CRM_CUSTOMER_TECHNOW" title="信息化现状" type="userdefined"/>
+			<PageView showField="queryByForm.do?__opr_data=T_CRM_CUSTOMER_DECISION" title="项目决策组" type="userdefined"/>
+			<PageView showField="queryByForm.do?__opr_data=T_CRM_CUSTOMER_COMPETITOR" title="竞争对手" type="userdefined"/>
+			<PageView showField="queryByForm.do?__opr_data=T_CRM_CONTRACT_VIEW" title="合同内容" type="userdefined"/>
+			<PageView showField="queryByForm.do?__opr_data=T_CRM_CUSTOMER_LOST" title="未成功原因" type="userdefined"/>
+			<PageView showField="queryByForm.do?__opr_data=T_CRM_PROJECT_AGREEMENT" title="项目合作契约" type="userdefined"/>
+			<PageView showField="queryByForm.do?__opr_data=T_CRM_PAYMENT_VIEW" title="回款记录" type="userdefined"/>
+			<PageView showField="queryByForm.do?__opr_data=T_CRM_PRODUCT" title="需要产品" type="userdefined"/>
+			-->
+		<!-- -->
+		<queryFilter>
+			<pluggedFilter methodName="exp" parameter="If(InRole({manager},{boss}),{},{ and t_1.AVAILABLE='1' and t_1.CREATE_USER_ID='}&amp;GetUser({ID})&amp;{'})"/>
+			<pluggedFilter methodName="exp" parameter="{ and t_1.NEXT_CONTACT_DATE&lt;=}&amp;SQLCurrDate()&amp;{ order by t_1.NEXT_CONTACT_DATE desc}"/>
+			<!--		
+				<pluggedFilter methodName="getSQL" parameter="test.drools"/>
+				-->
+		</queryFilter>
+		<!-- -->
+		<!--
+		<javascript hostPage="edit" src="project/crm/CUSTOMER_DTL_EDIT.js"><![CDATA[
+		]]></javascript>
+		<javascript hostPage="ids" src="project/crm/CUSTOMER_DTL_IDS.js"><![CDATA[
+		]]></javascript>
+		-->
+		<!-- -->
+		<!--
+		<pluginInterceptor methodName="exp" pluginName="save" parameter="DBFindByPK({T_CRM_CLIENT},Get({CUSTOMER_ID}));Set(GetVar(0), CON_LASTTIME, Datetime({yyyy-MM-dd HH:mm:ss}));If(Get({STATUS})={1},DBUpdate({T_CRM_CLIENT},GetVar(0)),false);" type="after"/>
+-->
+		<pluginInterceptor methodName="exp" pluginName="save" parameter="SetCreateTime({CREATE_TIME});SetCreateUser({CREATE_USER_ID});If(IsEmpty(Get({JOURNAL_TIME})),true,Set({STATUS},{1}));" type="before"/>
+		<pluginInterceptor methodName="exp" pluginName="del" parameter="Set(AVAILABLE,{0});DBUpdate({T_CRM_CONTACTION_CQ},GetVar(0));Forward({edit.do?__opr_data=T_CRM_CONTACTION_CQ});" type="before"/>
+		<pluginInterceptor methodName="exp" pluginName="edit" parameter="If(InRole({manager},{boss},{admin}),true,ReadOnlyTable({AVAILABLE}));SetCreateUser({USER_ID});SetCreateUser({CREATE_USER_ID});" type="before"/>
+		<pluginInterceptor methodName="setDefaultValByHeadID" pluginName="edit" parameter="CUSTOMER_ID,T_DIC_ORGA,ID,CUSTOMER_ID,NAME,__CUSTOMER_ID__NAME,ADDRESS,CUSTOMER_ADDRESS"/>
+		<!-- -->
+		<pluginInterceptor methodName="onlyByMaker" parameter="CREATE_USER_ID" pluginName="save"/>
+		<pluginInterceptor methodName="onlyByMaker" parameter="CREATE_USER_ID" pluginName="del"/>
+		<!--
+		<pluginInterceptor className="hyiis.interceptor.DICJournalInterceptor" methodName="generate" pluginName="save" parameter="生成待办事宜" type="after"/>
+		-->
+		<!-- -->
+		<pluginOperation name="del" oprName="删除" accessKey="D" hostPage="edit" tblevel="1"/>
+		<!-- -->
+		<Operation queryPageQueryEdit="false" customizeColumns="false" saveAndAddCopy="false" queryPageDelete="false"/>
+	</table>
+</Haiyan>

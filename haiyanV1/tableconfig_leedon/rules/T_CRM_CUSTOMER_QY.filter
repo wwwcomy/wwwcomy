@@ -1,0 +1,54 @@
+<rule-set declaration="客户过滤条件SQL" name="客户过滤器" xmlns="http://drools.org/rules" xmlns:java="http://drools.org/semantics/java" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<!-- -->
+	<java:import>com.haiyan.genmis.core.db.DBManager</java:import>
+	<java:import>com.haiyan.genmis.core.SrvContext</java:import>
+	<java:import>com.haiyan.genmis.core.struts.*</java:import>
+	<java:import>com.haiyan.genmis.core.right.*</java:import>
+	<java:import>com.haiyan.genmis.core.*</java:import>
+	<java:import>com.haiyan.genmis.core.exception.Warning</java:import>
+	<java:import>com.haiyan.genmis.castorgen.Table</java:import>
+	<java:import>com.haiyan.genmis.util.StringUtil</java:import>
+	<java:import>com.haiyan.genmis.util.ConfigUtil</java:import>
+	<java:import>haiyan.interceptor.DroolsInterceptor</java:import>
+	<java:import>java.lang.String</java:import>
+	<java:import>java.util.*</java:import>
+	<!-- -->
+	<application-data identifier="context">SrvContext</application-data>
+	<application-data identifier="dbm">DBManager</application-data>
+	<application-data identifier="table">Table</application-data>
+	<application-data identifier="form">Qbq3Form</application-data>
+	<!-- （授权人员 及 14 销售总监 1 管理员 6 事业部经理 15 区域经理 9 总裁 3 总经理 21 销售经理 18 销售组长） -->
+	<java:functions>
+		 public static String getStaticSQL(SrvContext context) {
+			 return "1=1";
+		 }
+	</java:functions>
+	<!-- 总部 通用过滤器 -->
+	<rule name="ZB" salience="0">
+		<parameter identifier="dForm">
+			<java:class>Qbq3Form</java:class>
+		</parameter>
+		<java:condition>"0".equals("0")</java:condition>
+		<java:consequence>
+				dForm.setParameter("__droolsFilter", "1=1");
+				drools.assertObject(dForm);
+		</java:consequence>
+	</rule>
+	<!-- 区域客户 通用过滤器 -->
+	<rule name="COMMON" salience="0">
+		<parameter identifier="dForm">
+			<java:class>Qbq3Form</java:class>
+		</parameter>
+		<java:condition>!StringUtil.isBlankOrNull(context.getParameter("__qudm"))</java:condition>
+		<java:consequence>
+				String qudm = context.getParameter("__qudm");
+				String sql = " t_1.CREATE_USER_ID in (select ID from VIEW_"+qudm+"_KEHU_RENYUAN) \n"
+					 + " or t_1.USER_ID in (select ID from VIEW_"+qudm+"_KEHU_RENYUAN) \n"
+					 + " or t_1.USER_ID_1 in (select ID from VIEW_"+qudm+"_KEHU_RENYUAN) \n"
+					 + " or t_1.USER_ID_2 in (select ID from VIEW_"+qudm+"_KEHU_RENYUAN) \n"
+				    + " or t_1.USER_ID_3 in (select ID from VIEW_"+qudm+"_KEHU_RENYUAN) \n";
+				dForm.setParameter( "__droolsFilter", "(" + sql + ") and (" + getStaticSQL(context) + ")" );
+				drools.assertObject(dForm);
+		</java:consequence>
+	</rule>
+</rule-set>

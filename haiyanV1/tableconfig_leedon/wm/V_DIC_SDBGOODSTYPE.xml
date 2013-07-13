@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Haiyan xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../haiyan.xsd">
+	<table name="SDB_GOODS_TYPE" description="商品材质" colspan="8">
+		<id name="TYPE_ID" description="TYPE_ID" javaType="string">
+			<component type="hidden" url="#"/>
+		</id>
+		<field name="NAME" description="NAME" displayOnly="false" javaType="string" lazyLoad="false">
+			<component type="text" readOnly="true"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="PROPS" description="PROPS" displayOnly="false" javaType="dbClob" lazyLoad="false">
+			<component type="textArea" readOnly="true"/>
+			<listColumn noedit="false" noquery="true" width="255"/>
+		</field>
+		<Operation queryPageDelete="false" queryPageAdd="false" save="false" saveAndAdd="false" saveAndAddCopy="false"/>
+	</table>
+	<table name="V_DIC_SDBGOODSTYPE" realTable="SDB_GOODS_TYPE"  description="商品材质" colspan="8">
+		<id name="TYPE_ID" description="TYPE_ID" javaType="string">
+			<component type="hidden" url="#"/>
+		</id>
+		<field name="NAME" description="NAME" displayOnly="false" javaType="string" lazyLoad="false">
+			<component type="text" readOnly="true"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="PROPS" description="PROPS" displayOnly="false" javaType="dbClob" lazyLoad="false">
+			<component type="textArea" readOnly="true"/>
+			<listColumn noedit="false" noquery="true" width="255"/>
+		</field>
+		<Operation queryPageDelete="false" queryPageAdd="false" save="false" saveAndAdd="false" saveAndAddCopy="false"/>
+	</table>
+	<!--
+	<table name="V_DIC_SDBGOODSTYPE_SYNC" realTable="SDB_GOODS_TYPE"  description="商品材质同步 " colspan="8">
+		<id name="TYPE_ID" description="TYPE_ID" javaType="string">
+			<component type="hidden" url="#"/>
+		</id>
+		<field name="NAME" description="NAME" displayOnly="false" javaType="string" lazyLoad="false">
+			<component type="text" readOnly="true"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="PROPS" description="PROPS" displayOnly="false" javaType="dbClob" lazyLoad="false">
+			<component type="textArea" readOnly="true"/>
+			<listColumn noedit="false" noquery="true" width="255"/>
+		</field>
+		<querySQL><![CDATA[
+			(select t_1.TYPE_ID, t_1.NAME, t_1.PROPS
+			from SDB_GOODS_TYPE t_1 left join SDB_GOODS_TYPE_BAK t_2 on t_1.TYPE_ID=t_2.TYPE_ID
+			where t_1.PROPS<>t_2.PROPS or t_2.PROPS is null)
+		]]></querySQL>
+		<Operation queryPageDelete="false" queryPageAdd="false" save="false" saveAndAdd="false" saveAndAddCopy="false"/>
+	</table>
+	-->
+</Haiyan>

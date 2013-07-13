@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Haiyan xsi:noNamespaceSchemaLocation="../../haiyan.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<table name="T_DIC_COMMON_ACTIVITY_TYPE" description="通用字典-活动分类-类型分类" realTable="T_DIC_COMMON">
+		<!--用于所有T_CRM_ACTIVITY的"活动类型"字段；初始时包括客户会议、技术培训、销售培训和渠道培训4个值-->
+		<id name="ID" javaType="string">
+			<component type="hidden" url="#"/>
+		</id>
+		<field name="CODE" javaType="string" description="编号">
+			<component type="text"/>
+		</field>
+		<field name="NAME" javaType="string" description="名称">
+			<component type="text"/>
+		</field>
+		<field name="MEMO" javaType="string" description="备注">
+			<component type="textArea" colspan="3"/>
+		</field>
+		<field name="LABEL" javaType="string" description="LABEL" defaultValue="HDFL">
+			<component type="hidden"/>
+		</field>
+		<field name="LABEL2" javaType="string" description="LABEL2" defaultValue="LXFL">
+			<component type="hidden"/>
+		</field>
+		<queryFilter>
+			<pluggedFilter><![CDATA[ and t_1.LABEL='HDFL' and t_1.LABEL2='LXFL']]></pluggedFilter>
+		</queryFilter>
+	</table>
+</Haiyan>

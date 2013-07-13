@@ -1,0 +1,64 @@
+void test(SrvContext context, int s, String headid, String code, String preCode, String parentID, String capti, String weight) throws Throwable {
+	DBManager dbm = context.getDBM();
+	if (s >= 6) // || (!code.startsWith(preCode)&&preCode.length()==2)
+		return;
+	Integer topInt = Integer.valueOf(code.substring(s, s + 2));
+	for (int i = 1; i <= topInt; i++) {
+		Ref curTopCode = new Ref();
+		curTopCode.setValue(preCode + (i < 10 ? ("0" + i) : ("" + i)));
+		// Qbq3Form q = new MapForm();
+		// q.set("CODE", curTopCode.getValue()); // 配置里是模糊查询
+		// q.set("HEADID", headid); // 仓库
+		String filter = " and t_1.CODE like '"+curTopCode.getValue()+"' and t_1.HEADID='"+headid+"'";
+		Page topP = dbm.findByFilter("T_DIC_WAREWHERE", filter, 1, 1, context, null);
+		Ref topID = new Ref();
+		if (topP.getSize() > 0) {
+			Qbq3Form f = topP.getData(0);
+			f.set("CODE", curTopCode.getValue());
+			f.set("HEADID", headid);
+			f.set("CAPACITYNUM", capti);
+			f.set("WEIGHT", weight);
+			if (parentID != null)
+				f.set("PARENTID", parentID);
+			f = context.getCore().doSaveOne(context, table, f);
+			topID.setValue(f.get("ID"));
+			if (f.get("ID").equals(form.get("ID")))
+				form.updateVersion();
+		} else {
+			Qbq3Form f = new MapForm();
+			f.set("CODE", curTopCode.getValue());
+			f.set("HEADID", headid);
+			f.set("CAPACITYNUM", capti);
+			f.set("WEIGHT", weight);
+			if (parentID != null)
+				f.set("PARENTID", parentID);
+			f = context.getCore().doSaveOne(context, table, f);
+			topID.setValue(f.get("ID"));
+			if (f.get("ID").equals(form.get("ID")))
+				form.updateVersion();
+		}
+		System.out.println("........................." + curTopCode);
+		if (curTopCode.getValue().length() == 6)
+			continue;
+		test(context, s+2, headid, code, curTopCode.getValue(), topID.getValue(), capti, weight);
+	}
+}
+try {
+	if (context.getUser() == null || context.getUser().getProperty("WAREHOUSEID") == null)
+		throw new Warning("当前操作所属仓库没有选择 ");
+	String code = form.get("CODE");
+	String capti = form.get("CAPACITYNUM");
+	String weight = form.get("WEIGHT");
+	String headid = form.get("HEADID");
+	if (StringUtil.isEmpty(headid))
+		throw new Warning("仓库不能为空");
+	if (StringUtil.isEmpty(code))
+		throw new Warning("编码不能为空");
+	if (code.length() <= 5)
+		throw new Warning("批量生成不支持5位以下编码");
+	System.out.println("........................." + code);
+	test(context, 0, headid, code, "", null, capti, weight);
+} catch(Throwable e) {
+	// DebugUtil.error(e);
+	throw e;
+}

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Haiyan xsi:noNamespaceSchemaLocation="../../haiyan.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<table description="市场活动" name="T_CRM_ACTCUS_MAP" realTable="T_CRM_ACTCUS_MAP">
+		<!-- parentTable="T_CRM_CUSTOMER" parentTableRefField="CUSTOMER_ID" -->
+		<id name="ID" javaType="string"/>
+		<field name="ACTIVITY_ID" javaType="string" description="客户活动">
+			<component type="richSelect" referenceTable="T_CRM_ACTIVITY" referenceField="ID" displayReferenceField="NAME" readOnly="false"/>
+		</field>
+		<field name="CUSTOMER_ID" javaType="string" description="参与客户">
+			<component type="richSelect" colspan="3" referenceTable="T_CRM_CUSTOMER_VIEW" referenceField="ID" displayReferenceField="NAME" readOnly="true"/>
+		</field>
+		<!--
+		<field name="REMARK" javaType="string" description="备注">
+			<component type="textArea" colspan="3" style="width:100%;"/>
+		</field>
+		-->
+		<field name="ALLMONEY" javaType="string" description="费用统计" displayOnly="true">
+			<component type="text" readOnly="true" subQuerySQL="select sum(s_1.money) from T_FIN_ACTMONEY s_1 where s_1.CUSTOMER_ID=t_1.CUSTOMER_ID and s_1.ACTIVITY_ID=t_1.ACTIVITY_ID"/>
+		</field>
+		<!--
+		maxFractionDigit="2" minFractionDigit="2" numberGrouping="true"
+		
+		<pluginInterceptor className="haiyan.interceptor.SaveInterceptor" methodName="setDefaultValByHead" pluginName="edit" parameter="ACTIVITY_ID,__ACTIVITY_ID__NAME,ACTIVITY_ID"/>
+		-->
+		<field name="CREATE_USER_ID" javaType="string" description="填写人">
+			<component type="richSelect" referenceTable="SYSOPERATOR_VIEW" referenceField="ID" displayReferenceField="NAME" readOnly="true"/>
+			<queryCondition type="none"/>
+			<listColumn noquery="true"/>
+		</field>
+		<pluginInterceptor className="haiyan.interceptor.DeleteInterceptor" methodName="onlyByMaker" parameter="CREATE_USER_ID" pluginName="delete"/>
+		<pluginInterceptor className="haiyan.interceptor.SaveInterceptor" methodName="onlyByMaker" parameter="CREATE_USER_ID" pluginName="save"/>
+		<pluginInterceptor className="haiyan.interceptor.SaveInterceptor" methodName="setCreateUser" parameter="CREATE_USER_ID" pluginName="edit"/>
+		<pluginInterceptor className="haiyan.interceptor.SaveInterceptor" methodName="setDefaultValByHead" pluginName="edit" parameter="CUSTOMER_ID,__CUSTOMER_ID__NAME,ID"/>
+		<Operation queryPageQueryEdit="false"/>
+	</table>
+</Haiyan>

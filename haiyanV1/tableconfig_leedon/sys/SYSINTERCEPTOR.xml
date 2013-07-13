@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Haiyan xsi:noNamespaceSchemaLocation="../haiyan.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<table description="系统拦截器" name="SYSINTERCEPTOR">
+		<id name="ID" javaType="string"/>
+		<!--
+		<pluginInterceptor methodName="exp" parameter="
+			Warning({TEST});
+			" pluginName="new" type="before"/> 
+		-->
+		<pluginInterceptor methodName="exp" parameter="
+			SetCreate(CREATE_USER_ID,GetUser(ID))
+			+SetCreateTime(CREATTIME,{yyyy-MM-dd HH:mm:ss})
+			" pluginName="save" type="before"/>
+		<!-- -->
+		<Operation queryPageQueryEdit="false" save="false" saveAndAdd="false" saveAndAddCopy="false" queryPageAdd="false" queryPageDelete="false" customizeColumns="false"/>
+	</table>
+</Haiyan>

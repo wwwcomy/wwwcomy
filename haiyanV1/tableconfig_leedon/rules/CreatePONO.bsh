@@ -1,0 +1,25 @@
+try {
+	String DATE = DateUtil.getLastTime("yyyyMMdd");
+	String SALES = form.get("EST_SALES");
+	String prefix = "LD"+DATE+SALES;
+	// User user = context.getUser();
+System.out.println("........"+prefix);
+	if (StringUtil.isBlankOrNull(form.get("PONO"))) {
+		String[][] rs = context.getDBM().getResultStrArray(
+			"select MAX(PONO) from T_DIC_ORGA where PONO like '"+prefix+"%'"
+				, 1, null);
+		if (rs.length==0 || rs[0].length==0 
+			|| StringUtil.isBlankOrNull(rs[0][0])) {
+			form.set("PONO", prefix+"001");
+		} else {
+			String tmp = rs[0][0].substring(prefix.length());
+			t = ""+(Double.valueOf(tmp).intValue()+1);
+                     for (int i=t.length();i<3;i++)
+				t="0"+t;
+			form.set("PONO", prefix+t);
+		}
+	}
+} catch(Throwable e) {
+	e.printStackTrace();
+	throw e;
+}

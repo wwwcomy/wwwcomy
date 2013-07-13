@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Haiyan xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../haiyan.xsd">
+	<table name="SYSBJ" description="便笺">
+		<!-- one2OneTable="SYSOPERATOR" -->
+		<id name="ID" javaType="string"/>
+		<field name="MEMO" description="内容" javaType="string" length="250">
+			<component type="textArea" url="#" colspan="3" style="width:100%;height:200;"/>
+			<queryCondition type="none"/>
+			<listColumn width="200" height="20" nowrap="true"/>
+		</field>
+		<!--查询过滤器。-->
+		<queryFilter>
+			<!--pluggedFilter className="haiyan.filter.RoleFilter" methodName="byRoleID"/-->
+			<pluggedFilter>
+			    and t_1.ID=@USERID@
+			</pluggedFilter>
+		</queryFilter>
+		<!--
+		<pluginInterceptor className="haiyan.interceptor.SaveInterceptor" methodName="setCreateUser" pluginName="save" parameter="ID"/>
+		-->
+	</table>
+</Haiyan>

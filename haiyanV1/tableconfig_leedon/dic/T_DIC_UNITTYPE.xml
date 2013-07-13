@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Haiyan xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../haiyan.xsd">
+	<table name="T_DIC_UNITTYPE" description="单位性质">
+		<id name="ID" javaType="string"/>
+		<field name="CODE" description="编码" javaType="string">
+			<component type="text"/>
+		</field>
+		<field name="NAME" description="名称" javaType="string">
+			<component type="text"/>
+		</field>
+		<field name="MEMO" description="备注" javaType="string">
+			<component type="textArea"/>
+		</field>
+		<field name="USED" description="是否使用" javaType="string" defaultValue="1">
+			<component type="dropdown">
+				<option displayName="是" value="1"/>
+				<option displayName="否" value="0"/>
+			</component>
+		</field>
+		<field name="SHOWED" description="是否隐藏" javaType="string" defaultValue="0">
+			<component type="dropdown">
+				<option displayName="是" value="1"/>
+				<option displayName="否" value="0"/>
+			</component>
+		</field>
+	</table>
+</Haiyan>

@@ -1,0 +1,405 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Haiyan xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../haiyan.xsd">
+	<table name="T_RO_CHBILL" description="出货单" realTable="T_RO_CHBILL" colspan="8">
+		<!--  colspan="4" -->
+		<id name="ID" description="ID" javaType="string">
+			<component type="hidden" url="$"/>
+		</id>
+		<field name="CODE" description="单据编号" displayOnly="false" javaType="string" lazyLoad="false">
+			<component type="text" readOnly="true"/>
+			<queryCondition type="equal"/>
+			<listColumn width="150"/>
+		</field>
+		<field name="SDATE" description="结帐日期" displayOnly="false" javaType="date" lazyLoad="false" nullAllowed="false">
+			<component type="date" readOnly="false"/>
+			<queryCondition type="equal"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="PJ" javaType="string" description="票据" defaultValue="BKP">
+			<component type="dropdown">
+				<option displayName="开票" value="KP"/>
+				<option displayName="不开票" value="BKP"/>
+				<option displayName="欠票" value="QP"/>
+			</component>
+			<queryCondition type="none"/>
+			<listColumn noquery="false" nowrap="true"/>
+		</field>
+		<field name="L1" description="" displayOnly="true" javaType="string" lazyLoad="false">
+			<component type="placeholder" colspan="1" readOnly="true"/>
+			<queryCondition type="equal"/>
+			<listColumn noquery="true"/>
+		</field>
+		<field name="CUSTOMERID" javaType="string" description="客户">
+			<component type="richSelect" displayReferenceField="NAME" referenceField="ID" referenceTable="T_RO_CUSTOMER" associatedFields="CONTACT_PERSON,PHONE" summaryType="count"/>
+			<queryCondition type="in"/>
+			<listColumn noquery="false"/>
+		</field>
+		<field name="CONTACT_PERSON" javaType="string" description="联系人" nullAllowed="false">
+			<component type="text" displayReferenceField="CONTACT_PERSON"/>
+			<queryCondition type="none"/>
+			<listColumn noquery="false" nowrap="false"/>
+		</field>
+		<field name="PHONE" javaType="string" description="联系电话" nullAllowed="false">
+			<component type="text" validatorText="(格式:086-0XX-XXXXXXXX)" displayReferenceField="PHONE"/>
+			<queryCondition type="none"/>
+			<listColumn noquery="false" nowrap="false"/>
+		</field>
+		<field name="L2" description="" displayOnly="true" javaType="string" lazyLoad="false">
+			<component type="placeholder" colspan="1" readOnly="true"/>
+			<queryCondition type="equal"/>
+			<listColumn noquery="true"/>
+		</field>
+		<field name="CKCODES" javaType="string" description="出库条形码" nullAllowed="true" length="255">
+			<component type="textArea" colspan="7" style="width:780;height:70;"/>
+			<queryCondition type="none"/>
+			<listColumn noquery="false" nowrap="true"/>
+		</field>
+		<field name="THCODES" javaType="string" description="退货条形码" nullAllowed="true" length="255">
+			<component type="textArea" colspan="7" style="width:780;height:70;"/>
+			<queryCondition type="none"/>
+			<listColumn noquery="false" nowrap="true"/>
+		</field>
+		<field name="STATUS" javaType="string" description="审批状态" defaultValue="1">
+			<component type="hidden" readOnly="true" colspan="3">
+				<option displayName="初稿" value="1"/>
+				<option displayName="在批" value="2"/>
+				<option displayName="结束" value="3"/>
+			</component>
+			<listColumn noquery="true"/>
+		</field>
+		<field name="SUBGRID1" javaType="string" description="明细" displayOnly="true">
+			<component type="grid" colspan="7" displayReferenceField="NAME" referenceField="HEADID" referenceTable="T_RO_CHBILL_DTL" parameter="HEADID={0}&amp;BTYPE=CH,ID" style="width:780;height:270;"/>
+			<queryCondition type="none"/>
+			<listColumn noquery="true"/>
+		</field>
+		<field name="SUBGRID2" javaType="string" description="明细" displayOnly="true">
+			<component type="grid" colspan="7" displayReferenceField="NAME" referenceField="HEADID" referenceTable="T_RO_CKBILL_DTL" parameter="HEADID={0}&amp;BTYPE=CK,ID" style="width:780;height:200;"/>
+			<queryCondition type="none"/>
+			<listColumn noquery="true"/>
+		</field>
+		<field name="SUBGRID3" javaType="string" description="明细" displayOnly="true">
+			<component type="grid" colspan="7" displayReferenceField="NAME" referenceField="HEADID" referenceTable="T_RO_THBILL_DTL" parameter="HEADID={0}&amp;BTYPE=TH,ID" style="width:780;height:200;"/>
+			<queryCondition type="none"/>
+			<listColumn noquery="true"/>
+		</field>
+		<field name="FRAME0" javaType="string" description="明细" displayOnly="true">
+			<component type="iframe" colspan="7" parameter="?{queryByForm.do?__opr_data=SYSSHENPI&amp;HEADID=}&amp;Value(ID)" style="width:780;height:270;"/>
+			<queryCondition type="none"/>
+			<listColumn noquery="true"/>
+		</field>
+		<TabPanel name="tab1" description="订单信息">
+			<Group name="g11" description="-" collapse="false" fields="CODE SDATE PJ CUSTOMERID CONTACT_PERSON PHONE SUBGRID1"/>
+		</TabPanel>
+		<TabPanel name="tab2" description="出库信息">
+			<Group name="g21" description="-" collapse="false" fields="SUBGRID2 CKCODES"/>
+		</TabPanel>
+		<TabPanel name="tab4" description="退货信息">
+			<Group name="g41" description="-" collapse="false" fields="SUBGRID3 THCODES"/>
+		</TabPanel>
+		<TabPanel name="tab3" description="审批记录">
+			<Group name="g31" description="-" collapse="false" fields="FRAME0 STATUS"/>
+		</TabPanel>
+		<!-- 引用的客户端js库 -->
+		<javascript hostPage="ids" src="project/ro/T_RO_CHBILL_IDS.js"><![CDATA[ // TEST_DETAIL_IDS.js
+		]]></javascript>
+		<javascript hostPage="edit" src="project/ro/T_RO_CHBILL_EDIT.js"><![CDATA[ // TEST_DETAIL_EDIT.js
+		]]></javascript>
+		<!-- -->
+		<pluginInterceptor methodName="exp" pluginName="edit" parameter="
+			If(IsEmpty(GetValue(STATUS)),SetValue(STATUS,{1}),true);
+			If(Or(GetInt(STATUS)=3,IsEmpty(GetValue(ID))),ReadonlyButtons(shenpi1,shenpi2,save),true);
+			If(Or(GetInt(STATUS)=2,IsEmpty(GetValue(ID))),ReadonlyButtons(shenpi1),true);
+			If(Or(GetInt(STATUS)=1,IsEmpty(GetValue(ID))),ReadonlyButtons(shenpi2),true);
+			If(Or(GetInt(STATUS)=1,IsEmpty(GetValue(ID))),ReadonlyTable(CKCODES,THCODES),true);
+			If(IsEmpty(GetValue(ID)),SetValue(ID,UUID()),true);
+		" type="after"/>
+		<pluginInterceptor methodName="exp" pluginName="delete" parameter="If(InRole({boss}),true,warning({你无权删除客户记录}))" type="before"/>
+		<pluginInterceptor methodName="exp" pluginName="save" parameter="
+			SetValue(CODE,Date());
+			SetValue(__one2oneID,GetValue(ID));
+		" type="before"/>
+		<pluginInterceptor methodName="exp" pluginName="shenpi1" parameter="
+			SetValue(STATUS,{2});
+			SetValue(NewForm(),TBLNAME,{T_RO_CHBILL},HEADID,Get(ID),SPREN,GetUser(ID),SPTIME,Date(),MEMO,{经理审批同意});
+			DBUpdate({SYSSHENPI},GetVar(1));
+		" type="before"/>
+		<pluginInterceptor methodName="exp" pluginName="shenpi2" parameter="
+			SetValue(STATUS,{3});
+			SetValue(NewForm(),TBLNAME,{T_RO_CHBILL},HEADID,Get(ID),SPREN,GetUser(ID),SPTIME,Date(),MEMO,{仓管出库确认});
+			DBUpdate({SYSSHENPI},GetVar(1));
+		" type="before"/>
+		<!-- -->
+		<pluginOperation name="saveProtocol" oprName="保存" hostPage="edit" tblevel="1" img="save"/>
+		<pluginOperation name="shenpi1" oprName="经理审批" hostPage="edit" tblevel="1" img="shenpi1"/>
+		<pluginOperation name="shenpi2" oprName="出货确认" hostPage="edit" tblevel="1" img="shenpi2"/>
+		<Operation save="false" saveAndAdd="false" saveAndAddCopy="false"/>
+	</table>
+	<table name="V_RO_CHBILL_DTL" description="出货明细" realTable="T_RO_CHBILL_DTL" colspan="6">
+		<id name="ID" description="ID" javaType="string">
+			<component type="hidden" url="#"/>
+		</id>
+		<field name="HEADID" description="单据编号" javaType="string" nullAllowed="false">
+			<component type="richSelect" readOnly="true" url="#" referenceField="ID" referenceTable="T_RO_CHBILL" displayReferenceField="CODE"/>
+		</field>
+		<field name="MATER" description="货物编号" displayOnly="false" javaType="string" lazyLoad="false" nullAllowed="false">
+			<component type="richSelect" renderer="rendererMATER" displayReferenceField="CODE" referenceField="ID" referenceTable="T_RO_MATER"/>
+			<queryCondition type="equal"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="XH" description="型号" displayOnly="false" javaType="string" lazyLoad="false" nullAllowed="false">
+			<component type="text" readOnly="false"/>
+			<queryCondition type="equal"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="HSDJ" description="含税单价" displayOnly="false" javaType="bigDecimal" lazyLoad="false" nullAllowed="false">
+			<component type="text" readOnly="false" numberGrouping="true" minFractionDigit="2" displayReferenceField="HSDJ" renderer="rendererHSDJ" summaryType="average"/>
+			<queryCondition type="equal"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="BHSDJ" description="不含税单价" displayOnly="false" javaType="bigDecimal" lazyLoad="false" nullAllowed="false">
+			<component type="text" readOnly="false" numberGrouping="true" minFractionDigit="2" displayReferenceField="BHSDJ" renderer="rendererBHSDJ" summaryType="average"/>
+			<queryCondition type="equal"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="BTYPE" javaType="string" description="单据类型" nullAllowed="false" defaultValue="CH">
+			<component type="hidden"/>
+			<queryCondition type="none"/>
+			<listColumn noquery="false" nowrap="false"/>
+		</field>
+		<queryFilter>
+			<pluggedFilter>
+				and t_1.BTYPE='CH'
+			</pluggedFilter>
+		</queryFilter>
+	</table>
+	<table name="T_RO_CHBILL_DTL" description="出货明细" realTable="T_RO_CHBILL_DTL" colspan="6">
+		<id name="ID" description="ID" javaType="string">
+			<component type="hidden" url="#"/>
+		</id>
+		<field name="HEADID" description="单据编号" javaType="string" nullAllowed="false">
+			<component type="richSelect" readOnly="true" url="#" referenceField="ID" referenceTable="T_RO_CHBILL" displayReferenceField="CODE"/>
+		</field>
+		<field name="CONFLICT" javaType="string" defaultValue="0" description="撞单">
+			<component type="hidden" readOnly="true">
+				<option displayName="1" value="1"/>
+				<option displayName="0" value="0"/>
+			</component>
+		</field>
+		<field name="CONFLICTIDS" javaType="string" defaultValue="0" description="冲突IDS" length="255">
+			<component type="hidden" readOnly="true"/>
+			<queryCondition type="none"/>
+			<listColumn noquery="true" nowrap="true"/>
+		</field>
+		<field name="MATER" description="货物编号" displayOnly="false" javaType="string" lazyLoad="false" nullAllowed="false">
+			<component type="richSelect" renderer="rendererMATER" displayReferenceField="CODE" referenceField="ID" referenceTable="T_RO_MATER" associatedFields="MATER_NAME,HSDJ,BHSDJ"/>
+			<queryCondition type="equal"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="MATER_NAME" description="货物名称" displayOnly="false" javaType="string" lazyLoad="false" nullAllowed="false" >
+			<component type="text" readOnly="true" displayReferenceField="NAME"/>
+			<queryCondition type="equal"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="XH" description="型号" displayOnly="false" javaType="string" lazyLoad="false" nullAllowed="false">
+			<component type="text" readOnly="false"/>
+			<queryCondition type="equal"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="HSDJ" description="含税单价" displayOnly="false" javaType="bigDecimal" lazyLoad="false" nullAllowed="false">
+			<component type="text" readOnly="false" numberGrouping="true" minFractionDigit="2" displayReferenceField="HSDJ" renderer="rendererHSDJ" summaryType="average"/>
+			<queryCondition type="equal"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="BHSDJ" description="不含税单价" displayOnly="false" javaType="bigDecimal" lazyLoad="false" nullAllowed="false">
+			<component type="text" readOnly="false" numberGrouping="true" minFractionDigit="2" displayReferenceField="BHSDJ" renderer="rendererBHSDJ" summaryType="average"/>
+			<queryCondition type="equal"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="NUM" description="数量" displayOnly="false" javaType="bigDecimal" lazyLoad="false" nullAllowed="false">
+			<component type="text" readOnly="false" numberGrouping="true" summaryType="sum"/>
+			<queryCondition type="equal"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="CKNUM" description="出库数量" displayOnly="false" javaType="bigDecimal" lazyLoad="false" defaultValue="0">
+			<component type="text" readOnly="true" numberGrouping="true" summaryType="sum" subQuerySQL="(select SUM(t.NUM) from T_RO_CHBILL_DTL t where t.HEADID=t_1.HEADID and t.BTYPE='CK' and t.XH=t_1.XH and t.MATER=t_1.MATER and t.HSDJ=t_1.HSDJ and t.BHSDJ=t_1.BHSDJ)" renderer="rendererCKNUM"/>
+			<queryCondition type="equal"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="THNUM" description="退货数量" displayOnly="false" javaType="bigDecimal" lazyLoad="false" defaultValue="0">
+			<component type="text" readOnly="true" numberGrouping="true" summaryType="sum" subQuerySQL="(select SUM(t.NUM) from T_RO_CHBILL_DTL t where t.HEADID=t_1.HEADID and t.BTYPE='TH' and t.XH=t_1.XH and t.MATER=t_1.MATER and t.HSDJ=t_1.HSDJ and t.BHSDJ=t_1.BHSDJ)" renderer="rendererTHNUM"/>
+			<queryCondition type="equal"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="HSHJ" description="含税合计" displayOnly="true" javaType="bigDecimal" lazyLoad="false" nullAllowed="false">
+			<component type="text" numberGrouping="true" minFractionDigit="2" readOnly="true" renderer="rendererHSHJ" summaryType="totalCost1" summaryRenderer="rendererHSHJ2"/>
+			<queryCondition type="equal"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="BHSHJ" description="不含税合计" displayOnly="true" javaType="bigDecimal" lazyLoad="false" nullAllowed="false">
+			<component type="text" numberGrouping="true" minFractionDigit="2" readOnly="true" renderer="rendererBHSHJ" summaryType="totalCost2" summaryRenderer="rendererBHSHJ2"/>
+			<queryCondition type="equal"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="BTYPE" javaType="string" description="单据类型" nullAllowed="false" defaultValue="CH">
+			<component type="hidden"/>
+			<queryCondition type="none"/>
+			<listColumn noquery="false" nowrap="false"/>
+		</field>
+		<queryFilter>
+			<!--
+			<pluggedFilter methodName="exp" parameter="{ and }"/>
+			-->
+			<pluggedFilter>
+				and t_1.BTYPE='CH'
+			</pluggedFilter>
+		</queryFilter>
+		<pluginInterceptor methodName="checkSame" pluginName="saveProtocol" parameter="HEADID,MATER,XH,BTYPE" type="before"/>
+	</table>
+	<table name="T_RO_CKBILL_DTL" description="出库明细" realTable="T_RO_CHBILL_DTL" colspan="6">
+		<id name="ID" description="ID" javaType="string">
+			<component type="hidden" url="#"/>
+		</id>
+		<field name="HEADID" description="单据编号" javaType="string" nullAllowed="false">
+			<component type="richSelect" readOnly="true" url="#" referenceField="ID" referenceTable="T_RO_CHBILL" displayReferenceField="CODE"/>
+		</field>
+		
+		<field name="DTLID" description="出货明细" javaType="string" nullAllowed="false">
+			<component type="hidden" readOnly="true" url="#" referenceField="ID" referenceTable="T_RO_CHBILL_DTL" displayReferenceField="MATER"/>
+		</field>
+		<field name="MATER" description="货物编号" displayOnly="false" javaType="string" lazyLoad="false" nullAllowed="false">
+			<component type="richSelect" renderer="rendererMATER" displayReferenceField="CODE" referenceField="ID" referenceTable="T_RO_MATER" associatedFields="MATER_NAME,HSDJ,BHSDJ"/>
+			<queryCondition type="equal"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="MATER_NAME" description="货物名称" displayOnly="false" javaType="string" lazyLoad="false" nullAllowed="false">
+			<component type="text" readOnly="true" displayReferenceField="NAME"/>
+			<queryCondition type="equal"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="XH" description="型号" displayOnly="false" javaType="string" lazyLoad="false" nullAllowed="false">
+			<component type="text" readOnly="false"/>
+			<queryCondition type="equal"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="SDATE" description="出库日期" displayOnly="false" javaType="date" lazyLoad="false" nullAllowed="false">
+			<component type="date" readOnly="false"/>
+			<queryCondition type="equal"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="HSDJ" description="含税单价" displayOnly="false" javaType="bigDecimal" lazyLoad="false" nullAllowed="false">
+			<component type="text" readOnly="false" numberGrouping="true" minFractionDigit="2" displayReferenceField="HSDJ"/>
+			<queryCondition type="equal"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="BHSDJ" description="不含税单价" displayOnly="false" javaType="bigDecimal" lazyLoad="false" nullAllowed="false">
+			<component type="text" readOnly="false" numberGrouping="true" minFractionDigit="2" displayReferenceField="BHSDJ"/>
+			<queryCondition type="equal"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="NUM" description="出库量" displayOnly="false" javaType="bigDecimal" lazyLoad="false" nullAllowed="false">
+			<component type="text" readOnly="false" numberGrouping="true" summaryType="sum"/>
+			<queryCondition type="equal"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<!--
+		<field name="HSHJ" description="含税合计" displayOnly="true" javaType="bigDecimal" lazyLoad="false" nullAllowed="false">
+			<component type="text" renderer="rendererHSHJ" numberGrouping="true" minFractionDigit="2" readOnly="true" summaryType="sum"/>
+			<queryCondition type="equal"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="BHSHJ" description="不含税合计" displayOnly="true" javaType="bigDecimal" lazyLoad="false" nullAllowed="false">
+			<component type="text" renderer="rendererBHSHJ" numberGrouping="true" minFractionDigit="2" readOnly="true" summaryType="sum"/>
+			<queryCondition type="equal"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		-->
+		<field name="BTYPE" javaType="string" description="单据类型" nullAllowed="false" defaultValue="CK">
+			<component type="hidden"/>
+			<queryCondition type="none"/>
+			<listColumn noquery="false" nowrap="false"/>
+		</field>
+		<queryFilter>
+			<!--
+			<pluggedFilter methodName="exp" parameter="{ and }"/>
+			-->
+			<pluggedFilter>
+				and t_1.BTYPE='CK'
+			</pluggedFilter>
+		</queryFilter>
+		<!-- -->
+		<pluginInterceptor className="ro.Interceptor" methodName="has" pluginName="saveProtocol" parameter="{ and t_1.HEADID='}&amp;Get(HEADID)&amp;{' and t_1.MATER='}&amp;Get(MATER)&amp;{' and t_1.XH='}&amp;Get(XH)&amp;{' and t_1.HSDJ=}&amp;Get(HSDJ)&amp;{ and t_1.BHSDJ=}&amp;Get(BHSDJ)&amp;{ }" type="before"/>
+	</table>
+	<table name="T_RO_THBILL_DTL" description="退货明细" realTable="T_RO_CHBILL_DTL" colspan="6">
+		<id name="ID" description="ID" javaType="string">
+			<component type="hidden" url="#"/>
+		</id>
+		<field name="HEADID" description="单据编号" javaType="string" nullAllowed="false">
+			<component type="richSelect" readOnly="true" url="#" referenceField="ID" referenceTable="T_RO_CHBILL" displayReferenceField="CODE"/>
+		</field>
+		<field name="DTLID" description="出货明细" javaType="string" nullAllowed="false">
+			<component type="hidden" readOnly="true" url="#" referenceField="ID" referenceTable="T_RO_CHBILL_DTL" displayReferenceField="MATER"/>
+		</field>
+		<field name="MATER" description="货物编号" displayOnly="false" javaType="string" lazyLoad="false" nullAllowed="false">
+			<component type="richSelect" renderer="rendererMATER" displayReferenceField="CODE" referenceField="ID" referenceTable="T_RO_MATER" associatedFields="MATER_NAME,HSDJ,BHSDJ"/>
+			<queryCondition type="equal"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="MATER_NAME" description="货物名称" displayOnly="false" javaType="string" lazyLoad="false" nullAllowed="false">
+			<component type="text" readOnly="true" displayReferenceField="NAME"/>
+			<queryCondition type="equal"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="XH" description="型号" displayOnly="false" javaType="string" lazyLoad="false" nullAllowed="false">
+			<component type="text" readOnly="false"/>
+			<queryCondition type="equal"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="SDATE" description="退货日期" displayOnly="false" javaType="date" lazyLoad="false" nullAllowed="false">
+			<component type="date" readOnly="false"/>
+			<queryCondition type="equal"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="HSDJ" description="含税单价" displayOnly="false" javaType="bigDecimal" lazyLoad="false" nullAllowed="false">
+			<component type="text" readOnly="false" numberGrouping="true" minFractionDigit="2" displayReferenceField="HSDJ"/>
+			<queryCondition type="equal"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="BHSDJ" description="不含税单价" displayOnly="false" javaType="bigDecimal" lazyLoad="false" nullAllowed="false">
+			<component type="text" readOnly="false" numberGrouping="true" minFractionDigit="2" displayReferenceField="BHSDJ"/>
+			<queryCondition type="equal"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="NUM" description="退货量" displayOnly="false" javaType="bigDecimal" lazyLoad="false" nullAllowed="false">
+			<component type="text" readOnly="false" numberGrouping="true" summaryType="sum"/>
+			<queryCondition type="equal"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<!--
+		<field name="HSHJ" description="含税合计" displayOnly="true" javaType="bigDecimal" lazyLoad="false" nullAllowed="false">
+			<component type="text" renderer="rendererHSHJ" numberGrouping="true" minFractionDigit="2" readOnly="true" summaryType="sum"/>
+			<queryCondition type="equal"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="BHSHJ" description="不含税合计" displayOnly="true" javaType="bigDecimal" lazyLoad="false" nullAllowed="false">
+			<component type="text" renderer="rendererBHSHJ" numberGrouping="true" minFractionDigit="2" readOnly="true" summaryType="sum"/>
+			<queryCondition type="equal"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		-->
+		<field name="BTYPE" javaType="string" description="单据类型" nullAllowed="false" defaultValue="TH">
+			<component type="hidden"/>
+			<queryCondition type="none"/>
+			<listColumn noquery="false" nowrap="false"/>
+		</field>
+		<queryFilter>
+			<!--
+			<pluggedFilter methodName="exp" parameter="{ and }"/>
+			-->
+			<pluggedFilter>
+				and t_1.BTYPE='TH'
+			</pluggedFilter>
+		</queryFilter>
+		<!-- -->
+		<pluginInterceptor className="ro.Interceptor" methodName="has" pluginName="saveProtocol" parameter="{ and t_1.HEADID='}&amp;Get(HEADID)&amp;{' and t_1.MATER='}&amp;Get(MATER)&amp;{' and t_1.XH='}&amp;Get(XH)&amp;{' and t_1.HSDJ=}&amp;Get(HSDJ)&amp;{ and t_1.BHSDJ=}&amp;Get(BHSDJ)&amp;{ }" type="before"/>
+	</table>
+</Haiyan>

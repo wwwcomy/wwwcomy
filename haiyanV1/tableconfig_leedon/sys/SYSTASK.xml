@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Haiyan xsi:noNamespaceSchemaLocation="../../haiyan.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<table description="日历任务" name="SYSTODO">
+		<id name="ID" description="ID" javaType="string">
+			<component type="hidden" url="#"/>
+		</id>
+		<field name="SUBJECT" javaType="string" description="标题">
+			<component type="text" readOnly="true"/>
+		</field>
+		<field name="MEMO" javaType="string" description="内容" length="255">
+			<component type="textArea" readOnly="true" style="width:300px;height:40px;"/>
+		</field>
+		<field name="SDATE" javaType="date" description="开始时间" dataStyle="yyyy-MM-dd hh:mm:ss">
+			<component type="date" readOnly="true"/>
+		</field>
+		<field name="EDATE" javaType="date" description="结束时间" dataStyle="yyyy-MM-dd hh:mm:ss">
+			<component type="date" readOnly="true"/>
+		</field>
+		<field name="USERID" javaType="string" description="用户">
+			<component type="richSelect" referenceTable="SYSOPERATOR_VIEW" referenceField="ID" displayReferenceField="NAME" readOnly="true"/>
+		</field>
+		<pluginInterceptor methodName="setCreateUser" pluginName="save" parameter="USERID" type="before"/>
+		<Operation saveAndAdd="false" saveAndAddCopy="false"/>
+	</table>
+	<table description="计划任务" name="SYSTASK">
+		<id name="ID" description="ID" javaType="string">
+			<component type="hidden" url="#"/>
+		</id>
+		<field name="JOB_NAME" javaType="string" description="标题">
+			<component type="text" readOnly="false"/>
+		</field>
+		<field name="JOB_EXP" javaType="string" description="执行公式" length="255">
+			<component type="textArea" readOnly="false" style="width:300px;height:40px;"/>
+		</field>
+		<field name="JOB_TABLE" javaType="string" description="公式所属表单" defaultValue="SYSTASK">
+			<component type="text" readOnly="false"/>
+		</field>
+		<field name="JOB_CLASSNAME" javaType="string" description="执行类名" >
+			<component type="text" readOnly="false"/>
+		</field>
+		<field name="JOB_TIME" javaType="string" description="触发时间" defaultValue="0 0 23 * * ?">
+			<component type="text" readOnly="false"/>
+		</field>
+		<field name="USERID" javaType="string" description="创建人">
+			<component type="richSelect" referenceTable="SYSOPERATOR_VIEW" referenceField="ID" displayReferenceField="NAME" readOnly="true"/>
+		</field>
+		<field name="STATUS" description="启用" javaType="string" defaultValue="1">
+			<component type="dropdown">
+				<option displayName="否" value="0"/>
+				<option displayName="是" value="1"/>
+			</component>
+		</field>
+		<pluginInterceptor methodName="exp" parameter="SetCreateUser(USERID,__USERID__NAME)" pluginName="save" />
+		<pluginInterceptor methodName="exp" parameter="RefreshTask()" pluginName="r1"/>
+		<pluginInterceptor methodName="exp" parameter="RefreshTask(GetForm())" pluginName="r2"/>
+		<!--<pluginInterceptor methodName="exp" parameter="StartTask()" pluginName="query"/>-->
+		<pluginOperation name="r1" oprName="重启所有任务" hostPage="query" tblevel="1"/>
+		<pluginOperation name="r2" oprName="启动当前任务" hostPage="edit" tblevel="1"/>
+		<!-- -->
+		<Operation saveAndAdd="false" saveAndAddCopy="false"/>
+	</table>
+	<!--
+	0 0 12 * * ?	            每天12点触发
+	0 15 10 ? * *	            每天10点15分触发
+	0 15 10 * * ?	            每天10点15分触发
+	0 15 10 * * ? *	            每天10点15分触发
+	0 15 10 * * ? 2005	        2005年每天10点15分触发
+	0 * 14 * * ?	            每天下午的 2点到2点59分每分触发
+	0 0/5 14 * * ?	            每天下午的 2点到2点59分(整点开始，每隔5分触发)
+	0 0/5 14,18 * * ?           每天下午的 2点到2点59分(整点开始，每隔5分触发) 每天下午的 18点到18点59分(整点开始，每隔5分触发)
+	0 0-5 14 * * ?	            每天下午的 2点到2点05分每分触发
+	0 10,44 14 ? 3 WED	        3月分每周三下午的 2点10分和2点44分触发
+	0 15 10 ? * MON-FRI	        从周一到周五每天上午的10点15分触发
+	0 15 10 15 * ?	            每月15号上午10点15分触发
+	0 15 10 L * ?	            每月最后一天的10点15分触发
+	0 15 10 ? * 6L	            每月最后一周的星期五的10点15分触发
+	0 15 10 ? * 6L 2002-2005	从2002年到2005年每月最后一周的星期五的10点15分触发
+	0 15 10 ? * 6#3	            每月的第三周的星期五开始触发
+	0 0 12 1/5 * ?	            每月的第一个中午开始每隔5天触发一次
+	0 11 11 11 11 ?	            每年的11月11号 11点11分触发(光棍节)
+	-->
+</Haiyan>

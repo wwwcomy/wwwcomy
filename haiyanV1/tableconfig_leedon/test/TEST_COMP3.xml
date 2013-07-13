@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Haiyan xsi:noNamespaceSchemaLocation="../../haiyan.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<table description="组件测试3" realTable="TEST_COMP" name="TEST_COMP3" colspan="4">
+		<id name="ID" javaType="string">
+			<component type="hidden" url="#"/>
+		</id>
+		<field name="CODE" javaType="string" description="编码" style="color:#990099;size:13;font-weight:bold;" nullAllowed="false" one2oneField="CODE" one2oneTable="TEST_ONE2ONE">
+			<component type="text" style="color:#990099;size:12;font-weight:bold;"/>
+			<listColumn noquery="true"/>
+		</field>
+		<field name="NAME" javaType="string" description="名称" style="color:#990099;size:13;font-weight:bold;" nullAllowed="false" one2oneField="NAME" one2oneTable="TEST_ONE2ONE">
+			<component type="text"/>
+			<listColumn noquery="false"/>
+		</field>
+		<field name="WAREHOUSEIN" javaType="string" description="查头表">
+			<component type="combo" referenceTable="TEST_GRID" referenceField="ID" displayReferenceField="NAME" quickQueryConditionField="NAME" associatedFields="WAREHOUSEIN_CODE" parameter="If(confirm({测试过滤吗?}),{&amp;ID=-1},{})"/>
+			<!-- associatedFields="WAREWHEREIN" restrictiveFields="TEMPWAREHOUSEID" conditionFields="ID" url="queryOne.do?__opr_data=SYSBILLCONFIG&amp;ID=@FIELD@" urlField="WAREHOUSEIN" style="width:100;"-->
+			<listColumn noquery="true"/>
+		</field>
+		<field name="WAREHOUSEIN_CODE" javaType="string" description="联带头表CODE">
+			<component type="text" displayReferenceField="CODE"/>
+			<!-- style="width:100;" colspan="3" -->
+			<listColumn noquery="true"/>
+		</field>
+		<field name="WAREWHEREIN" javaType="string" description="查明细表">
+			<component type="combo" referenceTable="TEST_DETAIL" referenceField="ID" displayReferenceField="NAME" quickQueryConditionField="NAME" conditionFields="HEADID" restrictiveFields="WAREHOUSEIN"/>
+			<!-- style="width:100;" -->
+			<listColumn noquery="true"/>
+		</field>
+	</table>
+</Haiyan>

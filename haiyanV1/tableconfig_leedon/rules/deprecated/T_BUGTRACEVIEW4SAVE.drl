@@ -1,0 +1,39 @@
+<rule-set declaration="" name="Tests assignment rules" xmlns="http://drools.org/rules"
+ xmlns:java="http://drools.org/semantics/java"
+ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+ 
+<java:import>com.haiyan.genmis.core.strutsGenMisForm</java:import>
+<java:import>com.haiyan.genmis.castorgen.Table</java:import>
+<java:import>com.haiyan.genmis.core.SrvContext</java:import>
+<java:import>com.haiyan.genmis.db.DBTransaction</java:import>
+<java:import>com.haiyan.genmis.exception.Warning</java:import>
+<java:import>com.haiyan.genmis.util.DateUtil</java:import>
+<java:import>com.zhouxw.utils.string.StringUtil</java:import>
+<java:import>java.lang.String</java:import>  
+
+<application-data identifier="table">Table</application-data>
+<application-data identifier="tx">DBTransaction</application-data>
+<application-data identifier="context">SrvContext</application-data>
+
+<java:functions>
+   <!--
+   public static void getValue(String name) {
+   } 
+   public static void setValue(String name, String value) {
+   }
+   -->
+</java:functions>
+
+<rule name="SetENDTIME" salience="0">
+   <parameter identifier="form">
+      <java:class>
+         GenMisForm
+      </java:class>
+   </parameter>
+   <java:condition>form.getParameter("STATUS").equals("3")</java:condition>
+   <java:consequence>
+      form.setParameter("ENDTIME",DateUtil.getLastTime("yyyy-MM-dd hh:mm:ss"));
+   </java:consequence>
+</rule>
+
+</rule-set>

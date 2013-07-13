@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Haiyan xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../haiyan.xsd">
+	<table name="SYSMESSAGE_APP" realTable="SYSMESSAGE" description="消息">
+		<id name="ID" javaType="string"/>
+		<field name="NAME" description="标题" javaType="string">
+			<component type="text" colspan="3"/>
+		</field>
+		<field name="MEMO" description="正文" javaType="blob" length="2500">
+			<component type="textArea" url="#" colspan="3" style="width:680"/>
+			<queryCondition type="none"/>
+			<listColumn width="200" height="20" nowrap="true" noquery="true"/>
+		</field>
+		<field name="URL" description="链接" javaType="string">
+			<component type="text" style="color:red;width:300" url="@F@" urlField="URL" colspan="3"/>
+			<queryCondition type="none"/>
+		</field>
+		<field name="CFILE" description="附件" javaType="string">
+			<component type="file" url="#"/>
+		</field>
+		<!--
+		<field name="ROLEID" description="接受组" javaType="string">
+			<component type="richSelect" referenceTable="SYSROLE" displayReferenceField="NAME" url="#"/>
+		</field>
+		<field name="DEPTID" description="接受部门" javaType="string">
+			<component type="richSelect" referenceTable="SYSORGA" displayReferenceField="NAME" url="#"/>
+		</field>
+		-->
+		<field name="USERID" description="接受人" javaType="string">
+			<component type="richSelect" referenceTable="SYSOPERATOR" displayReferenceField="NAME" url="#"/>
+		</field>
+		<field name="DEALLEVEL" description="处理级别" javaType="string">
+			<component type="text" url="#"/>
+		</field>
+		<field name="CREATETIME" description="发出消息时间" javaType="date" dataStyle="yyyy-MM-dd hh:mm:ss">
+			<component type="text" url="#" readOnly="true"/>
+		</field>
+		<field name="SENDERID" description="发送用户" javaType="string">
+			<component type="richSelect" referenceTable="SYSOPERATOR" readOnly="true" url="#" displayReferenceField="NAME"/>
+		</field>
+		<field name="TYPE" description="来源分类" javaType="string">
+			<!--
+			<component type="text" url="#"/>
+			-->
+			<component type="dropdown">
+				<option displayName="系统内" value="0"/>
+				<option displayName="MESSAGE" value="1"/>
+				<option displayName="EMAIL" value="2"/>
+				<option displayName="短信" value="2"/>
+			</component>
+		</field>
+		<field name="USED" description="是否已处理" javaType="string" defaultValue="1">
+			<component type="dropdown">
+				<option displayName="已处理" value="0"/>
+				<option displayName="未处理" value="1"/>
+			</component>
+		</field>
+		<field name="CODE" description="助记码" javaType="string">
+			<component type="text" readOnly="true" url="#"/>
+		</field>
+		<pluginInterceptor className="haiyan.interceptor.SaveInterceptor" methodName="setCreateTime" pluginName="save" parameter="CREATETIME,yyyy-MM-dd hh:mm:ss"/>
+		<pluginOperation name="sendMSG" oprName="消息" accessKey="C" className="haiyan.plugin.CommonAutoSavePlugin" hostPage="edit"/>
+	</table>
+</Haiyan>

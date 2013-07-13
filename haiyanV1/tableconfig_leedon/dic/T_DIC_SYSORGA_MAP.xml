@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Haiyan xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../haiyan.xsd">
+	<table name="T_DIC_SYSORGA_MAP" description="组织机构业务层次">
+		<id name="ID" javaType="string"/>
+		<field name="SHORTNAME" javaType="string" description="业务部门名称">
+        	<component type="readOnlyText" referenceField="SHORTNAME"/>
+        </field>
+		<field name="ORGA_ID" javaType="string" description="业务部门">
+            <component type="richSelect" referenceTable="SYSORGA" 
+            	referenceField="ID" displayReferenceField="NAME" 
+            	associatedFields="SHORTNAME"/>
+        </field>
+        <field name="PARENT_ID" javaType="string" description="上级业务部门">
+            <component type="richSelect" referenceTable="T_DIC_SYSORGA_MAP"
+                referenceField="ID" displayReferenceField="SHORTNAME"/>
+        </field>
+        <field name="AVAILABLE" javaType="string" description="业务联系是否有效">
+            <component type="dropdown" defaultValue="1">
+            	<option displayName="无效" value="0"/>
+            	<option displayName="有效" value="1"/>
+            </component>
+        </field>
+        <field name="REMARK" javaType="string" description="备注">
+            <component type="textArea" colspan="3" style="width:560"/>
+            <queryCondition type="none"/>
+        </field>
+        
+        <PageView showField="SHORTNAME" type="gentree" title="树形索引"/>
+		<PageView type="querybyform" title="列表索引"/>
+	</table>
+</Haiyan>

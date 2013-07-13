@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Haiyan xsi:noNamespaceSchemaLocation="../../haiyan.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<table name="T_CRM_HANGYE" description="行业类型" realTable="T_DIC_COMMON">
+		<id name="ID" javaType="string">
+			<component type="hidden" url="#"/>
+		</id>
+		<field name="CODE" javaType="string" description="编号">
+			<component type="text"/>
+		</field>
+		<field name="NAME" javaType="string" description="名称">
+			<component type="text"/>
+		</field>
+		<field name="LXTSJG" javaType="bigDecimal" description="联系天数间隔" defaultValue="7" nullAllowed="false">
+			<component type="text"/>
+		</field>
+		<field name="JQ" javaType="string" description="需要精确地址" defaultValue="0" nullAllowed="false">
+			<component type="dropdown">
+				<option displayName="是" value="1"/>
+				<option displayName="否" value="0"/>
+			</component>
+		</field>
+		<field name="MEMO" javaType="string" description="备注">
+			<component type="textArea" colspan="3" style="width:95%;height:40;"/>
+		</field>
+		<field name="LABEL" description="字典分类" javaType="string" defaultValue="HYLX">
+			<component type="hidden"/>
+		</field>
+		<field name="PID" javaType="string" description="所属(默认请选行业类型)" nullAllowed="false">
+			<component type="richSelect" quickQueryConditionField="NAME,CODE" referenceTable="T_CRM_HANGYE" referenceField="ID" displayReferenceField="NAME"/>
+		</field>
+		<field name="NODETYPE" javaType="string" description="节点类型" defaultValue="1" nullAllowed="false">
+			<component type="dropdown">
+				<option displayName="汇总" value="0"/>
+				<option displayName="明细" value="1"/>
+			</component>
+		</field>
+		<field name="USED" description="是否使用" javaType="string" defaultValue="1" nullAllowed="false">
+			<component type="dropdown">
+				<option displayName="是" value="1"/>
+				<option displayName="否" value="0"/>
+			</component>
+		</field>
+		<field name="SHOWED" description="是否显示" javaType="string" defaultValue="1" nullAllowed="false">
+			<component type="dropdown">
+				<option displayName="是" value="1"/>
+				<option displayName="否" value="0"/>
+			</component>
+		</field>
+		<!-- -->
+		<PageView title="树状索引" type="userdefined" methodName="exp" parameter="{ext_showtree_prot.do?__opr_data=T_CRM_HANGYE}" hostPage="query" showField="true" img="refresh"/>
+		<!--		
+		<PageView title="列表索引" type="querybyform" showField="true"/>
+		<PageView title="树状索引" type="gentree" showField="NAME,CODE" />
+		<PageView title="树状索引" type="userdefined" methodName="exp" parameter="{gen_queryform.do?__opr_data=T_CRM_HANGYE}" hostPage="query" showField="NAME,CODE" img="refresh"/>
+		<PageView title="树状索引" type="userdefined" methodName="exp" parameter="{gen_tree.do?__opr_data=T_CRM_HANGYE}" hostPage="query" showField="NAME,CODE" img="refresh"/>
+		<PageView title="树状索引" type="userdefined" methodName="exp" parameter="{ext_showtree_prot.do?__opr_data=T_CRM_HANGYE}" hostPage="query" showField="NAME,CODE" img="refresh"/>
+		<PageView title="树状索引" type="userdefined" methodName="exp" parameter="{ext_shownav_prot.do?__opr_data=T_CRM_HANGYE}" hostPage="query" showField="NAME,CODE" img="refresh"/>
+		-->
+		<queryFilter>
+			<pluggedFilter methodName="exp" parameter="{ and t_1.LABEL='HYLX' order by t_1.CODE}"/>
+		</queryFilter>
+		<!-- -->
+		<isSelectable methodName="isSelectable"/>
+		<pluginInterceptor methodName="exp" parameter="
+			Set(LABEL,{HYLX})
+ 		" pluginName="save" type="before"/>
+		<pluginInterceptor methodName="checkCircle" pluginName="save"/>
+	</table>
+</Haiyan>

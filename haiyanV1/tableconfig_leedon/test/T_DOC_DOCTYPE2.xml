@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- edited with XMLSPY v2004 rel. 2 U (http://www.xmlspy.com) by psa (boke) -->
+<Haiyan xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../haiyan.xsd">
+	<table name="T_DOC_DOCTYPE2"  realTable="T_DOC_DOCTYPE"  description="文档类型">
+		<id name="ID" javaType="string"/>
+		<field name="Code" description="编码" javaType="string">
+			<component type="text" url="#"/>
+		</field>
+		<field name="Name" description="名称" javaType="string">
+			<component type="text" url="queryOne.do@Q@__opr_data@E@KB_T_DoctypeView2@A@ID@E@@F@" urlField="ID"/>
+		</field>
+		<field name="Memo" description="备注" javaType="string">
+			<component type="textArea" url="#"/>
+			<queryCondition type="none"/>
+			<listColumn noquery="true"/>
+		</field>
+      
+                <PageView type="querybyform" title="按条件查询"/>
+	</table>
+</Haiyan>

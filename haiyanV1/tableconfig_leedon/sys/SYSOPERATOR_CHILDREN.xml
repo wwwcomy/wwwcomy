@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Haiyan xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../haiyan.xsd">
+	<table name="SYSOPERATOR_CHILDREN" realTable="SYSOPERATOR" description="管辖人员">
+		<id name="ID" javaType="string"/>
+		<field name="CODE" description="登录名" javaType="string">
+			<component type="text" colspan="3"/>
+		</field>
+		<field name="NAME" description="姓名" javaType="string">
+			<component type="text" colspan="3"/>
+		</field>
+		<field name="USED" description="是否使用" javaType="string" defaultValue="1">
+			<component type="dropdown" colspan="3">
+				<option displayName="是" value="1"/>
+				<option displayName="否" value="0"/>
+			</component>
+		</field>
+		<!--
+		<queryFilter>
+			<pluggedFilter>
+				and (t_1.ID=@USERID@ or t_1.ID in (select CHILDID from SYSUSERUSER where USERID=@USERID@ ))  and t_1.USED&lt;&gt;0
+			</pluggedFilter>
+		</queryFilter>
+		-->
+		<pluginInterceptor  methodName="complete" pluginName="save" type="after"/>
+		<pluginInterceptor  methodName="complete" pluginName="delete" type="after"/>
+		<Operation selectedHidden="true" queryPageQueryEdit="true" queryPageDelete="false"/>
+	</table>
+</Haiyan>

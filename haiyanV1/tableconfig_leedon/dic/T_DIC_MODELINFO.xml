@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Haiyan xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../haiyan.xsd">
+	<table name="T_DIC_MODELINFO" description="模特信息">
+		<id name="ID" javaType="string">
+			<component type="hidden" url="#"/>
+		</id>
+		<field name="MODEL_PIC" javaType="string" description="模特照片">
+			<component type="multiImage" colspan="3" style="width:110;height:130;"/>
+			<queryCondition type="blurMatching"/>
+		</field>
+		<field name="MODEL_NAME" javaType="string" description="模特姓名">
+			<component type="text"/>
+			<queryCondition type="blurMatching"/>
+		</field>
+		<field name="MODEL_AGE" javaType="string" description="模特年龄">
+			<component type="text"/>
+			<queryCondition type="blurMatching"/>
+		</field>
+		<field name="MODEL_ADDRESS" javaType="string" description="模特地址">
+			<component type="text"/>
+			<queryCondition type="blurMatching"/>
+		</field>
+		<field name="MODEL_CROP" javaType="string" description="模特公司">
+			<component type="text"/>
+			<queryCondition type="blurMatching"/>
+		</field>
+		<field name="MODEL_DEPA" description="模特部门" javaType="string">
+			<component type="text"/>
+			<queryCondition type="blurMatching"/>
+		</field>
+		<field name="MODEL_PHONE" javaType="string" description="电话">
+			<component type="text"/>
+			<queryCondition type="blurMatching"/>
+		</field>
+		<field name="MODEL_QQ" javaType="string" description="QQ">
+			<component type="text"/>
+			<queryCondition type="blurMatching"/>
+		</field>
+		<field name="MODEL_MSN" javaType="string" description="MSN">
+			<component type="text"/>
+			<queryCondition type="blurMatching"/>
+		</field>
+		<field name="MODEL_EMAIL" javaType="string" description="EMAIL">
+			<component type="text"/>
+			<queryCondition type="blurMatching"/>
+		</field>
+		<!--
+		<field name="CUSTOMER_ID" description="参与客户" javaType="string" displayOnly="true">
+			<component type="richSelect" referenceTable="T_CRM_ACTIVITY" referenceField="ID" displayReferenceField="NAME"/>
+			<queryCondition type="blurMatching"/>
+			<listColumn noquery="true"/>
+		</field>
+		-->
+		<field name="CREATE_USER_ID" javaType="string" description="创建人">
+			<component type="richSelect" referenceTable="SYSOPERATOR_VIEW" referenceField="ID" displayReferenceField="NAME" readOnly="true"/>
+			<listColumn noquery="true"/>
+		</field>
+		<field name="CREATE_TIME" javaType="date" dataStyle="yyyy-MM-dd HH:mm:ss" description="创建时间">
+			<component type="date" readOnly="true"/>
+			<queryCondition type="none"/>
+			<listColumn noquery="true"/>
+		</field>
+		<field name="BEGIN_DATE" javaType="date" dataStyle="yyyy-MM-dd HH:mm:ss" description="已安排档期起始时间">
+			<component type="date" readOnly="true"/>
+			<listColumn noquery="true"/>
+		</field>
+		<field name="FINISH_DATE" javaType="date" dataStyle="yyyy-MM-dd HH:mm:ss" description="已安排档期结束时间">
+			<component type="date" readOnly="true"/>
+			<listColumn noquery="true"/>
+		</field>
+		<field name="ACTIVITY_ID" description="现参加的活动" javaType="string">
+			<component type="richSelect" referenceTable="T_CRM_ACTIVITY" referenceField="ID" displayReferenceField="NAME" readOnly="true"/>
+			<queryCondition type="none"/>
+		</field>
+		<field name="CUSTOMER_ID" description="现有关客户" javaType="string" displayOnly="false">
+			<component type="richSelect" referenceTable="T_CRM_CUSTOMER_QY" referenceField="ID" displayReferenceField="NAME" readOnly="true"/>
+			<queryCondition type="none"/>
+		</field>
+		<pluginInterceptor methodName="setCreateUser" parameter="CREATE_USER_ID" pluginName="save"/>
+		<pluginInterceptor methodName="setCreateTime" parameter="CREATE_TIME,yyyy-MM-dd HH:mm:ss" pluginName="save"/>
+	</table>
+</Haiyan>

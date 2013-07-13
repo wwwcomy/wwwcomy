@@ -1,0 +1,220 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Haiyan xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../haiyan.xsd">
+	<table name="TEST_GRID" description="DBM测试GRID" realTable="TEST_DBM" colspan="8">
+		<id name="ID" description="ID" javaType="string">
+			<component type="hidden" url="$"/>
+		</id>
+		<field name="NAME" description="阿拉伯数字" displayOnly="false" javaType="string" lazyLoad="false">
+			<component type="text" readOnly="false"/>
+			<!-- validator="^-?\d+.\d{2}$" validatorText="必须为数字金额" -->
+			<queryCondition type="blurMatching"/>
+		</field>
+		<field name="CODE" description="大写数字" displayOnly="false" javaType="string" lazyLoad="false">
+			<component type="text" readOnly="true"/>
+			<queryCondition type="equal"/>
+		</field>
+		<!--
+		<field name="PID" description="所属" displayOnly="false" javaType="string" lazyLoad="false">
+			<component type="richSelect" referenceField="ID" referenceTable="TEST_GRID" displayReferenceField="NAME" readOnly="false" colspan="3"/>
+			<queryCondition type="equal"/>
+		</field>
+		<field name="URL" description="链接" displayOnly="true" javaType="string" lazyLoad="false">
+			<component type="hidden" readOnly="false" colspan="7"/>
+			<queryCondition type="equal"/>
+		</field>
+		-->
+		<field name="L1" description="" displayOnly="true" javaType="string" lazyLoad="false">
+			<component type="placeholder" colspan="7" readOnly="true"/>
+			<queryCondition type="none"/>
+			<listColumn noquery="true" nowrap="true"/>
+		</field>
+		<field name="SUBGRID1" javaType="string" description="子表格1" displayOnly="true">
+			<component type="grid" referenceField="HEADID" referenceTable="TEST_DETAIL" parameter="{&amp;HEADID=}&amp;If(IsEmpty(Get(ID)),-1,Get(ID))" style="width:900;height:360;" colspan="8"/>
+			<queryCondition type="none"/>
+			<listColumn noquery="true"/>
+		</field>
+		<field name="SUBGRID2" javaType="string" description="子表格2" displayOnly="true">
+			<component type="grid" referenceField="HEADID2" referenceTable="TEST_DETAIL2" parameter="{&amp;HEADID2=}&amp;If(IsEmpty(Get(ID)),-1,Get(ID))" style="width:900;height:210;" colspan="7"/>
+			<queryCondition type="none"/>
+			<listColumn noquery="true"/>
+		</field>
+		<!-- src="test/TEST_DETAIL_EDIT.js" -->
+		<javascript hostPage="edit"><![CDATA[
+			function renderREADONLY1(value, metaData, record, rowIndex, colIndex, store, displayValue, refValue, fieldName) { // 列描绘
+				var money = record.get('MONEY');
+				if (Ext.isEmpty(money)) return 0;
+				else return money * 1.768;
+			}
+			function summaryRenderTEST1(value, params, data, fldName) {
+				return '换算:'+(value * 1).toFixed(2); // 汇总行显示
+			}
+			Ext.grid.GroupSummary.Calculations['TEST1'] = function(v, record, field) {
+				return v + ((record.data.MONEY) * 1.768); // 汇总行计算
+			}
+			Hy_UIFunction.test2010 = function(_paras) { // 自定义公式
+				Ext.getCmp('SUBGRID1').getSelectionModel().getSelections().each(function(_rec,_index){alert(_rec.get('__flag'));});
+			}
+		]]></javascript>
+		<!-- mid interceptor -->
+		<pluginInterceptor methodName="exp" pluginName="pluginAll" parameter="Set(CODE,{pluginAll})" type="before"/>
+		<pluginInterceptor methodName="exp" pluginName="save" parameter="Set(CODE,{saveAll})" type="before"/>
+		<!-- saveAll必须要进行__one2oneID的设置 -->
+		<pluginInterceptor methodName="exp" pluginName="edit" parameter="If(IsEmpty(Get(ID)),Set(ID,GetNewID()),true)+SetPara(__one2oneID,Get(ID))+DisBtns(save,saveAndAdd,saveAndAddCopy)+Set(URL,{edit.do?__opr_data=TEST_GRID&amp;__one2oneID=}&amp;GetUser(ID))" type="after"/>
+		
+		<!-- ui operation -->
+		<pluginOperation name="saveAll" oprName="保存" hostPage="edit" img="save" action="save({},{},{SUBGRID1},{SUBGRID2})+brk()"/>
+		<pluginOperation name="pluginAll" oprName="插件" hostPage="edit" img="save" action="plugin({},{pluginAll},{SUBGRID1},{SUBGRID2})+brk()"/>
+		
+		<pluginOperation name="lookup" oprName="查看SUBGRID1行标记" hostPage="edit" img="look" action="test2010()+brk()"/>
+		
+		<Operation queryPageDelete="false" save="false" saveAndAdd="false" saveAndAddCopy="false"/>
+		<!-- 
+		<Order needOrder="true"/>
+		-->
+	</table>
+	<table name="TEST_DETAIL" description="明细测试" realTable="TEST_DETAIL" colspan="6">
+		<id name="ID" description="ID" javaType="string">
+			<component type="hidden" url="#"/>
+		</id>
+		<field name="HEADID" description="HEADID" javaType="string">
+			<component type="richSelect" readOnly="true" url="#" referenceField="ID" referenceTable="TEST_GRID" displayReferenceField="NAME"/>
+		</field>
+		<field name="CODE" description="编码" displayOnly="false" javaType="string" lazyLoad="false" nullAllowed="false">
+			<component type="text" readOnly="true"/>
+			<queryCondition type="equal"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="NAME" description="名称" displayOnly="false" javaType="string" lazyLoad="false" nullAllowed="false">
+			<component type="text" readOnly="false" validator="^[\w-]+(\.[\w-]+)*@[\w-]+(\.[\w-]+)+$" validatorText="必须为email类型"/>
+			<queryCondition type="equal"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="STATUS" javaType="string" description="STATUS" defaultValue="0">
+			<component type="dropdown" style="width:100;" action="alert({你选择了它...}&amp;Get(STATUS))">
+				<option displayName="编制" value="0"/>
+				<option displayName="人事审批" value="1"/>
+				<option displayName="总经理审批" value="2"/>
+				<option displayName="公司下达" value="3"/>
+			</component>
+			<listColumn noquery="false"/>
+		</field>
+		<field name="ORGAID" description="单位" displayOnly="false" javaType="string" lazyLoad="false" nullAllowed="false">
+			<component type="text" readOnly="false" referenceTable="SYSORGA" referenceField="ID" displayReferenceField="NAME,CODE" action="alert(11)"/>
+			<queryCondition type="equal"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="OPRID" description="操作员" displayOnly="false" javaType="string" lazyLoad="false" nullAllowed="false">
+			<component type="text" readOnly="false" referenceTable="SYSOPERATOR_VIEW" referenceField="ID" displayReferenceField="NAME"/>
+			<queryCondition type="equal"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="MONEY" description="金额" displayOnly="false" javaType="bigDecimal" lazyLoad="false" nullAllowed="false">
+			<component type="text" readOnly="false" numberGrouping="true" summaryType="TEST1" summaryRenderer="summaryRenderTEST1" action="alert(11)"/>
+			<queryCondition type="equal"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="READONLY" description="计算(x1.768)" displayOnly="false" javaType="string" lazyLoad="false" nullAllowed="false" defaultValue="0">
+			<component type="text" readOnly="true" renderer="renderREADONLY1"/>
+			<queryCondition type="equal"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<pluginInterceptor methodName="exp" pluginName="pluginAll" parameter="Set(CODE,{pluginAll})" type="before"/>
+		<pluginInterceptor methodName="exp" pluginName="save" parameter="Set(CODE,{名称的拼音:}&amp;PY(Get(NAME)))" type="before"/>
+	</table>
+	<table name="TEST_DETAIL2" description="明细测试2" realTable="TEST_DETAIL2" colspan="6">
+		<id name="ID" description="ID" javaType="string">
+			<component type="hidden" url="#"/>
+		</id>
+		<field name="HEADID2" description="HEADID2" javaType="string">
+			<component type="richSelect" readOnly="true" url="#" referenceField="ID" referenceTable="TEST_GRID" displayReferenceField="NAME"/>
+		</field>
+		<field name="CODE" description="编码" displayOnly="false" javaType="string" lazyLoad="false" nullAllowed="false">
+			<component type="text" readOnly="false"/>
+			<queryCondition type="equal"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="NAME" description="名称" displayOnly="false" javaType="string" lazyLoad="false" nullAllowed="false">
+			<component type="text" readOnly="true"/>
+			<queryCondition type="equal"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="ORGAID" description="单位" displayOnly="false" javaType="string" lazyLoad="false" nullAllowed="false">
+			<component type="text" readOnly="false" referenceTable="SYSORGA" referenceField="ID" displayReferenceField="NAME"/>
+			<queryCondition type="equal"/>
+			<!--renderer="rendererORGA"-->
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="OPRID" description="操作员" displayOnly="false" javaType="string" lazyLoad="false" nullAllowed="false">
+			<component type="text" readOnly="false" referenceTable="SYSOPERATOR_VIEW" referenceField="ID" displayReferenceField="NAME"/>
+			<queryCondition type="equal"/>
+			<!--renderer="rendererOPRT"-->
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="MONEY" description="金额" displayOnly="false" javaType="bigDecimal" lazyLoad="false" nullAllowed="false">
+			<component type="text" readOnly="false" numberGrouping="true" summaryType="sum"/>
+			<queryCondition type="equal"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="READONLY" description="计算(x10)" displayOnly="false" javaType="string" lazyLoad="false" nullAllowed="false" defaultValue="0">
+			<component type="text" readOnly="true" renderer="rendererREADONLY2"/>
+			<queryCondition type="equal"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<pluginInterceptor methodName="exp" pluginName="pluginAll" parameter="Set(CODE,{pluginAll})" type="before"/>
+		<pluginInterceptor methodName="exp" pluginName="save" parameter="Set(CODE,RMB(GetDouble(MONEY)),NAME,RMB(GetDouble(MONEY)))" type="before"/>
+	</table>
+</Haiyan>
+<!--
+	var orgaStore = new Ext.data.JsonStore({
+		url : Hy.getContextName()+'/ext_jsonlist.do?__opr_data=SYSORGA_VIEW&__maxNumPerPage=5000&__go2pageNum=1'
+		, autoLoad : true
+		, root : 'SYSORGA_VIEW'
+		, fields : ['ID', 'NAME', 'CODE']
+	});
+	function rendererREADONLY2(value, metaData, record, rowIndex, colIndex, store,
+			displayValue, refValue, fieldName) {
+		var money = record.get('MONEY');
+		if (Ext.isEmpty(money))
+			return 0;
+		else
+			return money * 10;
+	}
+	function rendererORGA(value, metaData, record, rowIndex, colIndex, store,
+			displayValue, refValue, fieldName) {
+		var ret = null;
+		orgaStore.filter('ID', value);
+		orgaStore.each(function(record2) {
+			if (record2.get('ID') == value) {
+				ret = record2.get('NAME');
+				return false;
+			}
+		});
+		if (ret != null)
+			return ret;
+		if (Ext.isEmpty(displayValue))
+			return '...';
+		return displayValue;
+	}
+	var oprtStore = new Ext.data.JsonStore({
+		url : Hy.getContextName()+'/ext_jsonlist.do?__opr_data=SYSOPERATOR_VIEW&__maxNumPerPage=5000&__go2pageNum=1'
+		, autoLoad : true
+		, root : 'SYSOPERATOR_VIEW'
+		, fields : ['ID', 'NAME', 'CODE']
+	});
+	function rendererOPRT(value, metaData, record, rowIndex, colIndex, store,
+			displayValue, refValue, fieldName) {
+		var ret = null;
+		oprtStore.filter('ID', value);
+		oprtStore.each(function(record2) {
+					if (record2.get('ID') == value) {
+						ret = record2.get('NAME');
+						return false;
+					}
+				});
+		if (ret != null)
+			return ret;
+		if (Ext.isEmpty(displayValue))
+			return '...';
+		return displayValue;
+	}
+-->

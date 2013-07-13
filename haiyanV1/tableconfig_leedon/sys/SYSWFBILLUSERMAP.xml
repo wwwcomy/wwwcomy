@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- edited with XML Spy v4.4 U (http://www.xmlspy.com) by zhouxw (bokesoft) -->
+<Haiyan xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../haiyan.xsd">
+	<table name="SYSWFBILLUSERMAP" description="待处理任务">
+		<id name="ID" javaType="string"/>
+		<field name="WFBILLID" description="流程单据" javaType="string">
+			<component type="richSelect" referenceTable="SYSWFBILL" referenceField="ID" displayReferenceField="NAME"/>
+		</field>
+		<field name="WFNODEID" description="任务节点" javaType="string">
+			<component type="readOnlyText"/>
+		</field>
+		<field name="USERID" description="人员" javaType="string">
+			<component type="richSelect" referenceTable="SYSOPERATOR" referenceField="ID" displayReferenceField="NAME"/>
+		</field>
+		<Operation selectedHidden="true"/>
+	</table>
+</Haiyan>

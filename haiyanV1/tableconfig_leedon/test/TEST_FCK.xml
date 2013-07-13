@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Haiyan xsi:noNamespaceSchemaLocation="../../haiyan.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<table description="TEST_FCK" name="TEST_FCK" realTable="TEST_FCK">
+		<id name="ID" javaType="string"/>
+		<field name="MEMO1" javaType="dbBlob" description="MEMO1" length="2048">
+			<component type="fckeditor" colspan="3" style="width:90%;height:240;"/>
+			<queryCondition type="none"/>
+		</field>
+		<field name="MEMO2" javaType="blob" description="MEMO2" length="2048">
+			<component type="fckeditor" colspan="3" style="width:90%;height:240;"/>
+			<queryCondition type="none"/>
+		</field>
+		<field name="MEMO" javaType="string" description="MEMO">
+			<component type="textArea" colspan="3" style="width:90%;height:240;"/>
+			<queryCondition type="none"/>
+		</field>
+	</table>
+</Haiyan>

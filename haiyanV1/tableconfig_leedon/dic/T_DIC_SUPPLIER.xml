@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Haiyan xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../haiyan.xsd">
+	<table name="T_DIC_SUPPLIER" realTable="T_DIC_ORGA" description="供应商">
+		<id name="ID" description="ID" javaType="string">
+			<component type="hidden" url="#"/>
+		</id>
+		<field name="CODE" description="供应商名称" javaType="string" nullAllowed="false">
+			<component type="text"/>
+		</field>
+		<field name="SUPP_CODE" description="供应商编号" javaType="string" nullAllowed="false">
+			<component type="text"/>
+		</field>
+		<field name="NAME" description="供应商简称" javaType="string">
+			<component type="text"/>
+		</field>
+		<field name="TYPE" description="类别" javaType="string" defaultValue="gys">
+			<component type="hidden"/>
+		</field>
+		<!--
+		<field name="DESCRIPTION" description="说明" javaType="string">
+			<component type="text"/>
+		</field>
+		<field name="TRANSPORTTYPE" description="发货方式" javaType="string">
+			<component type="text"/>
+		</field>
+		<field name="PROCURER" description="采购员" javaType="string">
+			<component type="text"/>
+		</field>
+			
+		<field name="CITY_ID" javaType="string" description="城市" >
+			<component type="richSelect" referenceTable="T_DIC_COMMON_CITY" referenceField="ID" displayReferenceField="NAME" quickQueryConditionField="NAME,CODE"/>
+			<listColumn noquery="false" nowrap="true"/>
+		</field>
+		-->
+		<field name="PHONE" description="联系电话" javaType="string">
+			<component type="text"/>
+		</field>
+		<field name="FAX" description="传真" javaType="string">
+			<component type="text"/>
+		</field>
+		<field name="EMAIL" description="E-Mail" javaType="string" nullAllowed="false">
+			<component type="text"/>
+		</field>
+		<field name="IMAGE" description="附件图片" displayOnly="false" javaType="string" length="255" lazyLoad="false" nullAllowed="false">
+			<component type="image" readOnly="false" renderer="renderIMAGE" multipleSelect="true"/>
+			<listColumn noedit="false" noquery="false" nowrap="true" width="165"/>
+		</field>
+		<field name="FREE_INSPACTION" javaType="string" description="是否免检" nullAllowed="false">
+			<component type="dropdown">
+				<option displayName="是" value="1"/>
+				<option displayName="否" value="0"/>
+			</component>
+		</field>
+		<field name="MAILCOACH" description="邮编" javaType="string">
+			<component type="text" colspan="6"/>
+		</field>
+		<field name="ADDRESS" description="供应商地址" javaType="string" nullAllowed="false">
+			<component type="text" style="width:448px" colspan="6"/>
+		</field>
+		<field name="ACCOUNT" description="账户" javaType="string" nullAllowed="false" length="512">
+			<component type="textArea" style="width:448px;height:60px" colspan="6"/>
+		</field>
+		<field name="CONTACTOR1" description="联系人1" javaType="string" nullAllowed="false" length="110">
+			<component type="text" style="width:448px" colspan="6"/>
+		</field>
+		<field name="CONTACTOR2" description="联系人2" javaType="string" length="110">
+			<component type="text" style="width:448px" colspan="6"/>
+		</field>
+		<field name="P_INCHARGE" description="负责人" javaType="string" nullAllowed="false" length="110">
+			<component type="text" style="width:448px" colspan="6"/>
+		</field>
+		<!--
+		<field name="USERID" description="用户账号" displayOnly="false" javaType="string" lazyLoad="false" nullAllowed="false">
+			<component type="combo" colspan="6" displayReferenceField="NAME" quickQueryConditionField="NAME,CODE" referenceField="ID" referenceTable="SYSOPERATOR_COMBO"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		-->
+		<field name="USERLIST" description="用户账号" javaType="string" displayOnly="true" mappingTable="T_DIC_SUPP_USER">
+			<component type="richSelect" referenceTable="SYSOPERATOR_COMBO" displayReferenceField="NAME" multipleSelect="true"/>
+			<queryCondition type="none"/>
+		</field>
+		<!--
+		<field name="ACC_LIST" description="账户列表" javaType="string" displayOnly="true" mappingTable="T_DIC_SUP_ACC">
+			<component type="richSelect" referenceTable="T_DIC_ACCOUNT" displayReferenceField="ACC_NAME" multipleSelect="true"/>
+			<queryCondition type="none"/>
+		</field>
+		-->
+		<!-- _NAME 结尾的冗余字段为了提高效率和开发便利而用 
+		<field name="COUNTRY" javaType="string" description="国家">
+			<component type="hidden" referenceTable="T_DIC_COMMON_COUNTRY" referenceField="ID" displayReferenceField="NAME"/>
+			<listColumn noquery="true"/>
+		</field>
+		<field name="COUNTRY_NAME" javaType="string" description="国家">
+			<component type="readOnlyText"/>
+			<queryCondition type="none"/>
+			<listColumn noquery="true"/>
+		</field>
+		<field name="AREA_CODE" javaType="string" description="大区编号">
+			<component type="readOnlyText"/>
+			<queryCondition type="none"/>
+			<listColumn noquery="false" nowrap="true"/>
+		</field>
+		<field name="AREA" javaType="string" description="大区名称">
+			<component type="readOnlyText"/>
+			<listColumn noquery="false" nowrap="true"/>
+		</field>
+		<field name="PROVINCE" javaType="string" description="省份">
+			<component type="hidden" referenceTable="T_DIC_COMMON_PROVINCE" referenceField="ID" displayReferenceField="NAME"/>
+			<listColumn noquery="true"/>
+		</field>
+		<field name="PROVINCE_NAME" javaType="string" description="省份">
+			<component type="readOnlyText"/>
+			<listColumn noquery="false" nowrap="true"/>
+		</field>
+		-->
+		<queryFilter>
+			<!-- 商品新增必须要有一份协议 -->
+			<pluggedFilter methodName="exp" parameter="if(IsEmpty(GetPara(__filter)),{ and t_1.TYPE='gys'},{ and t_1.ID in (select SUPPLIER from T_WM_AGREEMENT where STATUS=1)})&amp;{ and t_1.TYPE='gys'}"><![CDATA[
+			]]></pluggedFilter>
+		</queryFilter>
+		<javascript hostPage="query"><![CDATA[
+			function renderIMAGE(v) {
+				var vals=v.split(',');
+				var t='';
+				vals.each(function(_s, _index){
+					if (!Ext.isEmpty(_s))
+						t+='<img src="'+_s+'" style="width:30;height30;" width=30 height=30><a href="'+_s+'" target="_blank">图片'+_index+'</a></img>';
+				});
+				return t;
+			}
+		]]></javascript>
+		<pluginInterceptor methodName="exp" parameter="
+			If(InRole(admin),true,DisBtns(add,delete,save,saveAndAdd,saveAndAddCopy))" pluginName="query" type="after"/>
+		<pluginInterceptor className="haiyan.interceptor.SaveInterceptor" methodName="createAreaInfo" pluginName="save"/>
+	</table>
+	<!-- -->
+	<table name="T_DIC_SUPP_USER" description="供应商-用户账号">
+		<id name="ID" description="ID" javaType="string">
+			<component type="hidden" readOnly="false" url="#"/>
+		</id>
+		<field name="SUPPLIER" description="供应商" javaType="string">
+			<component type="richSelect" referenceField="ID" referenceTable="T_DIC_SUPPLIER" displayReferenceField="NAME"/>
+		</field>
+		<field name="USERID" description="用户账号" javaType="string">
+			<component type="richSelect" referenceField="ID" referenceTable="SYSOPERATOR_COMBO" displayReferenceField="NAME,CODE"/>
+		</field>
+	</table>
+	<!-- -->
+	<table name="T_DIC_ACCOUNT" description="银行账户">
+		<id name="ID" description="ID" javaType="string">
+			<component type="hidden" readOnly="false" url="#"/>
+		</id>
+		<field name="ACC_CODE" description="银行名" javaType="string">
+			<component type="text">
+				<!--
+				<option displayName="CMB" value="CMB" />
+				<option displayName="ICBC" value="ICBC" />
+				-->
+			</component>
+		</field>
+		<field name="ACC_NAME" description="银行开户名" javaType="string">
+			<component type="text"/>
+		</field>
+		<field name="ACC_NUM" description="银行账号" javaType="string">
+			<component type="text"/>
+		</field>
+	</table>
+	<!-- -->
+	<table name="T_DIC_SUP_ACC" description="供应商-银行账户">
+		<id name="ID" description="ID" javaType="string">
+			<component type="hidden" readOnly="false" url="#"/>
+		</id>
+		<field name="SUPPLIER" description="供应商" javaType="string">
+			<component type="richSelect" referenceField="ID" referenceTable="T_DIC_SUPPLIER" displayReferenceField="NAME"/>
+		</field>
+		<field name="ACCOUNT" description="银行账号" javaType="string">
+			<component type="richSelect" referenceField="ID" referenceTable="T_DIC_ACCOUNT" displayReferenceField="ACC_CODE,ACC_NAME,ACC_NUM"/>
+		</field>
+	</table>
+	<!-- -->
+	<table name="T_DIC_CUS_ACC" realTable="T_DIC_SUP_ACC" description="客户-银行账户">
+		<id name="ID" description="ID" javaType="string">
+			<component type="hidden" readOnly="false" url="#"/>
+		</id>
+		<field name="SUPPLIER" description="客户" javaType="string">
+			<component type="richSelect" referenceField="ID" referenceTable="T_CRM_CUSTOMER_QY" displayReferenceField="NAME"/>
+		</field>
+		<field name="ACCOUNT" description="银行账号" javaType="string">
+			<component type="richSelect" referenceField="ID" referenceTable="T_DIC_ACCOUNT" displayReferenceField="ACC_CODE,ACC_NAME,ACC_NUM"/>
+		</field>
+	</table>
+</Haiyan>

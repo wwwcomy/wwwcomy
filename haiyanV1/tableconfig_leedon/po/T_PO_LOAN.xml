@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Haiyan xsi:noNamespaceSchemaLocation="../../haiyan.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<table description="样品申请表" name="T_PO_LOAN" realTable="T_PO_LOAN">
+		<id name="ID" javaType="string"/>
+		<field name="CREATE_TIME" javaType="date" dataStyle="yyyy-MM-dd HH:mm:ss" description="创建时间">
+			<component type="dateTime" readOnly="true"/>
+			<queryCondition type="none"/>
+			<listColumn noquery="false" nowrap="false" noedit="true"/>
+		</field>
+		<field name="CREATE_USER_ID" javaType="string" description="创建人">
+			<component type="richSelect" quickQueryConditionField="NAME" referenceTable="SYSOPERATOR_VIEW" referenceField="ID" displayReferenceField="NAME" readOnly="true"/>
+			<listColumn noquery="false" nowrap="false" noedit="true"/>
+		</field>
+		<field name="LIST" javaType="string" description="样品说明(至少要有数量)">
+			<component type="text"/>
+		</field>
+		<field name="IMAGES" javaType="string" description="图片">
+			<component type="image" style="width:80;height:80;" parameter="quality:.55F" renderer="rendererImage"/>
+		</field>
+		<field name="USAGE2" javaType="string" description="用途" defaultValue="2">
+			<component type="dropdown" readOnly="false">
+				<option displayName="给供应商" value="1"/>
+				<option displayName="给客户" value="2"/>
+			</component>
+		</field>
+		<field name="PERSON" javaType="string" description="收件人">
+			<component type="richSelect" quickQueryConditionField="NAME,ENAME,AutoNaming__CUS_ID__NAME" referenceField="ID" referenceTable="T_CRM_CONTACT" displayReferenceField="NAME,ENAME,PHONE,ADDRESS,CUS_ID" associatedFields="PHONE,ADDRESS" action="
+Set(REC_COMPANY,FindValue({select CUS_ID from T_CRM_CONTACT where ID='}&amp;Get(PERSON)&amp;{'},1))
++
+Set(AutoNaming__REC_COMPANY__NAME,FindValue({select NAME from }&amp;If(Get(USAGE2)=1,T_CRM_VENDOR,T_CRM_CLIENT)&amp;{ where ID in (select CUS_ID from T_CRM_CONTACT where ID='}&amp;Get(PERSON)&amp;{')},1))
+"/>
+		</field>
+		<field name="REC_COMPANY" javaType="string" description="收件公司">
+			<component type="richSelect" referenceField="ID" referenceTable="If(Get(USAGE2)=1,T_CRM_VENDOR,T_CRM_CLIENT)" displayReferenceField="NAME" readOnly="true"/>
+		</field>
+		<field name="ADDRESS" javaType="string" description="收件地址">
+			<component type="readOnlyText" displayReferenceField="ADDRESS"/>
+		</field>
+		<field name="PHONE" javaType="string" description="电话" lazyLoad="true">
+			<component type="readOnlyText" displayReferenceField="PHONE"/>
+		</field>
+		<javascript hostPage="edit"><![CDATA[
+			function rendererImage(v) {
+				return '<a href="'+v+'" target="_blank">'+v+'</a>';
+			}
+]]></javascript>
+		<javascript hostPage="edit"><![CDATA[
+			</script>
+			<style>
+				.x-grid-record-green{
+					background: #00FFFF;
+				}
+			</style>
+			<script>
+				Ext.onReady(function(){
+					if (typeof(__grid)!='undefined') {
+						__grid.getView().getRowClass=function(rec, rowIndex, rowParams, store){
+							if (rec.data.STATUS=='audit') 
+								return 'x-grid-record-green';
+							else
+								return '';
+						}
+					}
+				});
+				Ext.grid.GroupSummary.Calculations['sum2'] = function(v, rec, fldName) {
+					return parseFloat(v) + parseFloat(rec.data.PAYMENT_MONEY.replace(',',''));			
+				}
+		]]></javascript>
+		<pluginInterceptor methodName="exp" parameter="Set(STATUS,{init})" pluginName="refuse" type="before"/>
+		<pluginInterceptor methodName="exp" parameter="Set(STATUS,{audit})" pluginName="audit" type="before"/>
+		<pluginInterceptor methodName="setCreateUser" parameter="CREATE_USER_ID" pluginName="save"/>
+		<pluginInterceptor methodName="setCreateTime" parameter="CREATE_TIME,yyyy-MM-dd HH:mm:ss" pluginName="save"/>
+		<Operation queryPageAdd="true" queryPageDelete="true"/>
+	</table>
+</Haiyan>

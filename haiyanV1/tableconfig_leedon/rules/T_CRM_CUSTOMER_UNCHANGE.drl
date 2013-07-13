@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="GBK"?>
+<rule-set declaration="" name="Tests assignment rules" xmlns="http://drools.org/rules" xmlns:java="http://drools.org/semantics/java" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<!-- -->
+	<java:import>com.haiyan.genmis.core.db.DBManager</java:import>
+	<java:import>com.haiyan.genmis.core.SrvContext</java:import>
+	<java:import>com.haiyan.genmis.core.struts.*</java:import>
+	<java:import>com.haiyan.genmis.core.right.*</java:import>
+	<java:import>com.haiyan.genmis.core.*</java:import>
+	<java:import>com.haiyan.genmis.core.exception.Warning</java:import>
+	<java:import>com.haiyan.genmis.castorgen.Table</java:import>
+	<java:import>com.haiyan.genmis.util.StringUtil</java:import>
+	<java:import>com.haiyan.genmis.util.ConfigUtil</java:import>
+	<java:import>haiyan.interceptor.DroolsInterceptor</java:import>
+	<java:import>java.lang.String</java:import>
+	<java:import>java.util.*</java:import>
+	<!-- -->
+	<application-data identifier="context">SrvContext</application-data>
+	<application-data identifier="dbm">DBManager</application-data>
+	<application-data identifier="table">Table</application-data>
+	<application-data identifier="form">Qbq3Form</application-data>
+	<!-- ����Ȩ��Ա �� 14 �����ܼ� 1 ����Ա 6 ��ҵ������ 15 ������ 9 �ܲ� 3 �ܾ��� 21 ���۾��� 18 �����鳤�� -->
+	<java:functions>
+		public static boolean isUserInRoleName(User user, String[] roleNames) {
+			Role[] roles = user.getRoles();
+			if (roles ==null || roles.length==0) {
+			} else {
+				for (int i = 0; i &lt; roles.length; i++) {
+					for (int j=0;j&lt;roleNames.length;j++) {
+						if (roles[i].getRoleName()==roleNames[j])
+							return true;
+					}
+				}
+			}
+			return false;
+		}
+	</java:functions>
+	<rule name="unchange" salience="0">
+		<parameter identifier="dForm">
+			<java:class>Qbq3Form</java:class>
+		</parameter>
+		<java:condition>"0".equals("0")</java:condition>
+		<java:consequence>
+			  User user = context.getUser();
+			  String[] roleNames = new String[] {"ϵͳ����Ա","�����ܼ�","�ܾ���","�ܲ�"};
+			  if (isUserInRoleName(user, roleNames)) {
+					String stage = dForm.getParameter("STAGE") ;
+	             if (!StringUtil.isBlankOrNull(stage)) {
+	                 int stagef = new Integer(stage).intValue();
+		              if (stagef==-1) {
+		                  stagef=3; 
+					    } else if (stagef ==1) {
+					        context.addException(new DBBreakonAlert("��Ȩ����"));
+	                      return;
+					    }
+					    dForm.setParameter("STAGE",""+stagef);
+					    drools.assertObject(dForm);
+					    // context.addException(new DBGoonAlert("����ɹ�"));
+					}
+			  } else {
+                 context.addException(new DBBreakonAlert("��Ȩ����"));
+                 return;
+			  }
+       </java:consequence>
+	</rule>
+</rule-set>

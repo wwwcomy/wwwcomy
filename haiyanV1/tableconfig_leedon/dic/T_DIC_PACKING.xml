@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Haiyan xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../haiyan.xsd">
+	<table name="T_DIC_PACKING" description="包装单位" realTable="T_DIC_PACKING">
+		<id name="ID" description="ID" javaType="string">
+			<component type="text" readOnly="true" url="#"/>
+		</id>
+		<field name="CODE" description="包装单位编码(s)" displayOnly="false" javaType="string" lazyLoad="false">
+			<component type="text" readOnly="false"/>
+			<queryCondition type="equal"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="NAME" description="包装单位名称(s)" displayOnly="false" javaType="string" lazyLoad="false">
+			<component type="text" readOnly="false"/>
+			<queryCondition type="equal"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="COUNT" description="换算个数(i)" displayOnly="false" javaType="bigDecimal" lazyLoad="false">
+			<component type="text" readOnly="false"/>
+			<queryCondition type="equal"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="PACKINGID" description="换算单位" displayOnly="false" javaType="string" lazyLoad="false">
+			<component type="richSelect" readOnly="false" displayReferenceField="NAME" referenceField="ID" referenceTable="T_DIC_PACKING"/>
+			<queryCondition type="equal"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="DIMENSION" description="规格型号(s)" displayOnly="false" javaType="string" lazyLoad="false" defaultValue="0">
+			<component type="hidden" readOnly="true"/>
+			<queryCondition type="equal"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="USEDSTATUS" description="被占用" javaType="string" defaultValue="0">
+			<component type="dropdown" readOnly="true">
+				<option displayName="是" value="1"/>
+				<option displayName="否" value="0"/>
+			</component>
+		</field>
+		<queryFilter>
+			<pluggedFilter methodName="exp" parameter="{ and t_1.DIMENSION='0'}"/>
+		</queryFilter>
+	</table>
+</Haiyan>
+
+	<!--
+	<table name="T_DIC_CAPACITY" description="体积单位" realTable="T_DIC_PACKING">
+		<id name="ID" description="ID" javaType="string">
+			<component type="text" readOnly="true" url="#"/>
+		</id>
+		<field name="CODE" description="体积单位编码(s)" displayOnly="false" javaType="string" lazyLoad="false">
+			<component type="text" readOnly="false"/>
+			<queryCondition type="equal"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="NAME" description="体积单位名称(s)" displayOnly="false" javaType="string" lazyLoad="false">
+			<component type="text" readOnly="false"/>
+			<queryCondition type="equal"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="COUNT" description="换算个数(i)" displayOnly="false" javaType="bigDecimal" lazyLoad="false">
+			<component type="text" readOnly="false"/>
+			<queryCondition type="equal"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="PACKINGID" description="换算单位" displayOnly="false" javaType="string" lazyLoad="false">
+			<component type="richSelect" readOnly="false" displayReferenceField="NAME" referenceField="ID" referenceTable="T_DIC_CAPACITY" />
+			<queryCondition type="equal"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="DIMENSION" description="规格型号(s)" displayOnly="false" javaType="string" lazyLoad="false" defaultValue="1">
+			<component type="hidden" readOnly="true"/>
+			<queryCondition type="equal"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<queryFilter>
+			<pluggedFilter methodName="exp" parameter="{ and t_1.DIMENSION='1'}"/>
+		</queryFilter>
+	</table>
+	<table name="T_DIC_WEIGHT" description="重量单位" realTable="T_DIC_PACKING">
+		<id name="ID" description="ID" javaType="string">
+			<component type="text" readOnly="true" url="#"/>
+		</id>
+		<field name="CODE" description="重量单位编码(s)" displayOnly="false" javaType="string" lazyLoad="false">
+			<component type="text" readOnly="false"/>
+			<queryCondition type="equal"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="NAME" description="重量单位名称(s)" displayOnly="false" javaType="string" lazyLoad="false">
+			<component type="text" readOnly="false"/>
+			<queryCondition type="equal"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="COUNT" description="换算个数(i)" displayOnly="false" javaType="bigDecimal" lazyLoad="false">
+			<component type="text" readOnly="false"/>
+			<queryCondition type="equal"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="PACKINGID" description="换算单位" displayOnly="false" javaType="string" lazyLoad="false">
+			<component type="richSelect" readOnly="false" displayReferenceField="NAME" referenceField="ID" referenceTable="T_DIC_WEIGHT" />
+			<queryCondition type="equal"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="DIMENSION" description="规格型号(s)" displayOnly="false" javaType="string" lazyLoad="false" defaultValue="2">
+			<component type="hidden" readOnly="true"/>
+			<queryCondition type="equal"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<queryFilter>
+			<pluggedFilter methodName="exp" parameter="{ and t_1.DIMENSION='2'}"/>
+		</queryFilter>
+	</table>
+	-->

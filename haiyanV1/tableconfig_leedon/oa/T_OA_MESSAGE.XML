@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Haiyan xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../haiyan.xsd">
+	<table name="T_OA_MESSAGE" description="公司公告">
+		<id name="ID" javaType="bigDecimal"/>
+		<field name="WORKMEMO" description="公司公告" javaType="string">
+			<component type="fckeditor" style="width:100%;" colspan="3"/>
+			<queryCondition type="none"/>
+		</field>
+		<field name="SYSTIME" description="系统时间" javaType="date" dataStyle="yyyy-MM-dd hh:mm:ss">
+			<component type="date" url="#" readOnly="true"/>
+		</field>
+		<!--
+		<field name="CANEDIT" description="编辑" javaType="bigDecimal">
+			      <component type="text" defaultValue="1" url="#"
+				    className="com.haiyan.genmis.view.component.CanEditComponent"/>
+			      <listColumn noquery="true"/>
+			      <queryCondition type="none"/>
+		</field>
+		-->
+		<field name="OPERATORID" description="编制人" javaType="bigDecimal">
+			<component url="#" quickQueryConditionField="NAME" type="richSelect" colspan="3" readOnly="true" referenceTable="SYSOPERATOR" displayReferenceField="NAME"/>
+		</field>
+		<field name="ISALL" description="是否全部可见" javaType="string">
+			<component url="#" type="hidden"/>
+		</field>
+		<!--
+		<field name="ROLEID" description="组织机构" javaType="string">
+			<component url="#" type="hidden" />
+		</field>
+		-->
+		<field name="ORGAID" description="组织机构" javaType="bigDecimal">
+			<component url="#" quickQueryConditionField="Name" type="richSelect" colspan="3" readOnly="true" referenceTable="SYSORGA" displayReferenceField="NAME"/>
+		</field>
+		<field name="UNITID" description="单位" javaType="bigDecimal">
+			<component url="#" quickQueryConditionField="NAME" type="richSelect" colspan="3" readOnly="true" referenceTable="SYSORGA" displayReferenceField="NAME"/>
+		</field>
+		<!--
+		url="edit.do@Q@__opr_data=T_TOR_MASSAGE@A@ID=@F@" urlField="ID"
+		url="queryOne.do@Q@__opr_data=T_TOR_MASSAGE@A@ID=@F@" urlField="ID"
+		-->
+		<!--
+		<pluginInterceptor pluginName="edit" className="haiyan.interceptor.DataInterceptor" methodName="putCreateUserInfo" 
+			parameter="OPERATORID,__OPERATORID__NAME"/>
+		<pluginInterceptor pluginName="edit" className="haiyan.interceptor.DataInterceptor" methodName="putCreateUserInfoOrga" 
+			parameter="ORGAID,__ORGAID__NAME"/>
+		
+		<role name="admin">
+		        <roleOperation name="listResult query edit queryOne save add delete"/>
+		</role>
+		-->
+		<pluginInterceptor className="haiyan.interceptor.SaveInterceptor" methodName="setCreateUser" parameter="OPERATORID,__OPERATORID__NAME" pluginName="save"/>
+		<pluginInterceptor className="haiyan.interceptor.SaveInterceptor" methodName="setCreateOrga" parameter="ORGAID,__ORGAID__NAME" pluginName="save"/>
+		<pluginInterceptor className="haiyan.interceptor.SaveInterceptor" methodName="setCreateOrgaDW" parameter="UNITID,__UNITID__NAME" pluginName="save"/>
+		<pluginInterceptor className="haiyan.interceptor.SaveInterceptor" methodName="setCreateTime" parameter="SYSTIME,yyyy-MM-dd HH:mm:ss" pluginName="save"/>
+		<pluginInterceptor className="haiyan.interceptor.EditInterceptor" methodName="onlyByMaker" parameter="OPERATORID" pluginName="save"/>
+		<pluginInterceptor className="haiyan.interceptor.SaveInterceptor" methodName="complete" pluginName="save" type="after"/>
+		<pluginInterceptor className="haiyan.interceptor.DeleteInterceptor" methodName="complete" pluginName="delete" type="after"/>
+		<!-- -->
+		<Operation queryPageDelete="false" queryPageQueryEdit="false"/>
+	</table>
+</Haiyan>

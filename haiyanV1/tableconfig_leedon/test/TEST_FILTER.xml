@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Haiyan xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../haiyan.xsd">
+	<table name="TEST_FILTER" description="当前表过滤测试" realTable="SYSOPERATOR" colspan="6">
+		<id name="ID" description="ID" javaType="string">
+			<component type="hidden" readOnly="false" url=""/>
+		</id>
+		<field name="NAME" description="名称" displayOnly="false" javaType="string" lazyLoad="false">
+			<component type="text" readOnly="false"/>
+			<queryCondition type="equal"/>
+		</field>
+		<!-- 只能选管理员的控件 -->
+		<field name="OPRID" description="自己选自己" displayOnly="false" javaType="string" lazyLoad="false">
+			<component type="text" readOnly="false" referenceTable="TEST_FILTER" referenceField="ID" displayReferenceField="NAME"/>
+			<queryCondition type="equal"/>
+		</field>
+		<!-- 只能查到管理员数据 -->
+		<queryFilter>
+			<pluggedFilter><![CDATA[ ]]></pluggedFilter>
+			<!--可以直接写SQL过滤-->
+			<pluggedFilter methodName="exp" parameter="{ and t_1.NAME like 'admin%' }"/>
+			<!--可以用公式过滤-->
+		</queryFilter>
+	</table>
+</Haiyan>

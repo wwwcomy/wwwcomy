@@ -1,0 +1,53 @@
+int compare(String curPeriod, String period) {
+	java.util.Date date1 = DateUtil.getDate(curPeriod, "yyyy-MM-dd HH:mm:ss");
+	java.util.Date date2 = DateUtil.getDate(period, "yyyy-MM-dd HH:mm:ss");
+	if (date1.before(date2))
+		return 1;
+	if (date1.after(date2))
+		return -1;
+	return 0;
+}
+String getCurrDate() {
+	return DateUtil.format(new java.util.Date(),"yyyy-MM-dd HH:mm:ss");
+}
+void check() throws Throwable {
+	DBManager dbm = context.getDBM();
+	String ID = form.get("ID");
+	String PRODUCTID = form.get("PRODUCTID");
+	String HEADID = form.get("HEADID");
+	String VALIDATE_DAY = form.get("VALIDATE_DAY"); 
+	String VALIDATE_END = form.get("VALIDATE_END");
+	String PRO_IN_PRICE = form.get("PRO_IN_PRICE");
+	if(StringUtil.isEmpty(PRO_IN_PRICE))
+		throw new Warning("产品进价必须填写:"+form.get("PRO_NAME"));
+	if (StringUtil.isEmpty(VALIDATE_DAY)||StringUtil.isEmpty(VALIDATE_END))
+		throw new Warning("合同起始日期与终止日期必须填写:"+form.get("PRO_NAME"));
+		//return;
+	if (!StringUtil.isEmpty(VALIDATE_END)) {
+		VALIDATE_END = VALIDATE_END.substring(0,10)+" 23:59:59";
+		form.set("VALIDATE_END", VALIDATE_END);
+	}
+	if (compare(VALIDATE_END,VALIDATE_DAY)==1)
+		throw new Warning("结束日期不可小于起始日期: "+form.get("PRO_NAME"));
+	String start = dbm.SQLDateTimeFromStr(VALIDATE_DAY);
+	String end = dbm.SQLDateTimeFromStr(VALIDATE_END);
+	// and (NOW()>=t_1.VALIDATE_DAY and NOW()<=t_1.VALIDATE_END);
+	String sf = " and t_1.PRODUCTID="+PRODUCTID+" and ( (t_1.ID<>"+ID+" and t_1.HEADID="+HEADID+") or (t_1.HEADID<>"+HEADID+" and t_1.HEADID in (select ID from T_WM_SDBCONTRACT where STATUS='1')) ) and not ("+end+"<VALIDATE_DAY or "+start+">VALIDATE_END) ";
+	//Filter f = new Filter(sf, new Object[]{form.get("HEADID")});
+	int c = dbm.countByFilter("T_WM_SDBCONPRODUCT", sf, context, null);
+	if (c>0)
+		throw new Warning("该产品当前已经有一份合同生效中，请重新选择产品或有效期: "+form.get("PRO_NAME"));
+	
+	//以下为自动更新商品的最低库存字段以及状态字段,仅当合同商品有效时修改 VALIDATE_DAY)
+	String now = getCurrDate();
+	if(compare(VALIDATE_END,now)==-1 && compare(now,VALIDATE_DAY)==-1) {
+		Qbq3Form form1 = context.getDBM().findByPK("T_WM_PRO", PRODUCTID, context);
+		form1.set("STATUS","0");
+		//form1.set("SUPP_CODE",form.get("SUPP_CODE"));//更新供应商自有货号
+		form1.set("ZDKC",form.get("ZDKC"));
+		context.getDBM().update("T_WM_PRO",form1,context);
+		//String sql1 = "update T_WM_PRO set STATUS=0, ZDKC="+form.get("ZDKC")+" where ID="+form.get("PRODUCTID");
+		//dbm.executeUpdate(sql1,null);
+	}
+}
+check();

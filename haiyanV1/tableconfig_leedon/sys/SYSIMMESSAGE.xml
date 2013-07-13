@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Haiyan xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../haiyan.xsd">
+	<table name="SYSIMMESSAGE" description="消息">
+		<id name="ID" javaType="string"/>
+		<field name="NAME" description="标题" javaType="string">
+			<component type="text" colspan="3"/>
+		</field>
+		<field name="MEMO" description="内容" javaType="string" length="250">
+			<component type="textArea" url="#" colspan="3" style="width:100%;height:200;"/>
+			<queryCondition type="none"/>
+			<listColumn width="200" height="20" nowrap="true"/>
+		</field>
+		<field name="URL" description="链接" javaType="string">
+			<component type="text" style="color:red;width:300" url="@F@" urlField="URL" colspan="3"/>
+			<queryCondition type="none"/>
+		</field>
+		<field name="CFILE" description="附件" javaType="string">
+			<component type="file" url="#"/>
+			<queryCondition type="none"/>
+		</field>
+		<field name="ROLEID" description="接受组" javaType="string">
+			<component type="richSelect" className="haiyan.component.PagingComboboxComponent" quickQueryConditionField="NAME,CODE" referenceTable="SYSROLE" referenceField="ID" displayReferenceField="NAME" url="#"/>
+		</field>
+		<field name="DEPTID" description="接受部门" javaType="string">
+			<component type="richSelect" className="haiyan.component.PagingComboboxComponent" quickQueryConditionField="NAME,CODE" referenceTable="SYSORGA" referenceField="ID" displayReferenceField="NAME" url="#"/>
+		</field>
+		<field name="USERID" description="接受人" javaType="string">
+			<component type="richSelect" className="haiyan.component.PagingComboboxComponent" quickQueryConditionField="NAME,CODE" referenceTable="SYSOPERATOR" referenceField="ID" displayReferenceField="NAME" url="#"/>
+		</field>
+		<field name="DEALLEVEL" description="处理级别" javaType="string">
+			<component type="dropdown">
+				<option displayName="暂缓" value="0"/>
+				<option displayName="普通" value="1"/>
+				<option displayName="紧急" value="2"/>
+			</component>
+		</field>
+		<field name="TYPE" description="来源分类" javaType="string">
+			<!--
+			<component type="text" url="#"/>
+			-->
+			<component type="dropdown" readOnly="true">
+				<option displayName="系统内" value="0"/>
+				<option displayName="MESSAGE" value="1"/>
+				<option displayName="EMAIL" value="2"/>
+				<option displayName="短信" value="2"/>
+			</component>
+		</field>
+		<field name="USED" description="是否已阅读" javaType="string" defaultValue="0">
+			<component type="dropdown">
+				<option displayName="未阅读" value="0"/>
+				<option displayName="已阅读" value="1"/>
+			</component>
+		</field>
+		<field name="SENDED" description="是否已发送" javaType="string" defaultValue="0">
+			<component type="hidden" readOnly="true">
+				<option displayName="未发送" value="0"/>
+				<option displayName="已发送" value="1"/>
+			</component>
+		</field>
+		<field name="SENDMAIL" description="是否发送邮件" javaType="string" defaultValue="0">
+			<component type="dropdown">
+				<option displayName="不发送" value="0"/>
+				<option displayName="发送" value="1"/>
+			</component>
+		</field>
+		<field name="CODE" description="助记码" javaType="string">
+			<component type="hidden" readOnly="true" url="#"/>
+		</field>
+		<field name="CREATETIME" description="发出消息时间" javaType="date" dataStyle="yyyy-MM-dd hh:mm:ss">
+			<component type="text" url="#" readOnly="true"/>
+		</field>
+		<field name="SENDERID" description="发送用户" javaType="string">
+			<component type="richSelect" readOnly="true" url="#" referenceTable="SYSOPERATOR" referenceField="ID" displayReferenceField="NAME"/>
+		</field>
+		<!--查询过滤器。-->
+		<queryFilter>
+			<pluggedFilter>
+			    order by t_1.CREATETIME desc
+			</pluggedFilter>
+			<!--pluggedFilter className="haiyan.filter.RoleFilter" methodName="byRoleID"/-->
+			<!--
+			<pluggedFilter>
+			    and (t_1.SENDERID=@USERID@ or @USERID@=1)
+			</pluggedFilter>
+			-->
+			<!-- -->
+		</queryFilter>
+		<!-- -->
+		<pluginInterceptor className="haiyan.interceptor.SaveInterceptor" methodName="complete" pluginName="save" type="after"/>
+		<pluginInterceptor className="haiyan.interceptor.DeleteInterceptor" methodName="complete" pluginName="delete" type="after"/>
+		<pluginInterceptor className="haiyan.interceptor.SaveInterceptor" methodName="setCreateTime" pluginName="save" parameter="CREATETIME,yyyy-MM-dd hh:mm:ss"/>
+		<pluginInterceptor className="haiyan.interceptor.SaveInterceptor" methodName="setCreateUser" pluginName="save" parameter="SENDERID"/>
+		<!--
+		<pluginInterceptor className="haiyan.interceptor.DroolsInterceptor" methodName="run" parameter="email/EMAIL.drl" pluginName="send" type="before"/>
+		<pluginOperation name="send" className="haiyan.plugin.CommonAutoSavePlugin" oprName="发送" hostPage="edit"/>
+		<Order needOrder="true"/>-->
+		<Operation queryPageDelete="false" queryPageAdd="false" saveAndAddCopy="false" saveAndAdd="false"/>
+	</table>
+</Haiyan>

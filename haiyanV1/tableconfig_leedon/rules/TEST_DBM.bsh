@@ -1,0 +1,25 @@
+System.out.print(111222333);
+//System.out.println();
+void testUpdate() {
+	Qbq3Form form = context.getDBM().findByPK(table, "2", context);
+	// form.set("ID","2");
+	form.set("CODE","lalala:"+Math.random());
+	context.getDBM().update(table, form, context, null);
+}
+void testInsertBatch() {
+	ArrayList list = new ArrayList();
+	for (int i=0;i<3;i++) {
+		//String newID = context.getNextID(table);
+		//System.out.println(newID);
+		Qbq3Form form = new MapForm();
+		form.set("CODE", "lalala:"+i);
+		list.add(form);
+	}
+	//Table t = ConfigUtil.getTable("SSS")
+	context.getDBM().insert(t, form, context, null);
+	
+	//context.setDSN("ddd");
+	//context.getDBM().find():
+}
+testUpdate();
+testInsertBatch();

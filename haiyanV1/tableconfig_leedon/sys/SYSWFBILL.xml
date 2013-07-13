@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Haiyan xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../haiyan.xsd">
+	<table name="SYSWFBILL" description="我的审批草稿" colspan="6">
+		<id name="ID" javaType="string">
+			<component type="hidden" url="@"/>
+		</id>
+		<field name="CODE" description="文件号" javaType="string" nullAllowed="false">
+			<component type="text"/>
+		</field>
+		<field name="NAME" description="文件简述" javaType="string" nullAllowed="false">
+			<component type="text"/>
+		</field>
+		<!-- 此ID和工作流模板ID相同 -->
+		<field name="STATUS" description="状态" javaType="string" defaultValue="chugao">
+			<component type="dropdown" readOnly="true">
+				<option displayName="初稿" value="chugao"/>
+				<option displayName="流转中" value="liuzhuan"/>
+				<option displayName="完成" value="wancheng"/>
+				<option displayName="挂起" value="guaqi"/>
+				<option displayName="作废" value="zuofei"/>
+			</component>
+		</field>
+		<field name="PROC_INSTANCE_ID" description="流程实例" javaType="string">
+			<component type="readOnlyText"/>
+		</field>
+		<field name="WFMODULEID" description="所走流程" javaType="string" nullAllowed="false">
+			<component type="richSelect" referenceTable="SYSWFMODULE" referenceField="ID" displayReferenceField="NAME" associatedFields="BILLNAME,BILLCOMMENTS,WFCODE,WFBILLCLS" action="Set(BILLID,{})"/><!-- BILLID, -->
+		</field>
+		<field name="WFCODE" description="流程模板" javaType="string" nullAllowed="false">
+			<component type="readOnlyText" displayReferenceField="CODE"/>
+		</field>
+		<field name="WFBILLCLS" description="审批单类" javaType="string" nullAllowed="false">
+			<component type="hidden" displayReferenceField="WFBILLCLS"/>
+		</field>
+		<field name="BILLCOMMENTS" description="填写表单" javaType="string" nullAllowed="false">
+			<component type="readOnlyText" displayReferenceField="BILLCOMMENTS"/>
+			<listColumn noquery="true" nowrap="true"/>
+		</field>
+		<field name="BILLNAME" description="表单名" javaType="string" nullAllowed="false">
+			<component type="hidden" displayReferenceField="BILLNAME"/>
+			<listColumn noquery="true" nowrap="true"/>
+		</field>
+		<field name="BILLID" description="表单ID" javaType="string" nullAllowed="false" defaultValue="-1">
+			<component type="readOnlyText" colspan="3"/><!-- displayReferenceField="BILLID" -->
+			<listColumn noquery="false" nowrap="true"/>
+		</field>
+		<field name="TYPE" description="TYPE" javaType="string" defaultValue="manual">
+			<component type="hidden" colspan="3" displayReferenceField="BILLID"/>
+			<listColumn noquery="true" nowrap="true"/>
+		</field>
+		<field name="CREATE_USER_ID" javaType="string" description="创建人">
+			<component type="richSelect" referenceTable="SYSOPERATOR" referenceField="ID" displayReferenceField="NAME" readOnly="true"/>
+		</field>
+		<field name="CREATE_TIME" javaType="date" dataStyle="yyyy-MM-dd HH:mm:ss" description="创建时间">
+			<component type="dateTime" readOnly="true"/>
+		</field>
+		<!--
+		<field name="DETAILS" description="业务单据" displayOnly="true" javaType="string" lazyLoad="false">
+			<component type="userDefined" readOnly="false" style="width:100%;height:450;" colspan="3" className="haiyan.component.DetailFrameComponent" parameter="edit.do?__opr_data={0}&amp;__one2oneID={1},BILLNAME,ID"/>
+			<queryCondition type="equal"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		-->
+		<!-- BILLNAME &amp;__model_id={1} -->
+		<!--
+		<PageView showField="*" title="表单" hostPage="edit" type="userdefined" className="haiyan.pageview.PageView" methodName="editPageView" parameter="edit.do?__opr_data={0}&amp;ID={1},BILLNAME,ID" img="leaf"/>
+-->
+		<!--
+		<PageView showField="*" title="正文" hostPage="edit" type="userdefined" className="haiyan.pageview.PageView" methodName="editPageView" parameter="doc_main.do?__opr_data={0}&amp;__moduleID={1}&amp;ID={2},BILLNAME,WFMODULEID,ID" img="page"/>
+-->
+		<PageView showField="*" title="文件草稿" type="querybyform"/>
+		<PageView showField="*" title="待办文件" hostPage="query" type="userdefined" className="haiyan.pageview.PageView" methodName="queryPageView" parameter="wf_listMyTask.do?" img="page"/>
+		<PageView showField="*" title="经办文件" hostPage="query" type="userdefined" className="haiyan.pageview.PageView" methodName="queryPageView" parameter="wf_listHisTask.do?" img="page"/>
+		<!-- or t_1.ACCEPT_USER_ID='@USERID@'-->
+		<queryFilter>
+			<pluggedFilter><![CDATA[and t_1.CREATE_USER_ID='@USERID@']]></pluggedFilter>
+		</queryFilter>
+		<!-- 编辑界面 
+			/*if (item.name=='lookupwf') {
+				window.open('wf_design.jsp?__moduleID='+$('WFMODULEID').value+'&__tableName='+$('BILLNAME').value);	
+				window.open('plugin.do?__opr_data=SYSWFBILL&__pluginName=lookupwf&WFMODULEID='+$('WFMODULEID').value+'&ID='+$('ID').value);	
+				addTab('plugin.do?__opr_data=SYSWFBILL&__pluginName=lookupwf&WFMODULEID='+$('WFMODULEID').value+'&ID='+$('ID').value,'流程图','lookupwf_iframe','todo');
+				addTab('plugin.do?&__opr_data=SYSWFBILL&__pluginName=lookupJbpm&WFMODULEID='+$('WFMODULEID').value+'&ID='+$('ID').value,'流程图','lookupwf_iframe','todo');
+				return false;
+			} else if (item.name=='lookupbill') {
+				window.open('ext_designbill.jsp?__headID='+$('BILLID').value+'&__opr_data='+$('BILLNAME').value);				
+				return false;
+			}*/	-->
+		<javascript hostPage="edit"><![CDATA[
+		function interceptorOnItemClick(item, checked) {
+			var billName = Hy.getValue('BILLNAME');
+			if (item.name=='lookupBill') {//查看表单设计
+				if (!Hy.get('BILLID'))
+					return;
+				showWfDetailFrame('ext_designbill.jsp?&__opr_data='+billName+'&__headID='+Hy.getValue('BILLID'),billName,billName);
+				return false;
+			} else if (item.name=='lookupJbpm') {//查看Jbpm流程图
+				if (!Hy.get('ID'))
+					return;
+				var url = 'plugin.do?&__opr_data=SYSWFBILL&__pluginName=lookupJbpm&WFMODULEID='+Hy.getValue('WFMODULEID')+'&ID='+Hy.getValue('ID');
+				new Ext.Window({autoDestroy:true,resizable:false,width:730,height:560,html:'<iframe style="width:100%;height:100%;" src="'+url+'" />'}).show();
+				//showWfDetailFrame('plugin.do?&__opr_data=SYSWFBILL&__pluginName=lookupJbpm&WFMODULEID='+Hy.getValue('WFMODULEID')+'&ID='+Hy.getValue('ID'),billName,billName);
+				return false;
+			} else if (item.name=='editBill') {//编辑单据
+				if (!Hy.get('ID') || !Hy.get('BILLID'))
+					return;
+				if (Hy.isEmpty(Hy.getValue('BILLID'))||Hy.getValue('BILLID')=='-1')
+					showWfDetailFrame('new.do?&__opr_data='+billName+'&WFBILLID='+Hy.getValue('ID'),billName,billName);
+				else
+					showWfDetailFrame('edit.do?&__opr_data='+billName+'&ID='+Hy.getValue('BILLID'),billName,billName);
+				return false;
+			} else if (item.name=='editDoc') {//编辑正文
+				if (!Hy.get('ID'))
+					return;
+				showWfDetailFrame('doc_main.do?&__opr_data=SYSWFBILL&ID='+Hy.getValue('ID')+'&__moduleID='+Hy.getValue('WFMODULEID'),billName,billName);
+				return false;
+			}
+		}
+		]]></javascript>
+		<!-- 列表编辑或快速编辑 -->
+		<javascript hostPage="ids"><![CDATA[
+		function interceptorOnItemClick(item, checked) {
+			var billName = Hy.getValue('BILLNAME');
+			if (item.name=='lookupBill') {//查看表单设计
+				if (!Hy.get('BILLID'))
+					return;
+				showWfDetailFrame('ext_designbill.jsp?&__opr_data='+billName+'&__headID='+Hy.getValue('BILLID'),billName,billName);
+				return false;
+			} else if (item.name=='lookupJbpm') {//查看Jbpm流程图
+				if (!Hy.get('ID'))
+					return false;
+				var url = 'plugin.do?&__opr_data=SYSWFBILL&__pluginName=lookupJbpm&WFMODULEID='+Hy.getValue('WFMODULEID')+'&ID='+Hy.getValue('ID');
+				new Ext.Window({autoDestroy:true,resizable:false,width:730,height:560,html:'<iframe style="width:100%;height:100%;" src="'+url+'" />'}).show();
+				//showWfDetailFrame('plugin.do?&__opr_data=SYSWFBILL&__pluginName=lookupJbpm&WFMODULEID='+Hy.getValue('WFMODULEID')+'&ID='+Hy.getValue('ID'),billName,billName);
+				return false;
+			} else if (item.name=='editBill') {//编辑单据
+				if (!Hy.get('ID') || !Hy.get('BILLID'))
+					return false;
+				if (Hy.isEmpty(Hy.getValue('BILLID'))||Hy.getValue('BILLID')=='-1')
+					showWfDetailFrame('new.do?&__opr_data='+billName+'&WFBILLID='+Hy.getValue('ID'),billName,billName);
+				else
+					showWfDetailFrame('edit.do?&__opr_data='+billName+'&ID='+Hy.getValue('BILLID'),billName,billName);
+				return false;
+			} else if (item.name=='editDoc') {//编辑正文
+				if (!Hy.get('ID'))
+					return;
+				showWfDetailFrame('doc_main.do?&__opr_data=SYSWFBILL&ID='+Hy.getCmp('ID')+'&__moduleID='+Hy.getValue('WFMODULEID'),billName,billName);
+				return false;
+			}
+		}
+		]]></javascript>
+		<!-- save -->
+		<pluginInterceptor methodName="exp" parameter="setCreateTime(CREATE_TIME,{yyyy-MM-dd HH:mm:ss})+setCreateUser(CREATE_USER_ID)" pluginName="save" type="before"/>
+		<!-- start -->
+		<pluginInterceptor methodName="exp" parameter="if(isEmpty(DBFindByPK(GetValue(BILLNAME),GetValue(BILLID))),Warning({没有找到对应的业务单据}),true)" pluginName="startJbpm" type="before"/>
+		<pluginInterceptor className="haiyan.interceptor.WfInterceptor" methodName="startJbpm" pluginName="startJbpm" type="before"/>
+		<pluginInterceptor methodName="exp" parameter="DBUpdate(GetValue(BILLNAME),SetValue(DBFindByPK(GetValue(BILLNAME),GetValue(BILLID)),STATUS,{2}))" pluginName="startJbpm" type="after"/>
+		<!-- lookup -->
+		<pluginInterceptor className="haiyan.interceptor.WfInterceptor" methodName="lookupJbpm" pluginName="lookupJbpm" type="before"/>
+		<!--
+		<pluginInterceptor methodName="bsh" parameter="" pluginName="startJbpm" type="before">
+			throw new Warning(&quot;中断测试&quot;);
+		</pluginInterceptor>
+		-->
+		<!-- -->
+		<!--<pluginOperation name="pass" oprName="启动原流程" hostPage="edit" tblevel="1"/>-->
+		<pluginOperation name="editBill" oprName="编辑单据" hostPage="edit" tblevel="1"/>
+		<pluginOperation name="editDoc" oprName="编辑正文" hostPage="edit" tblevel="1"/>
+		<pluginOperation name="startJbpm" oprName="启动流程" hostPage="edit" tblevel="1"/>
+		<pluginOperation name="lookupJbpm" oprName="查看流程" hostPage="edit" tblevel="1"/>
+		<!--
+		<pluginOperation name="lookupBill" className="haiyan.plugin.CommonPlugin" oprName="查看表单" accessKey="B" hostPage="edit" tblevel="1"/>
+		-->
+		<!--<Operation inWorkFlow="true"/>-->
+		<doc>
+			<help>注：必须先填写审批单,然后填写业务单进行后面的流转。</help>
+		</doc>
+	</table>
+</Haiyan>

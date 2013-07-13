@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Haiyan xsi:noNamespaceSchemaLocation="../../haiyan.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<table description="面试信息" name="T_CRM_MIANSHI" realTable="T_CRM_MIANSHI" colspan="8">
+		<id name="ID" javaType="string">
+			<component type="hidden" url="@"/>
+		</id>
+		<field name="CONFLICT" javaType="string" defaultValue="0" description="冲突">
+			<component type="dropdown" readOnly="true">
+				<option displayName="有" value="1"/>
+				<option displayName="无" value="0"/>
+			</component>
+			<listColumn width="100"/>
+		</field>
+		<field name="CONFLICTIDS" javaType="string" defaultValue="0" description="冲突IDS" length="255">
+			<component type="hidden" readOnly="true"/>
+		</field>
+		<field name="AVAILABLE" javaType="string" description="是否还有效" defaultValue="1">
+			<component type="dropdown" readOnly="true">
+				<option displayName="有效" value="1"/>
+				<option displayName="无效" value="0"/>
+			</component>
+		</field>
+		<field name="CUSTOMER_ID" javaType="string" description="联系客户" nullAllowed="false">
+			<component type="richSelect" referenceTable="T_CRM_CUSTOMER_QY" referenceField="ID" displayReferenceField="NAME,CONTACT_PERSON,PHONE" readOnly="false" associatedFields="LXTSJG,JQ"/>
+			<!-- action="changeFilter(comboField_ACTIVITY_ID,[\'CUSTOMER_ID\'],[comboField_CUSTOMER_ID]);" -->
+			<listColumn noquery="false" width="200"/>
+		</field>
+		<field name="LXTSJG" javaType="bigDecimal" description="联系天数间隔">
+			<component type="text" readOnly="true" displayReferenceField="LXTSJG"/>
+			<listColumn noquery="true" nowrap="false"/>
+		</field>
+		<field name="JQ" javaType="string" description="需要精确地址">
+			<component type="text" readOnly="true" displayReferenceField="JQ"/>
+			<listColumn noquery="true" nowrap="false"/>
+		</field>
+		<!--
+			<field name="MS_ADDRESS" javaType="string" description="面试地址" nullAllowed="false">
+				<component type="text"/>
+				<queryCondition type="blurMatching"/>
+			</field>
+			-->
+		<field name="CONTACT_PERSON" javaType="string" description="联系人" nullAllowed="false">
+			<component type="text"/>
+			<queryCondition type="none"/>
+			<listColumn noquery="true" nowrap="false"/>
+		</field>
+		<field name="PHONE" javaType="string" description="联系电话" nullAllowed="false">
+			<component type="text" validatorText="(格式:086-0XX-XXXXXXXX)"/>
+			<queryCondition type="none"/>
+			<listColumn noquery="true" nowrap="false"/>
+		</field>
+		<field name="MS_DATE" javaType="date" description="面试时间" dataStyle="yyyy-MM-dd HH:mm:ss" nullAllowed="false">
+			<component type="dateTime" colspan="3"/>
+			<queryCondition type="region"/>
+		</field>
+		<field name="CITY_ID" javaType="string" description="城市" nullAllowed="false">
+			<component type="richSelect" referenceTable="T_DIC_COMMON_CITY" referenceField="ID" displayReferenceField="NAME" quickQueryConditionField="NAME,CODE"/>
+			<!-- associatedFields="PROVINCE_NAME" -->
+			<listColumn noquery="false" nowrap="true"/>
+		</field>
+		<field name="MS_ADDR_QU" javaType="string" description="面试地址-区" nullAllowed="false">
+			<component type="text"/>
+			<queryCondition type="blurMatching"/>
+		</field>
+		<field name="MS_ADDR_LU" javaType="string" description="面试地址-路" nullAllowed="false">
+			<component type="text"/>
+			<queryCondition type="blurMatching"/>
+		</field>
+		<field name="MS_ADDR_LO" javaType="string" description="面试地址-号/弄" nullAllowed="false">
+			<component type="text" validator="^\d+$" validatorText="必须为数字"/>
+			<queryCondition type="blurMatching"/>
+		</field>
+		<field name="MS_ADDR_CE" javaType="string" description="面试地址-号楼">
+			<component type="text"/>
+			<queryCondition type="blurMatching"/>
+		</field>
+		<field name="MS_ADDR_SH" javaType="string" description="面试地址-室">
+			<component type="text" colspan="7"/>
+			<queryCondition type="blurMatching"/>
+		</field>
+		<field name="MS_MODELS" javaType="string" description="面试模特" nullAllowed="false" length="255">
+			<component type="textArea" colspan="7" style="width:95%;height:50;"/>
+			<queryCondition type="blurMatching"/>
+			<listColumn noquery="true"/>
+		</field>
+		<field name="MS_MEMO" javaType="string" description="面试内容" nullAllowed="false" length="255">
+			<component type="textArea" colspan="7" style="width:95%;height:50;"/>
+			<queryCondition type="none"/>
+			<listColumn noquery="true"/>
+		</field>
+		<field name="USER_ID" description="经纪人" javaType="string" style="color:#000099;size:12;font-weight:bold;">
+			<component type="richSelect" colspan="3" referenceTable="SYSOPERATOR_VIEW" displayReferenceField="NAME" referenceField="ID" quickQueryConditionField="NAME" readOnly="true"/>
+			<listColumn noquery="false" nowrap="true"/>
+		</field>
+		<field name="ACTIVITY_ID" description="相关活动" javaType="string" displayOnly="false">
+			<component type="richSelect" referenceTable="T_CRM_ACTIVITY" referenceField="ID" displayReferenceField="NAME"/>
+		</field>
+		<!--
+		<queryFilter>
+			<pluggedFilter methodName="exp" parameter=" {and t_1.FINISH_DATE is null or t_1.FINISH_DATE&lt;}&amp;SQLCurrDate() "/>
+		</queryFilter>
+		-->
+		<!--
+		<queryFilter>
+			<pluggedFilter methodName="exp" parameter="If(InRole({manager},{boss}),{},{ and t_1.USER_ID='}&amp;GetUser({ID})&amp;{'})"/>
+		</queryFilter>
+		-->
+		<!-- -->
+		<javascript hostPage="ids" src="project/crm/MIANSHI_IDS.js"><![CDATA[
+			remoteValidate = remoteValidate.createInterceptor(function() {
+				try {
+					if(Hy.getValue('JQ')=='1') {
+						if (Hy.getValue('MS_ADDR_CE')=='' || Hy.getValue('MS_ADDR_SH')=='') {
+							alert('面试地址的 楼 和 室 必须填写');
+							return false;
+						}
+					}
+				}catch(E) {
+					alert(E.message);
+					return false;
+				}
+				return true;
+			});		
+		]]></javascript>
+		<javascript hostPage="edit" src="project/crm/MIANSHI_EDIT.js"><![CDATA[
+		]]></javascript>
+		<!-- -->
+		<pluginInterceptor methodName="exp" pluginName="save" parameter="
+			If(IsUser(USER_ID),true,Warning({你无权修改此记录}));
+			CheckSame(T_CRM_MIANSHI,{CITY_ID,MS_ADDR_QU,MS_ADDR_LU,MS_ADDR_LO,MS_ADDR_CE,MS_ADDR_SH});
+			Set(USER_ID,GetUser(ID));
+		"/>
+		<pluginInterceptor methodName="exp" pluginName="delete" parameter="
+			If(Or(InRole({manager},{boss}),IsUser(USER_ID)),true,warning({你无权删除这些记录}))
+		"/>
+		<pluginInterceptor methodName="exp" pluginName="edit" parameter="
+			DBFindByPK(T_CRM_ACTIVITY,GetPara(ACTIVITY_ID));
+			Set(ACTIVITY_ID,Get(GetVar(0),ID), __ACTIVITY_ID__NAME,Get(GetVar(0),NAME), CUSTOMER_ID,Get(GetVar(0),CUSTOMER_ID), __CUSTOMER_ID__NAME,Get(GetVar(0), __CUSTOMER_ID__NAME), USER_ID,GetUser(ID));
+		"/>
+		<!-- -->
+		<!-- 
+			<pluginInterceptor className="haiyan.model.Interceptor" methodName="affrimModel" pluginName="affirm"/>
+			<pluginOperation name="affirm" oprName="确认模特" accessKey="C" hostPage="query" tblevel="1"/>
+			-->
+		<!-- -->
+		<Operation queryPageAdd="false" queryPageDelete="false" save="false" saveAndAdd="false" saveAndAddCopy="false" customizeColumns="true"/>
+	</table>
+</Haiyan>

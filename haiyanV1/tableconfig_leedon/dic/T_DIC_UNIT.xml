@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- edited with XMLSPY v2004 rel. 2 U (http://www.xmlspy.com) by psa (boke) -->
+
+<Haiyan xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../haiyan.xsd">
+	<table name="T_DIC_UNIT" description="外部单位">
+		<id name="ID" javaType="string"/>
+		<field name="CODE" description="编码" javaType="string">
+			<component type="readOnlyText"/>
+		</field>
+		<field name="NAME" description="名称" javaType="string">
+			<component type="text"/>
+		</field>
+		<field name="SHORTNAME" description="简称" javaType="string">
+			<component type="text"/>
+		</field>
+		<field name="ORGATYPE" description="机构类型" javaType="string" defaultValue="1">
+			<component type="dropdown">
+				<option displayName="客户" value="1"/>
+				<option displayName="供应商" value="2"/>
+			</component>
+		</field>
+		<field name="PID" description="上级机构名称" javaType="string">
+			<component type="richSelect" referenceTable="T_DIC_UNIT" displayReferenceField="NAME"/>
+		</field>
+		<field name="USED" description="是否使用" javaType="string" defaultValue="1">
+			<component type="dropdown" >
+				<option displayName="是" value="1"/>
+				<option displayName="否" value="0"/>
+			</component>
+		</field>
+		<field name="SHOWED" description="是否隐藏" javaType="string" defaultValue="0">
+			<component type="dropdown" >
+				<option displayName="是" value="1"/>
+				<option displayName="否" value="0"/>
+			</component>
+		</field>
+		<field name="BANK" description="银行" javaType="string">
+			<component type="text"/>
+		</field>
+		<field name="BANKACCOUNT" description="银行帐号" javaType="string">
+			<component type="text"/>
+		</field>
+		<field name="ADDRESS" description="地址" javaType="string">
+			<component type="text"/>
+		</field>
+		<field name="DWCODE" description="对应单位代码" javaType="string">
+			<component type="text"/>
+		</field>
+		<field name="ORGAUNITID" description="单位" javaType="string">
+			<component type="richSelect" readOnly="true" referenceTable="SYSORGA" displayReferenceField="NAME"/>
+		</field>
+		<queryFilter>
+			<pluggedFilter className="finance.filter.FinanceFilter" methodName="getFilterOrgaUnitSQL"/>
+		</queryFilter>
+		<pluginInterceptor className="haiyan.interceptor.SaveInterceptor" methodName="complete" pluginName="save" type="after"/>
+		<pluginInterceptor className="haiyan.interceptor.DeleteInterceptor" methodName="complete" pluginName="delete" type="after"/>
+		<pluginInterceptor className="haiyan.interceptor.SaveInterceptor" methodName="setCreateCode" parameter="CODE" pluginName="save"/>
+		<pluginInterceptor pluginName="edit" className="flomistwo.interceptor.DefaultValueInterceptor" methodName="getCurrentUnit"/>
+		<pluginOperation name="importzwdw" className="flomistwo.plugin.ImportZWDW" oprName="importzwdw"/>
+	</table>
+</Haiyan>
+

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Haiyan xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../haiyan.xsd">
+	<table name="TEST_DESIGNER" description="TEST_DESIGNER" realTable="TEST_DESIGNER" modelcode="test">
+		<!-- colspan="4"  -->
+		<id name="ID" description="ID" javaType="string">
+			<component type="hidden" readOnly="false"/>
+			<!-- url="" module url="@" myweta url="#" meta url="$" open -->
+		</id>
+		<field name="MONEY" description="MONEY" displayOnly="false" javaType="bigDecimal" lazyLoad="false">
+			<!-- dataStyle="'###,###,###,###.00'" -->
+			<component type="text" readOnly="false" numberGrouping="true" maxFractionDigit="18" minFractionDigit="2" colspan="5"/>
+			<queryCondition type="equal"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="NAME" description="NAME" displayOnly="false" javaType="string" lazyLoad="false">
+			<component type="text" readOnly="false" colspan="5"/>
+			<queryCondition type="equal"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="CODE" description="CODE" displayOnly="false" javaType="string" lazyLoad="false">
+			<component type="text" readOnly="false" colspan="5"/>
+			<queryCondition type="equal"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="STATUS" javaType="string" description="状态" defaultValue="1">
+			<component type="dropdown" readOnly="false" colspan="5">
+				<option displayName="初稿" value="1"/>
+				<option displayName="在批" value="2"/>
+				<option displayName="结束" value="3"/>
+			</component>
+		</field>
+		<PageView className="haiyan.pageview.PageView" methodName="editPageView" parameter="http://www.google.com" title="google" showField="*" img="refresh" hostPage="edit" type="userdefined"/>
+		<queryFilter>
+			<pluggedFilter> and 1=1 </pluggedFilter>
+		</queryFilter>
+		<role name="admin">
+			<readOnlyComponent name="CODE"/>
+		</role>
+		<!-- -->
+		<pluginInterceptor methodName="exp" parameter="if(GetInt(STATUS)&gt;1,ReadonlyButtons(saveAdd,saveAddCopy),true)" pluginName="edit" type="after"/>
+		<pluginInterceptor methodName="exp" parameter="if(GetInt(STATUS)&lt;3,ReadonlyButtons(test,test2),true)" pluginName="edit" type="after"/>
+		<pluginInterceptor methodName="exp" parameter="if(GetInt(STATUS)=2,ReadonlyTable(NAME,MONEY),true)" pluginName="edit" type="after"/>
+		<!-- -->
+		<pluginOperation oprName="测试exp插件" name="test2" className="haiyan.plugin.ExpPlugin" hostPage="edit" tblevel="1" img="other">Warning(&quot;测试&quot;);</pluginOperation>
+		<pluginOperation oprName="测试计算" name="test" className="haiyan.plugin.ExpPlugin" hostPage="edit" tblevel="1" img="other">DBUpdate(TEST_DESIGNER,SetValue(CODE,RMB(GetDbl(MONEY))))</pluginOperation>
+	</table>
+</Haiyan>

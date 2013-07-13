@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Haiyan xsi:noNamespaceSchemaLocation="../../haiyan.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<table description="客户销售管理" name="T_CRM_SALES" childTable="T_CRM_SALES_DTL">
+		<id name="ID" javaType="string"/>
+		<field name="CODE" javaType="string" description="单据编码">
+			<component type="text" readOnly="true"/>
+		</field>
+		<field name="NAME" javaType="string" description="单据标题">
+			<component type="text"/>
+		</field>
+		<field name="CUSTOMER_ID" javaType="string" description="客户">
+			<component type="richSelect" referenceTable="T_CRM_CUSTOMER_VIEW" referenceField="ID" displayReferenceField="NAME"/>
+		</field>
+		<field name="AGENT_ID" javaType="string" description="渠道">
+			<component type="richSelect" referenceTable="T_CRM_AGENT" referenceField="ID" displayReferenceField="NAME"/>
+		</field>
+		<field name="USER_ID" javaType="string" description="业务员">
+			<component type="richSelect" referenceTable="SYSOPERATOR_VIEW" referenceField="ID" displayReferenceField="NAME"/>
+		</field>
+		<field name="PROJECT_ID" javaType="string" description="相关项目">
+			<component type="richSelect" referenceTable="T_CRM_PROJECT" referenceField="ID" displayReferenceField="NAME"/>
+			<listColumn noquery="true"/>
+		</field>
+		<field name="CONTRACT_ID" javaType="string" description="相关合同">
+			<component type="richSelect" referenceTable="T_CRM_CONTRACT" referenceField="ID" displayReferenceField="NAME"/>
+			<listColumn noquery="true"/>
+		</field>
+		<field name="SALES_DATE" javaType="date" dataStyle="yyyy-MM-dd" description="销售日期">
+			<component type="date"/>
+		</field>
+		<field name="TOTAL_MONEY" javaType="string" description="销售金额" sumable="true">
+			<component type="text" maxFractionDigit="2" minFractionDigit="2" numberGrouping="true" style="align:right" readOnly="true"/>
+			<!--
+            	subQuerySQL="select SUM(MONEY) from T_CRM_SALES_DTL where HEADID=t_1.ID"
+            	-->
+			<queryCondition type="none"/>
+		</field>
+		<field name="ACTUAL_MONEY" javaType="string" description="实收金额" sumable="true">
+			<component type="text" maxFractionDigit="2" minFractionDigit="2" numberGrouping="true" style="align:right"/>
+			<queryCondition type="none"/>
+		</field>
+		<field name="REMARK" javaType="string" description="备注">
+			<component type="textArea" colspan="3" style="width:560"/>
+			<queryCondition type="none"/>
+			<listColumn noquery="true"/>
+		</field>
+		<field name="CONFIRM_STATUS" javaType="string" defaultValue="0" description="审核状态">
+			<component type="dropdown" readOnly="true">
+				<option displayName="待审核" value="0"/>
+				<option displayName="已审核" value="1"/>
+			</component>
+		</field>
+		<field name="CONFIRM_USER_ID" javaType="string" description="审核人">
+			<component type="richSelect" referenceTable="SYSOPERATOR_VIEW" referenceField="ID" displayReferenceField="NAME" readOnly="true"/>
+			<listColumn noquery="true"/>
+		</field>
+		<field name="CONFIRM_TIME" javaType="date" description="审核时间" dataStyle="yyyy-MM-dd hh:mm:ss">
+			<component type="date" readOnly="true"/>
+			<queryCondition type="none"/>
+			<listColumn noquery="true"/>
+		</field>
+		<field name="CREATE_USER_ID" javaType="string" description="创建人">
+			<component type="richSelect" referenceTable="SYSOPERATOR_VIEW" referenceField="ID" displayReferenceField="NAME" readOnly="true"/>
+			<queryCondition type="none"/>
+			<listColumn noquery="true"/>
+		</field>
+		<field name="CREATE_TIME" javaType="date" dataStyle="yyyy-MM-dd hh:mm:ss" description="创建时间">
+			<component type="date" readOnly="true"/>
+			<queryCondition type="none"/>
+			<listColumn noquery="true"/>
+		</field>
+		<queryFilter>
+			<pluggedFilter>
+               and 
+                   (
+                   t_1.CREATE_USER_ID=@USERID@ 
+                   or 
+                   t_1.USER_ID=@USERID@ 
+                   or 
+                   (t_1.CREATE_USER_ID in (select ID from SYSOPERATOR where ORGAID=@DEPTID@) and 6 in (@ROLEID@)) 
+                   or 
+                   1 in (@ROLEID@) 
+                   ) 
+	       </pluggedFilter>
+		</queryFilter>
+		<!--
+		<pluginInterceptor className="hyiis.interceptor.SaveInterceptor" methodName="check" pluginName="save" parameter="CONFIRM_STATUS,1,已审核的销售单：内容不能修改,NAME,CUSTOMER_ID,USER_ID,PROJECT_ID,CONTRACT_ID,SALES_DATE,ACTUAL_MONEY,REMARK"/>
+		-->
+		<!-- -->
+		<pluginInterceptor methodName="confirm" pluginName="confirm" parameter="客户销售"/>
+		<pluginInterceptor methodName="setCreateCode" parameter="CODE,536" pluginName="save"/>
+		<pluginInterceptor methodName="setCreateUser" parameter="USER_ID" pluginName="edit"/>
+		<pluginInterceptor methodName="setCreateUser" parameter="CREATE_USER_ID" pluginName="edit"/>
+		<pluginInterceptor methodName="setCreateTime" parameter="CREATE_TIME,yyyy-MM-dd HH:mm:ss" pluginName="save"/>
+		<!--
+		<pluginInterceptor className="haiyan.interceptor.EditInterceptor" methodName="onlyByMaker" parameter="CREATE_USER_ID" pluginName="save"/>
+		-->
+		<pluginInterceptor methodName="onlyByMaker" parameter="CREATE_USER_ID" pluginName="delete"/>
+		<pluginOperation name="confirm" oprName="审核" accessKey="C" className="haiyan.plugin.CommonAutoSavePlugin" hostPage="edit"/>
+		<Operation saveAndAdd="false" saveAndAddCopy="false"/>
+	</table>
+</Haiyan>

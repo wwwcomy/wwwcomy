@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Haiyan xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../haiyan.xsd">
+	<table name="SYSSTATIONROLEMAP" description="部门-岗位-角色对应表">
+		<id name="ID" javaType="string"/>
+		<field name="STATIONID" description="岗位" javaType="string">
+			<component type="richSelect" className="haiyan.component.PagingComboboxComponent" referenceTable="SYSSTATIONUSERROLE" displayReferenceField="NAME"/>
+		</field>
+		<field name="ROLEID" description="角色" javaType="string">
+			<component type="richSelect" className="haiyan.component.PagingComboboxComponent" referenceTable="SYSROLE" displayReferenceField="NAME"/>
+		</field>
+		<Operation selectedHidden="true"/>
+	</table>
+</Haiyan>

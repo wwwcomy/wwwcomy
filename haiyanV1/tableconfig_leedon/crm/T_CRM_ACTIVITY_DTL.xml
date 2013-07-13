@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Haiyan xsi:noNamespaceSchemaLocation="../../haiyan.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<table description="市场活动管理-参与客户" name="T_CRM_ACTIVITY_DTL">
+		<id name="ID" javaType="string"/>
+		<field name="HEADID" javaType="string" description="市场活动主表ID">
+			<component type="hidden" referenceTable="T_CRM_ACTIVITY" referenceField="ID" displayReferenceField="NAME"/>
+		</field>
+		<field name="CUSTOMER_ID" javaType="string" description="参与客户">
+			<component type="richSelect" referenceTable="T_DIC_ORGA" referenceField="ID" displayReferenceField="NAME"/>
+		</field>
+		<field name="REMARK" javaType="string" description="备注">
+			<component type="textArea" colspan="3" style="width:560"/>
+		</field>
+	</table>
+</Haiyan>

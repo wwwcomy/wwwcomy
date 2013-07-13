@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Haiyan xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../haiyan.xsd">
+	<table name="T_OA_WEEKREPORT" description="工作周报" realTable="T_OA_WEEKREPORT" colspan="2">
+		<id name="ID" description="ID" javaType="string"/>
+		<field name="PLANDATE4" description="计划完成时间4" displayOnly="false" javaType="string" lazyLoad="false">
+			<component type="textArea" readOnly="false"/>
+			<queryCondition type="equal"/>
+		</field>
+		<field name="MEMO" description="备注" displayOnly="false" javaType="string" lazyLoad="false">
+			<component type="textArea" readOnly="false"/>
+			<queryCondition type="equal"/>
+		</field>
+		<field name="PLANSUPPORT" description="需要支持" displayOnly="false" javaType="string" lazyLoad="false">
+			<component type="textArea" readOnly="false"/>
+			<queryCondition type="equal"/>
+		</field>
+		<field name="EVENT2" description="具体事项2" displayOnly="false" javaType="string" lazyLoad="false">
+			<component type="textArea" readOnly="false"/>
+			<queryCondition type="equal"/>
+		</field>
+		<field name="PLAN4" description="计划4" displayOnly="false" javaType="string" lazyLoad="false">
+			<component type="textArea" readOnly="false"/>
+			<queryCondition type="equal"/>
+		</field>
+		<field name="AFFECT4" description="效果总结4" displayOnly="false" javaType="string" lazyLoad="false">
+			<component type="textArea" readOnly="false"/>
+			<queryCondition type="equal"/>
+		</field>
+		<field name="AFFECT3" description="效果总结3" displayOnly="false" javaType="string" lazyLoad="false">
+			<component type="textArea" readOnly="false"/>
+			<queryCondition type="equal"/>
+		</field>
+		<field name="PLAN3" description="计划3" displayOnly="false" javaType="string" lazyLoad="false">
+			<component type="textArea" readOnly="false"/>
+			<queryCondition type="equal"/>
+		</field>
+		<field name="PLAN2" description="计划2" displayOnly="false" javaType="string" lazyLoad="false">
+			<component type="textArea" readOnly="false"/>
+			<queryCondition type="equal"/>
+		</field>
+		<field name="DATE1" description="开始日期" displayOnly="false" javaType="date" lazyLoad="false">
+			<component type="date" readOnly="false"/>
+			<queryCondition type="equal"/>
+		</field>
+		<field name="AFFECT2" description="效果总结2" displayOnly="false" javaType="string" lazyLoad="false">
+			<component type="textArea" readOnly="false"/>
+			<queryCondition type="equal"/>
+		</field>
+		<field name="CREATE_USER_ID" description="填写人" displayOnly="false" javaType="string" lazyLoad="false">
+			<component type="richSelect" readOnly="true" quickQueryConditionField="NAME" displayReferenceField="NAME" referenceField="ID" referenceTable="SYSOPERATOR"/>
+			<queryCondition type="equal"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="AFFECT1" description="效果总结1" displayOnly="false" javaType="string" lazyLoad="false">
+			<component type="textArea" readOnly="false"/>
+			<queryCondition type="equal"/>
+		</field>
+		<field name="AFFECT5" description="效果总结5" displayOnly="false" javaType="string" lazyLoad="false">
+			<component type="textArea" readOnly="false"/>
+			<queryCondition type="equal"/>
+		</field>
+		<field name="EVENT1" description="具体事项1" displayOnly="false" javaType="string" lazyLoad="false">
+			<component type="textArea" readOnly="false"/>
+			<queryCondition type="equal"/>
+		</field>
+		<field name="PLAN1" description="计划1" displayOnly="false" javaType="string" lazyLoad="false">
+			<component type="textArea" readOnly="false"/>
+			<queryCondition type="equal"/>
+		</field>
+		<field name="EVENT3" description="具体事项3" displayOnly="false" javaType="string" lazyLoad="false">
+			<component type="textArea" readOnly="false"/>
+			<queryCondition type="equal"/>
+		</field>
+		<field name="PLANDATE2" description="计划完成时间2" displayOnly="false" javaType="string" lazyLoad="false">
+			<component type="date" readOnly="false"/>
+			<queryCondition type="equal"/>
+		</field>
+		<field name="PLANMEMO" description="计划备注" displayOnly="false" javaType="string" lazyLoad="false">
+			<component type="textArea" readOnly="false"/>
+			<queryCondition type="equal"/>
+		</field>
+		<field name="PLANDATE3" description="计划完成时间3" displayOnly="false" javaType="string" lazyLoad="false">
+			<component type="textArea" readOnly="false"/>
+			<queryCondition type="equal"/>
+		</field>
+		<field name="MARKET_STATE" description="市场信息" displayOnly="false" javaType="string" lazyLoad="false">
+			<component type="textArea" readOnly="false"/>
+			<queryCondition type="equal"/>
+		</field>
+		<field name="EVENT5" description="具体事项5" displayOnly="false" javaType="string" lazyLoad="false">
+			<component type="textArea" readOnly="false"/>
+			<queryCondition type="equal"/>
+		</field>
+		<field name="EVENT4" description="具体事项4" displayOnly="false" javaType="string" lazyLoad="false">
+			<component type="textArea" readOnly="false"/>
+			<queryCondition type="equal"/>
+		</field>
+		<field name="NEXTWEEK_PLAN" description="下周计划" displayOnly="false" javaType="string" lazyLoad="false">
+			<component type="textArea" readOnly="false"/>
+			<queryCondition type="equal"/>
+		</field>
+		<field name="DATE2" description="结束日期" displayOnly="false" javaType="date" lazyLoad="false">
+			<component type="date" readOnly="false"/>
+			<queryCondition type="equal"/>
+		</field>
+		<field name="PLANDATE1" description="计划完成时间1" displayOnly="false" javaType="string" lazyLoad="false">
+			<component type="date" readOnly="false"/>
+			<queryCondition type="equal"/>
+		</field>
+		<field name="CREATE_TIME" description="填写时间" displayOnly="false" javaType="date" lazyLoad="false">
+			<component type="date" readOnly="true"/>
+			<queryCondition type="equal"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<pluginInterceptor className="haiyan.interceptor.SaveInterceptor" methodName="setCreateTime" parameter="CREATE_TIME" pluginName="save" type="before"/>
+		<pluginInterceptor className="haiyan.interceptor.SaveInterceptor" methodName="setCreateUser" parameter="CREATE_USER_ID" pluginName="save" type="before"/>
+	</table>
+</Haiyan>

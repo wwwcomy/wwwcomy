@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Haiyan xsi:noNamespaceSchemaLocation="../../haiyan.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<table description="银行帐户" name="T_RO_BANK" realTable="T_RO_BANK">
+		<id name="ID" javaType="string"/>
+		<field name="CODE" javaType="string" description="帐户编号">
+			<component type="text" readOnly="false"/>
+			<queryCondition type="blurMatching"/>
+			<listColumn noquery="false"/>
+		</field>
+		<field name="NAME" javaType="string" description="分行名称" nullAllowed="false">
+			<component type="text"/>
+			<queryCondition type="blurMatching"/>
+			<listColumn noquery="false" width="200"/>
+		</field>
+	</table>
+</Haiyan>

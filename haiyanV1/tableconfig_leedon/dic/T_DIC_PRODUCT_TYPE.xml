@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Haiyan xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../haiyan.xsd">
+	<table name="T_DIC_PRODUCT_TYPE" description="一级产品类型" realTable="T_DIC_PRODUCT_TYPE" colspan="6">
+		<id name="ID" description="ID" javaType="string">
+			<component type="hidden" url="#"/>
+		</id>
+		<field name="CODE" description="拼音" displayOnly="false" javaType="string" lazyLoad="false">
+			<component type="text" readOnly="true"/>
+			<queryCondition type="blurMatching"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="NAME" description="名称" displayOnly="false" javaType="string" lazyLoad="false">
+			<component type="text" readOnly="false" colspan="1"/>
+			<queryCondition type="blurMatching"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="PARENTID" description="所属" displayOnly="false" javaType="string" lazyLoad="false">
+			<component type="richSelect" readOnly="false" displayReferenceField="NAME" referenceField="ID" referenceTable="T_DIC_PRODUCT_TYPE" colspan="5"/>
+			<queryCondition type="blurMatching"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="SUBGRID" javaType="string" description="产品列表" displayOnly="true">
+			<component type="grid" readOnly="false" referenceField="TYPE_0" referenceTable="T_DIC_PRODUCT" colspan="6" parameter="{&amp;TYPE_0=}&amp;If(IsEmpty(Get({ID})),-1,Get({ID}))" style="width:900;height:500;toolbar:no;editor:no;"/>
+			<!-- displayReferenceField="NAME" action="alert(get(ID))" -->
+			<queryCondition type="none"/>
+			<listColumn noquery="true"/>
+		</field>
+		<field name="USEDSTATUS" description="被占用" javaType="string" defaultValue="0">
+			<component type="dropdown" readOnly="true">
+				<option displayName="是" value="1"/>
+				<option displayName="否" value="0"/>
+			</component>
+		</field>
+		<!-- -->
+		<javascript hostPage="query"><![CDATA[
+			function renderIMAGE(v) {
+			   var vals=v.split(','), t='';
+				vals.each(function(_s, _index){
+					if (!Ext.isEmpty(_s))
+						t+='<img src="'+_s+'" style="width:30;height30;" width=30 height=30><a href="'+_s+'" target="_blank">图片'+_index+'</a></img>';
+				});
+				return t;
+			}
+		]]></javascript>
+		<javascript hostPage="edit"><![CDATA[
+			function renderIMAGE(v) {
+			   var vals=v.split(','), t='';
+				vals.each(function(_s, _index){
+					if (!Ext.isEmpty(_s))
+						t+='<img src="'+_s+'" style="width:30;height30;" width=30 height=30><a href="'+_s+'" target="_blank">图片'+_index+'</a></img>';
+				});
+				return t;
+			}
+		]]></javascript>
+		<!-- 
+		<pluginInterceptor methodName="exp" parameter="DisBtns(save,saveAndAdd,saveAndAddCopy);" pluginName="edit" type="after"/>
+		-->
+		<pluginInterceptor methodName="exp" parameter="CheckCircle()+Set(CODE,PY(Get(NAME)))" pluginName="save"/>
+		<pluginInterceptor methodName="exp" parameter="DBSQL({delete from T_DIC_PRODUCT_TYPE where ID='}&amp;Get(ID)&amp;{' })+DBSQL({update T_DIC_PRODUCT_TYPE set PARENTID=null where PARENTID='}&amp;Get(ID)&amp;{' })" pluginName="deleteTree"/>
+		<!-- 
+		<pluginInterceptor methodName="exp" pluginName="save" parameter="Set(__one2oneID,Get(ID))" type="before"/>
+		<pluginOperation name="saveAll" oprName="保存" hostPage="edit" tblevel="1" img="save" action="save({},{},{SUBGRID})+brk()"/>
+		-->
+		<pluginOperation name="deleteTree" oprName="强制删除" hostPage="edit" tblevel="1" img="delete" action="alert({警告，强制删除会导致数据混乱。})"/>
+		<!-- -->
+		<Operation save="true" saveAndAdd="false" saveAndAddCopy="false"/>
+	</table>
+</Haiyan>

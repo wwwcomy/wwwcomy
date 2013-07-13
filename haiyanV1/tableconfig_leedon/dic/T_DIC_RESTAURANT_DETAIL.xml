@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Haiyan xsi:noNamespaceSchemaLocation="../haiyan.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <table description="明细" name="T_DIC_RESTAURANT_DETAIL">
+        <id name="ID" javaType="string"/>
+        <field name="DISHNAME" javaType="string" description="菜名">
+            <component type="text" style="width:200"/>
+        </field>
+        <field name="DISHPRICE" javaType="string" description="价格">
+            <component type="text" style="width:100"/>
+        </field>
+        <field name="RESID" javaType="string" description="RESID">
+            <component type="hidden"
+                referenceTable="T_DIC_RESTAURANT" referenceField="ID" displayReferenceField="NAME"/>
+        </field>
+    </table>
+</Haiyan>

@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Haiyan xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../haiyan.xsd">
+	<table name="TEST_REPORT" description="TEST_REPORT" realTable="SYSORGA">
+		<!-- one2oneTable="TEST_ONE2ONE_2" one2oneField="ID" -->
+		<id name="ID" description="ID" javaType="string">
+			<component type="hidden" url="#"/>
+		</id>
+		<field name="CODE" description="编码" displayOnly="false" javaType="string">
+			<component type="text" readOnly="false"/>
+			<queryCondition type="equal"/>
+		</field>
+		<field name="NAME" description="名称" displayOnly="false" javaType="string">
+			<component type="text" readOnly="false"/>
+			<queryCondition type="equal"/>
+		</field>
+		<field name="SHORTNAME" description="SHORTNAME" displayOnly="false" javaType="string">
+			<component type="text" readOnly="false"/>
+			<queryCondition type="equal"/>
+		</field>
+		<field name="STATUS" description="状态" displayOnly="false" javaType="string" lazyLoad="false">
+			<component type="dropdown" readOnly="false">
+				<option displayName="编制" value="0"/>
+				<option displayName="人事审批" value="1"/>
+				<option displayName="总经理审批" value="2"/>
+				<option displayName="公司下达" value="3"/>
+			</component>
+			<queryCondition type="equal"/>
+		</field>
+		<field name="MEMO" description="意见(不允许后台修改)" displayOnly="false" javaType="string" lazyLoad="false">
+			<component type="textArea" colspan="3" readOnly="false" style="width:800px;height:45px;"/>
+			<queryCondition type="equal"/>
+			<listColumn noedit="false" noquery="true"/>
+		</field>
+		<field name="SUBGRID1" javaType="string" description="子表格1" displayOnly="true">
+			<component type="grid" referenceField="HEADID" referenceTable="SYSROLE_VIEW" parameter="" readOnly="true" style="width:900;height:160;toolbar:no;" colspan="8"/>
+			<queryCondition type="none"/>
+			<listColumn noquery="true"/>
+		</field>
+		<field name="SUBGRID2" javaType="string" description="子表格2" displayOnly="true">
+			<component type="grid" referenceField="ORGAID" referenceTable="SYSOPERATOR" parameter="{&amp;ORGAID=}&amp;If(IsEmpty(Get(ID)),-1,Get(ID))" readOnly="true" style="width:900;height:160;toolbar:no;" colspan="8"/>
+			<queryCondition type="none"/>
+			<listColumn noquery="true"/>
+		</field>
+		<!-- ########################################################################## -->
+		<pluginInterceptor methodName="exp" parameter="
+			ReportPDF({},ConfigPath()&amp;{/report/SYSORGA.jasper},{TR1_}&amp;Get(ID)&amp;{.pdf})
+			+WriteJS({Hy.showBill(Hy.upload_service+'/upload/report/TR1_}&amp;Get(ID)&amp;{.pdf','test','test')})" 
+			pluginName="ReportPDFBatch" type="after"/>
+		<pluginInterceptor methodName="exp" parameter="
+			ReportPDF({},ConfigPath()&amp;{/report/SYSORGA2.jasper},{TR3_}&amp;Get(ID)&amp;{.pdf})
+			+WriteJS({Hy.showBill(Hy.upload_service+'/upload/report/TR3_}&amp;Get(ID)&amp;{.pdf','test','test')})" 
+			pluginName="ReportPDF3Batch" type="after"/>
+		<!-- 
+		<pluginInterceptor methodName="exp" parameter="
+			ReportPDF({},ConfigPath()&amp;{/report/SYSORGA.jasper},{TR2_}&amp;Get(ID)&amp;{.pdf_})
+			+WriteJS({Hy.showBill(Hy.upload_service+'/upload/report/TR2_}&amp;Get(ID)&amp;{.pdf_','test','test')})" 
+			pluginName="DownloadPDFBatch" type="after"/>
+		-->
+		<!--
+		+WriteJS({Hy.showBill(Hy.getContextName()+'/gen_reportv.jsp?url='+Hy.upload_service+'/upload/report/TR3_}&amp;Get(ID)&amp;{.pdf','test','test')})" 
+		-->
+		<!-- +WriteJS(FileToBytes(UploadPath()&amp;{/report/TR2_}&amp;Get(ID)&amp;{.pdf}),{test.pdf},true)"  -->
+		<pluginInterceptor methodName="exp" parameter="
+			SetPara(OPERATOR_DS,DBFindByFilter(SYSOPERATOR,{and t_1.ID is not null},5000,1,false))
+			+ReportPDF({},ConfigPath()&amp;{/report/SYSORGA.jasper},{TR5_.pdf})
+			+WriteJS({Hy.showBill(Hy.upload_service+'/upload/report/TR5_.pdf','test','test')})" 
+			pluginName="ReportPDFQ" type="after"/>
+		<pluginInterceptor methodName="exp" parameter="
+			ReportHTML({},ConfigPath()&amp;{/report/report1.jasper},{TR41_.html})
+			+WriteJS({Hy.showBill(Hy.upload_service+'/upload/report/TR41_.html','test','test')})" 
+			pluginName="ReportHTMLQ2" type="after"/>
+		<pluginInterceptor methodName="exp" parameter="
+			ReportPDF({},ConfigPath()&amp;{/report/reportCross.jasper},{TR62_.pdf})
+			+WriteJS({Hy.openWin(Hy.upload_service+'/upload/report/TR62_.pdf')})" 
+			pluginName="ReportPDFQ3" type="after"/>
+		<!-- ########################################################################## -->
+		<pluginOperation name="ReportPDF" oprName="主表打印" hostPage="edit" tblevel="1" action="Plugin({},{ReportPDF},{SUBGRID1},{SUBGRID2})+brk()"/>
+		<pluginOperation name="ReportPDF3" oprName="主从打印" hostPage="edit" tblevel="1" action="Plugin({},{ReportPDF3},{SUBGRID1},{SUBGRID2})+brk()"/>
+		<!--
+		<pluginOperation name="DownloadPDF" oprName="下载" hostPage="edit" tblevel="1" action="Plugin({},{DownloadPDF},{SUBGRID1},{SUBGRID2})+brk()"/> 
+		-->
+		<pluginOperation name="ReportPDFQ" oprName="批量打印" hostPage="query" tblevel="1" action="Plugin({__batch},{ReportPDFQ})+brk()"/>
+		<pluginOperation name="ReportHTMLQ2" oprName="特效打印HTML" hostPage="query" tblevel="1" action="Plugin({__batch},{ReportHTMLQ2})+brk()"/>
+		<pluginOperation name="ReportPDFQ3" oprName="交叉报表" hostPage="query" tblevel="1" action="Plugin({__batch},{ReportPDFQ3})+brk()"/>
+		<!--
+		<Operation editOne="false"/>
+		-->
+	</table>
+</Haiyan>

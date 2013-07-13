@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<process-definition name="JBPM_TEST">
+	<swimlane name="starter" xmlns="urn:jbpm.org:jpdl-3.1">
+		<assignment class="haiyan.wfe.jbpm.handler.WfeAssignmentHandler">
+			<handlerClassName>haiyan.wfe.jbpm.WfeStarter</handlerClassName>
+		</assignment>
+	</swimlane>
+	<start-state name="Start">
+		<task swimlane="starter" xmlns="urn:jbpm.org:jpdl-3.1"/>
+		<transition id="5002cb20-cd28-49a9-b637-acafaf6b885c" name="5002cb20-cd28-49a9-b637-acafaf6b885c" to="检查金额"/>
+	</start-state>
+	<node name="任务结束">
+		<event type="node-enter">
+			<action class="haiyan.wfe.jbpm.handler.WfeActionHandler">
+				<handlerClassName>haiyan.wfe.jbpm.WfePlugin</handlerClassName>
+				<handlerSettings>
+					<entry>
+						<key>className</key>
+						<value>wfd.Reback</value>
+					</entry>
+				</handlerSettings>
+			</action>
+		</event>
+		<transition id="bf92ab01-cad5-4b67-8415-0b67a0439a54" name="bf92ab01-cad5-4b67-8415-0b67a0439a54" to="End"/>
+	</node>
+	<node name="Node">
+		<transition id="bcf587bc-f5d3-425e-8840-e5ce8b1c4f47" name="bcf587bc-f5d3-425e-8840-e5ce8b1c4f47" to="抢占"/>
+	</node>
+	<task-node name="会签">
+		<event type="node-enter">
+			<action class="haiyan.wfe.jbpm.handler.WfeActionHandler">
+				<handlerClassName>haiyan.wfe.jbpm.WfeActionHQ</handlerClassName>
+				<handlerSettings>
+					<entry>
+						<key>transitionmap</key>
+						<value>[{'name':'ba156e25-603b-46d7-bc5a-2425bbe2c0c9','code':'ba156e25-603b-46d7-bc5a-2425bbe2c0c9','to':'End','btname':'no'},{'name':'deee3757-428d-4c14-b72b-7d90f4c300f8','code':'deee3757-428d-4c14-b72b-7d90f4c300f8','to':'任务结束','btname':'yes'}]</value>
+					</entry>
+					<entry>
+						<key>expression</key>
+						<value>${shifouhuiqian}1${/shifouhuiqian}${kejianhuiqianyijian}0${/kejianhuiqianyijian}${shenpiren}25fd69a9-f7cf-4e40-9e79-d7d47d593cec,990aa91b-74e4-4103-9f95-fa6425afed1a${#}采购经理(cgjl),采购人员(cgry)${/shenpiren}${shenpibilv}0.5${/shenpibilv}${chajianchengxu_before}${/chajianchengxu_before}${chajianchengxu}wfd.Reback${/chajianchengxu}</value>
+					</entry>
+					<entry>
+						<key>vote-percent</key>
+						<value>0.5</value>
+					</entry>
+					<entry>
+						<key>vote-type</key>
+						<value>percent</value>
+					</entry>
+				</handlerSettings>
+			</action>
+		</event>
+		<event type="node-leave">
+			<action class="haiyan.wfe.jbpm.WfeActionHandler">
+				<handlerClassName>haiyan.wfe.jbpm.WfePlugin</handlerClassName>
+				<handlerSettings>
+					<entry>
+						<key>className</key>
+						<value>wfd.Reback</value>
+					</entry>
+				</handlerSettings>
+			</action>
+		</event>
+		<task xmlns="urn:jbpm.org:jpdl-3.1"/>
+		<transition id="ba156e25-603b-46d7-bc5a-2425bbe2c0c9" name="ba156e25-603b-46d7-bc5a-2425bbe2c0c9" to="End"/>
+		<transition id="deee3757-428d-4c14-b72b-7d90f4c300f8" name="deee3757-428d-4c14-b72b-7d90f4c300f8" to="任务结束"/>
+	</task-node>
+	<task-node name="抢占">
+		<event type="node-enter">
+			<action class="haiyan.wfe.jbpm.handler.WfeActionHandler">
+				<handlerClassName>haiyan.wfe.jbpm.WfeActionQZ</handlerClassName>
+				<handlerSettings>
+					<entry>
+						<key>transitionmap</key>
+						<value>[{'name':'2e221b03-708f-4fe4-9bf3-d26e557f8ab4','code':'2e221b03-708f-4fe4-9bf3-d26e557f8ab4','to':'会签','btname':'yes'},{'name':'3be29ecf-bda5-48a9-8727-b34c283abb97','code':'3be29ecf-bda5-48a9-8727-b34c283abb97','to':'End','btname':'no'}]</value>
+					</entry>
+				</handlerSettings>
+			</action>
+		</event>
+		<task xmlns="urn:jbpm.org:jpdl-3.1">
+			<assignment class="haiyan.wfe.jbpm.WfeAssignmentQZ">
+				<expression>${shenpiren}1,25fd69a9-f7cf-4e40-9e79-d7d47d593cec,990aa91b-74e4-4103-9f95-fa6425afed1a${#}admin(admin),采购经理(cgjl),采购人员(cgry)${/shenpiren}${shifouhuiqian}0${/shifouhuiqian}${kejianhuiqianyijian}0${/kejianhuiqianyijian}</expression>
+			</assignment>
+		</task>
+		<transition id="2e221b03-708f-4fe4-9bf3-d26e557f8ab4" name="2e221b03-708f-4fe4-9bf3-d26e557f8ab4" to="会签"/>
+		<transition id="3be29ecf-bda5-48a9-8727-b34c283abb97" name="3be29ecf-bda5-48a9-8727-b34c283abb97" to="End"/>
+	</task-node>
+	<decision name="检查金额">
+		<handler class="haiyan.wfe.jbpm.handler.WfeScriptDecisionHandler">
+			<script>
+if (1!=1) {}
+else if (haiyan.wfe.jbpm.ext.WfeUtil.checkTransition(executionContext,&quot;C38B88AD-8980-0001-50FB-18F6E7F06050&quot;)) {return &quot;ad530452-aff7-4696-a20b-376feea9d414&quot;;}
+else if (haiyan.wfe.jbpm.ext.WfeUtil.checkTransition(executionContext,&quot;C38B889A-7E40-0001-31DF-9D6C1E321A1B&quot;)) {return &quot;6b80e34e-4451-4b49-95c4-547197edb35c&quot;;}
+else {return &quot;94ee331b-4884-40e5-9a42-a0ec2313b213&quot;;}
+</script>
+		</handler>
+		<transition id="ad530452-aff7-4696-a20b-376feea9d414" name="ad530452-aff7-4696-a20b-376feea9d414" to="会签"/>
+		<transition id="6b80e34e-4451-4b49-95c4-547197edb35c" name="6b80e34e-4451-4b49-95c4-547197edb35c" to="抢占"/>
+		<transition id="94ee331b-4884-40e5-9a42-a0ec2313b213" name="94ee331b-4884-40e5-9a42-a0ec2313b213" to="Node"/>
+	</decision>
+	<end-state name="End"/>
+</process-definition>

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Haiyan xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../haiyan.xsd">
+<table name="T_DIC_TRANSPORTCOMPANY" description="运输公司信息表" >
+                <id name="ID" javaType="string"/>
+                <field name="NAME" description="运输公司名称" javaType="string">
+			<component type="text"/>
+		</field>
+		<field name="PHONE" description="联系电话" javaType="string">
+                       <component type="text"/>
+		</field>
+		<field name="FAX" description="传真" javaType="string">
+	               <component type="text"/>
+		</field>
+		<field name="SUPPORTMAN" description="联系人" javaType="string">
+			<component type="text"/>
+		</field>
+		<field name="ADDRESS" description="地址" javaType="string">
+			<component type="text"/>
+		</field>
+		</table>
+		</Haiyan>

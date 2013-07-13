@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Haiyan xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../haiyan.xsd">
+	<table name="SYSORGATREE" realTable="SYSORGA" description="树形组织机构">
+		<id name="ID" javaType="string"/>
+		<field name="PID" description="上级机构" javaType="string">
+			<component type="richSelect" quickQueryConditionField="NAME" referenceTable="SYSORGA" referenceField="ID" displayReferenceField="NAME"/>
+		</field>
+	</table>
+</Haiyan>

@@ -1,0 +1,106 @@
+void checkStock() {
+	String ID = form.get("ID");
+	String warehouseID = form.get("WAREHOUSE");
+	DBManager dbm = context.getDBM();
+	// 取所有明细中 每个库位,某种商品的移库数量之和, 检查是否大于库存数量
+	// 201209加入批次维度
+	String sql = "select PRO_WH,PRODUCTID,BATCH,sum(PRO_COUNT) from T_WM_TRANSDETAIL where HEADID='"+ID+"' group by PRO_WH, PRODUCTID,BATCH";
+	String[][] rs = dbm.getResultStrArray(sql, 4, null);
+	if(rs.length>0) {
+		int l = rs.length;
+		for(int i = 0; i<l;i++){
+			String WHID = rs[i][0];
+			String proID = rs[i][1];
+			String batch = rs[i][2];
+			String proCount = rs[i][3];
+			//throw new Warning(WHID+","+proID+","+proCount);
+			int transCount = Integer.valueOf(proCount);
+			String checkSql = "select t_1.PRO_COUNT,t_2.CODE from V_WM_STOCKWHEREBATCH t_1,V_WM_SDBPRODUCT t_2 where t_1.PRODUCTID=t_2.ID and t_1.WAREHOUSE='"+warehouseID+"' and t_1.PRODUCTID='"+proID+"' and t_1.WAREWHERE='"+WHID+"' and t_1.BATCH="+batch;
+			String[][] result = dbm.getResultStrArray(checkSql, 2, null);
+			if (result.length>0) {
+				int t = 0;
+				t = Integer.valueOf(result[0][0]);
+				String proWmcode = result[0][1];
+				if(transCount>t){
+					String whCode = getWarewhereCode(WHID,dbm);
+					throw new Warning("审批失败,商品 '"+proWmcode+"' 库存不足, 仓位:"+whCode+",批次:"+batch+" 移库数量:"+transCount+", 现有仓位库存:"+t);
+				}
+			}else{
+				String whCode = getWarewhereCode(WHID,dbm);
+				throw new Warning("审批失败,商品无库存, 仓位:"+whCode+",批次:"+batch+" ,移库数量:"+transCount);
+			}
+		}
+	}
+}
+
+String getWarewhereCode(String whID,DBManager dbm){
+	String whCode=null;
+	String wareWhereSql = "select CODE from T_DIC_WAREWHERE where ID =" +whID;
+	String[][] result = dbm.getResultStrArray(wareWhereSql, 1, null);
+	if (result.length>0) {
+		whCode = result[0][0];
+	}
+	return whCode;
+}
+
+void transStock(){
+	String ID = form.get("ID");
+	String sql = "select PRO_WH,PRODUCTID,PRO_COUNT,TO_WH,BATCH from T_WM_TRANSDETAIL where HEADID='"+ID+"'";
+	DBManager dbm = context.getDBM();
+	String[][] rs = dbm.getResultStrArray(sql, 5, null);
+	if(rs.length>0) {
+		int l = rs.length;
+		for(int i = 0; i<l;i++){
+			String WHID = rs[i][0];
+			String proID = rs[i][1];
+			String proCount = rs[i][2];
+			String toWH = rs[i][3];
+			String batch = rs[i][4];
+		
+			Table outDetail = ConfigUtil.getTable("T_WM_OUTDETAIL");
+			Qbq3Form formOut = new MapForm();
+			formOut.set("HEADID", "YK"+form.get("ID"));
+			formOut.set("PRODUCTID",proID);
+			formOut.set("PRO_NAME","");
+			formOut.set("PRO_WMCODE","");
+			formOut.set("BATCH",batch);
+			formOut.set("PRO_WH",WHID);
+			formOut.set("PRO_COUNT",proCount);
+			formOut.set("PRO_CAPACITYNUM","0");
+			formOut.set("PRO_WEIGHTNUM","0");
+			formOut.set("LOGISTICS_NAME","");
+			formOut.set("LOGISTICS_CODE","");
+			formOut.set("LOGISTICS_MEMO","");
+			formOut.set("PRO_IN_PRICE","");
+			formOut.set("ALL_IN_COST","");
+			formOut.set("PRO_OUT_PRICE","");
+			formOut.set("ALL_OUT_COST","");
+			formOut.set("TRANS_TO_WH",toWH);
+			formOut.set("BILL_STATUS","audit");
+			context.getDBM().insert(outDetail, formOut, context, null);
+			
+			Table inDetail = ConfigUtil.getTable("T_WM_INDETAIL");
+			Qbq3Form formIn = new MapForm();
+			formIn.set("HEADID", "YK"+form.get("ID"));
+			formIn.set("PRODUCTID",proID);
+			formIn.set("PREIN_ID","");
+			formIn.set("PRO_NAME","");
+			formIn.set("PRO_WMCODE","");
+			formIn.set("BATCH",batch);
+			formIn.set("PRO_WH",toWH);
+			formIn.set("PRO_COUNT",proCount);
+			formIn.set("INPACK_COUNT","");
+			formIn.set("PRO_CAPACITYNUM","");
+			formIn.set("PRO_WEIGHTNUM","");
+			formIn.set("PRO_IN_PRICE","0");
+			formIn.set("ALL_IN_COST","0");
+			formIn.set("PRO_OUT_PRICE","0");
+			formIn.set("ALL_OUT_COST","0");
+			formIn.set("TRANS_FROM_WH",WHID);
+			formIn.set("BILL_STATUS","audit");
+			context.getDBM().insert(inDetail, formIn, context, null);
+		}
+	}
+}
+checkStock();
+transStock();

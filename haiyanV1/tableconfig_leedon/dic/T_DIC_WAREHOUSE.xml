@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Haiyan xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../haiyan.xsd">
+	<table name="T_DIC_WAREHOUSE" description="仓库信息">
+		<!-- childTable="T_DIC_WAREWHERE" -->
+		<!--#meta @mymeta-->
+		<id name="ID" javaType="string">
+			<component type="hidden" url="#"/>
+		</id>
+		<field name="CODE" description="编码" javaType="string" nullAllowed="false">
+			<component type="text"/>
+		</field>
+		<field name="NAME" description="仓库名称" javaType="string" nullAllowed="false">
+			<component type="text"/>
+		</field>
+		<!-- 应该是多对多
+		<field name="OWNERID" description="库主" javaType="string" nullAllowed="false">
+			<component type="richSelect" readOnly="false" displayReferenceField="NAME" referenceField="ID" referenceTable="SYSOPERATOR_COMBO"/>
+		</field>
+		-->
+		<field name="LINKMAN" description="联系人" javaType="string">
+			<component type="text"/>
+		</field>
+		<field name="ADDRESS" description="地址" javaType="string">
+			<component type="text"/>
+		</field>
+		<field name="PHONE" description="电话" javaType="string">
+			<component type="text"/>
+		</field>
+		<field name="TELPHONE" description="手机" javaType="string">
+			<component type="text"/>
+		</field>
+		<field name="OPENTIME" description="开放时间" javaType="string">
+			<component type="text"/>
+		</field>
+		<field name="FAX" description="传真" javaType="string">
+			<component type="text"/>
+		</field>
+		<field name="CAPACITYNUM" description="库容(m3)" javaType="bigDecimal">
+			<component type="text" readOnly="false" maxFractionDigit="3" minFractionDigit="3"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="MEMO" description="备注" javaType="string">
+			<component type="text"/>
+		</field>
+		<field name="USEDSTATUS" description="被占用" javaType="string" defaultValue="0">
+			<component type="dropdown" readOnly="true">
+				<option displayName="是" value="1"/>
+				<option displayName="否" value="0"/>
+			</component>
+		</field>
+		<field name="IS_SUPP" description="是否供应商仓库" javaType="string" defaultValue="0">
+			<component type="dropdown">
+				<option displayName="是" value="1"/>
+				<option displayName="否" value="0"/>
+			</component>
+		</field>
+		
+		<field name="USERID" description="仓管账号" displayOnly="false" javaType="string" lazyLoad="false" nullAllowed="false">
+			<component type="combo" colspan="6" displayReferenceField="NAME" referenceField="ID" referenceTable="SYSOPERATOR_COMBO"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="SUPPLIER" description="所属供应商" javaType="string">
+			<component type="combo" readOnly="false" displayReferenceField="CODE" referenceField="ID" referenceTable="T_DIC_SUPPLIER"/>
+		</field>
+		
+		<queryFilter>
+			<pluggedFilter methodName="exp" parameter="If(InRole(wm),{ and t_1.USERID='}&amp;GetUser(ID)&amp;{'},{})"/>
+			<pluggedFilter methodName="exp" parameter="If(InRole(sp),{ and (t_1.USERID='}&amp;GetUser(ID)&amp;{' or t_1.CODE like 'EDP' or t_1.SUPPLIER in (select SUPPLIER from T_DIC_SUPP_USER where USERID='}&amp;GetUser(ID)&amp;{'))},{})"/>
+		</queryFilter>
+	</table>
+	<!-- -->
+	<table name="T_DIC_WAREHOUSE_COMBO" realTable="T_DIC_WAREHOUSE" description="仓库信息">
+		<!-- childTable="T_DIC_WAREWHERE" -->
+		<!--#meta @mymeta-->
+		<id name="ID" javaType="string">
+			<component type="hidden" url="#"/>
+		</id>
+		<field name="CODE" description="编码" javaType="string" nullAllowed="false">
+			<component type="text"/>
+		</field>
+		<field name="NAME" description="仓库名称" javaType="string" nullAllowed="false">
+			<component type="text"/>
+		</field>
+		<field name="OWNERID" description="库主" javaType="string" nullAllowed="false">
+			<component type="richSelect" readOnly="false" displayReferenceField="NAME" referenceField="ID" referenceTable="SYSOPERATOR_COMBO"/>
+		</field>
+	
+		<field name="USERID" description="仓管账号" displayOnly="false" javaType="string" lazyLoad="false">
+			<component type="combo" colspan="6" displayReferenceField="NAME" referenceField="ID" referenceTable="SYSOPERATOR_COMBO"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="SUPPLIER" description="所属供应商" javaType="string">
+			<component type="combo" readOnly="false" displayReferenceField="CODE" referenceField="ID" referenceTable="T_DIC_SUPPLIER"/>
+		</field>
+		
+		<queryFilter>
+			<pluggedFilter methodName="exp" parameter="If(InRole(wm),{ and t_1.USERID='}&amp;GetUser(ID)&amp;{'},{})"/>
+			<pluggedFilter methodName="exp" parameter="If(InRole(sp),{ and (t_1.USERID='}&amp;GetUser(ID)&amp;{' or t_1.CODE like 'EDP' or t_1.SUPPLIER in (select SUPPLIER from T_DIC_SUPP_USER where USERID='}&amp;GetUser(ID)&amp;{'))},{})"/>
+			
+			<pluggedFilter methodName="exp" parameter="If(IsEmpty(GetPara(__filter)),{},If(GetPara(__filter)={filter1},{ and IS_SUPP=0},{ and IS_SUPP=0 or t_1.ID=}&amp;GetUser(WAREHOUSEID)))"/>
+		</queryFilter>
+	</table>
+</Haiyan>

@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Haiyan xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../haiyan.xsd">
+	<table name="T_WM_ACCOUNTSTATEMENT" description="供应商月度对账单">
+		<id name="ID" description="ID" javaType="string">
+		</id>
+		<field name="TITLE" description="供应商月度对账单" defaultValue="供应商月度对账单" displayOnly="true" javaType="string">
+			<component type="text" readOnly="false" colspan="6"/>
+			<listColumn noedit="false" noquery="true"/>
+		</field>
+		<field name="SUPP_MONTH" description="供应商月度对账表(单头)" javaType="string">
+			<component type="hidden" readOnly="true"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="PRINT" description="打印" displayOnly="true" javaType="string">
+			<component type="text" readOnly="true" colspan="6"/>
+			<listColumn noedit="false" noquery="true"/>
+		</field>
+		<field name="MONTH" description="月度" displayOnly="false" javaType="string">
+			<component type="text" readOnly="false" colspan="6"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="SUPPLIER" description="供应商" javaType="string">
+			<component type="combo" readOnly="false" displayReferenceField="NAME" referenceField="ID" referenceTable="T_DIC_SUPPLIER" colspan="6"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="BEGIN_DATE" description="起始时间" displayOnly="true" javaType="date" lazyLoad="false">
+			<component type="date" readOnly="true" colspan="6"/>
+			<listColumn noedit="false" noquery="true"/>
+		</field>
+		<field name="END_DATE" description="结束时间" displayOnly="true" javaType="date" lazyLoad="false">
+			<component type="hidden" readOnly="false" colspan="6"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="ALL_AMOUNT" description="本月应付金额为" displayOnly="false" javaType="bigDecimal" defaultValue="0">
+			<component type="text" readOnly="false" maxFractionDigit="3" minFractionDigit="3" colspan="6"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="SUBGRID" javaType="string" description="本月销售汇总" displayOnly="true">
+			<component type="grid" readOnly="false" colspan="6" style="width:950;height:255;toolbar:no;" displayReferenceField="ID,SUPP_MONTH,WMCODE,SUPP_CODE,PRODUCTID,PRO_COUNT,OUT_ALL_PRICE,SUP_ALL_RETURNRPRICE,OUT_ALL_AMOUNT,WM_MONTH" referenceField="SUPP_MONTH" referenceTable="V_WM_MONTHDTL" parameter="{&amp;SUPP_MONTH=}&amp;If(IsEmpty(Get(SUPP_MONTH)),-1,Get(SUPP_MONTH))"/>
+			<queryCondition type="none"/>
+			<listColumn noquery="true"/>
+		</field>
+		<field name="CONTENT" description="CONTENT" displayOnly="true" javaType="string" >
+			<component type="text" readOnly="false" colspan="6"/>
+			<listColumn noedit="false" noquery="true" />
+		</field>
+		<field name="LAST_AMOUNT" description="上月应付金额" displayOnly="true" javaType="bigDecimal" defaultValue="0">
+			<component type="text" readOnly="true" maxFractionDigit="3" minFractionDigit="3"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="LAST_R_AMOUNT" description="上月实付金额" displayOnly="true" javaType="bigDecimal" defaultValue="0">
+			<component type="text" readOnly="true" maxFractionDigit="3" minFractionDigit="3"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="BILL_AMOUNT" description="本月开票额为" displayOnly="false" javaType="bigDecimal" defaultValue="0">
+			<component type="text" readOnly="false" maxFractionDigit="3" minFractionDigit="3"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="BILL_R_AMOUNT" description="本月实收发票额" displayOnly="false" javaType="bigDecimal" defaultValue="0">
+			<component type="text" readOnly="false" maxFractionDigit="3" minFractionDigit="3" colspan="6"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="BILL_TIME" description="发票收到时间" displayOnly="false" javaType="date">
+			<component type="date" readOnly="false" />
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="BILL_PAY_AMOUNT" description="已支付金额" displayOnly="false" javaType="bigDecimal" defaultValue="0">
+			<component type="text" readOnly="false" maxFractionDigit="3" minFractionDigit="3"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		
+		<queryFilter>
+			<pluggedFilter methodName="exp" parameter="If(InRole(admin),{},{ and t_1.SUPPLIER in (select SUPPLIER from T_DIC_SUPP_USER where userid='}&amp;GetUser(ID)&amp;{')})"/>
+		</queryFilter>
+		
+		<role name="user sp">
+			<disComponent name="BILL_TIME BILL_PAY_AMOUNT"/>
+			<disOperation name="saveAll"/>
+		</role>
+		<role name="admin boss manager wm pe ac"/>
+		
+		<javascript hostPage="edit" src="project/leedon/T_WM_ACCOUNTSTATEMENT.js"><![CDATA[
+		]]></javascript>
+		<pluginInterceptor methodName="exp" parameter="DisBtns(add,saveAndAdd,saveAndAddCopy);" pluginName="edit" type="after"/>
+		<pluginInterceptor methodName="exp" parameter="
+			bsh(T_WM_ACTSTMT_GEN.bsh)
+			" pluginName="bshtest" type="before"/>
+		
+		<pluginOperation name="saveAll" oprName="保存" hostPage="edit" tblevel="1" img="save" action="Save({},{})+brk()"/>
+		<pluginOperation name="printAll" oprName="打印预览" hostPage="edit" action="ShowBill({queryOne.do?__opr_data=T_WM_ACCOUNTSTATEMENT&amp;ID=}&amp;Get(ID)&amp;,{对账单打印},{ACTSTMT})+brk()"/>
+		
+		<!--
+		<pluginOperation name="bshtest" oprName="测试脚本" hostPage="edit" tblevel="1" img="settings" action="
+			plugin({},{bshtest})+brk()"/>
+			 -->
+		<Operation save="false" queryPageDelete="false" queryPageAdd="false" saveAndAdd="false" saveAndAddCopy="false"/>
+	</table>
+</Haiyan>

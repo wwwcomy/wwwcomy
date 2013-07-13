@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Haiyan xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../haiyan.xsd">
+	<table name="V_WM_STORESALETMP" description="库存销售情况TMP">
+		<id name="ID" javaType="string"/>
+		<field name="HEADID" description="单头" javaType="string">
+			<component type="hidden"/>
+		</field>
+		<field name="WM_MONTH" description="所属月份" displayOnly="false" javaType="string" lazyLoad="false">
+			<component type="text" readOnly="true" renderer="renderID"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<!--
+		<field name="WM_DATE" description="发生时间" displayOnly="false" javaType="date" lazyLoad="false">
+			<component type="date" readOnly="true" colspan="1"/>
+			<listColumn noedit="false" noquery="true"/>
+		</field>
+		-->
+		<field name="PRO_WMCODE" description="EDP商品编号" javaType="string" lazyLoad="false">
+			<component type="text" readOnly="true" colspan="1"/>
+			<listColumn noedit="false" noquery="true"/>
+		</field>
+		<field name="PRODUCTID" description="EDP商品名" displayOnly="false" javaType="string" lazyLoad="false">
+			<component type="combo" readOnly="true" colspan="1" displayReferenceField="NAME" referenceField="ID" referenceTable="V_WM_SDBPRODUCT" associatedFields="WMCODE"/>
+			<queryCondition type="equal"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="WMCODE" description="货号" displayOnly="true" javaType="string" lazyLoad="false">
+			<component type="text" readOnly="true" colspan="1" displayReferenceField="WMCODE"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="SUPP_CODE" description="供应商自有货号" displayOnly="false" javaType="string" lazyLoad="false">
+			<component type="text" readOnly="false"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="PRO_COUNT" description="库存数量" javaType="bigDecimal">
+			<component type="text" readOnly="true"/>
+			<queryCondition type="blurMatching"/>
+			<listColumn noedit="false" noquery="false"  style="remoteSort:true;sortName:PRO_COUNT"/>
+		</field>
+		<field name="PRO_VALUE" description="库存货值" javaType="bigDecimal">
+			<component type="text" readOnly="true" maxFractionDigit="3" minFractionDigit="3"/>
+			<queryCondition type="blurMatching"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="SALE_COUNT" description="销售数量" javaType="bigDecimal">
+			<component type="text" readOnly="true" renderer="renderCount"/>
+			<queryCondition type="blurMatching"/>
+			<listColumn noedit="false" noquery="false" style="remoteSort:true;sortName:SALE_COUNT"/>
+		</field>
+		<field name="SALE_VALUE" description="销售金额" javaType="bigDecimal">
+			<component type="text" readOnly="true" maxFractionDigit="2" minFractionDigit="2" renderer="renderSaleValue"/>
+			<queryCondition type="blurMatching"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="EDP_SALE_VALUE" description="EDP销售总额" javaType="bigDecimal">
+			<component type="text" readOnly="true" maxFractionDigit="3" minFractionDigit="3"/>
+			<listColumn noedit="false" noquery="false" style="remoteSort:true;sortName:EDP_SALE_VALUE"/>
+		</field>
+		<field name="PROFIT_STATISTICS" description="利润统计" javaType="bigDecimal">
+			<component type="text" readOnly="true" maxFractionDigit="2" minFractionDigit="2" />
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="WAREHOUSE" description="所属仓库" displayOnly="false" javaType="string" lazyLoad="false" nullAllowed="false">
+			<component type="combo" readOnly="true" displayReferenceField="NAME" referenceField="ID" referenceTable="T_DIC_WAREHOUSE_COMBO"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="PRO_MEMO" description="产品详细信息" displayOnly="false" javaType="string" lazyLoad="false" defaultValue="详细信息">
+			<component type="text" readOnly="true" renderer="renderInfo"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="SUPPLIER" description="供应商" javaType="string">
+			<component type="combo" readOnly="true" displayReferenceField="NAME" referenceField="ID" referenceTable="T_DIC_SUPPLIER"/>
+		</field>
+		<field name="SUPP_MONTH" description="供应商月度对账表" javaType="string">
+			<component type="hidden" readOnly="true"/>
+			<listColumn noedit="false" noquery="true"/>
+		</field>
+		<field name="SUPP_PRO_MONTH" description="供应商商品月度" javaType="string">
+			<component type="hidden" readOnly="true"/>
+			<listColumn noedit="false" noquery="true"/>
+		</field>
+		<!-- -->
+		<queryFilter>
+			<pluggedFilter methodName="exp" parameter="{ and t_1.WAREHOUSE='}&amp;GetUser(WAREHOUSEID)&amp;{' }"/>
+			<pluggedFilter methodName="exp" parameter="If(InRole(sp,wm),{ and t_1.SUPPLIER='}&amp;GetUser(SUPPLIER)&amp;{'},{})"/>
+		</queryFilter>
+		<role name="user sp">
+			<disComponent name="EDP_SALE_VALUE PROFIT_STATISTICS"/>
+		</role>
+		<role name="admin boss manager wm pe ac"/>
+		<javascript hostPage="query"><![CDATA[
+		function renderInfo(v,metaData,record) {
+				//return "<a href='#' onclick=\"window.location.href = 'edit.do?ID="+record.json.PRODUCTID+"&__opr_data=V_WM_SDBPRODUCT'\">"+v+"</a>";
+				//return "<a href='#' onclick=\"showNavDetailFrame('edit','"+record.json.PRODUCTID+"','V_WM_SDBPRODUCT')\">"+v+"</a>"
+				return "<a href='#' onclick=\"Hy.showBill('edit.do?ID="+record.json.PRODUCTID+"&__opr_data=V_WM_SDBPRODUCT','产品链接')\">"+v+"</a>"
+		}
+		function renderCount(v,metaData,record) {
+				//return "<a href='#' onclick=\"showNavDetailFrame('query','','V_WM_SDBPRODUCT')\">"+v+"</a>"
+				return "<a href='#' onclick=\"Hy.showBill('query.do?PRODUCTID="+record.json.PRODUCTID+"&__opr_data=V_WM_STOCK1','产品销售明细')\">"+v+"</a>"
+		}
+		function renderSaleValue(v,metaData,record) {
+				//return "<a href='#' onclick=\"showNavDetailFrame('query','','V_WM_SDBPRODUCT')\">"+v+"</a>"
+				
+				
+		]]></javascript>
+		<!-- -->
+		<pluginInterceptor methodName="initDB" pluginName="initDB" type="before"><![CDATA[
+create or replace view V_WM_STORESALETMP as 
+	(
+		select concat(t_1.ID,t_1.BT) as ID,t_1.HEADID,t_1.PRODUCTID,t_1.PRO_WMCODE,t_1.PRO_WMCODE as WMCODE,
+		sum(t_1.PRO_COUNT*t_1.STOCKCHANGE) as PRO_COUNT,
+		sum(t_1.PRO_COUNT*t_1.STOCKCHANGE*t_1.PRO_IN_PRICE) as PRO_VALUE,
+		DATE_FORMAT(date_add(date_sub(t_1.WM_DATE,INTERVAL 20 day),INTERVAL 1 month),'%Y%m') as WM_MONTH,
+		SUM( CASE WHEN BT = -1 THEN  t_1.PRO_COUNT WHEN BT=-95 THEN t_1.PRO_COUNT*-1 ELSE 0 END) as SALE_COUNT,
+		SUM( CASE WHEN BT = -1 THEN  t_1.PRO_COUNT*t_1.PRO_IN_PRICE WHEN BT=-95 THEN t_1.ALL_IN_COST ELSE 0 END) as SALE_VALUE,
+		
+		SUM( CASE WHEN BT = -1 THEN  t_1.ALL_OUT_COST WHEN BT=-95 THEN t_1.ALL_OUT_COST ELSE 0 END) as EDP_SALE_VALUE, 
+		(SUM( CASE WHEN BT = -1 THEN  t_1.ALL_OUT_COST WHEN BT=-95 THEN t_1.ALL_OUT_COST ELSE 0 END)
+		-SUM( CASE WHEN BT = -1 THEN  t_1.PRO_COUNT*t_1.PRO_IN_PRICE WHEN BT=-95 THEN t_1.ALL_IN_COST ELSE 0 END)) as PROFIT_STATISTICS,
+        t_1.WAREHOUSE, '产品详细信息' as PRO_MEMO, t_1.SUPPLIER, t_1.SUPP_CODE,
+        concat(t_1.SUPPLIER,'_',DATE_FORMAT(date_add(date_sub(t_1.WM_DATE,INTERVAL 20 day),INTERVAL 1 month),'%Y%m')) as SUPP_MONTH,
+        concat(t_1.SUPPLIER,'_',t_1.PRODUCTID,'_',DATE_FORMAT(date_add(date_sub(t_1.WM_DATE,INTERVAL 20 day),INTERVAL 1 month),'%Y%m')) as SUPP_PRO_MONTH
+		from V_WM_STOCK1 t_1 
+		where YK=-1
+		and t_1.BT<2 and t_1.BT>=-95
+		group by t_1.PRODUCTID,t_1.WAREHOUSE,WM_MONTH
+	)
+		]]></pluginInterceptor>
+		<!-- where t_1.BILL_STATUS='audit' 预判断 还没确认的入库也要计算 -->
+		<pluginInterceptor methodName="exp" parameter="DisBtns(add,delete,save,saveAndAdd,saveAndAddCopy);" pluginName="query" type="after"/>
+		<pluginInterceptor methodName="exp" parameter="If(InRole(admin),true,HidFlds(EDP_SALE_VALUE,PROFIT_STATISTICS));" pluginName="query" type="after"/>
+		<pluginInterceptor methodName="exp" parameter="DisBtns(add,delete,save,saveAndAdd,saveAndAddCopy);" pluginName="edit" type="after"/>
+	</table>
+</Haiyan>

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Haiyan xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../haiyan.xsd">
+	<table name="T_DIC_PROJECT_DETAIL" description="工程项目表">
+		<id name="ID" javaType="string"/>
+		<field name="HEADID" description="头表" javaType="string">
+			<component type="hidden" referenceTable="T_PROJECT"/>
+		</field>
+		<field name="NAME" description="执行人" javaType="string">
+			<component type="richSelect" referenceTable="SYSOPERATOR" displayReferenceField="NAME" referenceField="ID"/>
+		</field>
+		<field name="CHARGE" description="项目费用" javaType="string">
+			<component type="text"/>
+		</field>
+		<field name="AREA" description="区域" javaType="string" lazyLoad="true">
+			<component type="richSelect" referenceTable="T_DIC_COMMON_AREA" referenceField="ID" displayReferenceField="NAME" multipleSelect="true"/>
+		</field>
+		<field name="MEMO" description="工作内容" javaType="string">
+			<component type="textArea"/>
+		</field>
+		<field name="STAGE" javaType="string" description="任务阶段">
+			<component type="dropdown">
+				<option displayName="意向阶段" value="1"/>
+				<option displayName="成交阶段" value="2"/>
+				<option displayName="后期维护阶段" value="3"/>
+			</component>
+		</field>
+	</table>
+</Haiyan>

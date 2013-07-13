@@ -1,0 +1,16 @@
+void setSum() throws Throwable {
+	final DBManager dbm = context.getDBM();
+	Qbq3Form q = new MapForm();
+	q.set("ORDER_ID", form.get("ID"));
+	dbm.dealByForm("V_WM_OUTPRE", q, new IPageCallBack(){
+		public void deal(Qbq3Form f2) {
+			String sql = "select sum(PRO_COUNT) from T_WM_OUTDETAIL where HEADID='"+f2.get("ORDER_ID")+"' and PRODUCTID='"+f2.get("PRODUCTID")+"' ";
+			String[][] rs = dbm.getResultStrArray(sql, 1, null);
+			if (rs.length>0) {
+				f2.set("OUT_RCOUNT", rs[0][0]);
+				dbm.update("T_WM_OUTPREPART", f2, context);
+			}
+		}
+	}, context, null);
+}
+setSum();

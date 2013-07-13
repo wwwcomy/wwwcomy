@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Haiyan xsi:noNamespaceSchemaLocation="../../haiyan.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<table description="字典" name="T_DIC_COMMON" childTable="T_DIC_COMMON_DETAIL">
+		<id name="ID" javaType="string"/>
+		<field name="CODE" javaType="string" description="编号">
+			<component type="text"/>
+			<listColumn noquery="false"/>
+		</field>
+		<field name="NAME" javaType="string" description="名称">
+			<component type="text" colspan="3"/>
+		</field>
+		<field name="MEMO" javaType="string" description="备注">
+			<component type="textArea" colspan="3" style="width:100%;"/>
+			<queryCondition type="none"/>
+			<listColumn noquery="true"/>
+		</field>
+		<field name="SHORTNAME" javaType="string" description="简称">
+			<component type="text" colspan="3"/>
+			<listColumn noquery="true"/>
+		</field>
+		<field name="PID" javaType="string" description="上级">
+			<!-- quickQueryConditionField="NAME"  -->
+			<component type="richSelect" colspan="3" referenceTable="T_DIC_COMMON" referenceField="ID" displayReferenceField="NAME" associatedFields="PIDNAME"/>
+			<listColumn noquery="true"/>
+		</field>
+		<field name="PIDNAME" javaType="string" description="上级名称(冗余信息)">
+			<component type="readOnlyText" colspan="3" displayReferenceField="NAME"/>
+			<queryCondition type="none"/>
+			<listColumn noquery="true"/>
+		</field>
+		<field name="PPID" javaType="string" description="上上级名称(冗余信息)">
+			<!-- quickQueryConditionField="NAME"  -->
+			<component type="richSelect" colspan="3" referenceTable="T_DIC_COMMON" referenceField="ID" displayReferenceField="NAME" associatedFields="PPIDNAME"/>
+			<listColumn noquery="true"/>
+		</field>
+		<field name="PPIDNAME" javaType="string" description="上上级名称(冗余信息)">
+			<component type="readOnlyText" colspan="3" displayReferenceField="NAME"/>
+			<queryCondition type="none"/>
+			<listColumn noquery="true"/>
+		</field>
+		<field name="LABEL" javaType="string" description="分类标签">
+			<component type="text"/>
+			<queryCondition type="none"/>
+			<listColumn noquery="true"/>
+		</field>
+		<field name="LABEL2" javaType="string" description="分类标签2">
+			<component type="text"/>
+			<queryCondition type="none"/>
+			<listColumn noquery="true"/>
+		</field>
+		<field name="LABEL3" javaType="string" description="分类标签3">
+			<component type="text"/>
+			<queryCondition type="none"/>
+			<listColumn noquery="true"/>
+		</field>
+		<field name="LABEL4" javaType="string" description="分类标签4">
+			<component type="text"/>
+			<queryCondition type="none"/>
+			<listColumn noquery="true"/>
+		</field>
+		<field name="PATH" javaType="string" description="数据路径">
+			<component type="text"/>
+		</field>
+		<field name="DATALEVEL" javaType="string" description="数据等级">
+			<component type="text"/>
+		</field>
+		<field name="NODETYPE" javaType="string" description="节点类型">
+			<component type="dropdown">
+				<option displayName="汇总" value="0"/>
+				<option displayName="明细" value="1"/>
+			</component>
+		</field>
+		<field name="USED" description="是否使用" javaType="string" defaultValue="1">
+			<component type="dropdown">
+				<option displayName="是" value="1"/>
+				<option displayName="否" value="0"/>
+			</component>
+		</field>
+		<field name="SHOWED" description="是否显示" javaType="string" defaultValue="1">
+			<component type="dropdown">
+				<option displayName="是" value="1"/>
+				<option displayName="否" value="0"/>
+			</component>
+		</field>
+		<PageView showField="NAME,CODE" type="xloadtree" title="树形索引"/>
+		<PageView showField="*" type="querybyform" title="列表索引"/>
+		<role name="admin boss manager user">
+			<disOperation name="save delete"/>
+		</role>
+		<Operation queryPageDelete="false" saveAndAdd="false" saveAndAddCopy="false" customizeColumns="true"/>
+	</table>
+</Haiyan>

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Haiyan xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../haiyan.xsd">
+	<table name="TEST_EDITONE" realTable="SYSOPERATOR" description="当前用户信息">
+		<id name="ID" javaType="string">
+			<component type="hidden" url="#"/>
+		</id>
+		<field name="CODE" description="登录名" javaType="string" nullAllowed="false">
+			<component type="text" colspan="3" appendStr="(*) 请选择易记、常用的会员名,只能是字母,数字和下划线"/>
+		</field>
+		<field name="PASSWORD" description="输入密码" javaType="string" nullAllowed="false">
+			<component type="password" colspan="3" appendStr="(*)"/>
+		</field>
+		<field name="PASSWORD2" description="确认密码" javaType="string" displayOnly="true" nullAllowed="false">
+			<component type="password" colspan="3" appendStr="(*)"/>
+		</field>
+		<field name="NAME" description="姓名" javaType="string" nullAllowed="false">
+			<component type="text" appendStr="(*) 请填写您的真实姓名,方便客户与您联系"/>
+		</field>
+		<queryFilter>
+			<!--只能查到当前用户数据并且是已经启用的 -->
+			<pluggedFilter><![CDATA[and t_1.USED<>0]]></pluggedFilter>
+			<!--可以直接写SQL过滤-->
+			<pluggedFilter methodName="exp" parameter="{ and t_1.ID='}&amp;GetUser(ID)&amp;{'}"/>
+			<!--可以用公式过滤-->
+		</queryFilter>
+		<pluginInterceptor methodName="exp" pluginName="edit" type="after"><![CDATA[
+			If(IsEmpty(Get(ID)),DBFindByPK(TEST_EDITONE,GetUser(ID),true),true)+If(Get(ID)=GetUser(ID),true,Warning({无权查看他人信息}))
+		]]></pluginInterceptor>
+		<pluginInterceptor className="haiyan.interceptor.FlowmisInterceptor" methodName="transPassword2" pluginName="save" type="before"/>
+		<Operation saveAndAdd="false" saveAndAddCopy="false"/>
+	</table>
+</Haiyan>

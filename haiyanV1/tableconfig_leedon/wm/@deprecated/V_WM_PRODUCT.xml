@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Haiyan xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../haiyan.xsd">
+	<table name="V_WM_PRODUCT" description="库存汇总(出入库)">
+		<id name="ID" javaType="string"/>
+		<field name="HEADID" description="单头" javaType="string">
+			<component type="hidden"/>
+		</field>
+		<field name="PRODUCTID" description="商品名称" displayOnly="false" javaType="string" lazyLoad="false">
+			<component type="richSelect" readOnly="true" colspan="1" displayReferenceField="NAME" referenceField="ID" referenceTable="T_DIC_PRODUCT" associatedFields="PRO_CODE,PRO_CAPACITYNUM,PRO_WEIGHTNUM"/>
+			<queryCondition type="equal"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="PRO_CODE" description="商品编号" displayOnly="true" javaType="string" lazyLoad="false">
+			<component type="text" readOnly="true" colspan="1" displayReferenceField="CODE"/>
+			<listColumn noedit="false" noquery="true"/>
+		</field>
+		<field name="PRO_CAPACITYNUM" description="单位体积" displayOnly="false" javaType="bigDecimal" lazyLoad="false">
+			<component type="text" readOnly="true" displayReferenceField="CAPACITYNUM" maxFractionDigit="3" minFractionDigit="3"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="PRO_WEIGHTNUM" description="单位重量" displayOnly="false" javaType="bigDecimal" lazyLoad="false">
+			<component type="text" readOnly="true" displayReferenceField="WEIGHTNUM" maxFractionDigit="3" minFractionDigit="3"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="WAREWHERE" description="仓位" displayOnly="false" javaType="string" lazyLoad="false">
+			<component type="richSelect" readOnly="true" colspan="1" displayReferenceField="CODE" referenceField="ID" referenceTable="T_DIC_WAREWHERE"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="WAREHOUSE" description="仓库" displayOnly="false" javaType="string" lazyLoad="false" nullAllowed="false">
+			<component type="richSelect" readOnly="true" colspan="5" displayReferenceField="NAME" referenceField="ID" referenceTable="T_DIC_WAREHOUSE"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="WHOWNER" description="库主" displayOnly="false" javaType="string" lazyLoad="false" nullAllowed="false">
+			<component type="richSelect" readOnly="true" colspan="1" displayReferenceField="NAME" referenceField="ID" referenceTable="SYSOPERATOR_COMBO"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<!--
+		<field name="IN_TYPE" javaType="string" defaultValue="po" description="入库方式" nullAllowed="false">
+			<component type="dropdown" readOnly="false">
+				<option displayName="初始化入库" value="init"/>
+				<option displayName="收货入库" value="po"/>
+				<option displayName="其他入库" value="etc"/>
+			</component>
+		</field>
+		<field name="OUT_TYPE" javaType="string" defaultValue="init" description="出库方式" nullAllowed="false">
+			<component type="dropdown" readOnly="true">
+				<option displayName="待发货" value="init"/>
+				<option displayName="发货出库" value="so"/>
+				<option displayName="其他出库" value="etc"/>
+			</component>
+		</field>
+		-->
+		<field name="PRO_COUNT" description="数量" javaType="bigDecimal">
+			<component type="text" readOnly="true" numberGrouping="true" summaryType="summaryCOUNT" summaryRenderer="summaryRendererCOUNT"/>
+			<queryCondition type="blurMatching"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<!--
+		<field name="PRO_PRICE" description="单价" displayOnly="true" javaType="bigDecimal" lazyLoad="false">
+			<component type="text" readOnly="true" colspan="1"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="PRO_COST" description="总价" displayOnly="false" javaType="bigDecimal" lazyLoad="false">
+			<component type="text" readOnly="true" colspan="1"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		-->
+		<!-- summaryType="sumPRO_COST" summaryRenderer="sumPRO_COST" -->
+		<field name="BILL_STATUS" javaType="string" description="单据状态">
+			<component type="hidden" readOnly="true">
+				<option displayName="待批" value="init"/>
+				<option displayName="审批确认" value="audit"/>
+			</component>
+		</field>
+		<field name="BT" javaType="bigDecimal" description="BT" displayOnly="false">
+			<component type="dropdown" readOnly="true">
+				<option displayName="入库" value="1"/>
+				<option displayName="出库" value="-1"/>
+			</component>
+		</field>
+		<!-- -->
+		<queryFilter>
+			<pluggedFilter methodName="exp" parameter="
+					{ and t_1.WAREHOUSE='}&amp;GetUser(WAREHOUSEID)&amp;{' and t_1.WHOWNER='}&amp;GetUser(WHOWNERID)&amp;{' }
+					"/>
+			<pluggedFilter><![CDATA[and t_1.BILL_STATUS='audit']]></pluggedFilter>
+		</queryFilter>
+		<!-- -->
+		<javascript hostPage="edit"><![CDATA[
+			function summaryRendererCOUNT(value, params, data, fldName) {
+				return "该仓库现有:" + value; // 汇总行显示
+			}
+			Ext.grid.GroupSummary.Calculations['summaryCOUNT'] = function(v, record, field) {
+				if (record.data.BT)
+					return v + (record.data.PRO_COUNT * record.data.BT); // 汇总行计算
+				return v + recorder.data.PRO_COUNT;
+			}
+			function renderOperation(value, metaData, record, rowIndex, colIndex, store) {return rowIndex+1;}
+			function showDetailFrame(_operation, _ID, _tableName, _anchor) {return false;}
+		]]></javascript>
+		<!-- -->
+		<pluginInterceptor methodName="initDB" pluginName="initDB" type="before"><![CDATA[
+create or replace view V_WM_PRODUCT as 
+	(
+		select 1 as BT,t_1.ID,t_1.HEADID,t_1.PRODUCTID,t_1.PRO_CODE,t_1.PRO_CAPACITYNUM,t_1.PRO_WEIGHTNUM,t_1.PRO_IN_COST PRO_COST,t_1.PRO_COUNT,t_2.BILL_STATUS,t_1.PRO_WH AS WAREWHERE,t_2.WAREHOUSE,t_2.WHOWNER
+		from T_WM_PRODUCT t_1 right join T_WM_IN t_2 on t_1.HEADID=t_2.ID
+	)
+	union
+	(
+		select -1 as BT,t_1.ID,t_1.HEADID ,t_1.PRODUCTID,t_1.PRO_CODE,t_1.PRO_CAPACITYNUM,t_1.PRO_WEIGHTNUM,t_1.PRO_OUT_COST PRO_COST,t_1.PRO_COUNT,t_2.BILL_STATUS,t_1.PRO_WH AS WAREWHERE,t_2.WAREHOUSE,t_2.WHOWNER
+		from T_WM_PRODUCT2 t_1 right join T_WM_OUT t_2 on t_1.HEADID=t_2.ID
+	)
+		]]></pluginInterceptor>
+		<!-- where t_1.BILL_STATUS='audit' 预判断 还没确认的入库也要计算
+		<pluginInterceptor methodName="exp" parameter="DisBtns(add,delete,save,saveAndAdd,saveAndAddCopy);" pluginName="query" type="after"/>
+		<pluginInterceptor methodName="exp" parameter="DisBtns(add,delete,save,saveAndAdd,saveAndAddCopy);" pluginName="edit" type="after"/>-->
+		<Operation queryPageDelete="false" save="false" saveAndAdd="false" saveAndAddCopy="false"/>
+	</table>
+</Haiyan>

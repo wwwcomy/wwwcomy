@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Haiyan xsi:noNamespaceSchemaLocation="../../haiyan.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<table description="明细" name="T_DIC_COMMON_DETAIL">
+		<id name="ID" javaType="string"/>
+		<field name="HEADID" javaType="string" description="HEADID">
+			<component type="hidden" referenceTable="T_DIC_COMMON"/>
+		</field>
+		<field name="CODE" javaType="string" description="CODE">
+			<component type="text"/>
+		</field>
+		<field name="NAME" javaType="string" description="NAME">
+			<component type="text"/>
+		</field>
+		<field name="PID" javaType="string" description="PID">
+			<component type="richSelect" referenceTable="T_DIC_COMMON_DETAIL" referenceField="ID" displayReferenceField="NAME"/>
+		</field>
+		<field name="LABEL" javaType="string" description="LABEL">
+			<component type="text"/>
+		</field>
+		<field name="LABEL2" javaType="string" description="LABEL2">
+			<component type="text"/>
+		</field>
+		<field name="LABEL3" javaType="string" description="LABEL3">
+			<component type="text"/>
+		</field>
+	</table>
+</Haiyan>

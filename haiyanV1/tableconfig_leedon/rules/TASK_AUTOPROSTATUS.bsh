@@ -1,0 +1,17 @@
+void autoChangeProStatus() throws Throwable {
+
+	DBManager dbm = context.getDBM();
+	//30天以内自动变为即将过期
+	String sql1 = "update T_WM_PRO set STATUS=2 where ID in (select distinct(PRODUCTID) from T_WM_SDBCONPRODUCT where now()>=VALIDATE_DAY and now()<=VALIDATE_END and datediff(VALIDATE_END,now())<=30 and BILL_STATUS='audit')";
+	dbm.executeUpdate(sql1,null);
+	//30天以外为生效
+	String sql2 = "update T_WM_PRO set STATUS=0 where ID in (select distinct(PRODUCTID) from T_WM_SDBCONPRODUCT where now()>=VALIDATE_DAY and now()<=VALIDATE_END and datediff(VALIDATE_END,now())>30 and BILL_STATUS='audit')";
+	dbm.executeUpdate(sql2,null);
+	//不在范围内则过期 ，并且把合同价格设为-1
+	String sql3 = "update T_WM_PRO set STATUS=1,CONTRA_INPRICE=-1 where ID not in (select distinct(PRODUCTID) from T_WM_SDBCONPRODUCT where now()>=VALIDATE_DAY and now()<=VALIDATE_END and BILL_STATUS='audit')";
+	dbm.executeUpdate(sql3,null);
+	//商品价格按照合同价格更新
+	String sqlInPrice = "update t_wm_pro t_1 left join t_wm_sdbconproduct t_2 on t_1.ID = t_2.PRODUCTID set t_1.CONTRA_INPRICE = t_2.PRO_IN_PRICE where t_2.BILL_STATUS='audit' and t_2.VALIDATE_DAY<=now() and t_2.VALIDATE_END>=now()";
+	dbm.executeUpdate(sqlInPrice,null);
+}
+autoChangeProStatus();

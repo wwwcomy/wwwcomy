@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<WFProcess name="leedon">
+	<WFTabPanels name="leedon" id="">
+		<WFPanels>
+			<WFPanel id="d01a20b3-53ef-4f95-84b3-9e4d0bb17413" wftype="Start" name="Start" type="class" className="wfd.plugin.Start" posx="36" posy="57" use="script">
+				<Description/>
+				<Script>return haiyan.interceptor.WfInterceptor.dealNode(table,form,&quot;leedon,d01a20b3-53ef-4f95-84b3-9e4d0bb17413&quot;,context);</Script>
+				<Data/>
+			</WFPanel>
+			<WFPanel id="26d43e74-238b-4d09-8411-70b263e49b27" wftype="End" name="End" type="class" className="wfd.plugin.End" posx="591" posy="182" use="script">
+				<Description/>
+				<Script>return haiyan.interceptor.WfInterceptor.dealNode(table,form,&quot;leedon,26d43e74-238b-4d09-8411-70b263e49b27&quot;,context);</Script>
+				<Data/>
+			</WFPanel>
+			<WFPanel id="861bc396-0b9d-497d-81ae-8e39568aa99b" wftype="Default" name="Node_001" type="class" className="wfd.plugin.Node" posx="158" posy="56" use="script">
+				<Description/>
+				<Script>return haiyan.interceptor.WfInterceptor.dealNode(table,form,&quot;leedon,861bc396-0b9d-497d-81ae-8e39568aa99b&quot;,context);</Script>
+				<Data>${express_nodeleave}SetValue(NAME,{已经开始流程})${/express_nodeleave}${chajianchengxu}${/chajianchengxu}</Data>
+				<Property name="mingcheng">Node_001</Property>
+				<Property name="chajianchengxu"/>
+				<Property name="express_nodeleave">SetValue(NAME,{已经开始流程})</Property>
+			</WFPanel>
+			<WFPanel id="2d1c5023-360e-4ce9-bcbb-2e53ba3268f5" wftype="Activity" name="TaskNode_001" type="class" className="wfd.plugin.TaskNode" posx="184" posy="224" use="script">
+				<Description/>
+				<Script>return haiyan.interceptor.WfInterceptor.dealNode(table,form,&quot;leedon,2d1c5023-360e-4ce9-bcbb-2e53ba3268f5&quot;,context);</Script>
+				<Data>${express_nodeleave}${/express_nodeleave}${shifouhuiqian}0${/shifouhuiqian}${kejianhuiqianyijian}0${/kejianhuiqianyijian}${shenpijuese}1${#}管理员(admin)${/shenpijuese}${chajianchengxu_before}${/chajianchengxu_before}${chajianchengxu}${/chajianchengxu}</Data>
+				<Property name="shifouhuiqian">0</Property>
+				<Property name="chajianchengxu_before"/>
+				<Property name="mingcheng">TaskNode_001</Property>
+				<Property name="shenpijuese">1${#}管理员(admin)</Property>
+				<Property name="chajianchengxu"/>
+				<Property name="express_nodeleave"/>
+			</WFPanel>
+			<WFPanel id="00b1db3f-beac-47ba-bf03-379995e03041" wftype="Activity" name="Decision_001" type="class" className="wfd.plugin.Decision" posx="320" posy="55" use="script">
+				<Description/>
+				<Script>=If(GetValue(CODE)={TEST},{TaskNode_001},{Node_003})</Script>
+				<Data/>
+				<Property name="mingcheng">Decision_001</Property>
+			</WFPanel>
+			<WFPanel id="bb82da46-4d18-4549-8409-a596a88adbf6" wftype="Default" name="Node_002" type="class" className="wfd.plugin.Node" posx="393" posy="242" use="script">
+				<Description/>
+				<Script>return haiyan.interceptor.WfInterceptor.dealNode(table,form,&quot;leedon,bb82da46-4d18-4549-8409-a596a88adbf6&quot;,context);</Script>
+				<Data/>
+				<Property name="mingcheng">Node_002</Property>
+			</WFPanel>
+			<WFPanel id="bab1996a-3176-401d-ab28-9dd3facf97c1" wftype="Default" name="Node_003" type="class" className="wfd.plugin.Node" posx="491" posy="58" use="script">
+				<Description/>
+				<Script>return haiyan.interceptor.WfInterceptor.dealNode(table,form,&quot;leedon,bab1996a-3176-401d-ab28-9dd3facf97c1&quot;,context);</Script>
+				<Data/>
+				<Property name="mingcheng">Node_003</Property>
+			</WFPanel>
+		</WFPanels>
+		<WFLines>
+			<WFLine id="f1a90937-c6e7-4917-b44a-52e4b8555e1c" wftype="Route" name="Commit" type="class" className="com.zhouxw.workflow.tools.view.WfStraightArrowLine" leftID="d01a20b3-53ef-4f95-84b3-9e4d0bb17413" rightID="861bc396-0b9d-497d-81ae-8e39568aa99b" use="script">
+				<Description/>
+				<Script>return haiyan.interceptor.WfInterceptor.dealRoute(table,form,&quot;leedon,f1a90937-c6e7-4917-b44a-52e4b8555e1c&quot;,context);</Script>
+				<Data/>
+			</WFLine>
+			<WFLine id="5e449a4b-cc2b-4d52-a88e-292912efd682" wftype="Route" name="Commit" type="class" className="com.zhouxw.workflow.tools.view.WfStraightArrowLine" leftID="861bc396-0b9d-497d-81ae-8e39568aa99b" rightID="00b1db3f-beac-47ba-bf03-379995e03041" use="script">
+				<Description/>
+				<Script>return haiyan.interceptor.WfInterceptor.dealRoute(table,form,&quot;leedon,5e449a4b-cc2b-4d52-a88e-292912efd682&quot;,context);</Script>
+				<Data/>
+			</WFLine>
+			<WFLine id="40d64e96-a271-4a7a-8b66-529b1c9643b7" wftype="Route" name="Commit" type="class" className="com.zhouxw.workflow.tools.view.WfStraightArrowLine" leftID="bab1996a-3176-401d-ab28-9dd3facf97c1" rightID="26d43e74-238b-4d09-8411-70b263e49b27" use="script">
+				<Description/>
+				<Script>return haiyan.interceptor.WfInterceptor.dealRoute(table,form,&quot;leedon,40d64e96-a271-4a7a-8b66-529b1c9643b7&quot;,context);</Script>
+				<Data/>
+			</WFLine>
+			<WFLine id="d03c7cb2-8034-4021-b4fb-a9513d096ef5" wftype="Route" name="Commit" type="class" className="com.zhouxw.workflow.tools.view.WfStraightArrowLine" leftID="bb82da46-4d18-4549-8409-a596a88adbf6" rightID="26d43e74-238b-4d09-8411-70b263e49b27" use="script">
+				<Description/>
+				<Script>return haiyan.interceptor.WfInterceptor.dealRoute(table,form,&quot;leedon,d03c7cb2-8034-4021-b4fb-a9513d096ef5&quot;,context);</Script>
+				<Data/>
+			</WFLine>
+			<WFLine id="5069fd09-b4f6-4b48-9a4e-3a05cab4e4cc" wftype="Route" name="Commit" type="class" className="com.zhouxw.workflow.tools.view.WfStraightArrowLine" leftID="00b1db3f-beac-47ba-bf03-379995e03041" rightID="2d1c5023-360e-4ce9-bcbb-2e53ba3268f5" use="script">
+				<Description/>
+				<Script>return haiyan.interceptor.WfInterceptor.dealRoute(table,form,&quot;leedon,5069fd09-b4f6-4b48-9a4e-3a05cab4e4cc&quot;,context);</Script>
+				<Data/>
+			</WFLine>
+			<WFLine id="99183aee-94a1-486c-a5bb-5a148d4c66e2" wftype="Route" name="Commit" type="class" className="com.zhouxw.workflow.tools.view.WfStraightArrowLine" leftID="00b1db3f-beac-47ba-bf03-379995e03041" rightID="bab1996a-3176-401d-ab28-9dd3facf97c1" use="script">
+				<Description/>
+				<Script>return haiyan.interceptor.WfInterceptor.dealRoute(table,form,&quot;leedon,99183aee-94a1-486c-a5bb-5a148d4c66e2&quot;,context);</Script>
+				<Data/>
+			</WFLine>
+			<WFLine id="23645032-1c4d-4746-ab65-9421fa3259df" wftype="Route" name="Commit" type="class" className="com.zhouxw.workflow.tools.view.WfStraightArrowLine" leftID="2d1c5023-360e-4ce9-bcbb-2e53ba3268f5" rightID="bb82da46-4d18-4549-8409-a596a88adbf6" use="script">
+				<Description/>
+				<Script>return haiyan.interceptor.WfInterceptor.dealRoute(table,form,&quot;leedon,23645032-1c4d-4746-ab65-9421fa3259df&quot;,context);</Script>
+				<Data/>
+				<Property name="mingcheng">Commit</Property>
+			</WFLine>
+		</WFLines>
+	</WFTabPanels>
+</WFProcess>

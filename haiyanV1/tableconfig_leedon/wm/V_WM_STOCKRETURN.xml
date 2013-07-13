@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Haiyan xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../haiyan.xsd">
+	<table name="V_WM_STOCKRETURN" description="退货财务统计">
+		<id name="ID" javaType="string"/>
+		<field name="HEADID" description="单头" javaType="string">
+			<component type="hidden"/>
+		</field>
+		<field name="WM_MONTH" description="所属月份" javaType="string" lazyLoad="false">
+			<component type="text" readOnly="true" colspan="1"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="WM_DATE" description="退货发生时间" javaType="date" lazyLoad="false">
+			<component type="date" readOnly="true" colspan="1"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="OUT_CODE" description="订单:商品号" displayOnly="false" javaType="string" lazyLoad="false">
+			<component type="combo" readOnly="false" displayReferenceField="OUT_CODE" referenceField="OUT_CODE" referenceTable="V_WM_OUTPRE" associatedFields="ORDER_ID" parameter="{&amp;RETURNPRE=1}"/>
+			<listColumn noedit="false" noquery="false" width="155" style="sortName:__OUT_CODE__OUT_CODE"/>
+		</field>
+		<field name="ORDER_ID" description="ORDER_ID出库单号" javaType="string">
+			<component type="hidden" readOnly="true" displayReferenceField="ORDER_ID"/>
+			<listColumn noedit="false" noquery="false" width="75"/>
+		</field>
+		<field name="OUT_DATE" description="订单发生时间" javaType="date" lazyLoad="false">
+			<component type="date" readOnly="true" />
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="PRODUCTID" description="EDP商品名" displayOnly="false" javaType="string" lazyLoad="false">
+			<component type="combo" readOnly="true" colspan="1" displayReferenceField="NAME" referenceField="ID" referenceTable="V_WM_SDBPRODUCT" associatedFields="WMCODE"/>
+			<queryCondition type="equal"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="WMCODE" description="货号" displayOnly="true" javaType="string" lazyLoad="false">
+			<component type="text" readOnly="true" colspan="1" displayReferenceField="WMCODE"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="PRO_NAME" description="商品名称" displayOnly="false" javaType="string" lazyLoad="false">
+			<component type="text" readOnly="true" displayReferenceField="NAME"/>
+			<listColumn noedit="false" noquery="false" width="60"/>
+		</field>
+		<field name="SUPP_CODE" description="供应商自有货号" javaType="string" lazyLoad="false">
+			<component type="text" readOnly="true" displayReferenceField="SUPP_CODE"/>
+			<listColumn noedit="false" noquery="false" width="70"/>
+		</field>
+		<field name="RETURN_RCOUNT" description="实退货统计" javaType="bigDecimal" defaultValue="0">
+			<component type="text" readOnly="false" />
+			<listColumn noedit="false" noquery="false" width="60"/>
+		</field>
+		<field name="RETURN_COUNT" description="退货数量" javaType="bigDecimal" defaultValue="0">
+			<component type="text" readOnly="false"/>
+			<listColumn noedit="false" noquery="false" width="65"/>
+		</field>
+		<field name="OUT_COUNT" description="销售数量" javaType="bigDecimal" defaultValue="0">
+			<component type="text" readOnly="true" displayReferenceField="OUT_COUNT"/>
+			<listColumn noedit="false" noquery="false" width="65"/>
+		</field>
+		<field name="OUT_PRICE" description="EDP单价" javaType="string">
+			<component type="text" readOnly="true" displayReferenceField="OUT_PRICE"/>
+			<listColumn noedit="false" noquery="false" width="70"/>
+		</field>
+		<field name="IN_PRICE" description="供应商单价" javaType="string">
+			<component type="text" readOnly="true" displayReferenceField="IN_PRICE"/>
+			<listColumn noedit="false" noquery="false" width="85"/>
+		</field>
+		<field name="OUT_ALL_PRICE" description="EDP销售总价" javaType="string">
+			<component type="text" readOnly="true" displayReferenceField="OUT_ALL_PRICE"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="EDP_RETURN_PRICE" description="EDP退货单价" javaType="bigDecimal" defaultValue="0">
+			<component type="text" readOnly="false" maxFractionDigit="3" minFractionDigit="3" />
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="EDP_OTHERPRICE" description="EDP其他退额" javaType="bigDecimal" defaultValue="0">
+			<component type="text" readOnly="false" maxFractionDigit="3" minFractionDigit="3" />
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="SUP_RETURN_PRICE" description="供应商承担单价" javaType="bigDecimal" defaultValue="0">
+			<component type="text" readOnly="false" maxFractionDigit="3" minFractionDigit="3" />
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="SUP_OTHERPRICE" description="供应商其他退额" javaType="bigDecimal" defaultValue="0">
+			<component type="text" readOnly="false" maxFractionDigit="3" minFractionDigit="3" />
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="SUP_ALL_RETURNRPRICE" description="供应商总退款额" javaType="bigDecimal" defaultValue="0">
+			<component type="text" readOnly="true" maxFractionDigit="3" minFractionDigit="3"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="EDP_ALL_RETURNRPRICE" description="EDP总退款额" javaType="bigDecimal" defaultValue="0">
+			<component type="text" readOnly="true" maxFractionDigit="3" minFractionDigit="3"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="SUPPLIER" description="供应商" javaType="string">
+			<component type="combo" readOnly="true" displayReferenceField="NAME" referenceField="ID" referenceTable="T_DIC_SUPPLIER"/>
+		</field>
+		<field name="SUPP_MONTH" description="供应商月度对账表" javaType="string">
+			<component type="text" readOnly="true"/>
+			<listColumn noedit="false" noquery="true"/>
+		</field>
+		<field name="SUPP_PRO_MONTH" description="供应商商品月度" javaType="string">
+			<component type="text" readOnly="true"/>
+			<listColumn noedit="false" noquery="true"/>
+		</field>
+		<field name="WAREHOUSE" description="收货仓库" displayOnly="false" javaType="string" lazyLoad="false" nullAllowed="false">
+			<component type="combo" readOnly="true" colspan="1" displayReferenceField="NAME" referenceField="ID" referenceTable="T_DIC_WAREHOUSE_COMBO"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<!-- -->
+		<queryFilter>
+			<pluggedFilter methodName="exp" parameter="{ and t_1.WAREHOUSE='}&amp;GetUser(WAREHOUSEID)&amp;{' }"/>
+		</queryFilter>
+		<role name="user sp">
+		</role>
+		<role name="admin boss manager wm pe ac"/>
+		<javascript hostPage="query"><![CDATA[
+		]]></javascript>
+		<!-- -->
+		<pluginInterceptor methodName="initDB" pluginName="initDB" type="before"><![CDATA[
+create or replace view V_WM_STOCKRETURN as 
+	(
+		select t_1.ID as ID,t_1.HEADID,t_1.OUT_CODE,t_1.ORDER_ID,
+		t_1.PRODUCTID,t_1.WMCODE,t_1.PRO_NAME,t_1.SUPP_CODE,
+		t_3.AUDIT_TIME as OUT_DATE,
+		t_2.AUDIT_TIME as WM_DATE,
+		sum(t_1.RETURN_RCOUNT) as RETURN_RCOUNT,
+		sum(t_1.RETURN_COUNT) as RETURN_COUNT,
+		SUM(OUT_COUNT) as OUT_COUNT,
+		t_1.OUT_PRICE,
+		t_1.IN_PRICE,
+		DATE_FORMAT(date_add(date_sub(t_2.AUDIT_TIME,INTERVAL 20 day),INTERVAL 1 month),'%Y%m') as WM_MONTH,
+		sum(t_1.OUT_ALL_PRICE) as OUT_ALL_PRICE,
+		
+		t_1.EDP_RETURN_PRICE,
+		t_1.SUP_RETURN_PRICE,
+		sum(t_1.EDP_OTHERPRICE) as EDP_OTHERPRICE,
+		sum(t_1.SUP_OTHERPRICE) as SUP_OTHERPRICE,
+		sum(t_1.EDP_ALL_RETURNRPRICE) as EDP_ALL_RETURNRPRICE,
+		sum(t_1.SUP_ALL_RETURNRPRICE) as SUP_ALL_RETURNRPRICE,
+		t_4.SUPPLIER,
+		t_2.WAREHOUSE,
+		concat(t_4.SUPPLIER,'_',t_1.PRODUCTID,'_',DATE_FORMAT(date_add(date_sub(t_2.AUDIT_TIME,INTERVAL 20 day),INTERVAL 1 month),'%Y%m')) as SUPP_MONTH,
+		concat(t_4.SUPPLIER,'_',t_1.PRODUCTID,'_',DATE_FORMAT(date_add(date_sub(t_2.AUDIT_TIME,INTERVAL 20 day),INTERVAL 1 month),'%Y%m')) as SUPP_PRO_MONTH
+		from T_WM_SDBRETURNPRE t_1
+		left join T_WM_SDBRETURN t_2 on t_1.HEADID=t_2.ID 
+		left join T_WM_OUTPART t_3 on t_1.ORDER_ID=t_3.ID
+		left join T_WM_PRO t_4 on t_1.PRODUCTID=t_4.ID
+		where t_2.BILL_STATUS='audit'
+		group by t_1.PRODUCTID,WM_MONTH,SUPP_MONTH,SUPPLIER
+	)
+		]]></pluginInterceptor>
+		<pluginInterceptor methodName="exp" parameter="DisBtns(add,delete,save,saveAndAdd,saveAndAddCopy);" pluginName="query" type="after"/>
+		<pluginInterceptor methodName="exp" parameter="DisBtns(add,delete,save,saveAndAdd,saveAndAddCopy);" pluginName="edit" type="after"/>
+	</table>
+</Haiyan>

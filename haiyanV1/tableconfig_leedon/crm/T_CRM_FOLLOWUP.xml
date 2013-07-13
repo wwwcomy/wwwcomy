@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Haiyan xsi:noNamespaceSchemaLocation="../../haiyan.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<table description="Leedon contact" name="T_CRM_FOLLOWUP" realTable="T_CRM_FOLLOWUP">
+		<id name="ID" javaType="string">
+			<component type="hidden" url="@"/>
+		</id>
+		<field name="SALESID" javaType="string" description="跟进销售" nullAllowed="false">
+			<component type="richSelect" referenceTable="SYSOPERATOR_VIEW" referenceField="ID" displayReferenceField="NAME" readOnly="true"/>
+			<listColumn noquery="false" nowrap="true"/>
+		</field>
+		<field name="SDATE" javaType="date" description="时间" dataStyle="yyyy-MM-dd HH:mm:ss">
+			<component type="text" readOnly="true"/>
+		</field>
+		<field name="METHOD" javaType="string" description="跟进方式" nullAllowed="false">
+			<component type="dropdown">
+				<option displayName="电话" value="1"/>
+				<option displayName="拜访" value="2"/>
+				<option displayName="邮件" value="3"/>
+				<option displayName="小礼物" value="4"/>
+			</component>
+		</field>
+		<field name="RCLIENT" javaType="string" description="客户">
+			<component type="richSelect" referenceTable="T_CRM_CLIENT" referenceField="ID" displayReferenceField="NAME" quickQueryConditionField="NAME" readOnly="true"/>
+		</field>
+		<field name="RCONTACT" javaType="string" description="客户联系人">
+			<component type="richSelect" referenceTable="T_CRM_CONTACT" conditionFields="CUS_ID" restrictiveFields="RCLIENT" referenceField="ID" displayReferenceField="NAME" quickQueryConditionField="NAME"/>
+		</field>
+		<!--		
+		<queryFilter>
+			<pluggedFilter methodName="exp" parameter="{ and t_1.CUS_ID='}&amp;GetPara(CUS_ID)&amp;{' }"/>
+		</queryFilter>
+-->
+		<pluginInterceptor methodName="setDefaultValByHeadID" pluginName="edit" parameter="CUS_ID,T_CRM_CLIENT,ID,RCLIENT,NAME,__RCLIENT__NAME"/>
+		<pluginInterceptor methodName="exp" pluginName="edit" parameter="Set(SDATE, datetime({yyyy-MM-dd HH:mm:ss}),SALESID,GetUser(ID))"/>
+		<!-- ,RCLIENT,GetPara(CUS_ID) -->
+	</table>
+</Haiyan>

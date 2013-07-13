@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Haiyan xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../haiyan.xsd">
+	<table name="TEST_META" description="META测试" realTable="TEST_META" colspan="1">
+		<id name="ID" description="ID" javaType="string">
+			<component type="hidden" url=""/>
+		</id>
+		<field name="CODE" description="数字字段" displayOnly="false" javaType="string" lazyLoad="false" nullAllowed="false">
+			<component type="text" readOnly="false" validator="^-?\d+$" validatorText="“编码“ 必须为数字类型"/>
+			<queryCondition type="equal"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="NAME" description="EMAIL字段" displayOnly="false" javaType="string" lazyLoad="false" nullAllowed="true">
+			<component type="text" readOnly="false" validator="^[\w-]+(\.[\w-]+)*@[\w-]+(\.[\w-]+)+$" validatorText="“名称“ 必须为email类型"/>
+			<queryCondition type="equal"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="GRID" description="表格字段" displayOnly="true" javaType="string" lazyLoad="false" nullAllowed="false">
+			<component type="grid" style="height:500;width:800;" referenceTable="TEST_DETAIL" referenceField="HEADID" displayReferenceField="NAME" readOnly="false"/>
+			<queryCondition type="equal"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<!-- -->
+		<javascript hostPage="edit"><![CDATA[
+			 //function interceptorOnItemClick(item, checked) {
+			 onItemClick = onItemClick.createInterceptor(function(item, checked) {
+			 	if (item.name=='test3') {
+			 		alert();
+			 		return false;
+			 	}
+			   if (item.name=='EditPlugin') {
+			   		Ext.Ajax.request( {
+						url : 'test/ext_mymetawin.jsp?__opr_data=TEST_ACC'
+						,success : function(response) {
+							try {
+								// alert(response.responseText);
+								if (__metaWin!=null) {
+									__metaWin.destroy();
+									__metaWin=null;
+								}
+							   __metaWin = eval(response.responseText);
+								__metaWin.show();
+							} catch (e) {
+								alert(e.message);
+							}
+						}
+					});	
+					return false;
+			   }
+		    }
+		]]></javascript>
+		<!-- -->
+		<pluginInterceptor methodName="exp" pluginName="test" parameter="Warning(&quot;12345&quot;);"><![CDATA[
+			Warning(&quot;12345&quot;);
+		]]></pluginInterceptor>
+		<!-- -->
+		<pluginOperation oprName="测试公式拦截器" name="test" hostPage="edit" tblevel="1"/>
+		<pluginOperation className="haiyan.plugin.ExpPlugin" oprName="测试公式按钮" name="test2" hostPage="edit" tblevel="1"><![CDATA[
+			Warning(&quot;12345&quot;);
+		]]></pluginOperation>
+		<pluginOperation className="haiyan.plugin.BshPlugin" oprName="测试脚本按钮" name="test3" hostPage="edit" tblevel="1"><![CDATA[
+			System.out.println("BSH");
+		]]></pluginOperation>
+	</table>
+</Haiyan>

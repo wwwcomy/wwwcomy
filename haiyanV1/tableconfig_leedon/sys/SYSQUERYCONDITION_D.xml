@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Haiyan xsi:noNamespaceSchemaLocation="../../haiyan.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<table description="条件设定" name="SYSQUERYCONDITION_D">
+		<id name="ID" javaType="string"/>
+		<field name="HEADID" javaType="string" description="HEADID">
+			<component type="hidden" referenceTable="SYSQUERYCONDITION"/>
+			<queryCondition type="equal"/>
+		</field>
+		<field name="RELATION" javaType="string" description="逻辑关系" defaultValue="and">
+			<component type="dropdown">
+				<option displayName="并且" value="and"/>
+				<option displayName="或者" value="or"/>
+			</component>
+		</field>
+		<field name="LEFT_P" javaType="string" description="(" defaultValue="">
+			<component type="dropdown">
+				<option displayName="" value=""/>
+				<option displayName="(" value="("/>
+			</component>
+		</field>
+		<field name="COLUMNNAME" javaType="string" description="列名称">
+			<component type="text"/>
+			<!--
+			<component type="dropdown" className="haiyan.component.TableFieldComponent" subQuerySQL="select TABLENAME from SYSQUERYCONDITION where HEADID=t_1.ID"/>
+			-->
+		</field>
+		<field name="CONDITIONS" javaType="string" description="条件" defaultValue="=">
+			<component type="dropdown">
+				<option displayName="等于" value="="/>
+				<option displayName="小于" value="&lt;"/>
+				<option displayName="大于" value="&gt;"/>
+				<option displayName="类似" value="like"/>
+				<option displayName="不为空" value="is not null"/>
+			</component>
+		</field>
+		<field name="CONTENT" javaType="string" description="检索内容">
+			<component type="text"/>
+		</field>
+		<field name="RIGHT_P" javaType="string" description=")" defaultValue="">
+			<component type="dropdown">
+				<option displayName="" value=""/>
+				<option displayName=")" value=")"/>
+			</component>
+		</field>
+	</table>
+</Haiyan>

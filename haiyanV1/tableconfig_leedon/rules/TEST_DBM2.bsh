@@ -1,0 +1,16 @@
+
+void test() {
+	Qbq3Form qfrm = new MapForm();
+	qfrm.set("TYPE_ID", "6");
+	Page pg = context.getDBM().findByForm(ConfigUtil.getTable("V_DIC_SDBGOODSTYPE"),qfrm,5000,1,context,null);
+	Qbq3Form frm = pg.getData(0);
+	String PROPS = frm.get("PROPS"); // new String(frm.get("PROPS").getBytes(),"UTF-8");
+	// throw new Warning(PROPS);
+	String k = "i:11;";
+	int c = PROPS.indexOf(k);
+	if (c>=0) {
+		String s1 = PROPS.substring(c+k.length());
+		throw new Warning(s1.substring(0, s1.indexOf(";")));
+	}
+}
+test();

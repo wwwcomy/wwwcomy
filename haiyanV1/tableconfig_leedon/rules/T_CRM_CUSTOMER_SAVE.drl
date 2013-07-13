@@ -1,0 +1,143 @@
+<rule-set declaration="" name="Tests assignment rules" xmlns="http://drools.org/rules" xmlns:java="http://drools.org/semantics/java" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<!-- -->	
+	<java:import>com.haiyan.genmis.core.db.Filter</java:import>
+	<java:import>com.haiyan.genmis.core.db.DBManager</java:import>
+	<java:import>com.haiyan.genmis.core.SrvContext</java:import>
+	<java:import>com.haiyan.genmis.core.struts.*</java:import>
+	<java:import>com.haiyan.genmis.core.right.*</java:import>
+	<java:import>com.haiyan.genmis.core.*</java:import>
+	<java:import>com.haiyan.genmis.core.exception.Warning</java:import>
+	<java:import>com.haiyan.genmis.castorgen.Table</java:import>
+	<java:import>com.haiyan.genmis.util.StringUtil</java:import>
+	<java:import>com.haiyan.genmis.util.ConfigUtil</java:import>
+	<java:import>haiyan.interceptor.DroolsInterceptor</java:import>
+	<java:import>java.lang.String</java:import>
+	<java:import>java.util.*</java:import>
+	<!-- -->
+	<application-data identifier="context">SrvContext</application-data>
+	<application-data identifier="dbm">DBManager</application-data>
+	<application-data identifier="table">Table</application-data>
+	<application-data identifier="form">Qbq3Form</application-data>
+	<!-- （授权人员 及 14 销售总监 1 管理员 6 事业部经理 15 区域经理 9 总裁 3 总经理 21 销售经理 18 销售组长） -->
+	<!-- 自定义方法 -->
+	<java:functions>
+	    public static Qbq3Form getForm(Qbq3Form form) {
+	        return null;
+	    }
+	</java:functions>
+	<!-- 规则 -->
+	<rule name="main" salience="0">
+		<parameter identifier="dForm">
+			<java:class>Qbq3Form</java:class>
+		</parameter>
+		<java:condition>"0".equals("0")</java:condition>
+		<java:consequence>
+		User user = context.getUser();
+		String corpName = dForm.getParameter("NAME");		
+		// String ID = dForm.getParameter("ID");
+		String ADDRESS = dForm.getParameter("ADDRESS ");
+		String CONTACT_PERSON = dForm.getParameter("CONTACT_PERSON");
+		String PHONE = dForm.getParameter("PHONE");
+		String MOBILE_PHONE = dForm.getParameter("MOBILE_PHONE");
+		String POSITION = dForm.getParameter("POSITION");
+		String SEX = dForm.getParameter("SEX");
+		String EMAIL = dForm.getParameter("EMAIL");
+		String CONTACT_PERSON_2 = dForm.getParameter("CONTACT_PERSON_2");
+		String PHONE_2 = dForm.getParameter("PHONE_2");
+		String MOBILE_PHONE_2 = dForm.getParameter("MOBILE_PHONE_2");
+		String POSITION_2 = dForm.getParameter("POSITION_2");
+		String SEX_2 = dForm.getParameter("SEX_2");
+		String EMAIL_2 = dForm.getParameter("EMAIL_2");
+		// 过滤器
+		Filter filter = new Filter(" and t_1.SOURCE like 'T_CRM_CUSTOMER." + corpName + ".%'  ");
+		ArrayList list = (ArrayList) dbm.findByFilter(ConfigUtil.getTable("T_DIC_WAB"), filter, 1, 1, context, null).getData();
+		// System.out.println(dForm);
+		// 如果没有联系人记录
+		if (list.size() == 0) {
+			Qbq3Form form2 = new MapForm();
+			form2.setParameter("COMPANY", corpName);
+			form2.setParameter("FIRST_NAME", CONTACT_PERSON);
+			form2.setParameter("LAST_NAME", " ");
+			form2.setParameter("NAME", CONTACT_PERSON);
+			form2.setParameter("PHONE ", PHONE);
+			form2.setParameter("MOBILE_PHONE", MOBILE_PHONE);
+			form2.setParameter("POSITION", POSITION);
+			form2.setParameter("SEX", SEX);
+			form2.setParameter("EMAIL", EMAIL);
+			form2.setParameter("ADDRESS", ADDRESS);
+			form2.setParameter("CUSTOMER_ID", dForm.getParameter("ID"));
+			form2.setParameter("CREATE_USER_ID", user.getID());
+			form2.setParameter("SOURCE", "T_CRM_CUSTOMER." + corpName + ".1");
+			form2.setParameter("AVAILABLE","1");
+			dbm.insert(ConfigUtil.getTable("T_DIC_WAB"), form2, context, null);
+			// 如果填写了联系人2的记录
+			if (!StringUtil.isBlankOrNull(CONTACT_PERSON_2)) {
+				form2 = new MapForm();
+				form2.setParameter("COMPANY", corpName);
+				form2.setParameter("FIRST_NAME", CONTACT_PERSON_2);
+				form2.setParameter("LAST_NAME", " ");
+				form2.setParameter("NAME", CONTACT_PERSON_2);
+				form2.setParameter("PHONE ", PHONE_2);
+				form2.setParameter("MOBILE_PHONE", MOBILE_PHONE_2);
+				form2.setParameter("POSITION", POSITION_2);
+				form2.setParameter("SEX", SEX_2);
+				form2.setParameter("ADDRESS", ADDRESS);
+				form2.setParameter("EMAIL", EMAIL_2);
+				form2.setParameter("CUSTOMER_ID", dForm.getParameter("ID"));
+				form2.setParameter("CREATE_USER_ID", user.getID());
+				form2.setParameter("SOURCE", "T_CRM_CUSTOMER." + corpName
+						+ ".2");
+				form2.setParameter("AVAILABLE","1");
+				dbm.insert(ConfigUtil.getTable("T_DIC_WAB"), form2, context, null);
+			}
+		} else {
+			filter = new Filter(" and t_1.SOURCE like 'T_CRM_CUSTOMER." + corpName + ".1'  ");
+			list = (ArrayList) dbm.findByFilter(ConfigUtil.getTable("T_DIC_WAB"), filter, 1, 1, context, null).getData();
+			// 如果有联系人1的记录
+			if (list.size() == 1) {
+				Qbq3Form form2 = (Qbq3Form) list.get(0);
+				form2.setParameter("COMPANY", corpName);
+				form2.setParameter("FIRST_NAME", CONTACT_PERSON);
+				form2.setParameter("LAST_NAME", " ");
+				form2.setParameter("NAME", CONTACT_PERSON);
+				form2.setParameter("PHONE ", PHONE);
+				form2.setParameter("MOBILE_PHONE", MOBILE_PHONE);
+				form2.setParameter("POSITION", POSITION);
+				form2.setParameter("SEX", SEX);
+				form2.setParameter("EMAIL", EMAIL);
+				form2.setParameter("ADDRESS", ADDRESS);
+				form2.setParameter("CUSTOMER_ID", dForm.getParameter("ID"));
+				form2.setParameter("CREATE_USER_ID", user.getID());
+				form2.setParameter("SOURCE", "T_CRM_CUSTOMER." + corpName
+						+ ".1");
+				form2.setParameter("AVAILABLE","1");
+				// System.out.println(form2);
+				dbm.update(ConfigUtil.getTable("T_DIC_WAB"), form2, context, null);
+			}
+			filter = new Filter(" and t_1.SOURCE like 'T_CRM_CUSTOMER." + corpName + ".2'  ");
+			list = (ArrayList) dbm.findByFilter(ConfigUtil.getTable("T_DIC_WAB"), filter, 1, 1, context, null).getData();
+			// 如果有联系人2的记录
+			if (list.size() == 1) {
+				Qbq3Form form2 = (Qbq3Form) list.get(0);
+				form2.setParameter("COMPANY", corpName);
+				form2.setParameter("FIRST_NAME", CONTACT_PERSON_2);
+				form2.setParameter("LAST_NAME", " ");
+				form2.setParameter("NAME", CONTACT_PERSON_2);
+				form2.setParameter("PHONE ", PHONE_2);
+				form2.setParameter("MOBILE_PHONE", MOBILE_PHONE_2);
+				form2.setParameter("POSITION", POSITION_2);
+				form2.setParameter("SEX", SEX_2);
+				form2.setParameter("EMAIL", EMAIL_2);
+				form2.setParameter("ADDRESS", ADDRESS);
+				form2.setParameter("CUSTOMER_ID", dForm.getParameter("ID"));
+				form2.setParameter("CREATE_USER_ID", user.getID());
+				form2.setParameter("SOURCE", "T_CRM_CUSTOMER." + corpName
+						+ ".2");
+				form2.setParameter("AVAILABLE","1");
+				// System.out.println(form2);
+				dbm.update(ConfigUtil.getTable("T_DIC_WAB"), form2, context, null);
+			}
+		}
+		</java:consequence>
+	</rule>
+</rule-set>

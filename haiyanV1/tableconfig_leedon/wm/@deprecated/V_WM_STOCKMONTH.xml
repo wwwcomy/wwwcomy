@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Haiyan xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../haiyan.xsd">
+	<table name="V_WM_STOCKMONTH" description="库存汇总(按仓库)">
+		<id name="ID" javaType="string"/>
+		<field name="HEADID" description="单头" javaType="string">
+			<component type="hidden"/>
+		</field>
+		<field name="PRODUCTID" description="EDP商品名" displayOnly="false" javaType="string" lazyLoad="false">
+			<component type="combo" readOnly="true" colspan="1" displayReferenceField="NAME" referenceField="ID" referenceTable="V_WM_SDBPRODUCT" associatedFields="PRO_WMCODE,PRO_NAME,PRO_CAPACITYNUM,PRO_WEIGHTNUM,PRO_IN_PRICE,PRO_OUT_PRICE"/>
+			<queryCondition type="equal"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="PRO_NAME" description="EDP商品名" displayOnly="false" javaType="string" lazyLoad="false">
+			<component type="hidden" readOnly="true" displayReferenceField="NAME"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="PRO_WMCODE" description="EDP商品编号" displayOnly="true" javaType="string" lazyLoad="false">
+			<component type="text" readOnly="true" colspan="1" displayReferenceField="WMCODE"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="PRO_CAPACITYNUM" description="单位体积" displayOnly="false" javaType="bigDecimal" lazyLoad="false">
+			<component type="text" readOnly="true" displayReferenceField="CAPACITYNUM" maxFractionDigit="3" minFractionDigit="3"/>
+			<listColumn noedit="false" noquery="true"/>
+		</field>
+		<field name="PRO_WEIGHTNUM" description="单位重量" displayOnly="false" javaType="bigDecimal" lazyLoad="false">
+			<component type="text" readOnly="true" displayReferenceField="WEIGHTNUM" maxFractionDigit="3" minFractionDigit="3"/>
+			<listColumn noedit="false" noquery="true"/>
+		</field>
+		<field name="WAREHOUSE" description="仓库" displayOnly="false" javaType="string" lazyLoad="false" nullAllowed="false">
+			<component type="richSelect" readOnly="true" colspan="5" displayReferenceField="NAME" referenceField="ID" referenceTable="T_DIC_WAREHOUSE_COMBO"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="WHOWNER" description="库主" displayOnly="false" javaType="string" lazyLoad="false" nullAllowed="false">
+			<component type="richSelect" readOnly="true" colspan="1" displayReferenceField="NAME" referenceField="ID" referenceTable="T_WM_OPERATOR"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="PRO_COUNT" description="发生数量" javaType="bigDecimal">
+			<component type="text" readOnly="true" numberGrouping="true" summaryRenderer="summaryRendererCOUNT"/>
+			<queryCondition type="blurMatching"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="PRO_IN_PRICE" description="参考进价" displayOnly="false" javaType="bigDecimal" lazyLoad="false">
+			<component type="text" readOnly="true" displayReferenceField="IN_PRICE" maxFractionDigit="3" minFractionDigit="3"/>
+			<listColumn noedit="false" noquery="false" width="78"/>
+		</field>
+		<field name="ALL_IN_COST" description="总进货金额" displayOnly="false" javaType="bigDecimal" lazyLoad="false">
+			<component type="text" readOnly="true" summaryType="sum" maxFractionDigit="2" minFractionDigit="2" />
+			<listColumn noedit="false" noquery="false" width="78"/>
+		</field>
+		<field name="PRO_OUT_PRICE" description="销售价" displayOnly="false" javaType="bigDecimal" lazyLoad="false">
+			<component type="text" readOnly="true" displayReferenceField="OUT_PRICE" maxFractionDigit="3" minFractionDigit="3"/>
+			<listColumn noedit="false" noquery="false" width="78"/>
+		</field>
+		<field name="ALL_OUT_COST" description="总销售金额" displayOnly="false" javaType="bigDecimal" lazyLoad="false">
+			<component type="text" readOnly="true" summaryType="sum" maxFractionDigit="2" minFractionDigit="2"/>
+			<listColumn noedit="false" noquery="false" width="78"/>
+		</field>
+
+		<field name="BILL_STATUS" javaType="string" description="单据状态">
+			<component type="hidden" readOnly="true">
+				<option displayName="待批" value="init"/>
+				<option displayName="审批确认" value="audit"/>
+			</component>
+		</field>
+		<field name="BT" javaType="bigDecimal" description="类型" displayOnly="false">
+			<component type="dropdown" readOnly="true">
+				<option displayName="入库" value="1"/>
+				<option displayName="出库" value="-1"/>
+			</component>
+		</field>
+		<field name="SUPPLIER" description="供应商" javaType="string">
+			<component type="combo" readOnly="false" displayReferenceField="NAME" referenceField="ID" referenceTable="T_DIC_SUPPLIER"/>
+		</field>
+		<!-- 
+		<queryFilter>
+			<pluggedFilter methodName="exp" parameter="
+					{ and t_1.WAREHOUSE='}&amp;GetUser(WAREHOUSEID)&amp;{' and t_1.WHOWNER='}&amp;GetUser(WHOWNERID)&amp;{' }
+					"/>
+			<pluggedFilter><![CDATA[and t_1.BILL_STATUS='audit']]></pluggedFilter>
+		</queryFilter>
+		-->
+		<!-- 
+		<queryFilter>
+			<pluggedFilter methodName="exp" parameter="{ and t_1.WAREHOUSE='}&amp;GetUser(WAREHOUSEID)&amp;{' }"/>
+			<pluggedFilter methodName="exp" parameter="If(InRole(sp,wm),{ and t_1.SUPPLIER='}&amp;GetUser(SUPPLIER)&amp;{'},{})"/>
+		</queryFilter>
+		-->
+		<javascript hostPage="edit"><![CDATA[
+		]]></javascript>
+		<!-- -->
+		<pluginInterceptor methodName="exp" parameter="If(InRole(user,sp),HidFlds(PRO_OUT_PRICE,ALL_OUT_COST),true)" pluginName="query" type="after"/>
+		<pluginInterceptor methodName="exp" parameter="If(InRole(user,sp),HidFlds(PRO_OUT_PRICE,ALL_OUT_COST),true)" pluginName="grid" type="before"/>
+		<!-- 入库：头BILL_STATUS 出库：明细BILL_STATUS-->
+		<pluginInterceptor methodName="initDB" pluginName="initDB" type="before"><![CDATA[
+create or replace view V_WM_STOCKMONTH as 
+	(
+		select 1 as BT,t_1.ID,t_1.HEADID,t_1.PRODUCTID,t_1.PRO_WMCODE,t_1.PRO_CAPACITYNUM,t_1.PRO_WEIGHTNUM,t_1.PRO_NAME,
+		t_1.PRO_IN_PRICE,sum(t_1.PRO_COUNT) as PRO_COUNT,
+		sum(t_1.PRO_COUNT*t_1.PRO_IN_PRICE) as ALL_IN_COST, 0 as PRO_OUT_PRICE,0 as ALL_OUT_COST,
+		t_2.BILL_STATUS,t_3.WHOWNER,t_3.WAREHOUSE,t_3.SUPPLIER
+		from (T_WM_INDETAIL t_1 left join T_WM_SDBIN t_2 on t_1.HEADID=t_2.ID) left join V_WM_SDBPRODUCT t_3 on t_3.ID=t_1.PRODUCTID
+		where t_2.BILL_STATUS='audit'
+		group by PRODUCTID
+	)
+		]]></pluginInterceptor>
+		<!-- where t_1.BILL_STATUS='audit' 预判断 还没确认的入库也要计算
+		<pluginInterceptor methodName="exp" parameter="DisBtns(add,delete,save,saveAndAdd,saveAndAddCopy);" pluginName="query" type="after"/>
+		<pluginInterceptor methodName="exp" parameter="DisBtns(add,delete,save,saveAndAdd,saveAndAddCopy);" pluginName="edit" type="after"/>-->
+		<Operation queryPageDelete="false" queryPageAdd="false" save="false" saveAndAdd="false" saveAndAddCopy="false"/>
+	</table>
+</Haiyan>

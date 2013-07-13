@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Haiyan xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../haiyan.xsd">
+	<table name="SYSPATH" description="权限路径">
+		<id name="ID" javaType="string">
+			<component type="hidden" url="#"/>
+		</id>
+		<field name="CODE" description="编码" javaType="string">
+			<component type="text"/>
+		</field>
+		<field name="NAME" description="名称" javaType="string">
+			<component type="text"/>
+		</field>
+		<field name="TABLENAME" description="表名" javaType="string">
+			<component type="text"/>
+		</field>
+		<field name="NODEID" description="节点" javaType="string">
+			<component type="richSelect" referenceTable="SYSNODE" displayReferenceField="NAME"/>
+		</field>
+		<field name="MEMO" description="备注" javaType="string" length="250">
+			<component type="textArea"/>
+			<queryCondition type="none"/>
+		</field>
+		<field name="USED" description="是否使用" javaType="string" defaultValue="1">
+			<component type="dropdown">
+				<option displayName="否" value="0"/>
+				<option displayName="是" value="1"/>
+			</component>
+		</field>
+		<field name="PID" description="父节点" javaType="string">
+			<component type="richSelect" referenceTable="SYSPATH" displayReferenceField="NAME"/>
+		</field>
+		<!--
+		<saveInterceptor className="haiyan.interceptor.FlowmisInterceptor" methodName="sClearMap"/>
+		<deleteInterceptor className="haiyan.interceptor.FlowmisInterceptor" methodName="dClearMap"/>
+		-->
+		<pluginInterceptor className="haiyan.interceptor.SaveInterceptor" methodName="complete" pluginName="save" type="after"/>
+		<pluginInterceptor className="haiyan.interceptor.DeleteInterceptor" methodName="complete" pluginName="delete" type="after"/>
+		<Operation queryPageQueryEdit="true"/>
+	</table>
+</Haiyan>

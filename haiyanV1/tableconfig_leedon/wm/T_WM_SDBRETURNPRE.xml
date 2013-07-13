@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Haiyan xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../haiyan.xsd">
+	<table name="T_WM_SDBRETURNPRE" description="应退货明细" colspan="6">
+		<id name="ID" javaType="string"/>
+		<field name="HEADID" description="退货单" javaType="string">
+			<component type="readOnlyText"/>
+		</field>
+		<field name="OUT_CODE" description="订单:商品号" displayOnly="false" javaType="string" lazyLoad="false">
+			<component type="combo" readOnly="false" displayReferenceField="OUT_CODE" referenceField="OUT_CODE" referenceTable="V_WM_OUTPRE" associatedFields="PRODUCTID,ORDER_ID,WMCODE,PRO_NAME,SUPP_CODE,SUPPLIER,OUT_COUNT,OUT_PRICE,IN_PRICE,OUT_ALL_PRICE" parameter="{&amp;RETURNPRE=1}"/>
+			<listColumn noedit="false" noquery="false" width="155" style="sortName:__OUT_CODE__OUT_CODE"/>
+		</field>
+		<field name="SUPPLIER" description="供应商" displayOnly="false" javaType="string" lazyLoad="false">
+			<component type="text" readOnly="true" displayReferenceField="SUPPLIER"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="SHIP_SUPPLIER" description="供应商_显示" displayOnly="true" javaType="string" lazyLoad="false">
+			<component type="combo" readOnly="true" displayReferenceField="NAME" referenceField="ID" referenceTable="T_DIC_SUPPLIER"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="ORDER_ID" description="ORDER_ID出库单号" javaType="string">
+			<component type="hidden" readOnly="true" displayReferenceField="ORDER_ID"/>
+			<listColumn noedit="false" noquery="false" width="75"/>
+		</field>
+		<field name="PRODUCTID" description="EDP商品ID" displayOnly="false" javaType="string">
+			<component type="hidden" readOnly="true" displayReferenceField="PRODUCTID"/>
+			<listColumn noedit="false" noquery="false" width="75"/>
+		</field>
+		<field name="WMCODE" description="货号" javaType="string" lazyLoad="false">
+			<component type="text" readOnly="true" displayReferenceField="WMCODE"/>
+			<listColumn noedit="false" noquery="false" width="70"/>
+		</field>
+		<field name="PRO_NAME" description="商品名称" displayOnly="false" javaType="string" lazyLoad="false">
+			<component type="text" readOnly="true" displayReferenceField="NAME"/>
+			<listColumn noedit="false" noquery="false" width="60"/>
+		</field>
+		<field name="SUPP_CODE" description="自有货号" javaType="string" lazyLoad="false">
+			<component type="text" readOnly="true" displayReferenceField="SUPP_CODE"/>
+			<listColumn noedit="false" noquery="false" width="70"/>
+		</field>
+		<field name="RETURN_RCOUNT" description="实退货" javaType="bigDecimal" defaultValue="0">
+			<component type="text" readOnly="false" action="Set(EDP_ALL_RETURNRPRICE,Get(RETURN_RCOUNT)*Get(EDP_RETURN_PRICE)+Get(EDP_OTHERPRICE))
+			+Set(SUP_ALL_RETURNRPRICE,Get(RETURN_RCOUNT)*Get(SUP_RETURN_PRICE)+Get(SUP_OTHERPRICE))"/>
+			<listColumn noedit="false" noquery="false" width="60"/>
+		</field>
+		<field name="RETURN_COUNT" description="退货数量" javaType="bigDecimal" defaultValue="0">
+			<component type="text" readOnly="false"/>
+			<listColumn noedit="false" noquery="false" width="65"/>
+		</field>
+		<field name="OUT_COUNT" description="销售数量" javaType="bigDecimal" defaultValue="0">
+			<component type="text" readOnly="true" displayReferenceField="OUT_COUNT"/>
+			<listColumn noedit="false" noquery="false" width="65"/>
+		</field>
+		<field name="OUT_PRICE" description="EDP单价" javaType="string">
+			<component type="text" readOnly="true" displayReferenceField="OUT_PRICE"/>
+			<listColumn noedit="false" noquery="false" width="70"/>
+		</field>
+		<field name="IN_PRICE" description="供应商单价" javaType="string">
+			<component type="text" readOnly="true" displayReferenceField="IN_PRICE"/>
+			<listColumn noedit="false" noquery="false" width="85"/>
+		</field>
+		<field name="OUT_ALL_PRICE" description="EDP销售总价" javaType="string">
+			<component type="text" readOnly="true" displayReferenceField="OUT_ALL_PRICE"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="EDP_RETURN_PRICE" description="EDP退货单价" javaType="bigDecimal" defaultValue="0">
+			<component type="text" readOnly="false" maxFractionDigit="3" minFractionDigit="3" action="Set(EDP_ALL_RETURNRPRICE,Get(RETURN_RCOUNT)*Get(EDP_RETURN_PRICE)+Get(EDP_OTHERPRICE))
+			+Set(SUP_ALL_RETURNRPRICE,Get(RETURN_RCOUNT)*Get(SUP_RETURN_PRICE)+Get(SUP_OTHERPRICE))"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="EDP_OTHERPRICE" description="EDP其他退额" javaType="bigDecimal" defaultValue="0">
+			<component type="text" readOnly="false" maxFractionDigit="3" minFractionDigit="3" action="Set(EDP_ALL_RETURNRPRICE,Get(RETURN_RCOUNT)*Get(EDP_RETURN_PRICE)+Get(EDP_OTHERPRICE))
+			+Set(SUP_ALL_RETURNRPRICE,Get(RETURN_RCOUNT)*Get(SUP_RETURN_PRICE)+Get(SUP_OTHERPRICE))"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="SUP_RETURN_PRICE" description="供应商承担单价" javaType="bigDecimal" defaultValue="0">
+			<component type="text" readOnly="false" maxFractionDigit="3" minFractionDigit="3" action="Set(EDP_ALL_RETURNRPRICE,Get(RETURN_RCOUNT)*Get(EDP_RETURN_PRICE)+Get(EDP_OTHERPRICE))
+			+Set(SUP_ALL_RETURNRPRICE,Get(RETURN_RCOUNT)*Get(SUP_RETURN_PRICE)+Get(SUP_OTHERPRICE))"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="SUP_OTHERPRICE" description="供应商其他退额" javaType="bigDecimal" defaultValue="0">
+			<component type="text" readOnly="false" maxFractionDigit="3" minFractionDigit="3" action="Set(EDP_ALL_RETURNRPRICE,Get(RETURN_RCOUNT)*Get(EDP_RETURN_PRICE)+Get(EDP_OTHERPRICE))
+			+Set(SUP_ALL_RETURNRPRICE,Get(RETURN_RCOUNT)*Get(SUP_RETURN_PRICE)+Get(SUP_OTHERPRICE))"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="SUP_ALL_RETURNRPRICE" description="供应商总退款额" javaType="bigDecimal" defaultValue="0">
+			<component type="text" readOnly="true" maxFractionDigit="3" minFractionDigit="3"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="EDP_ALL_RETURNRPRICE" description="EDP总退款额" javaType="bigDecimal" defaultValue="0">
+			<component type="text" readOnly="true" maxFractionDigit="3" minFractionDigit="3"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="PRO_MEMO" description="备注" javaType="string">
+			<component type="text"/>
+		</field>
+		<field name="BILL_STATUS" javaType="string" description="单据明细状态">
+			<component type="dropdown" readOnly="true">
+				<option displayName="待批" value="init"/>
+				<option displayName="审批确认" value="audit"/>
+			</component>
+		</field>
+		<!-- -->
+		<pluginInterceptor methodName="exp" parameter="If(IsEmpty(GetPara(HEADID)),Warning({参数错误}),true)" pluginName="query" type="after"/>
+		
+		<pluginInterceptor methodName="exp" parameter="If(InRole(sp),HidFlds(IN_COUNT,PRO_PRE),true)" pluginName="grid" type="after"/>
+		<pluginInterceptor methodName="exp" parameter="Set(BILL_STATUS,{audit})+Save()" pluginName="audit" type="before"/>
+		<pluginInterceptor methodName="exp" parameter="
+			Set(BILL_STATUS,{init},AUDIT_USER_ID,{})+Save()
+			" pluginName="unaudit" type="before"/>
+		<Operation queryPageDelete="false" saveAndAdd="false" saveAndAddCopy="false" />
+	</table>
+</Haiyan>

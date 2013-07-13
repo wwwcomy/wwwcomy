@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Haiyan xsi:noNamespaceSchemaLocation="../../haiyan.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<table description="用户桌面链接" name="SYSDESKDETAIL" colspan="3">
+		<id name="ID" javaType="string"/>
+		<field name="MDTITLE" javaType="string" description="标题">
+			<component type="text" colspan="5" style="width:100%;"/>
+		</field>
+		<field name="MDIMGID" javaType="string" description="图标名称">
+			<component type="richSelect" referenceTable="SYSRESOURCE" displayReferenceField="NAME" quickQueryConditionField="NAME" associatedFields="MDIMG" url="#"/>
+		</field>
+		<field name="MDIMG" javaType="string" description="图标文件">
+			<component type="readOnlyText" displayReferenceField="FILEURL"/>
+		</field>
+		<field name="MDPROCID" javaType="string" description="目录影射">
+			<component type="richSelect" referenceTable="SYSCATALOG" displayReferenceField="NAME" quickQueryConditionField="NAME" url="#"/>
+		</field>
+		<field name="MDURL" javaType="string" description="链接">
+			<component type="text" url="@F@" urlField="MDURL" colspan="5" style="width:100%;"/>
+		</field>
+		<field name="HEADID" javaType="string" description="头表ID">
+			<component type="hidden" referenceTable="SYSDESKHEAD"/>
+		</field>
+		<field name="MDTYPE" javaType="string" description="类型" defaultValue="1">
+			<component type="dropdown" >
+				<option displayName="其他" value="0"/>
+				<option displayName="系统内" value="1"/>
+				<option displayName="系统外" value="2"/>
+				<option displayName="搜索引擎" value="3"/>
+			</component>
+		</field>
+		<pluginInterceptor className="haiyan.interceptor.CreateDeskInterceptor" methodName="createDetailUrl" pluginName="save" type="after"/>
+		<pluginInterceptor className="haiyan.interceptor.SaveInterceptor" methodName="complete" pluginName="save" type="after"/>
+		<pluginInterceptor className="haiyan.interceptor.DeleteInterceptor" methodName="complete" pluginName="delete" type="after"/>
+	</table>
+</Haiyan>

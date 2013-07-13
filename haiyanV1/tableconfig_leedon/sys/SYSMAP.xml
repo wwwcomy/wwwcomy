@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Haiyan xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../haiyan.xsd">
+	<table name="SYSMAP" description="数据映射">
+		<id name="ID" javaType="string">
+			<component type="hidden" url="#"/>
+		</id>
+		<field name="BILLKEY" description="数据表名" displayOnly="false" javaType="string" lazyLoad="false">
+			<component type="text" readOnly="true"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<!--
+		<field name="BILLID" description="BILLID" displayOnly="false" javaType="string" lazyLoad="false">
+			<component type="text" readOnly="true"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		-->
+		<field name="BILLDTLID" description="明细ID" displayOnly="false" javaType="string" lazyLoad="false">
+			<component type="text" readOnly="true"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="FLDKEY" description="推送字段" displayOnly="false" javaType="string" lazyLoad="false">
+			<component type="text" readOnly="true"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="FLDVAL" description="当前值" displayOnly="false" javaType="string" lazyLoad="false">
+			<component type="text" readOnly="true"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="NOWVAL" description="已推送值" displayOnly="false" javaType="string" lazyLoad="false">
+			<component type="text" readOnly="true"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="PID" description="上级节点ID" displayOnly="false" javaType="string" lazyLoad="false">
+			<component type="text" readOnly="true"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="TREEID" description="数据流ID" displayOnly="false" javaType="string" lazyLoad="false">
+			<component type="text" readOnly="true"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<!-- -->
+		<DataRules name="T_WM_OUTPRE_2_T_WM_PRODUCT2" description="应出库到实际出库" srcTable="T_WM_OUTPRE" srcRefField="PRO_COUNT" destTable="T_WM_PRODUCT2" destRefField="PRO_COUNT;ORDER_PRO_ID;PRO_CODE"/>
+		
+		<DataRules name="T_WM_PRODUCTPRE_2_T_WM_PRODUCT" description="应入库到实际入库" srcTable="T_WM_PRODUCTPRE" srcRefField="PRO_COUNT;IN_COUNT" destTable="T_WM_PRODUCT" destRefField="PRO_COUNT;PREIN_ID;PRO_CODE"/>
+		
+		<DataRules name="T_WM_CONPRODUCT_2_T_WM_IN" description="合同到应入库" srcTable="T_WM_CONPRODUCT" srcRefField="PRO_COUNT;PRO_COUNT2" destTable="T_WM_PRODUCTPRE" destRefField="PRO_COUNT;CONTRACT_DID;PRO_CODE" srcExp="Set(PRO_COUNT3,Get(PRO_COUNT)-Get(PRO_COUNT2))" destExp="">
+			<rule srcTableIndex="0" destTableIndex="0" formula="Get(CONTRACT_CODE);Get(ID);Get(PRODUCTID);Get(PRO_NAME);Get(PRO_COUNT);Get(PRO_CODE);Get(PRO_CAPACITYNUM);Get(PRO_WEIGHTNUM);Get(PRO_WMCODE);Get(PRO_PACKINGNUM);Get(CONTRACT_ID)" 
+			field="__CONTRACT_DID__CONTRACT_CODE;CONTRACT_DID;PRODUCTID;PRO_NAME;PRO_COUNT;PRO_CODE;PRO_CAPACITYNUM;PRO_WEIGHTNUM;PRO_WMCODE;PRO_PACKINGNUM;CONTRACTID"/>
+		</DataRules>
+		
+		<DataRules name="T_WM_SDBCONPRODUCT_2_T_WM_SDBINPRE" description="SDB合同到应入库" srcTable="T_WM_SDBCONPRODUCT" srcRefField="PRO_COUNT" destTable="T_WM_SDBINPRE" destRefField="PRO_COUNT;PRODUCTID" srcExp="" destExp="">
+			<rule srcTableIndex="0" destTableIndex="0" 
+			formula="Get(ID);Get(CONTRACT_CODE);Get(PRODUCTID);Get(PRO_NAME);Get(PRO_COUNT);Get(PRO_COUNT);Get(PRO_PACKINGNUM);Get(PRO_CAPACITYNUM);Get(PRO_WEIGHTNUM);Get(PRO_IN_PRICE);Get(PRO_OUT_PRICE);Get(MARKETABLE)" 
+			field="CONTRACT_CODE;__CONTRACT_CODE__CONTRACT_CODE;PRODUCTID;PRO_NAME;PRO_COUNT;IN_COUNT;PRO_PACKINGNUM;PRO_CAPACITYNUM;PRO_WEIGHTNUM;IN_PRICE;OUT_PRICE;MARKETABLE"/>
+		</DataRules>
+		<!-- srcExp:下推后每行src记录执行的公式    destExp:下推后每行dest记录执行的公式 -->
+		<!-- srcRefField[0]:src记录的关注字段     srcRefField[1]:src记录的返填字段(累加值) -->
+		<!-- destRefField[0]:dest记录的关注字段   destRefField[1]:dest记录的外键字段（源记录的主键字段），destForm事先肯定会去保存的 -->
+		<!-- index 源和目标的talbeindex field 流转计算字段 formula 流转规则公式 -->
+		<!-- ID      BILLKEY              BILLDTLID    FLDKEY        FLDVAL    PID     TREEID
+			 101     T_WM_CONPRODUCT         1         PRO_COUNT     123       -1      11
+			 102     T_WM_PRODUCTPRE      1001         PRO_COUNT     123       101     11 
+			 
+			 103     T_WM_CONPRODUCT         2         PRO_COUNT     500       -1      12
+			 104     T_WM_PRODUCTPRE      1002         PRO_COUNT     200       103     12 
+			 105     T_WM_PRODUCTPRE      1003         PRO_COUNT     300       103     12      -->
+		<!--rule srcTableIndex="0" destTableIndex="0" field="ID,MONEY" formula="{M_}+Get(ID),GetPara(D1)"/-->
+		<doc>
+			<help><![CDATA[	
+				DataRules 配置推送检查规则 rule定义推送的UI数据构造过程
+			]]></help>
+		</doc>
+	</table>
+</Haiyan>

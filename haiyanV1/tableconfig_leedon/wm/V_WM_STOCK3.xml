@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Haiyan xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../haiyan.xsd">
+	<table name="V_WM_STOCK3" description="库存汇总(按仓库)">
+		<id name="ID" javaType="string"/>
+		<field name="HEADID" description="单头" javaType="string">
+			<component type="hidden"/>
+		</field>
+		<field name="PRODUCTID" description="EDP商品编号" displayOnly="false" javaType="string" lazyLoad="false">
+			<component type="combo" readOnly="true" colspan="1" displayReferenceField="CODE" referenceField="ID" referenceTable="V_WM_SDBPRODUCT" associatedFields="PRO_WMCODE,PRO_NAME,PRO_CAPACITYNUM,PRO_WEIGHTNUM"/>
+			<queryCondition type="equal"/>
+			<listColumn noedit="false" noquery="false" width="170"/>
+		</field>
+		<field name="PRO_NAME" description="EDP商品名称" displayOnly="true" javaType="string" lazyLoad="false">
+			<component type="text" readOnly="true" colspan="1" displayReferenceField="NAME"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="PRO_WMCODE" description="EDP商品编号" displayOnly="true" javaType="string" lazyLoad="false">
+			<component type="hidden" readOnly="true" colspan="1" displayReferenceField="CODE"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="SUPP_CODE" description="供应商自有货号" displayOnly="false" javaType="string" lazyLoad="false">
+			<component type="text" readOnly="true" colspan="1" displayReferenceField="CODE"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="PRO_CAPACITYNUM" description="单位体积" displayOnly="false" javaType="bigDecimal" lazyLoad="false">
+			<component type="text" readOnly="true" displayReferenceField="CAPACITYNUM" maxFractionDigit="3" minFractionDigit="3"/>
+			<listColumn noedit="false" noquery="true"/>
+		</field>
+		<field name="PRO_WEIGHTNUM" description="单位重量" displayOnly="false" javaType="bigDecimal" lazyLoad="false">
+			<component type="text" readOnly="true" displayReferenceField="WEIGHTNUM" maxFractionDigit="3" minFractionDigit="3"/>
+			<listColumn noedit="false" noquery="true"/>
+		</field>
+		<field name="WAREHOUSE" description="仓库" displayOnly="false" javaType="string" lazyLoad="false" nullAllowed="false">
+			<component type="richSelect" readOnly="true" colspan="5" displayReferenceField="NAME" referenceField="ID" referenceTable="T_DIC_WAREHOUSE_COMBO"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="PRO_COUNT" description="库存数" javaType="bigDecimal">
+			<component type="text" readOnly="true" numberGrouping="true"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="ORDER_COUNT" description="订单总占用数" javaType="bigDecimal">
+			<component type="text" readOnly="true" />
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="XD_ORDER_COUNT" description="新导占用数" javaType="bigDecimal">
+			<component type="text" readOnly="true" />
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="OTHER_ORDER_COUNT" description="付款占用数" javaType="bigDecimal">
+			<component type="text" readOnly="true" />
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="PRO_IN_SUM" description="在途数量" javaType="bigDecimal">
+			<component type="text" readOnly="true" />
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="SUPPLIER" description="供应商" javaType="string">
+			<component type="combo" readOnly="true" displayReferenceField="NAME" referenceField="ID" referenceTable="T_DIC_SUPPLIER"/>
+		</field>
+		<!-- 
+		<field name="PRO_IN_PRICE" description="参考进价" displayOnly="false" javaType="bigDecimal" lazyLoad="false">
+			<component type="text" readOnly="true" displayReferenceField="IN_PRICE" maxFractionDigit="3" minFractionDigit="3"/>
+			<listColumn noedit="false" noquery="false" width="78"/>
+		</field>
+		<field name="ALL_IN_COST" description="总进货金额" displayOnly="false" javaType="bigDecimal" lazyLoad="false">
+			<component type="text" readOnly="true" summaryType="sum" maxFractionDigit="3" minFractionDigit="3" />
+			<listColumn noedit="false" noquery="false" width="78"/>
+		</field>
+		<field name="PRO_OUT_PRICE" description="销售价" displayOnly="false" javaType="bigDecimal" lazyLoad="false">
+			<component type="text" readOnly="true" displayReferenceField="OUT_PRICE" maxFractionDigit="3" minFractionDigit="3"/>
+			<listColumn noedit="false" noquery="false" width="78"/>
+		</field>
+		<field name="ALL_OUT_COST" description="总销售金额" displayOnly="false" javaType="bigDecimal" lazyLoad="false">
+			<component type="text" readOnly="true" summaryType="sum" maxFractionDigit="3" minFractionDigit="3"/>
+			<listColumn noedit="false" noquery="false" width="78"/>
+		</field>
+		-->
+		<!-- -->
+		<queryFilter>
+			<pluggedFilter methodName="exp" parameter="{ and t_1.WAREHOUSE='}&amp;GetUser(WAREHOUSEID)&amp;{' }"/>
+			<pluggedFilter methodName="exp" parameter="If(InRole(sp,wm),{ and t_1.SUPPLIER='}&amp;GetUser(SUPPLIER)&amp;{' },{})"/>
+			<pluggedFilter methodName="exp" parameter="if(GetPara(GRID)=1,if(IsEmpty(GetPara(PRODUCTID)),{ and 1=2 },{}),{})"/>
+		</queryFilter>
+		<!-- 
+		<javascript hostPage="edit"><![CDATA[
+		]]></javascript>
+		-->
+		<!-- -->
+		<pluginInterceptor methodName="initDB" pluginName="initDB" type="before"><![CDATA[
+create or replace view V_WM_STOCK3 as 
+	(
+		select concat(t_1.ID,t_1.STOCKCHANGE) as ID,t_1.HEADID,t_1.PRODUCTID,t_1.PRO_WMCODE, t_1.PRO_NAME,t_3.supp_code as supp_code,t_1.PRO_CAPACITYNUM,t_1.PRO_WEIGHTNUM,
+		sum(t_1.PRO_COUNT*t_1.STOCKCHANGE) as PRO_COUNT, t_2.NUMS as ORDER_COUNT,t_2.XD_nums AS XD_ORDER_COUNT,t_2.other_nums AS OTHER_ORDER_COUNT,
+		t_3.PRO_IN_SUM as PRO_IN_SUM,
+        t_1.WAREHOUSE, t_1.SUPPLIER
+		from V_WM_STOCK1 t_1 
+		left join V_WM_SDBITEMCOUNT t_2 on t_1.PRODUCTID=t_2.PRODUCTID
+		left join V_WM_IN t_3 on t_1.PRODUCTID=t_3.PRODUCTID
+		where t_1.BT>-95
+		group by t_1.PRODUCTID,t_1.WAREHOUSE
+	)
+
+		]]></pluginInterceptor>
+		<Operation queryPageDelete="false" queryPageAdd="false" save="false" saveAndAdd="false" saveAndAddCopy="false"/>
+	</table>
+</Haiyan>

@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Haiyan xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../haiyan.xsd">
+	<table name="T_PO_PRODUCT" description="Production List" colspan="6">
+		<id name="ID" javaType="string"/>
+		<field name="HEADID" description="合同号" javaType="string">
+			<component type="richSelect" readOnly="true" displayReferenceField="CODE" referenceField="ID" referenceTable="T_PO_CONTRACT"/>
+		</field>
+		<field name="PRODUCT" description="商品名" displayOnly="false" javaType="string" lazyLoad="false">
+			<component type="text" readOnly="false" />
+			<queryCondition type="blurMatching"/>
+			<listColumn noedit="false" noquery="false"/>
+			<!-- <component type="text" readOnly="false" /> -->
+			<!-- colspan="1" displayReferenceField="NAME" referenceField="ID" referenceTable="T_DIC_PRODUCT" associatedFields="PRO_CODE,PRO_SPEC,PRO_MODEL,PRO_IN_PRICE,PRO_OUT_PRICE"-->
+		</field>
+		<field name="PRO_COUNT" description="数量" javaType="bigDecimal">
+			<component type="text" readOnly="false" action="Set(PRO_IN_COST,Get(PRO_COUNT)*Get(PRO_IN_PRICE))+Set(PRO_OUT_COST,Get(PRO_COUNT)*Get(PRO_OUT_PRICE))"/>
+			<queryCondition type="blurMatching"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<!--
+		<field name="PRO_CODE" description="商品编号" displayOnly="false" javaType="string" lazyLoad="false">
+			<component type="text" readOnly="false" colspan="1" displayReferenceField="CODE"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="PRO_CAPACITYNUM" description="外箱体积" displayOnly="false" javaType="bigDecimal" lazyLoad="false">
+			<component type="text" readOnly="true" displayReferenceField="CAPACITYNUM" maxFractionDigit="3" minFractionDigit="3"/>
+			<listColumn noedit="false" noquery="false" width="78"/>
+		</field>
+		<field name="PRO_WEIGHTNUM" description="单位重量" displayOnly="false" javaType="bigDecimal" lazyLoad="false">
+			<component type="text" readOnly="true" displayReferenceField="WEIGHTNUM" maxFractionDigit="3" minFractionDigit="3"/>
+			<listColumn noedit="false" noquery="false" width="78"/>
+		</field>
+		-->
+		<!--
+		<field name="PRO_SPEC" description="商品规格" displayOnly="false" javaType="string" lazyLoad="false">
+			<component type="text" readOnly="false" colspan="1" displayReferenceField="SPEC"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="PRO_MODEL" description="商品型号" displayOnly="false" javaType="string" lazyLoad="false">
+			<component type="text" readOnly="false" colspan="1" displayReferenceField="MODEL"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		-->
+		<!--
+		<field name="PRO_WH" description="仓库" javaType="string" defaultValue="=Get(WAREHOUSE)">
+			<component type="richSelect" readOnly="false" colspan="1" displayReferenceField="NAME" referenceField="ID" referenceTable="T_DIC_WAREHOUSE"/>
+			<queryCondition type="blurMatching"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		-->
+		<!--
+		<field name="IN_TIME" description="入库时间" javaType="date" dataStyle="yyyy-MM-dd HH:mm:ss">
+			<component type="dateTime" readOnly="false"/>
+			<queryCondition type="blurMatching"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="IN_TYPE" javaType="string" defaultValue="po" description="入库方式" nullAllowed="false">
+			<component type="dropdown" readOnly="false">
+				<option displayName="初始化入库" value="init"/>
+				<option displayName="收货入库" value="po"/>
+				<option displayName="其他入库" value="etc"/>
+			</component>
+		</field>
+		<field name="OUT_TIME" description="出库时间" javaType="date" dataStyle="yyyy-MM-dd HH:mm:ss">
+			<component type="dateTime" readOnly="false"/>
+			<queryCondition type="blurMatching"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="OUT_TYPE" javaType="string" defaultValue="init" description="出库方式" nullAllowed="false">
+			<component type="dropdown" readOnly="true">
+				<option displayName="待发货" value="init"/>
+				<option displayName="发货出库" value="so"/>
+				<option displayName="其他出库" value="etc"/>
+			</component>
+		</field>
+		-->
+		<field name="PRO_IN_PRICE" description="进货单价" displayOnly="false" javaType="bigDecimal" lazyLoad="false">
+			<component type="text" readOnly="false" colspan="1" displayReferenceField="IN_PRICE" action="Set(PRO_IN_COST,Get(PRO_COUNT)*Get(PRO_IN_PRICE))"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<!-- subQuerySQL="(select t_1.PRO_COUNT*t_2.IN_PRICE from T_DIC_PRODUCT t_2 where t_1.PRODUCTID=t_2.ID)" -->
+		<field name="PRO_IN_COST" description="进货总价" displayOnly="false" javaType="bigDecimal" lazyLoad="false">
+			<component type="text" readOnly="true" colspan="1" summaryType="sum" summaryRenderer="sumPRO_COST"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="PRO_OUT_PRICE" description="出货单价" displayOnly="false" javaType="bigDecimal" lazyLoad="false">
+			<component type="text" readOnly="false" colspan="1" displayReferenceField="OUT_PRICE" action="Set(PRO_OUT_COST,Get(PRO_COUNT)*Get(PRO_OUT_PRICE))"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="PRO_OUT_COST" description="出货总价" displayOnly="false" javaType="bigDecimal" lazyLoad="false">
+			<component type="text" readOnly="true" colspan="1" summaryType="sum" summaryRenderer="sumPRO_COST"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<!-- subQuerySQL="(select t_1.PRO_COUNT*t_2.OUT_PRICE from T_DIC_PRODUCT t_2 where t_1.PRODUCTID=t_2.ID)" -->
+		<field name="PRO_MEMO" description="备注" javaType="string">
+			<component type="text"/>
+		</field>
+		<field name="CONTRACT_CODE" description="合同-商品号" displayOnly="false" javaType="string" lazyLoad="false">
+			<component type="text" readOnly="true" />
+			<listColumn noedit="false" noquery="false" width="178"/>
+		</field>
+		<!-- -->
+		<javascript hostPage="edit"><![CDATA[
+		]]></javascript>
+		<!-- subQuerySQL="(select CONCAT(t.CODE,'-',t_1.PRO_CODE) from T_PO_CONTRACT t where t.ID=t_1.HEADID)"
+		<pluginInterceptor methodName="bsh" parameter="PushData.bsh" pluginName="testPushData"/> -->
+		<pluginInterceptor methodName="exp" parameter="CheckKC()+Set(OUT_TYPE,{so})" pluginName="auditOut"/>
+		<pluginInterceptor methodName="exp" parameter="DisBtns(delete,add,save,saveAndAdd,saveAndAddCopy);" pluginName="query" type="after"/>
+		<pluginInterceptor methodName="exp" parameter="DisBtns(delete,add,save,saveAndAdd,saveAndAddCopy);" pluginName="edit" type="after"/>
+		<pluginInterceptor methodName="exp" parameter="Set(CONTRACT_CODE,DBFindValue({select CODE from T_PO_CONTRACT where ID='}&amp;Get(HEADID)&amp;{'}, 1, 0, 0)&amp;{-}&amp;Get(PRO_CODE))" pluginName="save"/>
+		<!-- -->
+		<!--
+		<pluginOperation name="saveProtocol" oprName="保存" hostPage="edit" tblevel="1" img="save" action="save('','')+brk()"/>	
+		-->
+		<pluginOperation name="testPushData" oprName="testPushData" hostPage="query" tblevel="1" img="save" action="PushData(testPushData,T_PO_PRODUCT_2_T_WM_IN,SUBGRID2)+brk()"/>
+	</table>
+</Haiyan>

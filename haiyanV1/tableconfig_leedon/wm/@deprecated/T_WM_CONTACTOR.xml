@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Haiyan xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../haiyan.xsd">
+	<table name="T_WM_CONTACTOR" description="联系人" realTable="T_WM_CONTACTOR" colspan="6">
+		<id name="ID" javaType="string">
+			<component type="hidden" url="#"/>
+		</id>
+		<field name="CODE" description="联系人编号" javaType="string">
+			<component type="text" />
+		</field>
+		<field name="NAME" description="姓名" javaType="string">
+			<component type="text" />
+		</field>
+		<field name="SEX" description="性别" javaType="string" defaultValue="男">
+			<component type="dropdown">
+				<option displayName="男" value="男"/>
+				<option displayName="女" value="女"/>
+			</component>
+		</field>
+		<field name="USED" description="是否使用" javaType="string" defaultValue="1">
+			<component type="dropdown">
+				<option displayName="是" value="1"/>
+				<option displayName="否" value="0"/>
+			</component>
+		</field>
+		<field name="ISKZ" description="是否库主" javaType="string" defaultValue="1">
+			<component type="dropdown" readOnly="true">
+				<option displayName="是" value="1"/>
+				<option displayName="否" value="0"/>
+			</component>
+		</field>
+		<field name="EMAIL" description="EMAIL" javaType="string">
+			<component type="text"/>
+		</field>
+		<field name="MOBILE_PHONE" description="手机" javaType="string">
+			<component type="text"/>
+		</field>
+		<field name="PHONE" description="电话" javaType="string">
+			<component type="text"/>
+		</field>
+		<field name="FAX" description="传真" javaType="string">
+			<component type="text"/>
+		</field>
+		<field name="QQ" description="QQ" javaType="string">
+			<component type="text"/>
+		</field>
+	</table>
+</Haiyan>

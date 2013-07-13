@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Haiyan xsi:noNamespaceSchemaLocation="../../haiyan.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<table description="文档管理" name="T_DIC_DOCUMENT">
+		<id name="ID" javaType="string"/>
+		<field name="NAME" javaType="string" description="文件标题">
+			<component type="text"/>
+		</field>
+		<field name="FILES" description="附件" javaType="string">
+			<component type="file" style="color:red" pathTable="T_DIC_DOCUMENT" url="upload/T_DIC_DOCUMENT/FILES/@F@/@F@" urlField="ID,FILES"/>
+			<queryCondition type="none"/>
+		</field>
+		<field name="DESCRIBE" javaType="string" description="描述">
+			<component type="textArea" colspan="3" style="width:100%;height:50;"/>
+			<queryCondition type="none"/>
+			<listColumn noquery="true"/>
+		</field>
+		<field name="PRIVILEGE" javaType="string" description="权限" defaultValue="0">
+			<component type="dropdown" colspan="3">
+				<option displayName="公开" value="1"/>
+				<option displayName="个人" value="0"/>
+			</component>
+			<queryCondition type="none"/>
+			<listColumn noquery="true"/>
+		</field>
+		<field name="CREATE_USER_ID" javaType="string" description="创建人">
+			<component type="richSelect" referenceTable="SYSOPERATOR_VIEW" referenceField="ID" displayReferenceField="NAME" readOnly="true"/>
+		</field>
+		<field name="CREATE_TIME" javaType="date" description="创建时间" dataStyle="yyyy-MM-dd hh:mm:ss">
+			<component type="readOnlyText"/>
+			<queryCondition type="region"/>
+		</field>
+		<queryFilter>
+			<pluggedFilter>
+				and ((CREATE_USER_ID=@USERID@ and t_1.PRIVILEGE=0) or t_1.PRIVILEGE=1)
+			</pluggedFilter>
+		</queryFilter>
+		<pluginInterceptor methodName="setCreateUser" parameter="CREATE_USER_ID" pluginName="save"/>
+		<pluginInterceptor methodName="setCreateTime" parameter="CREATE_TIME,yyyy-MM-dd hh:mm:ss" pluginName="save"/>
+		<!-- -->
+		<pluginInterceptor methodName="checkSameAlert" parameter="NAME" pluginName="save"/>
+		<pluginInterceptor methodName="onlyByMaker" parameter="CREATE_USER_ID" pluginName="save"/>
+		<pluginInterceptor methodName="onlyByMaker" parameter="CREATE_USER_ID" pluginName="delete"/>
+	</table>
+</Haiyan>

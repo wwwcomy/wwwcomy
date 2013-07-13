@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Haiyan xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../haiyan.xsd">
+	<table name="T_DIC_SYSORGA_WORKSEQ" description="业务层次" childTable="T_DIC_SYSORGA_WORKSEQ_DTL">
+		<id name="ID" javaType="string"/>
+		<field name="ORGA_ID" javaType="string" description="业务部门">
+			<component type="richSelect" referenceTable="SYSORGA" referenceField="ID" displayReferenceField="NAME"/>
+		</field>
+		<field name="PARENT_ID" javaType="string" description="上级业务部门">
+			<component type="richSelect" referenceTable="T_DIC_SYSORGA_WORKSEQ" referenceField="ID" displayReferenceField="ORGA_ID"/>
+		</field>
+		<field name="WORK_TYPE" javaType="string" description="分管业务类型">
+			<component type="dropdown">
+				<option displayName="ERP业务" value="1"/>
+				<option displayName="物流业务" value="2"/>
+				<option displayName="销售业务" value="3"/>
+				<option displayName="审计业务" value="4"/>
+			</component>
+		</field>
+		<field name="AVAILABLE" javaType="string" description="是否有效" defaultValue="1">
+			<component type="dropdown">
+				<option displayName="无效" value="0"/>
+				<option displayName="有效" value="1"/>
+			</component>
+		</field>
+		<field name="REMARK" javaType="string" description="备注">
+			<component type="textArea" colspan="3" style="width:560"/>
+			<queryCondition type="none"/>
+		</field>
+		<!-- -->
+		<PageView showField="__ORGA_ID__NAME" type="gentree" title="树形索引"/>
+		<PageView type="querybyform" title="列表索引"/>
+		<pluginInterceptor className="haiyan.interceptor.TreeSaveInterceptor" methodName="checkCircle" pluginName="save"/>
+	</table>
+</Haiyan>

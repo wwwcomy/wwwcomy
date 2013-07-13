@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Haiyan xsi:noNamespaceSchemaLocation="../../haiyan.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<table description="明细" name="T_OTH_DCGL_DETAIL">
+		<id name="ID" javaType="string"/>
+		<field name="HEADID" javaType="string" description="HEADID">
+			<component type="hidden" referenceTable="T_OTH_DCGL" referenceField="ID" displayReferenceField="MEMO"/>
+		</field>
+		<field name="DCRES" description="饭店" javaType="string">
+			<component type="richSelect" referenceTable="T_DIC_RESTAURANT" displayReferenceField="NAME" referenceField="ID" className="com.haiyan.genmis.view.component.ListenerRichSelectComponent" conditionFields="ID" restrictiveFields="FDHEADID"/>
+		</field>
+		<field name="FDHEADID" description="HEADID" javaType="string" displayOnly="true">
+			<component type="hidden" displayReferenceField="RESID"/>
+		</field>
+		<field name="DCDISH" description="菜名" javaType="string">
+			<component type="richSelect" referenceTable="T_DIC_RESTAURANT_DETAIL" displayReferenceField="DISHNAME" referenceField="ID" className="com.haiyan.genmis.view.component.RestrictiveRichSelectComponent" conditionFields="RESID" restrictiveFields="DCRES" associatedFields="FDHEADID,DCPRICE"/>
+		</field>
+		<field name="DCPRICE" javaType="string" description="单价">
+			<component type="readOnlyText" displayReferenceField="DISHPRICE"/>
+		</field>
+		<field name="DCOPER" javaType="string" description="订餐人">
+			<component type="richSelect" readOnly="true" referenceTable="SYSOPERATOR" referenceField="ID" displayReferenceField="Name"/>
+		</field>
+		<!--逗号为分割符-->
+		<pluginInterceptor className="haiyan.interceptor.SaveInterceptor" methodName="setCreateUser" parameter="DCOPER,__DCOPER__Name" pluginName="save"/>
+		<pluginInterceptor className="haiyan.interceptor.SaveInterceptor" methodName="setEditUser" parameter="DCOPER,__DCOPER__Name" pluginName="save"/>
+	</table>
+</Haiyan>

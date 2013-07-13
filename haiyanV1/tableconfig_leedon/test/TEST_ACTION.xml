@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Haiyan xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../haiyan.xsd">
+	<table name="TEST_ACTION" description="ACTION测试表单" realTable="TEST_DBM">
+		<!--  colspan="4" -->
+		<id name="ID" description="ID" javaType="string">
+			<component type="hidden" url="#"/>
+		</id>
+		<field name="CODE" description="编码" displayOnly="false" javaType="string" lazyLoad="false" one2oneField="CODE" one2oneTable="TEST_ONE2ONE">
+			<component type="text" readOnly="false" validator="^-?\d+$" validatorText="必须为数字类型" action="alert('InputCode');"/>
+			<queryCondition type="equal"/>
+		</field>
+		<field name="NAME" description="名称" displayOnly="false" javaType="string" lazyLoad="false" one2oneField="NAME" one2oneTable="TEST_ONE2ONE">
+			<component type="text" readOnly="false" action="alert('InputName');"/>
+			<queryCondition type="equal"/>
+		</field>
+		<!-- -->
+		<field name="MEMO" description="意见" displayOnly="false" javaType="string" lazyLoad="false">
+			<component type="textArea" colspan="3" readOnly="false" style="height:50px;" action="alert('InputMemo');"/>
+			<queryCondition type="equal"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<!--
+		<field name="BLOBTEXT" description="大对象数据" displayOnly="false" javaType="dbBlob" lazyLoad="false">
+			<component type="fckeditor" colspan="3" readOnly="false" style="width:800;height:230;"/>
+			<queryCondition type="equal"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		-->
+		<pluginOperation name="testbsh" oprName="bsh" hostPage="edit" tblevel="1" className="haiyan.plugin.BshPlugin"><![CDATA[
+			 form.set("MEMO", "用BSH设值");
+			 com.haiyan.genmis.core.GeneralCore core = new com.haiyan.genmis.core.GeneralCore(context);
+			 core.doSaveOne(context, table, form);
+		]]></pluginOperation>
+		<pluginOperation name="testexp" oprName="exp" hostPage="edit" tblevel="1" className="haiyan.plugin.ExpPlugin"><![CDATA[
+			 Rmb(GetDouble(CODE));Println(GetVar(0));ToString();Println(GetVar(2));Set(NAME,GetVar(0));Set(MEMO,{用EXP设值});DBUpdate();
+		]]></pluginOperation>
+		<pluginOperation name="t1" oprName="t1" hostPage="edit" tblevel="1" action="alert('12345')+brk()"><![CDATA[
+		]]></pluginOperation>
+		<pluginOperation name="t2" oprName="t2" hostPage="edit" tblevel="1" action="save()+brk()"><![CDATA[
+		]]></pluginOperation>
+		<pluginOperation name="t3" oprName="t3" hostPage="edit" tblevel="1" action="plugin({},{testexp})+brk()"><![CDATA[
+		]]></pluginOperation>
+	</table>
+</Haiyan>

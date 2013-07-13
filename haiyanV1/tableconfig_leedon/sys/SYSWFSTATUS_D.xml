@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Haiyan xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../haiyan.xsd">
+	<table name="SYSWFSTATUS_D" description="已处理任务">
+		<id name="ID" javaType="string"/>
+		<field name="TABLENAME" javaType="string" description="表名">
+			<component type="readOnlyText"/>
+		</field>
+		<field name="FORMID" javaType="string" description="业务单据ID">
+			<component type="readOnlyText"/>
+		</field>
+		<field name="WFCURRNODEID" javaType="string" description="任务节点">
+			<component type="readOnlyText"/>
+		</field>
+		<field name="WFRESULT" javaType="string" description="处理结果">
+			<component type="readOnlyText"/>
+		</field>
+		<field name="WFDEALER" javaType="string" description="处理人">
+			<component type="readOnlyText"/>
+		</field>
+		<field name="WFDEALTIME" javaType="string" description="处理时间" dataStyle="yyyy-MM-dd hh:mm:ss">
+			<component type="readOnlyText"/>
+		</field>
+		<pluginInterceptor className="haiyan.interceptor.SaveInterceptor" methodName="setCreateUser" parameter="WFDEALER" pluginName="save"/>
+		<pluginInterceptor className="haiyan.interceptor.SaveInterceptor" methodName="setCreateTime" parameter="WFDEALTIME,yyyy-MM-dd hh:mm:ss" pluginName="save"/>
+	</table>
+</Haiyan>

@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Haiyan xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../haiyan.xsd">
+	<table name="T_DIC_CUSVISITRECORD" description="客户来电来访记录">
+		<id name="ID" javaType="string"/>
+		<field name="HEADID" description="头表" javaType="string">
+			<component type="hidden" referenceTable="T_CUSMAIN"/>
+		</field>
+		<field name="NAME" description="名称" javaType="string">
+			<component type="text"/>
+		</field>
+		<field name="CODE" description="编码" javaType="string" createable="true" updateable="false">
+			<component type="text" readOnly="true"/>
+		</field>
+		<field name="VISITDATE" description="拜访日期" javaType="date">
+			<component type="date"/>
+		</field>
+		<field name="VISITTIME" description="拜访时间" javaType="string">
+			<component type="text"/>
+		</field>
+		<field name="VISITOR" description="拜访人" javaType="string">
+			<component type="text"/>
+		</field>
+		<field name="VISITORCONNECT" description="拜访人联系方式" javaType="string">
+			<component type="text"/>
+		</field>
+		<field name="VISITTARGET" description="拜访目的" javaType="string">
+			<component type="textArea"/>
+		</field>
+		<field name="VISITADDRESS" description="拜访地点" javaType="string">
+			<component type="text"/>
+		</field>
+		<field name="DESKCLERK" description="接待人员" javaType="string">
+			<component type="text"/>
+		</field>
+		<field name="ACCESSORY" description="附件" javaType="string">
+			<component type="file" style="color:red;" url="upload/T_CUSVISITRECORD/ACCESSORY/@F@" urlField="ACCESSORY"/>
+		</field>
+		<field name="MEMO" description="备注" javaType="string">
+			<component type="textArea"/>
+		</field>
+		<field name="VISITWAY" description="来访\去访" javaType="string" defaultValue="1">
+			<component type="dropdown">
+				<option displayName="来访" value="1"/>
+				<option displayName="去访" value="0"/>
+			</component>
+		</field>
+		<queryFilter>
+			<!--
+			<pluggedFilter className="haiyan.filter.RoleFilter" methodName="byRoleID"/>
+			-->
+		</queryFilter>
+		<!--
+		<saveInterceptor className="reqprocess.interceptor.CusVisitRecord" methodName="save"/>
+		<saveInterceptor className="haiyan.interceptor.DefaultValueInterceptor" methodName="setCode"/>
+       -->
+		<pluginInterceptor className="haiyan.interceptor.SaveInterceptor" methodName="complete" pluginName="save" type="after"/>
+		<pluginInterceptor className="haiyan.interceptor.DeleteInterceptor" methodName="complete" pluginName="delete" type="after"/>
+		<Operation queryPageAdd="true" queryPageDelete="true" queryPageQueryEdit="true"/>
+	</table>
+</Haiyan>

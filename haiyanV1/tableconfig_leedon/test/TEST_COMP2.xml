@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Haiyan xsi:noNamespaceSchemaLocation="../../haiyan.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<table description="组件测试2" name="TEST_COMP2" realTable="TEST_COMP" colspan="4">
+		<!-- modelid="9" -->
+		<id name="ID" javaType="string">
+			<component type="hidden" url="#"/>
+		</id>
+		<field name="CODE" javaType="string" description="编码" style="color:#990099;size:13;font-weight:bold;" defaultValue="$Date()">
+			<component type="text" style="color:#990099;size:12;font-weight:bold;"/>
+			<listColumn noquery="true"/>
+		</field>
+		<field name="NAME" javaType="string" description="名称" style="color:#990099;size:13;font-weight:bold;" nullAllowed="false">
+			<component type="textArea" style="width:550px;height:50px;"/>
+			<listColumn noquery="false"/>
+		</field>
+		<field name="P" javaType="string" description="-" displayOnly="true">
+			<component type="placeholder"/>
+			<queryCondition type="none"/>
+			<listColumn noquery="false"/>
+		</field>
+		<field name="IMAGE1" description="图片1" displayOnly="false" javaType="string" lazyLoad="false" nullAllowed="true" length="250">
+			<component type="roleImage" parameter="admin" readOnly="true" style="imageWidth:30;imageHeight:30;" pathTable="TEST_COMP"/>
+			<queryCondition type="blurMatching"/>
+		</field>
+		<!--
+		<field name="IMAGE1" description="图片1" displayOnly="false" javaType="string" lazyLoad="false" nullAllowed="true" length="250">
+			<component type="hidden" readOnly="false" style="width:30;height:30;" pathTable="TEST_COMP"/>
+			<queryCondition type="equal"/>
+		</field>
+		-->
+		<field name="IMAGE2" description="图片2" displayOnly="false" javaType="string" lazyLoad="false" nullAllowed="true" length="250">
+			<component type="image" readOnly="false" style="imageWidth:30;imageHeight:30;" pathTable="TEST_COMP"/>
+			<queryCondition type="blurMatching"/>
+		</field>
+		<field name="DEPT_ID" javaType="string" description="部门(单选树)" style="color:#990000;size:12;font-weight:bold;" nullAllowed="true">
+			<component type="treeComb" action="debugJs(getValue(&quot;__DEPT_ID__NAME&quot;));" referenceTable="SYSORGA_VIEW" referenceField="ID" displayReferenceField="NAME" quickQueryConditionField="NAME" style=""/>
+			<!-- associatedFields="PROVINCE_NAME,COUNTRY_NAME" -->
+			<listColumn noquery="false"/>
+		</field>
+		<field name="TEST_ANCMUL" javaType="string" description="ANC(多选下拉)" style="color:#990000;size:12;font-weight:bold;" lazyLoad="true">
+			<component type="richSelect" action="debugJs(getValue(&quot;__TEST_ANCMUL__NAME&quot;));" referenceTable="SYSORGA_VIEW" referenceField="ID" displayReferenceField="NAME" multipleSelect="true" style=""/>
+			<!-- className="haiyan.component.PagingAndrieFieldComponent" -->
+			<queryCondition type="none"/>
+		</field>
+		<field name="TEST_LOVMUL" javaType="string" description="LOV(多选列表)" style="color:#990000;size:12;font-weight:bold;" lazyLoad="true">
+			<component type="combo" action="debugJs(getValue(&quot;__TEST_LOVMUL__NAME&quot;));" referenceTable="SYSORGA_VIEW" referenceField="ID" displayReferenceField="NAME" quickQueryConditionField="NAME,CODE" multipleSelect="true" style=""/>
+			<queryCondition type="none"/>
+		</field>
+		<field name="WAREHOUSEIN" javaType="string" description="查头表">
+			<component type="combo" referenceTable="TEST_GRID" referenceField="ID" displayReferenceField="NAME" quickQueryConditionField="NAME" associatedFields="WAREHOUSEIN_CODE" />
+			<!-- associatedFields="WAREWHEREIN" restrictiveFields="TEMPWAREHOUSEID" conditionFields="ID" url="queryOne.do?__opr_data=SYSBILLCONFIG&amp;ID=@FIELD@" urlField="WAREHOUSEIN" style="width:100;"-->
+			<listColumn noquery="true"/>
+		</field>
+		<field name="WAREHOUSEIN_CODE" javaType="string" description="联带头表CODE">
+			<component type="text" displayReferenceField="CODE"/>
+			<!-- style="width:100;" colspan="3" -->
+			<listColumn noquery="true"/>
+		</field>
+		<field name="WAREWHEREIN" javaType="string" description="查明细表">
+			<component type="combo" referenceTable="TEST_DETAIL" referenceField="ID" displayReferenceField="NAME" quickQueryConditionField="NAME" conditionFields="HEADID" restrictiveFields="WAREHOUSEIN"/>
+			<!-- style="width:100;" -->
+			<listColumn noquery="true"/>
+		</field>
+		<field name="STATUS" javaType="string" description="状态" defaultValue="0">
+			<component type="dropdown" style="" colspan="5">
+				<option displayName="编制" value="0"/>
+				<option displayName="人事审批" value="1"/>
+				<option displayName="总经理审批" value="2"/>
+				<option displayName="公司下达" value="3"/>
+			</component>
+			<listColumn noquery="true"/>
+		</field>
+		<field name="TEST_RADIO_GROUP" javaType="string" description="radio测试">
+			<component type="radio">
+				<!-- type="userDefined" className="haiyan.component.RadioComponent" -->
+				<!--  style="width:5;" -->
+				<option displayName="编制" value="1"/>
+				<option displayName="人事审批" value="2"/>
+				<option displayName="总经理审批" value="3"/>
+				<option displayName="公司下达" value="4"/>
+			</component>
+			<queryCondition type="none"/>
+			<listColumn noquery="false"/>
+		</field>
+		<field name="TEST_CHECK_GROUP" javaType="string" description="checkbox测试">
+			<component type="checkbox">
+				<!-- style="width:5;" -->
+				<option displayName="编制" value="1"/>
+				<option displayName="人事审批" value="2"/>
+				<option displayName="总经理审批" value="3"/>
+				<option displayName="公司下达" value="4"/>
+			</component>
+			<queryCondition type="none"/>
+			<listColumn noquery="false"/>
+		</field>
+		<!-- -->
+		<Panel name="root" description="ROOT">
+			<Panel name="pan1" description="PAN1" style="height:270;">
+				<TabPanel name="tab" description="TAB">
+					<Panel name="tab1" description="tab1">
+						<Group name="g01" description="g01" collapse="true" fields="CODE NAME DEPT_ID TEST_ANCMUL TEST_LOVMUL STATUS TEST_RADIO_GROUP TEST_CHECK_GROUP"/>
+					</Panel>
+				</TabPanel>
+			</Panel>
+			<Panel name="pan2" description="PAN2">
+				<Group name="g02" description="g02" collapse="true" fields="IMAGE1 IMAGE2"/>
+				<Group name="g03" description="g03" collapse="true" fields="WAREHOUSEIN WAREHOUSEIN_CODE WAREWHEREIN HYVERSION"/>
+			</Panel>
+		</Panel>
+		<!-- -->
+		<queryFilter>
+			<pluggedFilter><![CDATA[and t_1.CODE not like 'hidden_%']]></pluggedFilter>
+		</queryFilter>
+		<!-- -->
+		<pluginInterceptor methodName="exp" pluginName="saveB" parameter="Save()"/>
+		<pluginInterceptor methodName="exp" pluginName="midtest" parameter="Error({12345})"/>
+		<pluginInterceptor methodName="exp" pluginName="edit" parameter="If(IsEmpty(Get(IMAGE1)),true,DisFlds(IMAGE1))"/>
+		<!-- -->
+		<pluginOperation name="saveS" oprName="保存S" hostPage="edit" tblevel="1" action="save({},{midtest})+brk()"/>
+		<pluginOperation name="saveP" oprName="保存P" hostPage="edit" tblevel="1" action="plugin({},{saveB})+brk()"/>
+		<pluginOperation name="midtest" oprName="midtest" hostPage="edit" tblevel="1"/>
+		<pluginOperation name="uitest" oprName="uitest" hostPage="edit" tblevel="1" action="test()+brk()"/>
+		<pluginOperation name="test" className="haiyan.plugin.BshPlugin" oprName="测试Bsh" hostPage="edit"><![CDATA[
+			 form.set("CODE", "BSH...");
+		]]></pluginOperation>
+		<pluginOperation name="test2" className="haiyan.plugin.ExpPlugin" oprName="测试Exp" hostPage="edit"><![CDATA[
+			 SetValue("CODE", "EXP...");
+		]]></pluginOperation>
+		<pluginOperation name="dbtest" className="haiyan.plugin.BshPlugin" oprName="生成测试数据" hostPage="edit"><![CDATA[
+			 new java.lang.Thread(new java.lang.Runnable() {				
+				final SrvContext context=new TempSrvContext("1");
+				public void run() {
+					try {
+						for (int i=1; i <= 400; i++) {
+							Qbq3Form form=new MapForm();
+							form.set("CODE", "CODE_" + Math.random());
+							form.set("NAME", DateUtil.getLastTime());
+							try {
+								context.getDBM().insert("TEST_PAGE", form, context);
+							} catch (Throwable e) {
+								throw new RuntimeException(e);
+							}
+							if (i % 100 == 0 && i > 1) {
+								try {
+									context.commit();
+								} catch (Throwable e) {
+									e.printStackTrace();
+								}
+								try {
+									context.begin();
+								} catch (Throwable e) {
+									e.printStackTrace();
+								}
+							}
+						}
+					} finally {
+						context.close();
+					}
+				}
+			}).start();
+		]]></pluginOperation>
+		<pluginOperation name="exiftest" className="haiyan.plugin.ExpPlugin" oprName="生成Exif数据" hostPage="edit"><![CDATA[
+			Exif(ExePath()&SubStr(Get(IMAGE2),7),{NAME},{Make:Model:Date/Time})
+		]]></pluginOperation>
+		<!-- -->
+		<Operation save="true" queryPageAdd="true" queryPageDelete="true" queryPageQueryEdit="true" customizeColumns="false" selectedHidden="true"/>
+		<doc>
+			<help><![CDATA[啦啦啦 帮助说明]]></help>
+		</doc>
+	</table>
+</Haiyan>
+<!--s.append("EXIF版本：" + directory.getString(com.drew.metadata.exif.ExifDirectory.TAG_EXIF_VERSION));-->

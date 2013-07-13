@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Haiyan xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../haiyan.xsd">
+	<table name="SYSAREA" description="管辖区域">
+		<id name="ID" javaType="string"/>
+		<field name="PATH" javaType="string" description="地区路径" style="color:#990000;size:12;font-weight:bold;">
+			<component type="text" />
+			<queryCondition type="none"/>
+			<listColumn noquery="false"/>
+		</field>
+		<field name="AREA_CODE" javaType="string" description="地区编码">
+			<component type="readOnlyText" displayReferenceField="LABEL4"/>
+			<queryCondition type="none"/>
+			<listColumn noquery="false"/>
+		</field>
+		<field name="AREA" javaType="string" description="地区">
+			<component type="readOnlyText" displayReferenceField="NAME"/>
+			<queryCondition type="none"/>
+			<listColumn noquery="false"/>
+		</field>
+		<field name="PROVINCE_ID" javaType="string" description="省份" >
+			<component type="richSelect" referenceTable="T_DIC_COMMON_PROVINCE" referenceField="ID" displayReferenceField="NAME" quickQueryConditionField="NAME" associatedFields="AREA,AREA_CODE"/>
+			<listColumn noquery="false"/>
+		</field>
+		<field name="SYSTEMUSER" description="用户" javaType="string" style="color:#990000;size:12;font-weight:bold;">
+			<component type="richSelect" quickQueryConditionField="NAME" referenceTable="SYSOPERATOR" displayReferenceField="NAME" colspan="3" />
+			<queryCondition type="none"/>
+		</field>
+		<field name="PID" javaType="string" description="上级区域">
+			<component type="dropdown" referenceTable="SYSAREA" referenceField="ID" displayReferenceField="AREA" />
+			<listColumn noquery="false"/>
+		</field>
+		
+
+		<PageView showField="*" type="querybyform" title="列表索引"/>
+		<PageView showField="AREA_CODE,AREA,__PROVINCE_ID__NAME,__SYSTEMUSER__NAME" type="gentree" title="树形索引"/>
+	
+		<pluginInterceptor className="haiyan.interceptor.SaveInterceptor" methodName="complete" pluginName="save" type="after"/>
+		<pluginInterceptor className="haiyan.interceptor.DeleteInterceptor" methodName="complete" pluginName="delete" type="after"/>
+		<Operation selectedHidden="true" queryPageQueryEdit="false" queryPageDelete="false"/>
+	</table>
+</Haiyan>

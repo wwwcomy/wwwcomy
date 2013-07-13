@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Haiyan xsi:noNamespaceSchemaLocation="../../haiyan.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<table name="T_DIC_PROVINCE" description="通用字典-省份" realTable="T_DIC_COMMON">
+		<id name="ID" javaType="string"/>
+		<field name="CODE" javaType="string" description="编号">
+			<component type="text"/>
+		</field>
+		<field name="NAME" javaType="string" description="名称">
+			<component type="text"/>
+		</field>
+		<field name="MEMO" javaType="string" description="备注">
+			<component type="textArea" colspan="3" style="width:100%;"/>
+		</field>
+		<field name="LABEL" description="字典分类" javaType="string" defaultValue="CSZL">
+			<component type="hidden"/>
+		</field>
+		<field name="LABEL2" description="字典分类" javaType="string" defaultValue="PROVINCE">
+			<component type="hidden"/>
+		</field>
+		<field name="LABEL3" description="所在区域" javaType="string" defaultValue="华东">
+			<component type="text"/>
+		</field>
+		<field name="LABEL4" description="区域编码" javaType="string">
+			<component type="text"/>
+		</field>
+		<field name="PID" javaType="string" description="所属国家">
+			<!-- quickQueryConditionField="NAME"  -->
+			<component type="richSelect" colspan="3" referenceTable="T_DIC_COMMON_COUNTRY" quickQueryConditionField="NAME" referenceField="ID" displayReferenceField="NAME" associatedFields="PIDNAME"/>
+			<listColumn noquery="true"/>
+		</field>
+		<field name="PIDNAME" javaType="string" description="国家名称(冗余信息)">
+			<component type="readOnlyText" colspan="3" displayReferenceField="NAME"/>
+			<queryCondition type="none"/>
+			<listColumn noquery="true"/>
+		</field>
+		<queryFilter>
+			<pluggedFilter> and t_1.LABEL='CSZL' and t_1.LABEL2='PROVINCE'</pluggedFilter>
+		</queryFilter>
+		<Operation saveAndAdd="false"/>
+	</table>
+</Haiyan>

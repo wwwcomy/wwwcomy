@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Haiyan xsi:noNamespaceSchemaLocation="../../haiyan.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<table description="客户需求" name="T_CRM_NEED" realTable="T_CRM_NEED">
+		<id name="ID" javaType="string">
+			<component type="hidden" url="@"/>
+		</id>
+		<field name="rclient" javaType="string" description="客户">
+			<component type="richSelect" referenceTable="T_CRM_CLIENT" referenceField="ID" displayReferenceField="NAME" quickQueryConditionField="NAME"/>
+		</field>
+		<field name="rcontact" javaType="string" description="客户联系人">
+			<component type="richSelect" referenceTable="T_CRM_CONTACT" conditionFields="CUS_ID" restrictiveFields="RCLIENT" referenceField="ID" displayReferenceField="NAME" quickQueryConditionField="NAME"/>
+		</field>
+		<field name="budget" javaType="string" description="客户budget">
+			<component type="text"/>
+			<listColumn noquery="false"/>
+		</field>
+		<field name="description" javaType="string" description="需求描述">
+			<component type="text"/>
+		</field>
+	</table>
+</Haiyan>

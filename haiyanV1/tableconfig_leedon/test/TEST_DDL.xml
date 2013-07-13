@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Haiyan xsi:noNamespaceSchemaLocation="../../haiyan.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<table description="TEST_DDL" name="TEST_DDL">
+		<id name="ID" javaType="string"/>
+		<field name="CODE" javaType="string" description="CODE" nullAllowed="true">
+			<component type="text"/>
+		</field>
+		<field name="NAME" javaType="string" description="NAME" nullAllowed="true" defaultValue="TEST">
+			<component type="text"/>
+		</field>
+		<pluginInterceptor methodName="initDB" pluginName="initDB" type="before"><![CDATA[
+create or replace view TEST_DDL as
+(select * from TEST_DBM)
+		]]></pluginInterceptor>
+	</table>
+</Haiyan>

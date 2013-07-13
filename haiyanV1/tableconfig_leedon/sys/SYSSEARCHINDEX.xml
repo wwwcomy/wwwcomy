@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Haiyan xsi:noNamespaceSchemaLocation="../haiyan.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<table description="SYSSEARCHINDEX" name="SYSSEARCHINDEX">
+		<id name="ID" javaType="string">
+			<component type="hidden" url="#"/>
+		</id>
+		<field name="TYPE" javaType="string" description="TYPE">
+			<component type="text"/>
+		</field>
+		<field name="DFIELDS" javaType="string" description="DFIELDS">
+			<component type="text"/>
+		</field>
+		<field name="SFIELDS" javaType="string" description="SFIELDS">
+			<component type="text"/>
+		</field>
+		<field name="STABLE" javaType="string" description="STABLE">
+			<component type="text"/>
+		</field>
+		<field name="CODE" javaType="string" description="CODE">
+			<component type="text"/>
+		</field>
+		<field name="NAME" javaType="string" description="NAME">
+			<component type="text"/>
+		</field>
+		<field name="LIKEC" javaType="string" description="LIKEC">
+			<component type="text"/>
+		</field>
+		<field name="LEV" javaType="string" description="LIKEC">
+			<component type="text"/>
+		</field>
+		<!-- -->
+		<queryFilter>
+			<pluggedFilter><![CDATA[
+			    group by t_1.ID,t_1.TYPE,t_1.DFIELDS,t_1.SFIELDS,t_1.STABLE,t_1.CODE,t_1.NAME,t_1.LIKEC,t_1.LEV 
+				order by t_1.LEV
+	        ]]></pluggedFilter>
+		</queryFilter>
+	</table>
+</Haiyan>

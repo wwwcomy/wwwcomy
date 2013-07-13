@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Haiyan xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../haiyan.xsd">
+	<table name="T_DIC_WAHMETRICCAL" description="计量单位换算">
+		<id name="ID" javaType="string"/>
+		<field name="METRIC1" description="计量单位1" javaType="string">
+			<component type="richSelect" referenceTable="T_WAHMETRIC" displayReferenceField="NAME" referenceField="ID"/>
+		</field>
+		<field name="LOGIC" description="逻辑符" javaType="string" defaultValue="=">
+			<component type="text" readOnly="true"/>
+		</field>
+		<field name="MODULUS" description="系数X" javaType="string">
+			<component type="text"/>
+		</field>
+		<field name="METRIC2" description="计量单位2" javaType="string">
+			<component type="richSelect" referenceTable="T_WAHMETRIC" displayReferenceField="NAME" referenceField="ID"/>
+		</field>
+		<pluginInterceptor className="haiyan.interceptor.SaveInterceptor" methodName="complete" pluginName="save" type="after"/>
+		<pluginInterceptor className="haiyan.interceptor.DeleteInterceptor" methodName="complete" pluginName="delete" type="after"/>
+		<Operation queryPageAdd="true" queryPageDelete="true" queryPageQueryEdit="true"/>
+	</table>
+</Haiyan>

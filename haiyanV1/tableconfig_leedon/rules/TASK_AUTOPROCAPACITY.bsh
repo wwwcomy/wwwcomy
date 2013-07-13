@@ -1,0 +1,36 @@
+void autoChangeProP27() throws Throwable {
+	DBManager dbm = context.getDBM();
+	String sql = "select ID,P_27 from V_WM_SDBPRODUCT where P_27<>P_27_LAST";
+	String[][] rs = dbm.getResultStrArray(sql,2,null);
+	if(rs.length>0) {
+		int l = rs.length;
+		for(int i = 0; i<l;i++){
+			String proID = rs[i][0];
+			String P27 = rs[i][1];
+			Ref c1= new Ref();
+			Ref c2= new Ref();
+			Ref c3= new Ref();
+			Ref capacity = new Ref();
+			//throw new Warning(proID+","+P27);
+			java.util.regex.Pattern ptn = java.util.regex.Pattern.compile("^(\\d+\\.?\\d?)\\*(\\d+\\.?\\d?)\\*(\\d+\\.?\\d?).*$");
+			java.util.regex.Matcher m = ptn.matcher(P27);
+
+			while(m.find()){
+				c1.setValue(m.group(1));
+				c2.setValue(m.group(2));
+				c3.setValue(m.group(3));
+				capacity.setValue(TypeConvert.toDouble(c1.getValue())*TypeConvert.toDouble(c2.getValue())*TypeConvert.toDouble(c3.getValue())/1000);
+			}
+			//String tmpSql = "update T_WM_PRO set P_27='"+ P27 +"',C1= "+c1.getValue()+",C2="+c2.getValue()+",C3="+c3.getValue()+",CAPACITYNUM="+TypeConvert.toString(capacity.getValue())+"  where ID='"+proID+"'";
+			//dbm.executeUpdate(tmpSql,null);
+			Qbq3Form form = context.getDBM().findByPK("T_WM_PRO", proID, context);
+			form.set("P_27",P27);
+			form.set("C1",c1.getValue());
+			form.set("C2",c2.getValue());
+			form.set("C3",c3.getValue());
+			form.set("CAPACITYNUM",TypeConvert.toString(capacity.getValue()));
+			context.getDBM().update("T_WM_PRO",form,context);
+		}
+	}
+}
+autoChangeProP27();

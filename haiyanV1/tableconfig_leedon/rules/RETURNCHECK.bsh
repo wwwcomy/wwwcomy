@@ -1,0 +1,54 @@
+void checkStock() {
+	String ID = form.get("ID");
+	String warehouseID = form.get("WAREHOUSE");
+	DBManager dbm = context.getDBM();
+	// 退货时需要检查:退货单中的每个商品每个批次的退货之和,是否小于当时出库单的相应商品和批次的数量之和
+	// 201209加入批次维度
+	// 先取退货单数据
+	String sql = "select PRO_WH,PRODUCTID,BATCH,sum(PRO_COUNT),ORDER_ID from T_WM_SDBRETURNDETAIL where HEADID='"+ID+"' group by PRO_WH, PRODUCTID,BATCH";
+	String[][] rs = dbm.getResultStrArray(sql, 5, null);
+	if(rs.length>0) {
+		int l = rs.length;
+		for(int i = 0; i<l;i++){
+			String WHID = rs[i][0];
+			String proID = rs[i][1];
+			String batch = rs[i][2];
+			String proCount = rs[i][3];
+			String orderID = rs[i][4];
+			int transCount = Integer.valueOf(proCount);
+			String checkSql =  "select sum(t_1.PRO_COUNT),t_2.CODE from T_WM_OUTDETAIL t_1,V_WM_SDBPRODUCT t_2 where t_1.PRODUCTID=t_2.ID and t_1.PRODUCTID='"+proID+"' and t_1.BATCH="+batch +" and HEADID='"+orderID+"'";
+			// throw new Warning(checkSql);
+			String[][] result = dbm.getResultStrArray(checkSql, 2, null);
+			if (result.length>0) {
+				int t = 0;
+				t = TypeConvert.toInt(result[0][0]);
+				String proWmcode = result[0][1];
+				if(transCount>t){
+					String whCode = getWarewhereCode(WHID,dbm);
+					throw new Warning("审批失败,商品 '"+proWmcode+"' 大于相应的出库单出库数量,请检查. 仓位:"+whCode+",批次:"+batch+", 退货数量:"+transCount+", 出库单相应商品批次出库数量:"+t);
+				}
+			}else{
+				String whCode = getWarewhereCode(WHID,dbm);
+				String proSql = "select CODE from V_WM_SDBPRODUCT where ID='"+proID+"'";
+				String[][] result1 = dbm.getResultStrArray(proSql, 1, null);
+				if (result1.length>0) {
+					throw new Warning("审批出库单无此商品:"+result1[0][0]+" 批次出库记录, 仓位:"+whCode+",批次:"+batch+", 退货数量:"+transCount);
+				}
+				throw new Warning("审批出库单无此商品批次出库记录, 仓位:"+whCode+",批次:"+batch+", 退货数量:"+transCount);
+			}
+		}
+	} else {
+		throw new Warning("退货明细必须有记录,请重新填写");
+	}
+}
+
+String getWarewhereCode(String whID,DBManager dbm){
+	String whCode=null;
+	String wareWhereSql = "select CODE from T_DIC_WAREWHERE where ID =" +whID;
+	String[][] result = dbm.getResultStrArray(wareWhereSql, 1, null);
+	if (result.length>0) {
+		whCode = result[0][0];
+	}
+	return whCode;
+}
+checkStock();

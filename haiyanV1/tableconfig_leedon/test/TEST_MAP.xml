@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Haiyan xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../haiyan.xsd">
+	<!-- 测试中间表 -->
+	<table name="TEST_DBMAP" description="DBMAP人员">
+		<id name="ID" javaType="string"/>
+		<field name="USERID" description="DBMAP" javaType="string">
+			<component type="richSelect" referenceTable="TEST_MAP" displayReferenceField="NAME"/>
+		</field>
+		<field name="CHILDID" description="人员" javaType="string">
+			<component type="richSelect" referenceTable="SYSOPERATOR_COMBO" displayReferenceField="NAME"/>
+		</field>
+		<Operation selectedHidden="true"/>
+	</table>
+	<!-- 原数据表 -->
+	<!--
+	数据流数据库结构样例:
+	
+	SYSDFHEAD(一个数据流)
+	ID  NAME        CODE  
+	1   数据流测试  TEST
+	
+	SYSDFDTL
+	ID  HEADID PID DFTIME             SRCTABLE SRCID SRCHEADID DESTTABLE DESTID DESTHEADID MAINVAL YXOVER DFRULE
+	1   1          20090908 11:00:00  TEST1    1001  1001      TEST1     1001   1001       1,000   0      
+	2   1      1   20090908 11:20:00  TEST1    1001  1001      TEST2     1005   1005         500   0      Rule_DFRule({TEST1},{TEST2},code:money,code:money,money,0)
+	3   1      1   20090908 11:30:00  TEST1    1001  1001      TEST3     1004   1004         500   0      Rule_DFRule({TEST1},{TEST3},code:money,code:money,money,0)
+	4   1      2   20090908 11:40:00  TEST2    1005  1005      TEST3     1003   1003         300   0      Rule_DFRule({TEST2},{TEST3},code:money,code:money,money,0)
+	5   1      2   20090908 11:40:00  TEST2    1005  1005      TEST3     1003   1003         200   0      Rule_DFRule({TEST2},{TEST3},code:money,code:money,money,0)
+	-->
+	<table name="TEST_MAP" description="ETL测试" realTable="TEST_MAP" >
+		<id name="ID" description="ID" javaType="string">
+			<component type="hidden" readOnly="false" url=""/>
+		</id>
+		<field name="NAME" description="NAME" displayOnly="false" javaType="string" lazyLoad="false">
+			<component type="text" readOnly="false"/>
+		</field>
+		<field name="CHILDREN" description="DBMAP人员" javaType="string" displayOnly="true" mappingTable="TEST_DBMAP">
+			<component type="richSelect" referenceTable="SYSOPERATOR_COMBO" referenceField="ID" displayReferenceField="NAME" multipleSelect="true"/>
+			<queryCondition type="none"/>
+			<listColumn noquery="true"/>
+		</field>
+		<!--
+		<pluginInterceptor pluginName="xiatui" methodName="exp" parameter="Rule_Map(TEST_MAP,XIATUI)" type="after"/>
+		<pluginOperation name="xiatui" oprName="下推" hostPage="edit" tblevel="1"/>
+		-->
+		<!-- -->
+		<pluginOperation name="xiatui" className="haiyan.plugin.ExpressionPlugin" oprName="下推" hostPage="edit" tblevel="1"><![CDATA[
+			Rule_Map(TEST_MAP,XIATUI);
+		]]></pluginOperation>
+		<!-- etl规则 rule_Value(r_1.NAME)&amp; -->
+		<DataRules name="XIATUI" description="数据流转" 
+				srcTable="TEST_MAP,TEST_MAP_CHILD" srcRefField="ID,HEADID" 
+				destTable="TEST_MAP_DEST,TEST_MAP_DEST_CHILD" destRefField="ID,HEADID">
+			<!-- index 源和目标的talbeindex field 流转计算字段 formula 流转规则公式 -->
+			<rule srcTableIndex="2" destTableIndex="2" field="ID,HEADID,MONEY,CODE,D1" formula="{M_}+Get(ID),{M_}+Get(HEADID),Get(MONEY),Get(CODE),SetPara(D1,GetPara(D1)+Get(MONEY))"/>
+			<rule srcTableIndex="1" destTableIndex="1" field="ID,MONEY" formula="{M_}+Get(ID),GetPara(D1)"/>
+		</DataRules>
+	</table>
+	<table name="TEST_MAP_CHILD" description="TEST_MAP_CHILD" realTable="TEST_MAP_CHILD">
+		<id name="ID" description="ID" javaType="string">
+			<component type="hidden" readOnly="false" url="#"/>
+		</id>
+		<field name="HEADID" javaType="string" description="主表" nullAllowed="false">
+			<component type="richSelect" referenceTable="TEST_MAP" referenceField="ID" displayReferenceField="NAME" quickQueryConditionField="NAME" style="width:100;"/>
+			<listColumn noquery="false"/>
+		</field>
+		<field name="MONEY" description="MONEY" displayOnly="false" javaType="bigDecimal" lazyLoad="false">
+			<component type="text" readOnly="false"/>
+		</field>
+		<pluginInterceptor methodName="setDefaultValByHeadID" parameter="HEADID,TEST_MAP,NAME,__HEADID__NAME" pluginName="edit" type="before"/>
+	</table>
+	<!-- 目标表 -->
+	<table name="TEST_MAP_DEST" description="TEST_MAP_DEST" realTable="TEST_MAP_DEST" childTable="TEST_MAP_DEST_CHILD" childTableRefField="HEADID">
+		<id name="ID" description="ID" javaType="string">
+			<component type="hidden" readOnly="false" url=""/>
+		</id>
+		<field name="NAME" description="NAME" displayOnly="false" javaType="string" lazyLoad="false">
+			<component type="text" readOnly="false"/>
+		</field>
+		<field name="MONEY" description="MONEY" displayOnly="false" javaType="string" lazyLoad="false">
+			<component type="text" readOnly="false"/>
+		</field>
+	</table>
+	<table name="TEST_MAP_DEST_CHILD" description="TEST_MAP_DEST_CHILD" realTable="TEST_MAP_DEST_CHILD">
+		<id name="ID" description="ID" javaType="string">
+			<component type="hidden" readOnly="false" url="#"/>
+		</id>
+		<field name="HEADID" javaType="string" description="主表" nullAllowed="false">
+			<component type="richSelect" referenceTable="TEST_MAP_DEST" referenceField="ID" displayReferenceField="NAME" quickQueryConditionField="NAME" style="width:100;"/>
+			<listColumn noquery="false"/>
+		</field>
+		<field name="MONEY" description="MONEY" displayOnly="false" javaType="bigDecimal" lazyLoad="false">
+			<component type="text" readOnly="false"/>
+		</field>
+		<pluginInterceptor methodName="setDefaultValByHeadID" parameter="HEADID,TEST_MAP_DEST,NAME,__HEADID__NAME" pluginName="edit" type="before"/>
+	</table>
+	<!-- -->
+</Haiyan>

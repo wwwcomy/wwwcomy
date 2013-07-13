@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="GB2312"?>
+<Haiyan xsi:noNamespaceSchemaLocation="../../haiyan.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<table description="产品分管字典" name="T_DIC_PRODUCT_MANAGER" realTable="T_DIC_PRODUCT_MANAGER">
+		<id name="ID" javaType="bigDecimal"/>
+		<field name="DEP_ID" javaType="bigDecimal" description="部门ID">
+			<component type="richSelect" referenceTable="SYSORGA_view" referenceField="ID" displayReferenceField="NAME"/>
+		</field>
+		<field name="PRO_ID" javaType="bigDecimal" description="产品ID">
+			<component type="richSelect" referenceTable="T_DIC_PRODUCT" referenceField="ID" displayReferenceField="NAME"/>
+		</field>
+	</table>
+</Haiyan>

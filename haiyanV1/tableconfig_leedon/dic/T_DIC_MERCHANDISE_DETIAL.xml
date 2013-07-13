@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Haiyan xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../haiyan.xsd">
+    <table name="T_DIC_MERCHANDISE_DETAIL" description="货品附属属性" >
+        <id name="ID" javaType="string"/>
+        <field name="HEADID" description="HEADID" javaType="string">
+		<component type="hidden"/>
+	</field>
+        <field name="PROP1" description="属性1" javaType="string">
+		<component type="text"/>
+	</field>
+	<field name="PROP2" description="属性2" javaType="string">
+		<component type="text"/>
+	</field>
+	<field name="PROP3" description="属性3" javaType="string">
+		<component type="text"/>
+	</field>
+    </table>
+</Haiyan>

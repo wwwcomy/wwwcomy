@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- edited with XML Spy v4.4 U (http://www.xmlspy.com) by zhouxw (bokesoft) -->
+<Haiyan xsi:noNamespaceSchemaLocation="../../haiyan.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<table description="预约拜访记录" name="T_DIC_JOURNAL">
+		<id name="ID" javaType="string">
+			<component type="hidden" url="#"/>
+		</id>
+		<field name="USER_ID" javaType="string" description="下次联系人">
+			<component type="richSelect" referenceTable="SYSOPERATOR_VIEW" referenceField="ID" displayReferenceField="NAME"/>
+		</field>
+		<field name="NEXT_CONTACT_DATE" javaType="date" description="下次联系时间" dataStyle="yyyy-MM-dd HH:mm:ss">
+			<component type="dateTime"/>
+		</field>
+		<field name="CUSTOMER_ID" javaType="string" description="联系客户" nullAllowed="false">
+			<component type="richSelect" referenceTable="T_CRM_CUSTOMER_QY" referenceField="ID" displayReferenceField="NAME" readOnly="false"/>
+		</field>
+		<!-- associatedFields="CUSTOMER_ADDRESS" 
+		<field name="CUSTOMER_ADDRESS" javaType="string" description="客户地址">
+			<component type="readOnlyText" displayReferenceField="ADDRESS"/>
+		</field>
+		-->
+		<!--
+		<field name="ACTIVITY_ID" javaType="string" description="目标活动">
+			<component type="richSelect" referenceTable="T_CRM_ACTIVITY" restrictiveFields="CUSTOMER_ID" conditionFields="CUSTOMER_ID" referenceField="ID" displayReferenceField="NAME"/>
+		</field>
+		-->
+		<field name="ADDRESS" javaType="string" description="联系地点" nullAllowed="false">
+			<component type="text"/>
+		</field>
+		<field name="ACTIVER" javaType="string" description="对方人员" nullAllowed="false">
+			<component type="text"/>
+		</field>
+		<field name="ACTIVER_POSITION" javaType="string" description="对方人员职位" nullAllowed="false">
+			<component type="text"/>
+		</field>
+		<field name="ACTIVER_PHONE" javaType="string" description="对方人员电话" nullAllowed="false">
+			<component type="text"/>
+		</field>
+		<field name="RESULT_STATUS" javaType="string" description="联系效果">
+			<component type="dropdown" colspan="3">
+				<option displayName="很好" value="perfect"/>
+				<option displayName="好" value="good"/>
+				<option displayName="一般" value="normal"/>
+				<option displayName="差" value="bad"/>
+			</component>
+			<queryCondition type="none"/>
+			<listColumn nowrap="true"/>
+		</field>
+		<field name="CREATE_USER_ID" javaType="string" description="填写人">
+			<component type="richSelect" referenceTable="SYSOPERATOR_VIEW" referenceField="ID" displayReferenceField="NAME" readOnly="true"/>
+			<queryCondition type="none"/>
+		</field>
+		<field name="CREATE_TIME" javaType="date" description="填写时间" dataStyle="yyyy-MM-dd HH:mm:ss">
+			<component type="dateTime" readOnly="true"/>
+			<queryCondition type="none"/>
+			<listColumn noquery="true"/>
+		</field>
+		<field name="JOURNAL_TIME" javaType="date" description="本次联系时间" dataStyle="yyyy-MM-dd HH:mm:ss">
+			<component type="dateTime" colspan="3"/>
+		</field>
+		<field name="CONTENT" javaType="string" description="工作内容" nullAllowed="false" defaultValue="(限2048字)">
+			<component type="textArea" colspan="3" style="width:100%;height:80;"/>
+			<queryCondition type="none"/>
+			<listColumn width="40" height="20" nowrap="true" noquery="true"/>
+		</field>
+		<!--
+		<field name="MAININFO" javaType="string" description="主要信息" style="color:#990000;size:12;font-weight:bold;" defaultValue="(限2048字)1、沟通的主要事项  2、目前需要解决的主要问题">
+			<component type="textArea" colspan="3" style="width:100%;height:80;"/>
+			<queryCondition type="none"/>
+			<listColumn width="40" height="20" nowrap="true" noquery="true"/>
+		</field>
+		<field name="PLANCONTENT" javaType="string" description="解决方案" style="color:#990000;size:12;font-weight:bold;" defaultValue="(限2048字)1、具体的解决方案，具体落实的时间">
+			<component type="textArea" colspan="3" style="width:100%;height:80;"/>
+			<queryCondition type="none"/>
+			<listColumn width="40" height="20" nowrap="true" noquery="true"/>
+		</field>
+		-->
+		<!--
+		<field name="ACCESSORY" javaType="string" description="递交附件">
+			<component type="file" url="upload\T_DIC_JOURNAL\ACCESSORY\@F@\@F@" urlField="ID,ACCESSORY"/>
+		</field>
+		-->
+		<field name="JDTYPE" javaType="string" defaultValue="0" description="客户合作阶段">
+			<component type="hidden">
+				<option displayName="合同" value="2"/>
+				<option displayName="呈现" value="1"/>
+				<option displayName="立项" value="0"/>
+			</component>
+		</field>
+		<field name="TYPE_" javaType="string" defaultValue="1" description="记录类型">
+			<component type="hidden">
+				<option displayName="客户拜访记录" value="1"/>
+				<option displayName="经理指定预约" value="2"/>
+			</component>
+			<listColumn noquery="true"/>
+		</field>
+		<field name="STATUS" javaType="string" defaultValue="0" description="预约状态">
+			<component type="dropdown" readOnly="true">
+				<option displayName="完成" value="1"/>
+				<option displayName="未完成" value="0"/>
+			</component>
+			<queryCondition type="none"/>
+		</field>
+		<field name="AVAILABLE" javaType="string" defaultValue="1" description="记录状态">
+			<component type="dropdown">
+				<option displayName="有效" value="1"/>
+				<option displayName="无效" value="0"/>
+			</component>
+			<queryCondition type="none"/>
+			<listColumn noquery="true"/>
+		</field>
+		<!--
+		<field name="HASCRMDTL" javaType="string" defaultValue="0" description="是否已经填写调查表">
+			<component type="dropdown" readOnly="true">
+				<option displayName="有" value="1"/>
+				<option displayName="无" value="0"/>
+			</component>
+			<queryCondition type="none"/>
+			<listColumn noquery="true"/>
+		</field>
+		-->
+		<!--
+		<field name="ACTIVER_ID" javaType="string" description="拜访人员" style="color:red;size:12;font-weight:bold;">
+			<component type="richSelect" referenceTable="T_DIC_WAB" referenceField="ID" displayReferenceField="NAME" restrictiveFields="CUSTOMER_ID" className="com.haiyan.genmis.view.component.RestrictiveRichSelectComponent" conditionFields="CUSTOMER_ID" associatedFields="ACTIVER_POSITION,ACTIVER_PHONE,ACTIVER_MOBLEPHONE"/>
+		</field>
+		<field name="ACTIVER_POSITION" javaType="string" description="拜访人职位" style="color:red;size:12;font-weight:bold;">
+			<component type="readOnlyText" displayReferenceField="POSITION" colspan="3" style="width:100%"/>
+		</field>
+		<field name="ACTIVER_PHONE" javaType="string" description="拜访人电话" style="color:red;size:12;font-weight:bold;">
+			<component type="readOnlyText" displayReferenceField="PHONE" style="width:100%"/>
+		</field>
+		<field name="ACTIVER_MOBLEPHONE" javaType="string" description="拜访人手机" style="color:red;size:12;font-weight:bold;">
+			<component type="readOnlyText" displayReferenceField="MOBILE_PHONE" style="width:100%"/>
+		</field>
+		<field name="ACCESSORY" javaType="string" description="照片">
+			<component type="image" colspan="3"/>
+		</field>
+		<field name="ACCESSORY1" javaType="string" description="照片">
+			<component type="image" colspan="3"/>
+		</field>
+		<field name="ACCESSORY2" javaType="string" description="照片">
+			<component type="image" colspan="3"/>
+		</field>
+		-->
+		<!-- -->
+		<queryFilter>
+			<pluggedFilter> order by t_1.NEXT_CONTACT_DATE desc </pluggedFilter>
+		</queryFilter>
+		<!-- -->
+		<!--
+		<javascript hostPage="edit">
+			 showOrHideObj(document.T_DIC_JOURNAL.PLANCONTENT.parentNode);
+		</javascript>
+		-->
+		<!--
+		<pluginInterceptor methodName="exif" parameter="HOMEIMAGE,HOMEIMAGE_INFO" pluginName="save"/>
+		<pluginInterceptor methodName="exif" parameter="HOMEIMAGE1,HOMEIMAGE_INFO1" pluginName="save"/>
+		<pluginInterceptor methodName="exif" parameter="HOMEIMAGE2,HOMEIMAGE_INFO2" pluginName="save"/>
+		-->
+		<!--
+		<pluginInterceptor methodName="setCreateUser" parameter="USER_ID" pluginName="edit"/>
+		<pluginInterceptor methodName="setCreateUser" parameter="CREATE_USER_ID" pluginName="edit"/>
+		<pluginInterceptor methodName="setCreateTime" parameter="JOURNAL_STARTTIME,yyyy-MM-dd HH:mm" pluginName="edit"/>
+		<pluginInterceptor methodName="setCreateTime" parameter="JOURNAL_ENDTIME,yyyy-MM-dd HH:mm" pluginName="edit"/>
+		<pluginInterceptor methodName="setCreateTime" parameter="CREATE_TIME,yyyy-MM-dd HH:mm:ss" pluginName="save"/>
+		<pluginInterceptor methodName="onlyByMaker" parameter="CREATE_USER_ID" pluginName="save"/>
+		<pluginInterceptor methodName="onlyByMaker" parameter="CREATE_USER_ID" pluginName="delete"/>
+		-->
+	</table>
+</Haiyan>

@@ -1,0 +1,381 @@
+<?xml version="1.0" encoding="GBK"?>
+<rule-set declaration="" name="Tests assignment rules" xmlns="http://drools.org/rules" xmlns:java="http://drools.org/semantics/java" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<!-- -->
+	<java:import>com.haiyan.genmis.core.db.DBManager</java:import>
+	<java:import>com.haiyan.genmis.core.SrvContext</java:import>
+	<java:import>com.haiyan.genmis.core.struts.*</java:import>
+	<java:import>com.haiyan.genmis.core.right.*</java:import>
+	<java:import>com.haiyan.genmis.core.*</java:import>
+	<java:import>com.haiyan.genmis.core.exception.Warning</java:import>
+	<java:import>com.haiyan.genmis.castorgen.Table</java:import>
+	<java:import>com.haiyan.genmis.util.StringUtil</java:import>
+	<java:import>com.haiyan.genmis.util.ConfigUtil</java:import>
+	<java:import>haiyan.interceptor.DroolsInterceptor</java:import>
+	<java:import>java.lang.String</java:import>
+	<java:import>java.util.*</java:import>
+	<!-- -->
+	<application-data identifier="context">SrvContext</application-data>
+	<application-data identifier="dbm">DBManager</application-data>
+	<application-data identifier="table">Table</application-data>
+	<application-data identifier="form">Qbq3Form</application-data>
+	<!-- -->
+	<java:functions/>
+	<rule name="confirm_xskh" salience="0">
+		<parameter identifier="dForm">
+			<java:class>Qbq3Form</java:class>
+		</parameter>
+		<java:condition>dForm.getParameter("STAGE").equals("1")</java:condition>
+		<java:consequence>
+		User user = context.getUser();
+		String id = user.getID();
+		Role[] roles = user.getRoles();
+		HashMap map = new HashMap();
+		for (int i = 0; i &lt; roles.length; i++) {
+			map.put(roles[i].getRoleName(), roles[i]);
+		}
+		if ( (map.get("ϵͳ����Ա") != null) 
+				|| (map.get("������") != null)
+				|| (map.get("���ž���") != null)
+				|| (map.get("�����ܼ�") != null) 
+				|| (map.get("�ܾ���") != null)
+				|| (map.get("�ܲ�") != null)
+				|| id.equals(dForm.getParameter("USER_ID_3")) 
+				|| id.equals(dForm.getParameter("USER_ID")) ) {
+			 Qbq3Form reqForm = new MapForm();
+			 reqForm.setParameter("CUSTOMER_ID",dForm.getParameter("ID"));
+			 ArrayList listProducts = (ArrayList) dbm
+				  .findByForm(ConfigUtil.getTable("T_CRM_PRODUCT" ), reqForm,
+						1000, 1, context,null).getData();
+			 if (listProducts.size() == 0) {
+			  	  context.addException(new DBBreakonAlert("�Բ���,����ʧ��,ȱ����Ϣ:(�ͻ������Ʒ),���ڿͻ���Ŀ��Ƭ����д."));
+			  	  return;
+			 }
+			 String stage = dForm.getParameter("STAGE"); 
+			 int stagef = new Integer(stage).intValue();
+			 if (stagef==1) {
+                 stagef=0; 
+                 dForm.setParameter("STAGE",""+stagef);
+			       drools.assertObject(dForm);
+                 context.addException(new DBGoonPrompt("����ɹ�"));
+			 }
+		} else {
+			 context.addException(new DBBreakonAlert("�Բ���,����Ȩ����!"));
+		}
+      	</java:consequence>
+	</rule>
+	<rule name="confirm_wfpkh" salience="1">
+		<parameter identifier="dForm">
+			<java:class>Qbq3Form</java:class>
+		</parameter>
+		<java:condition>dForm.getParameter("STAGE").equals("0")</java:condition>
+		<java:consequence>
+		Qbq3Form usernewform =dbm.findByPK("SYSOPERATOR",dForm.getParameter("USER_ID_1"),context);
+		User user = context.getUser();
+		String id = user.getID();
+		Role[] roles = user.getRoles();
+		HashMap map = new HashMap();
+		for (int i = 0; i &lt; roles.length; i++) {
+			map.put(roles[i].getRoleName(), roles[i]);
+		}
+		if(!StringUtil.isBlankOrNull(dForm.getParameter("USER_ID_1"))) {
+			Qbq3Form myuserdept = RightUtil.getUserDept(dbm,user);		
+	 		if ( (map.get("ϵͳ����Ա") != null) 
+				|| (map.get("�����ܼ�") != null) 
+				|| (map.get("�ܾ���") != null)
+				|| (map.get("�ܲ�") != null)
+				|| ( 
+						( map.get("������") != null || map.get("���ž���") != null ) &amp;&amp; myuserdept.getParameter("ID").equals(usernewform.getParameter("ORGAID")) 
+				   ) 
+			   ) {		
+	          String stage = dForm.getParameter("STAGE");
+			   String name = dForm.getParameter("NAME");
+			   String remake = dForm.getParameter("REMARK");
+			   String gdrelation = dForm.getParameter("GDRELATION"); 
+			   //
+			   Qbq3Form reqForm = new MapForm();
+			   reqForm.setParameter("CUSTOMER_ID",dForm.getParameter("ID"));
+		      ArrayList list = (ArrayList) dbm
+			       .findByForm(ConfigUtil.getTable("T_CRM_CUSTOMER_DTL"), reqForm,
+								1000, 1, context,null).getData();
+			   ArrayList list1 = (ArrayList) dbm
+				   .findByForm(ConfigUtil.getTable("T_CRM_CUSTOMER_TECHNOW" ), reqForm,
+						1000, 1, context,null).getData(); 
+			   ArrayList listProducts = (ArrayList) dbm
+				   .findByForm(ConfigUtil.getTable("T_CRM_PRODUCT" ), reqForm,
+						1000, 1, context,null).getData(); 
+				//
+			   String error="";
+			   if (StringUtil.isBlankOrNull(remake)) {
+					error = "(�ͻ������)";
+			   }
+			   if (StringUtil.isBlankOrNull(gdrelation)) {
+					error = error + "(�ɶ�����Ȩ��ϵ)";
+			   }
+	           if (StringUtil.isBlankOrNull(dForm.getParameter("USER_ID"))) {
+					error = error + "(�ͻ�����)";
+			   }
+	          if (StringUtil.isBlankOrNull(dForm.getParameter("USER_ID_1"))) {
+					error = error + "(��Ŀ����)";
+			   }
+			   if (list.size() == 0) {
+					error = "(�ݷü�¼)";
+				}
+				if (list1.size() == 0) {
+					error = error + "(��Ϣ����״)";
+				}
+				if (listProducts.size() == 0) {
+					error = error + "(�ͻ������Ʒ)";
+				}
+				error = error + "δ��д����!";
+	    		//
+		       if (!StringUtil.isBlankOrNull(stage)) {
+	              int stagef = new Integer(stage).intValue();
+	              if ((stagef==0)
+	   				    &amp;&amp; !StringUtil.isBlankOrNull(remake)
+						 &amp;&amp; !StringUtil.isBlankOrNull(gdrelation)
+						 &amp;&amp; !StringUtil.isBlankOrNull(dForm.getParameter("USER_ID"))
+						 &amp;&amp; !StringUtil.isBlankOrNull(dForm.getParameter("USER_ID_1"))
+						 &amp;&amp; (list.size() != 0)
+						 &amp;&amp; (list1.size() != 0)) {
+	                  stagef=2; 
+	                   dForm.setParameter("STAGE",""+stagef);
+				         drools.assertObject(dForm);
+	                   context.addException(new DBGoonPrompt("����ɹ�"));
+	                  
+				    }else{
+				     context.addException(new DBBreakonAlert("�Բ���,����ʧ��,���������!"+error));
+				    }			   
+				}
+			
+			} else {
+			 	context.addException(new DBBreakonAlert("�Բ���,����Ȩ����!"));
+			}
+		} else{ 
+			context.addException(new DBBreakonAlert("�Բ���,���������,��ѡ����Ŀ����!"));
+		}
+      	</java:consequence>
+	</rule>
+	<rule name="confirm_sjkh" salience="2">
+		<parameter identifier="dForm">
+			<java:class>Qbq3Form</java:class>
+		</parameter>
+		<java:condition>dForm.getParameter("STAGE").equals("2")</java:condition>
+		<java:consequence>
+		User user = context.getUser();
+		String id = user.getID();
+		Role[] roles = user.getRoles();
+		HashMap map = new HashMap();
+		for (int i = 0; i &lt; roles.length; i++) {
+			map.put(roles[i].getRoleName(), roles[i]);
+		}
+		if ((map.get("ϵͳ����Ա") != null) 
+				|| (map.get("�����ܼ�") != null)
+				|| (map.get("�ܾ���") != null)
+				|| (map.get("�ܲ�") != null)
+				|| (map.get("������") != null)) {				
+	          String stage = dForm.getParameter("STAGE");
+			   String remake = dForm.getParameter("REMAKE");
+			   String gdrelation = dForm.getParameter("GDRELATION"); 
+			    Qbq3Form reqForm = new MapForm();
+			   reqForm.setParameter("CUSTOMER_ID",dForm.getParameter("ID"));
+	
+		 		ArrayList list = (ArrayList) dbm
+					.findByForm(ConfigUtil.getTable("T_CRM_CUSTOMER_DTL"), reqForm,
+								1000, 1, context,null).getData();
+				ArrayList list1 = (ArrayList) dbm
+					.findByForm(ConfigUtil.getTable("T_CRM_CUSTOMER_TECHNOW" ), reqForm,
+						1000, 1, context,null).getData(); 
+				ArrayList list2 = (ArrayList) dbm
+					.findByForm(ConfigUtil.getTable("T_CRM_CUSTOMER_DECISION" ), reqForm,
+						1000, 1, context,null).getData();
+				ArrayList list3 = (ArrayList) dbm
+					.findByForm(ConfigUtil.getTable("T_CRM_CUSTOMER_COMPETITOR" ), reqForm,
+						1000, 1, context,null).getData(); 
+				ArrayList list4 = (ArrayList) dbm
+					.findByForm(ConfigUtil.getTable("T_CRM_PROJECT_AGREEMENT" ), reqForm,
+						1000, 1, context,null).getData();
+				ArrayList listProducts = (ArrayList) dbm
+				   .findByForm(ConfigUtil.getTable("T_CRM_PRODUCT" ), reqForm,
+						1000, 1, context,null).getData(); 
+				//
+		       if (!StringUtil.isBlankOrNull(stage)) {
+	             int stagef = new Integer(stage).intValue();
+		          String error="";
+					if (list.size() == 0) {
+						error = "(�ݷü�¼)";
+					}
+					if (list1.size() == 0) {
+						error = error + "(��Ϣ����״)";
+					}
+					if (list2.size() == 0) {
+						error = error + "(��Ŀ�����)";
+					}
+					if (list3.size() == 0) {
+						error = error + "(�������)";
+					}
+					if (list4.size() == 0) {
+						error = error + "(��Ŀ������Լ)";
+					}
+					if (listProducts.size() == 0) {
+						error = error + "(�ͻ������Ʒ)";
+					}
+					error = error + "δ��д����!";
+					
+	             if ((stagef==2)
+						 &amp;&amp; (list.size() != 0)
+						 &amp;&amp; (list1.size() != 0)
+						 &amp;&amp; (list2.size() != 0)
+						 &amp;&amp; (list3.size() != 0)
+						 &amp;&amp; (list4.size() != 0)
+						) {
+	                  stagef=5; 
+	                   dForm.setParameter("STAGE",""+stagef);
+				         drools.assertObject(dForm);
+	                   context.addException(new DBGoonPrompt("����ɹ�"));
+	              }
+				    else{
+				        //System.out.print(stage+"ssssssss"+remake+gdrelation+stagef);
+				        context.addException(new DBBreakonAlert("�Բ���,����ʧ��,���������!"+error));
+				    }   
+				}
+			} else {
+			 	context.addException(new DBBreakonAlert("�Բ���,����Ȩ����!"));
+			}
+      		</java:consequence>
+	</rule>
+	<rule name="confirm_zlxkh" salience="3">
+		<parameter identifier="dForm">
+			<java:class>Qbq3Form</java:class>
+		</parameter>
+		<java:condition>dForm.getParameter("STAGE").equals("5")</java:condition>
+		<java:consequence>
+		User user = context.getUser();
+		String id = user.getID();
+		Role[] roles = user.getRoles();
+		HashMap map = new HashMap();
+		for (int i = 0; i &lt; roles.length; i++) {
+			map.put(roles[i].getRoleName(), roles[i]);
+		}
+		if ((map.get("ϵͳ����Ա") != null) 
+				|| (map.get("�����ܼ�") != null)
+				|| (map.get("�ܾ���") != null)
+				|| (map.get("�ܲ�") != null)) {		
+          String stage = dForm.getParameter("STAGE");
+		   String remake = dForm.getParameter("REMAKE");
+		   String gdrelation = dForm.getParameter("GDRELATION"); 
+		    Qbq3Form reqForm = new MapForm();
+		   reqForm.setParameter("CUSTOMER_ID",dForm.getParameter("ID"));
+			//
+			ArrayList list = (ArrayList) dbm
+				.findByForm(ConfigUtil.getTable("T_CRM_CUSTOMER_DTL"), reqForm,
+							1000, 1, context,null).getData();
+			ArrayList list1 = (ArrayList) dbm
+				.findByForm(ConfigUtil.getTable("T_CRM_CUSTOMER_TECHNOW" ), reqForm,
+					1000, 1, context,null).getData(); 
+			ArrayList list2 = (ArrayList) dbm
+				.findByForm(ConfigUtil.getTable("T_CRM_CUSTOMER_DECISION" ), reqForm,
+					1000, 1, context,null).getData();
+			ArrayList list3 = (ArrayList) dbm
+				.findByForm(ConfigUtil.getTable("T_CRM_CUSTOMER_COMPETITOR" ), reqForm,
+					1000, 1, context,null).getData();
+			ArrayList listProducts = (ArrayList) dbm
+			   .findByForm(ConfigUtil.getTable("T_CRM_PRODUCT" ), reqForm,
+					1000, 1, context,null).getData(); 
+			//  
+	      if (!StringUtil.isBlankOrNull(stage)) {
+              int stagef = new Integer(stage).intValue();
+	          //
+	          String error="";
+				if (list.size() == 0) {
+					error = "(�ݷü�¼)";
+				}
+				if (list1.size() == 0) {
+					error = error + "(��Ϣ����״)";
+				}
+				if (list2.size() == 0) {
+					error = error + "(��Ŀ�����)";
+				}
+				if (list3.size() == 0) {
+					error = error + "(�������)";
+				}
+				if (listProducts.size() == 0) {
+					error = error + "(�ͻ������Ʒ)";
+				}
+				error = error + "δ��д����!";
+				//
+             if ((stagef==5)
+					 &amp;&amp; (list.size() != 0)
+					 &amp;&amp; (list1.size() != 0)
+					 &amp;&amp; (list2.size() != 0)
+					 &amp;&amp; (list3.size() != 0)
+					) {
+                   stagef=3; 
+                   dForm.setParameter("STAGE",""+stagef);
+			         drools.assertObject(dForm);
+                   context.addException(new DBGoonPrompt("����ɹ�"));
+			    } else{
+			         //System.out.print(stage+"ssssssss"+remake+gdrelation+stagef);
+			         context.addException(new DBBreakonAlert("�Բ���,����ʧ��,���������!"+error));
+			    }	      
+			}
+		} else {
+			 context.addException(new DBBreakonAlert("�Բ���,����Ȩ����!"));
+		}
+      	</java:consequence>
+	</rule>
+	<rule name="confirm_lxkh" salience="4">
+		<parameter identifier="dForm">
+			<java:class>Qbq3Form</java:class>
+		</parameter>
+		<java:condition>dForm.getParameter("STAGE").equals("3")  &amp;&amp; !StringUtil.isBlankOrNull(dForm.getParameter("USER_ID"))  &amp;&amp; !StringUtil.isBlankOrNull(dForm.getParameter("USER_ID"))</java:condition>
+		<java:consequence>
+		User user = context.getUser();
+		String id = user.getID();
+		Role[] roles = user.getRoles();
+		HashMap map = new HashMap();
+		for (int i = 0; i &lt; roles.length; i++) {
+			map.put(roles[i].getRoleName(), roles[i]);
+		}
+		if ((map.get("ϵͳ����Ա") != null) 
+				|| (map.get("�����ܼ�") != null)
+				|| (map.get("�ܾ���") != null)
+				|| (map.get("�ܲ�") != null)
+				|| (id.equalsIgnoreCase(dForm.getParameter("USER_ID")))
+				|| (id.equalsIgnoreCase(dForm.getParameter("USER_ID_1")))) {				
+          String stage = dForm.getParameter("STAGE");
+          String user_id = dForm.getParameter("USER_ID");
+          String user_id_1 = dForm.getParameter("USER_ID_1");
+		   String remake = dForm.getParameter("REMAKE");
+		   String gdrelation = dForm.getParameter("GDRELATION");
+		  	//
+          Qbq3Form reqForm = new MapForm();
+		   reqForm.setParameter("CUSTOMER_ID",dForm.getParameter("ID"));
+ 			//
+	      ArrayList list = (ArrayList) dbm
+					.findByForm(ConfigUtil.getTable("T_CRM_CONTRACT_VIEW"), reqForm,
+							1000, 1, context,null).getData();
+		   String error="";
+			if (list.size() == 0) {
+				error = "(��ͬ����)";
+			}
+			error = error + "δ��д����!";
+	       if (!StringUtil.isBlankOrNull(stage)) {
+              int stagef = new Integer(stage).intValue();
+              if ((stagef==3)
+   					 &amp;&amp; (list.size() != 0)
+					) {
+                   stagef++; 
+                   dForm.setParameter("STAGE",""+stagef);
+			         drools.assertObject(dForm);
+                   context.addException(new DBGoonPrompt("����ɹ�"));
+			    } else{
+			     	  System.out.print("sdsdds"+list.size());
+			     	  context.addException(new DBBreakonAlert("�Բ���,����ɹ�!���������!"+error));
+			    }
+			}
+		} else {
+			 context.addException(new DBBreakonAlert("�Բ�������Ȩ����!"));
+		}
+      	</java:consequence>
+	</rule>
+</rule-set>

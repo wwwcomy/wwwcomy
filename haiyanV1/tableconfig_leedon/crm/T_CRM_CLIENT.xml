@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Haiyan xsi:noNamespaceSchemaLocation="../../haiyan.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<table description="Leedon\'s client info" name="T_CRM_CLIENT" realTable="T_CRM_CLIENT">
+		<id name="ID" javaType="string"/>
+		<field name="NAME" javaType="string" description="客户全称" nullAllowed="false">
+			<component type="text"/>
+			<queryCondition type="blurMatching"/>
+			<listColumn noquery="false" width="200"/>
+		</field>
+		<!--		<field name="INDUSTRY" javaType="string">	
+			<component type="richSelect" referenceTable="T_CRM_HANGYE" referenceField="ID" displayReferenceField="NAME" quickQueryConditionField="NAME,CODE" associatedFields="LXTSJG,JQ"/>
+			<queryCondition type="equal"/>
+			<listColumn noquery="false" nowrap="true"/>
+		</field>
+		<field name="AREACODE" javaType="string">
+			<component type="richSelect" referenceTable="T_DIC_COMMON_CITY" referenceField="ID" displayReferenceField="NAME" quickQueryConditionField="NAME,CODE"/>
+			<associatedFields="PROVINCE_NAME"/>
+			<queryCondition type="blurMatching"/>
+			<listColumn noquery="true" nowrap="true"/>
+		</field>
+		<field name="SALESATTACHED" javaType="string">
+			<component type="richSelect" colspan="3" referenceTable="SYSOPERATOR_VIEW" displayReferenceField="NAME" referenceField="ID" quickQueryConditionField="NAME"/>
+			<listColumn noquery="false" nowrap="true"/>
+		</field>-->
+	</table>
+</Haiyan>

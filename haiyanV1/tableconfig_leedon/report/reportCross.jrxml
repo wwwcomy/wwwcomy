@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="reportCross" language="groovy" pageWidth="612" pageHeight="792" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<style name="Crosstab Data Text" hAlign="Center"/>
+	<queryString>
+		<![CDATA[select t_1.*,t_2.NAME,t_2.CODE from T_DIC_JOURNAL t_1 left join T_DIC_ORGA t_2 on t_1.CUSTOMER_ID=t_2.ID]]>
+	</queryString>
+	<field name="ID" class="java.lang.String"/>
+	<field name="USER_ID" class="java.lang.String"/>
+	<field name="NEXT_CONTACT_DATE" class="java.sql.Timestamp"/>
+	<field name="CUSTOMER_ID" class="java.lang.String"/>
+	<field name="ADDRESS" class="java.lang.String"/>
+	<field name="ACTIVER" class="java.lang.String"/>
+	<field name="ACTIVER_POSITION" class="java.lang.String"/>
+	<field name="ACTIVER_PHONE" class="java.lang.String"/>
+	<field name="RESULT_STATUS" class="java.lang.String"/>
+	<field name="CREATE_USER_ID" class="java.lang.String"/>
+	<field name="CREATE_TIME" class="java.sql.Timestamp"/>
+	<field name="JOURNAL_TIME" class="java.sql.Timestamp"/>
+	<field name="CONTENT" class="java.lang.String"/>
+	<field name="JDTYPE" class="java.lang.String"/>
+	<field name="TYPE_" class="java.lang.String"/>
+	<field name="STATUS" class="java.lang.String"/>
+	<field name="AVAILABLE" class="java.lang.String"/>
+	<field name="LXTSJG" class="java.math.BigDecimal"/>
+	<field name="JQ" class="java.lang.String"/>
+	<field name="CQTS" class="java.math.BigDecimal"/>
+	<field name="CQZT" class="java.lang.String"/>
+	<field name="CUSTOMER_CONTACT" class="java.lang.String"/>
+	<field name="NEXT_CONTACT_TIME" class="java.sql.Timestamp"/>
+	<field name="WFBILLID" class="java.lang.String"/>
+	<field name="USEDSTATUS" class="java.lang.String"/>
+	<field name="HYVERSION" class="java.lang.String"/>
+	<field name="NAME" class="java.lang.String"/>
+	<field name="CODE" class="java.lang.String"/>
+	<group name="CUSTOMER_ID">
+		<groupExpression><![CDATA[$F{CUSTOMER_ID}]]></groupExpression>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="51" splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band height="101" splitType="Stretch">
+			<meterChart>
+				<chart>
+					<reportElement x="0" y="0" width="572" height="101"/>
+					<chartTitle/>
+					<chartSubtitle/>
+					<chartLegend/>
+				</chart>
+				<valueDataset>
+					<dataset resetType="Report" incrementType="Report"/>
+				</valueDataset>
+				<meterPlot>
+					<plot/>
+					<valueDisplay/>
+					<dataRange>
+						<lowExpression><![CDATA[]]></lowExpression>
+						<highExpression><![CDATA[]]></highExpression>
+					</dataRange>
+				</meterPlot>
+			</meterChart>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="23" splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band height="149">
+			<elementGroup/>
+			<crosstab>
+				<reportElement x="0" y="0" width="572" height="149"/>
+				<crosstabHeaderCell>
+					<cellContents>
+						<box topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="1">
+							<pen lineWidth="1.0"/>
+							<topPen lineWidth="1.0"/>
+							<leftPen lineWidth="1.0"/>
+							<bottomPen lineWidth="1.0"/>
+							<rightPen lineWidth="1.0"/>
+						</box>
+						<line>
+							<reportElement style="Crosstab Data Text" x="0" y="0" width="70" height="30"/>
+						</line>
+					</cellContents>
+				</crosstabHeaderCell>
+				<rowGroup name="CUSTOMER_ID" width="70" totalPosition="End">
+					<bucket class="java.lang.String">
+						<bucketExpression><![CDATA[$F{CUSTOMER_ID}]]></bucketExpression>
+					</bucket>
+					<crosstabRowHeader>
+						<cellContents backcolor="#F0F8FF" mode="Opaque">
+							<box>
+								<pen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+							</box>
+							<textField>
+								<reportElement style="Crosstab Data Text" x="0" y="0" width="70" height="25"/>
+								<textElement/>
+								<textFieldExpression><![CDATA[$V{CUSTOMER_ID}]]></textFieldExpression>
+							</textField>
+						</cellContents>
+					</crosstabRowHeader>
+					<crosstabTotalRowHeader>
+						<cellContents backcolor="#BFE1FF" mode="Opaque">
+							<box>
+								<pen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+							</box>
+							<staticText>
+								<reportElement x="0" y="0" width="70" height="25"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle"/>
+								<text><![CDATA[Total CUSTOMER_ID]]></text>
+							</staticText>
+						</cellContents>
+					</crosstabTotalRowHeader>
+				</rowGroup>
+				<columnGroup name="ID" height="30" totalPosition="End">
+					<bucket class="java.lang.String">
+						<bucketExpression><![CDATA[$F{ID}]]></bucketExpression>
+					</bucket>
+					<crosstabColumnHeader>
+						<cellContents backcolor="#F0F8FF" mode="Opaque">
+							<box>
+								<pen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+							</box>
+							<textField>
+								<reportElement style="Crosstab Data Text" x="0" y="0" width="50" height="30"/>
+								<textElement/>
+								<textFieldExpression><![CDATA[$V{ID}]]></textFieldExpression>
+							</textField>
+						</cellContents>
+					</crosstabColumnHeader>
+					<crosstabTotalColumnHeader>
+						<cellContents backcolor="#BFE1FF" mode="Opaque">
+							<box>
+								<pen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+							</box>
+							<staticText>
+								<reportElement x="0" y="0" width="50" height="30"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle"/>
+								<text><![CDATA[Total ID]]></text>
+							</staticText>
+						</cellContents>
+					</crosstabTotalColumnHeader>
+				</columnGroup>
+				<measure name="IDMeasure" class="java.lang.Integer" calculation="Count">
+					<measureExpression><![CDATA[$F{ID}]]></measureExpression>
+				</measure>
+				<crosstabCell width="50" height="25">
+					<cellContents>
+						<box>
+							<pen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+						</box>
+						<textField>
+							<reportElement style="Crosstab Data Text" x="0" y="0" width="50" height="25"/>
+							<textElement/>
+							<textFieldExpression><![CDATA[$V{IDMeasure}]]></textFieldExpression>
+						</textField>
+					</cellContents>
+				</crosstabCell>
+				<crosstabCell height="25" rowTotalGroup="CUSTOMER_ID">
+					<cellContents backcolor="#BFE1FF" mode="Opaque">
+						<box>
+							<pen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+						</box>
+						<textField>
+							<reportElement style="Crosstab Data Text" x="0" y="0" width="50" height="25"/>
+							<textElement/>
+							<textFieldExpression><![CDATA[$V{IDMeasure}]]></textFieldExpression>
+						</textField>
+					</cellContents>
+				</crosstabCell>
+				<crosstabCell width="50" columnTotalGroup="ID">
+					<cellContents backcolor="#BFE1FF" mode="Opaque">
+						<box>
+							<pen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+						</box>
+						<textField>
+							<reportElement style="Crosstab Data Text" x="0" y="0" width="50" height="25"/>
+							<textElement/>
+							<textFieldExpression><![CDATA[$V{IDMeasure}]]></textFieldExpression>
+						</textField>
+					</cellContents>
+				</crosstabCell>
+				<crosstabCell rowTotalGroup="CUSTOMER_ID" columnTotalGroup="ID">
+					<cellContents backcolor="#BFE1FF" mode="Opaque">
+						<box>
+							<pen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+						</box>
+						<textField>
+							<reportElement style="Crosstab Data Text" x="0" y="0" width="50" height="25"/>
+							<textElement/>
+							<textFieldExpression><![CDATA[$V{IDMeasure}]]></textFieldExpression>
+						</textField>
+					</cellContents>
+				</crosstabCell>
+			</crosstab>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="38" splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="37" splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band height="37" splitType="Stretch"/>
+	</summary>
+</jasperReport>

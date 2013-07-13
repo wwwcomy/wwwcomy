@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Haiyan xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../haiyan.xsd">
+	<!-- deprecated -->
+	<table name="SYSOPERATORVIEW" realTable="SYSOPERATOR" description="用户">
+		<id name="ID" javaType="string">
+			<component type="hidden" url="#"/>
+		</id>
+		<field name="CODE" description="登录名" javaType="string" nullAllowed="false">
+			<component type="text" colspan="3" appendStr="(*) 请选择易记、常用的会员名,只能是字母,数字和下划线"/>
+		</field>
+		<field name="PASSWORD" description="输入密码" javaType="string" nullAllowed="false">
+			<component type="password" colspan="3" appendStr="(*)"/>
+		</field>
+		<field name="PASSWORD2" description="确认密码" javaType="string" displayOnly="true" nullAllowed="false">
+			<component type="password" colspan="3" appendStr="(*)"/>
+		</field>
+		<field name="NAME" description="姓名" javaType="string" nullAllowed="false">
+			<component type="text" appendStr="(*) 请填写您的真实姓名,方便客户与您联系"/>
+		</field>
+		<field name="ROLE" description="角色" javaType="string" displayOnly="true" mappingTable="SYSUSERROLE" nullAllowed="false">
+			<component type="treePComb" multipleSelect="true" referenceTable="SYSROLE" displayReferenceField="NAME" appendStr="(*)"/>
+		</field>
+		<!-- -->
+		<queryFilter>
+			<pluggedFilter><![CDATA[and t_1.USED<>0]]></pluggedFilter>
+			<pluggedFilter methodName="exp" parameter="IF(InRole(admin),{},{ and 1=2 })"/>
+			<!--可以用公式过滤-->
+		</queryFilter>
+		<pluginInterceptor methodName="exp" parameter="
+			If(
+			InRole(admin)
+			,true
+			,Warning({无权操作})
+			)" pluginName="save" type="before"/>
+		<pluginInterceptor methodName="exp" parameter="
+			If(
+			Get(PASSWORD)=Get(PASSWORD2)
+			,true
+			,Warning({2个密码不匹配})
+			)" pluginName="save" type="before"/>
+		<pluginInterceptor className="haiyan.interceptor.FlowmisInterceptor" methodName="transPassword2" pluginName="save" type="before"/>
+		<Operation queryPageDelete="false" saveAndAdd="false" saveAndAddCopy="false"/>
+	</table>
+	<!-- deprecated -->
+	<table name="SYSOPERATORVIEW2" realTable="SYSOPERATOR" description="用户">
+		<id name="ID" javaType="string">
+			<component type="hidden" url="#"/>
+		</id>
+		<field name="CODE" description="登录名" javaType="string">
+			<component type="text" colspan="3"/>
+		</field>
+		<field name="NAME" description="姓名" javaType="string">
+			<component type="text" colspan="3"/>
+		</field>
+		<field name="EMAIL" description="EMAIL" javaType="string">
+			<component type="text" colspan="3"/>
+		</field>
+		<queryFilter>
+			<pluggedFilter><![CDATA[and t_1.USED<>0]]></pluggedFilter>
+		</queryFilter>
+		<Operation selectedHidden="true" queryPageDelete="false"/>
+	</table>
+	<table name="SYSOPERATOR_VIEW" realTable="SYSOPERATOR" description="用户">
+		<id name="ID" javaType="string">
+			<component type="hidden" url="#"/>
+		</id>
+		<field name="CODE" description="登录名" javaType="string">
+			<component type="text" colspan="3"/>
+			<listColumn noquery="false"/>
+		</field>
+		<field name="NAME" description="姓名" javaType="string">
+			<component type="text" colspan="3"/>
+			<listColumn noquery="false"/>
+		</field>
+		<field name="SEX" description="性别" javaType="string" defaultValue="男">
+			<component type="dropdown">
+				<option displayName="男" value="男"/>
+				<option displayName="女" value="女"/>
+			</component>
+		</field>
+		<field name="USED" description="是否使用" javaType="string" defaultValue="1">
+			<component type="dropdown">
+				<option displayName="是" value="1"/>
+				<option displayName="否" value="0"/>
+			</component>
+		</field>
+		<field name="EMAIL" description="EMAIL" javaType="string">
+			<component type="text"/>
+		</field>
+		<field name="MOBILE_PHONE" description="手机" javaType="string">
+			<component type="text"/>
+		</field>
+		<Operation save="false" saveAndAdd="false" saveAndAddCopy="false" queryPageAdd="false" queryPageDelete="false"  selectedHidden="true" />
+	</table>
+	<!-- deprecated -->
+	<table name="SYSOPERATOR_DROP" realTable="SYSOPERATOR" description="用户">
+		<id name="ID" javaType="string">
+			<component type="hidden" url="#"/>
+		</id>
+		<field name="CODE" description="登录名" javaType="string">
+			<component type="text" colspan="3"/>
+		</field>
+		<field name="NAME" description="姓名" javaType="string">
+			<component type="text" colspan="3"/>
+		</field>
+		<field name="SEX" description="性别" javaType="string" defaultValue="男">
+			<component type="dropdown">
+				<option displayName="男" value="男"/>
+				<option displayName="女" value="女"/>
+			</component>
+		</field>
+		<field name="USED" description="是否使用" javaType="string" defaultValue="1">
+			<component type="dropdown" colspan="3">
+				<option displayName="是" value="1"/>
+				<option displayName="否" value="0"/>
+			</component>
+		</field>
+		<field name="EMAIL" description="EMAIL" javaType="string">
+			<component type="text" colspan="3"/>
+		</field>
+		<field name="MOBILE_PHONE" description="手机" javaType="string">
+			<component type="text"/>
+		</field>
+		<queryFilter>
+			<pluggedFilter><![CDATA[and t_1.USED<>0]]></pluggedFilter>
+		</queryFilter>
+		<Operation selectedHidden="true"  queryPageDelete="false"/>
+	</table>
+	<!-- deprecated -->
+	<table name="SYSOPERATOR_COMBO" realTable="SYSOPERATOR" description="用户">
+		<id name="ID" javaType="string">
+			<component type="hidden" url="#"/>
+		</id>
+		<field name="CODE" description="登录名" javaType="string">
+			<component type="text" colspan="3"/>
+		</field>
+		<field name="NAME" description="姓名" javaType="string">
+			<component type="text" colspan="3"/>
+		</field>
+		<field name="SEX" description="性别" javaType="string" defaultValue="男">
+			<component type="dropdown">
+				<option displayName="男" value="男"/>
+				<option displayName="女" value="女"/>
+			</component>
+		</field>
+		<field name="USED" description="是否使用" javaType="string" defaultValue="1">
+			<component type="dropdown">
+				<option displayName="是" value="1"/>
+				<option displayName="否" value="0"/>
+			</component>
+		</field>
+		<field name="EMAIL" description="EMAIL" javaType="string">
+			<component type="text"/>
+		</field>
+		<field name="MOBILE_PHONE" description="手机" javaType="string">
+			<component type="text"/>
+		</field>
+		<queryFilter>
+			<pluggedFilter><![CDATA[and t_1.USED<>0]]></pluggedFilter>
+		</queryFilter>
+		<Operation queryPageAdd="false" queryPageDelete="false"  selectedHidden="true" />
+	</table>
+</Haiyan>

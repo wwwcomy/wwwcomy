@@ -1,0 +1,328 @@
+<rule-set name="Tests assignment rules" xmlns="http://drools.org/rules" xmlns:java="http://drools.org/semantics/java" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<!--出差申请单 流程控制文件-->
+	<java:import>com.tornado.genmis.castorgen.*</java:import>
+	<java:import>com.tornado.genmis.util.*</java:import>
+	<java:import>com.tornado.genmis.core.struts.*</java:import>
+	<java:import>com.tornado.genmis.core.*</java:import>
+	<java:import>com.tornado.genmis.core.db.*</java:import>
+	<java:import>com.tornado.genmis.core.exception.*</java:import>
+	<java:import>com.tornado.genmis.core.right.*</java:import>
+	<java:import>java.lang.String</java:import>
+	<application-data identifier="table">Table</application-data>
+	<application-data identifier="dbm">DBManager</application-data>
+	<application-data identifier="context">SrvContext</application-data>
+	<java:functions>
+
+   public String getDept(DBManager dbm, User user, String para)  throws Exception {
+       GenMisForm contextForm = RightUtil.getUserDept(dbm, user);
+       return contextForm.getParameter(para);
+   }
+   
+   public String getDept(DBManager dbm, String userID, String para)  throws Exception {
+       User user = new User();
+       user.setID(userID);
+       GenMisForm contextForm = RightUtil.getUserDept(dbm, user);
+       return contextForm.getParameter(para);
+   }
+  
+   public void updateFlowRecord(DBManager dbm,Table table,GenMisForm form,SrvContext context,
+        String tableName,String wfName,String nodeName,String actionName,String reasonFieldName) throws Exception {
+        
+        Table wfTable = ConfigUtil.getTable(tableName);
+        GenMisForm wfForm = new MapForm();
+        User user = context.getUser();
+				
+		wfForm.setParameter("PROCOPRID", user.getID());
+		wfForm.setParameter("WORKFLOWNAME", wfName);
+		wfForm.setParameter("NODENAME", nodeName);
+		wfForm.setParameter("PROCACTION", actionName);
+		try {
+			wfForm.setParameter("PROCOPRTIME", DateUtil
+					.getLastTime("yyyy-MM-dd hh:mm:ss"));
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		wfForm.setParameter("BILLID", form
+				.getParameter(table.getId().getName()));
+		wfForm.setParameter("PROCREASON", form.getParameter(reasonFieldName));
+		System.out.println(wfForm.toXML());  
+		dbm.insert(wfTable, wfForm, null, null);
+   }
+   
+   public void updateMsgRecord(DBManager dbm, Table table, GenMisForm form, SrvContext context, 
+       String roleID, String type)  throws Exception {
+        
+        Table msgTable = ConfigUtil.getTable("SYSMESSAGE");
+        GenMisForm msgForm = new MapForm();
+        User user = context.getUser();
+        
+        msgForm.setParameter("ID","");
+        try {
+		 	msgForm.setParameter("CREATETIME", DateUtil.getLastTime("yyyy-MM-dd hh:mm:ss"));
+	    }
+	    catch (Exception e) {
+			e.printStackTrace();
+	    }
+	    msgForm.setParameter("NAME", "出差申请单: " + form.getParameter("BILLNO") + " " + type);
+	    if(roleID.equals("6"))
+	        msgForm.setParameter("DEPTID", getDept(dbm,form.getParameter("USER_ID"),"ID"));
+	        msgForm.setParameter("ROLEID", roleID);
+	    if(roleID.equals("3"))
+	        msgForm.setParameter("ROLEID", roleID);
+	    if(roleID.equals("0")) 
+	        msgForm.setParameter("USER_ID", form.getParameter("USER_ID"));
+	    msgForm.setParameter("SENDERID", user.getID());
+	    msgForm.setParameter("URL", "edit.do?__opr_data=T_APP_TRAVEL&amp;ID=" + form.getParameter("ID"));
+	    
+	    msgForm.setParameter("SHOWED", "1");
+	    msgForm.setParameter("USED", "1");
+	    System.out.println(msgForm.toXML());  
+	    dbm.insert(msgTable, msgForm, null,null);
+
+    }
+   
+</java:functions>
+	<rule name="debug" salience="-1">
+		<!--debug-->
+		<parameter identifier="form">
+			<java:class>GenMisForm</java:class>
+		</parameter>
+		<java:condition>  1==1      
+    </java:condition>
+		<java:consequence>
+			System.out.println(">"+form.getParameter("STATUS")+" "+form.getParameter("USER_ID")+" "+ context.getParameter("__pluginName"));
+    </java:consequence>
+	</rule>
+	<rule name="本人提交通过" salience="0">
+		<!--当前状态为“未提交”(STATUS="0"),制单人试图提交通过;并发消息给同部门部门经理-->
+		<parameter identifier="form">
+			<java:class>GenMisForm</java:class>
+		</parameter>
+		<java:condition>  
+        form.getParameter("STATUS").equals("0") &amp;&amp; 
+            context.getUser().getID().equals(form.getParameter("USER_ID")) &amp;&amp; 
+            context.getParameter("__pluginName").equals("Approve")          
+    </java:condition>
+		<java:consequence>
+        form.setParameter("STATUS","1");
+	    drools.assertObject(form);
+	    updateFlowRecord(dbm,table,form,context,"T_APP_TRAVEL_PROC","T_APP_TRAVEL_PROC","本人提交通过","通过","REASON");  
+	    updateMsgRecord(dbm,table,form,context,"6","等待处理");
+    </java:consequence>
+	</rule>
+	<rule name="非本人通过" salience="0">
+		<!--当前状态为“未提交”(STATUS="0"),非制单人试图通过-->
+		<parameter identifier="form">
+			<java:class>GenMisForm</java:class>
+		</parameter>
+		<java:condition>  
+       form.getParameter("STATUS").equals("0") &amp;&amp; 
+           !(context.getUser().getID().equals(form.getParameter("USER_ID"))) &amp;&amp;
+           context.getParameter("__pluginName").equals("Approve")          
+   </java:condition>
+		<java:consequence>
+       context.addException(new DBBreakonAlert("权限不足：只有本人可以通过该出差申请单"));
+   </java:consequence>
+	</rule>
+	<rule name="同部门经理通过" salience="1">
+		<!--当前状态为“待审批”(STATUS="1"),同部门的部门经理（ROLECODE="005"）试图通过;并发消息给总经理(roleID="3")-->
+		<parameter identifier="form">
+			<java:class>GenMisForm</java:class>
+		</parameter>
+		<java:condition>  
+       form.getParameter("STATUS").equals("1") &amp;&amp; 
+           context.getUser().isMemberOfByRoleCode("005") &amp;&amp;
+           context.getParameter("__pluginName").equals("Approve") &amp;&amp;
+           getDept(dbm,context.getUser(),"ID").equals(getDept(dbm,form.getParameter("USER_ID"),"ID"))
+   </java:condition>
+		<java:consequence>
+       form.setParameter("STATUS","2");
+	   drools.assertObject(form);
+	   updateFlowRecord(dbm,table,form,context,"T_APP_TRAVEL_PROC","T_APP_TRAVEL_PROC","部门经理执行通过","通过","REASON");
+	   updateMsgRecord(dbm,table,form,context,"3","等待处理");  
+	  
+   </java:consequence>
+	</rule>
+	<rule name="同部门经理退回" salience="1">
+		<!--当前状态为“待审批”(STATUS="1")，部门经理（ROLECODE="005"）试图退回-->
+		<parameter identifier="form">
+			<java:class>GenMisForm</java:class>
+		</parameter>
+		<java:condition>  
+       form.getParameter("STATUS").equals("1") &amp;&amp; 
+           context.getUser().isMemberOfByRoleCode("005") &amp;&amp;
+           context.getParameter("__pluginName").equals("Disapprove") &amp;&amp;
+           getDept(dbm,context.getUser(),"ID").equals(getDept(dbm,form.getParameter("USER_ID"),"ID"))           
+   </java:condition>
+		<java:consequence>
+       if (StringUtil.isBlankOrNull(form.getParameter("REASON"))) {
+        
+           context.addException(new DBBreakonAlert("审批意见必须填写"));
+       } else {
+	       form.setParameter("STATUS","0");
+	       drools.assertObject(form);
+	       updateFlowRecord(dbm,table,form,context,"T_APP_TRAVEL_PROC","T_APP_TRAVEL_PROC","部门经理执行退回","退回","REASON");  
+	       updateMsgRecord(dbm,table,form,context,"0","被部门经理退回");
+       }
+   </java:consequence>
+	</rule>
+	<rule name="非同部门的部门经理通过" salience="1">
+		<!--当前状态为“待审批”(STATUS="1"),具有部门经理角色（ROLECODE!="005"）但不同部门的用户试图通过-->
+		<parameter identifier="form">
+			<java:class>GenMisForm</java:class>
+		</parameter>
+		<java:condition>  
+       form.getParameter("STATUS").equals("1") &amp;&amp; 
+           context.getParameter("__pluginName").equals("Approve") &amp;&amp;
+           context.getUser().isMemberOfByRoleCode("005") &amp;&amp;
+           !(getDept(dbm,context.getUser(),"ID").equals(getDept(dbm,form.getParameter("USER_ID"),"ID")))
+   </java:condition>
+		<java:consequence>
+       context.addException(new DBBreakonAlert("权限不足：只有同部门的部门经理可以通过该出差申请单"));
+   </java:consequence>
+	</rule>
+	<rule name="同部门的非部门经理通过" salience="1">
+		<!--当前状态为“待审批”(STATUS="1"),不具有部门经理角色（ROLECODE!="005"）但相同部门的用户试图通过-->
+		<parameter identifier="form">
+			<java:class>GenMisForm</java:class>
+		</parameter>
+		<java:condition>  
+       form.getParameter("STATUS").equals("1") &amp;&amp; 
+           context.getParameter("__pluginName").equals("Approve") &amp;&amp;
+           !(context.getUser().isMemberOfByRoleCode("005")) &amp;&amp;
+           getDept(dbm,context.getUser(),"ID").equals(getDept(dbm,form.getParameter("USER_ID"),"ID"))
+   </java:condition>
+		<java:consequence>
+       context.addException(new DBBreakonAlert("权限不足：只有同部门的部门经理可以通过该出差申请单"));
+   </java:consequence>
+	</rule>
+	<rule name="非同部门的非部门经理通过" salience="1">
+		<!--当前状态为“待审批”(STATUS="1"),具有部门经理角色（ROLECODE!="005"）但不同部门的用户试图通过-->
+		<parameter identifier="form">
+			<java:class>GenMisForm</java:class>
+		</parameter>
+		<java:condition>  
+       form.getParameter("STATUS").equals("1") &amp;&amp; 
+           context.getParameter("__pluginName").equals("Approve") &amp;&amp;
+           !(context.getUser().isMemberOfByRoleCode("005")) &amp;&amp;
+           !(getDept(dbm,context.getUser(),"ID").equals(getDept(dbm,form.getParameter("USER_ID"),"ID")))
+   </java:condition>
+		<java:consequence>
+       context.addException(new DBBreakonAlert("权限不足：只有同部门的部门经理可以通过该出差申请单"));
+   </java:consequence>
+	</rule>
+	<rule name="非同部门的部门经理退回" salience="1">
+		<!--当前状态为“待审批”(STATUS="1"),具有部门经理角色（ROLECODE!="005"）但非同部门的用户试图退回-->
+		<parameter identifier="form">
+			<java:class>GenMisForm</java:class>
+		</parameter>
+		<java:condition>  
+       form.getParameter("STATUS").equals("1") &amp;&amp; 
+            context.getParameter("__pluginName").equals("Disapprove") &amp;&amp;
+            (context.getUser().isMemberOfByRoleCode("005")) &amp;&amp;
+            !(getDept(dbm,context.getUser(),"ID").equals(getDept(dbm,form.getParameter("USER_ID"),"ID")))
+   </java:condition>
+		<java:consequence>
+       context.addException(new DBBreakonAlert("权限不足：只有同部门的部门经理可以退回该出差申请单"));
+   </java:consequence>
+	</rule>
+	<rule name="同部门的非部门经理退回" salience="1">
+		<!--当前状态为“待审批”(STATUS="1"),不具有部门经理角色（ROLECODE!="005"）但相同部门的用户试图退回-->
+		<parameter identifier="form">
+			<java:class>GenMisForm</java:class>
+		</parameter>
+		<java:condition>  
+       form.getParameter("STATUS").equals("1") &amp;&amp; 
+            context.getParameter("__pluginName").equals("Disapprove") &amp;&amp;
+            !(context.getUser().isMemberOfByRoleCode("005")) &amp;&amp;
+            getDept(dbm,context.getUser(),"ID").equals(getDept(dbm,form.getParameter("USER_ID"),"ID"))
+   </java:condition>
+		<java:consequence>
+       context.addException(new DBBreakonAlert("权限不足：只有同部门的部门经理可以退回该出差申请单"));
+   </java:consequence>
+	</rule>
+	<rule name="非同部门的非部门经理退回" salience="1">
+		<!--当前状态为“待审批”(STATUS="1"),不具有部门经理角色（ROLECODE!="005"）但相同部门的用户试图退回-->
+		<parameter identifier="form">
+			<java:class>GenMisForm</java:class>
+		</parameter>
+		<java:condition>  
+       form.getParameter("STATUS").equals("1") &amp;&amp; 
+            context.getParameter("__pluginName").equals("Disapprove") &amp;&amp;
+            !(context.getUser().isMemberOfByRoleCode("005")) &amp;&amp;
+            !(getDept(dbm,context.getUser(),"ID").equals(getDept(dbm,form.getParameter("USER_ID"),"ID")))
+   </java:condition>
+		<java:consequence>
+       context.addException(new DBBreakonAlert("权限不足：只有同部门的部门经理可以退回该出差申请单"));
+   </java:consequence>
+	</rule>
+	<rule name="总经理通过" salience="2">
+		<!--当前状态为部门审批(STATUS="2")，总经理（ROLECODE="001"）试图审批-->
+		<parameter identifier="form">
+			<java:class>GenMisForm </java:class>
+		</parameter>
+		<java:condition>  
+       form.getParameter("STATUS").equals("2") &amp;&amp; 
+           context.getUser().isMemberOfByRoleCode("001")  &amp;&amp;
+           context.getParameter("__pluginName").equals("Approve")          
+   </java:condition>
+		<java:consequence>
+       form.setParameter("STATUS","3");
+       drools.assertObject(form);
+       updateFlowRecord(dbm,table,form,context,"T_APP_TRAVEL_PROC","T_APP_TRAVEL_PROC","总经理执行通过","通过","REASON");  
+       updateMsgRecord(dbm,table,form,context,"0","处理完毕");
+       
+   </java:consequence>
+	</rule>
+	<rule name="总经理退回" salience="2">
+		<!--当前状态为“部门审批”(STATUS="2")，总经理（ROLECODE="005"）试图退回-->
+		<parameter identifier="form">
+			<java:class>GenMisForm</java:class>
+		</parameter>
+		<java:condition>  
+       form.getParameter("STATUS").equals("2") &amp;&amp; 
+           context.getUser().isMemberOfByRoleCode("001") &amp;&amp;
+           context.getParameter("__pluginName").equals("Disapprove")           
+   </java:condition>
+		<java:consequence>
+       if (StringUtil.isBlankOrNull(form.getParameter("REASON"))) {
+        
+           context.addException(new DBBreakonAlert("审批意见必须填写"));
+       } else {
+	       form.setParameter("STATUS","1");
+	       drools.assertObject(form);
+	       updateFlowRecord(dbm,table,form,context,"T_APP_TRAVEL_PROC","T_APP_TRAVEL_PROC","总经理执行退回","退回","REASON");  
+	       updateMsgRecord(dbm,table,form,context,"0","被总经理退回");
+	      
+       }
+   </java:consequence>
+	</rule>
+	<rule name="非总经理通过" salience="2">
+		<!--当前状态为部门审批(STATUS="2"),不具有总经理角色（ROLECODE!="001"）的用户试图通过"-->
+		<parameter identifier="form">
+			<java:class>GenMisForm</java:class>
+		</parameter>
+		<java:condition>  
+       form.getParameter("STATUS").equals("2") &amp;&amp; 
+           !(context.getUser().isMemberOfByRoleCode("001")) &amp;&amp;
+           context.getParameter("__pluginName").equals("Approve")          
+   </java:condition>
+		<java:consequence>
+       context.addException(new DBBreakonAlert("权限不足：只有总经理可以通过该出差申请单"));
+   </java:consequence>
+	</rule>
+	<rule name="非总经理退回" salience="2">
+		<!--当前状态为经理审批(STATUS="2"),不具有总经理角色（ROLECODE!="001"）的用户试图退回"-->
+		<parameter identifier="form">
+			<java:class>GenMisForm</java:class>
+		</parameter>
+		<java:condition>  
+       form.getParameter("STATUS").equals("2") &amp;&amp; 
+           !(context.getUser().isMemberOfByRoleCode("001")) &amp;&amp;
+           context.getParameter("__pluginName").equals("Disapprove")          
+   </java:condition>
+		<java:consequence>
+       context.addException(new DBBreakonAlert("权限不足：只有总经理可以退回该出差申请单"));
+   </java:consequence>
+	</rule>
+</rule-set>

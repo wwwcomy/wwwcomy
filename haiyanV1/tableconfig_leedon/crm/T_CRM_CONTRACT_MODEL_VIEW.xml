@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Haiyan xsi:noNamespaceSchemaLocation="../../haiyan.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<table description="到期欠款合同" name="T_CRM_CONTRACT_MODEL_VIEW" realTable="T_DIC_CONTRACT" colspan="6">
+		<id name="ID" javaType="string">
+			<component type="hidden" url="#"/>
+		</id>
+		<field name="CODE" javaType="string" description="合同编码">
+			<component type="text" readOnly="true"/>
+		</field>
+		<field name="NAME" javaType="string" description="合同标题">
+			<component type="text"/>
+		</field>
+		<!--
+       <field name="CONTACT_IDS" javaType="string" description="相关文档" displayOnly="true">
+          <component type="richSelect" referenceTable="T_DIC_DOCUMENT" 
+              multipleSelect="true" mappingTable="CRM_CONTRACT_DOCMAP"
+              referenceField="ID" displayReferenceField="NAME"/>
+       </field>
+       -->
+		<field name="CONTACT_PERSON" javaType="string" description="客户签约人" nullAllowed="false">
+			<component type="text"/>
+		</field>
+		<field name="CUSTOMER_ID" javaType="string" description="签约方客户">
+			<component type="richSelect" referenceTable="T_CRM_CUSTOMER_QY" referenceField="ID" displayReferenceField="NAME" associatedFields="CUS_CONTACTER,CUS_PHONE,CUS_MOBILE_PHONE,CUS_LEVEL_,CUS_TYPE_,CUS_ADDRESS"/>
+		</field>
+		<field name="CUS_CONTACTER" javaType="string" description="联系人" nullAllowed="false">
+			<component type="text" displayReferenceField="CONTACT_PERSON"/>
+			<queryCondition type="none"/>
+		</field>
+		<field name="CUS_PHONE" javaType="string" description="联系电话" nullAllowed="false">
+			<component type="text" displayReferenceField="PHONE" validatorText="(格式:086-0XX-XXXXXXXX)"/>
+			<queryCondition type="none"/>
+		</field>
+		<field name="CUS_MOBILE_PHONE" javaType="string" description="手机" nullAllowed="false">
+			<component type="text" displayReferenceField="MOBILE_PHONE" validatorText="(格式:0XX-XXXXXXXXXXX)" colspan="3"/>
+			<queryCondition type="none"/>
+		</field>
+		<field name="CUS_LEVEL_" javaType="string" description="客户等级" nullAllowed="false">
+			<component type="text" displayReferenceField="LEVEL_">
+				<!--
+				<option displayName="A级" value="A"/>
+				<option displayName="B级" value="B"/>
+				<option displayName="C级" value="C"/>
+				<option displayName="D级" value="D"/>
+				<option displayName="E级" value="E"/>
+				-->
+			</component>
+			<queryCondition type="none"/>
+		</field>
+		<field name="CUS_TYPE_" javaType="string" defaultValue="1" description="客户类型" nullAllowed="false">
+			<component type="dropdown" displayReferenceField="TYPE_" readOnly="true">
+				<option displayName="无" value="0"/>
+				<option displayName="客户" value="1"/>
+				<option displayName="代理" value="2"/>
+				<option displayName="供应商" value="3"/>
+			</component>
+			<listColumn noquery="true"/>
+		</field>
+		<field name="CUS_ADDRESS" javaType="string" description="客户地址" nullAllowed="false">
+			<component type="text" displayReferenceField="ADDRESS"/>
+			<queryCondition type="none"/>
+			<listColumn noquery="true"/>
+		</field>
+		<field name="ACTIVITY_ID" description="相关客户活动" javaType="string" displayOnly="false">
+			<component type="richSelect" referenceTable="T_CRM_ACTIVITY" referenceField="ID" displayReferenceField="NAME"/>
+			<queryCondition type="none"/>
+		</field>
+		<field name="MODEL" javaType="string" description="签约模特" nullAllowed="false">
+			<!-- style="color:red;size:12;font-weight:bold;" -->
+			<component type="text"/>
+		</field>
+		<!--
+		<field name="MODEL_ID" javaType="string" description="签约模特" nullAllowed="false">
+			<component type="richSelect" referenceTable="T_DIC_MODELINFO" referenceField="ID" displayReferenceField="MODEL_NAME"/>
+		</field>
+		-->
+		<!--
+		<field name="DEPT_ID" javaType="string" description="我方部门">
+			<component type="richSelect" referenceTable="SYSORGA" referenceField="ID" displayReferenceField="NAME"/>
+		</field>
+		<field name="USER_ID" javaType="string" description="我方法人">
+			<component type="richSelect" referenceTable="SYSOPERATOR_VIEW" referenceField="ID" displayReferenceField="NAME"/>
+		</field>
+		-->
+		<field name="WRITING_DATE" javaType="date" dataStyle="yyyy-MM-dd HH:mm:ss" description="合同签约时间" nullAllowed="false">
+			<component type="dateTime"/>
+			<queryCondition type="none"/>
+			<listColumn noquery="true"/>
+		</field>
+		<field name="FINISH_DATE" javaType="date" dataStyle="yyyy-MM-dd HH:mm:ss" description="合同到期时间" nullAllowed="false">
+			<component type="dateTime"/>
+			<queryCondition type="none"/>
+			<listColumn noquery="true"/>
+		</field>
+		<field name="LIMIT_DATE" javaType="date" dataStyle="yyyy-MM-dd HH:mm:ss" description="回款截止时间" nullAllowed="false">
+			<component type="dateTime"/>
+			<queryCondition type="none"/>
+			<listColumn noquery="true"/>
+		</field>
+		<field name="CONTRACT_DATE" javaType="date" dataStyle="yyyy-MM-dd HH:mm:ss" description="工作时间" nullAllowed="false">
+			<component type="dateTime"/>
+			<queryCondition type="none"/>
+			<listColumn noquery="true"/>
+		</field>
+		<!-- -->
+		<field name="ADDRESS" javaType="string" description="工作地点">
+			<component type="text"/>
+			<queryCondition type="none"/>
+		</field>
+		<field name="MONEY" javaType="bigDecimal" description="工作费用">
+			<component type="text" maxFractionDigit="2" minFractionDigit="2" numberGrouping="true" style="align:right"/>
+			<queryCondition type="none"/>
+		</field>
+		<!--
+		<field name="DESCRIPTION" javaType="string" description="合同详情">
+			<component type="textArea" colspan="3" style="width:100%;height=75;"/>
+			<queryCondition type="none"/>
+			<listColumn noquery="true"/>
+		</field>
+		-->
+		<field name="CONTRACT_TYPE" javaType="string" description="工作种类" nullAllowed="false">
+			<component type="richSelect" colspan="3" referenceTable="T_DIC_WORK_TYPE" referenceField="ID" displayReferenceField="NAME"/>
+		</field>
+		<field name="REMARK" javaType="string" description="工作细节">
+			<component type="textArea" colspan="3" style="width:93%;height=35;"/>
+			<queryCondition type="none"/>
+			<listColumn noquery="true"/>
+		</field>
+		<!--
+		<field name="ACCESSORY" javaType="string" description="合同附件" style="color:#990000;size:12;font-weight:bold;" length="255">
+			<component type="file"/>
+			<queryCondition type="none"/>
+			<listColumn noquery="true"/>
+		</field>
+		-->
+		<field name="TYPE_" javaType="string" defaultValue="4" description="合同类型">
+			<component type="hidden" readOnly="true">
+				<option displayName="客户合同" value="1"/>
+				<option displayName="代理合同" value="2"/>
+				<option displayName="其他合同" value="3"/>
+				<option displayName="模特合同" value="4"/>
+			</component>
+			<listColumn noquery="true"/>
+		</field>
+		<field name="KX" javaType="string" defaultValue="0" description="收款状态">
+			<component type="dropdown" readOnly="true">
+				<option displayName="未结清" value="0"/>
+				<option displayName="已结清" value="1"/>
+			</component>
+			<listColumn noquery="true"/>
+		</field>
+		<!--
+		<field name="CONFIRM_STATUS" javaType="string" defaultValue="0" description="审核状态">
+			<component type="dropdown" readOnly="true">
+				<option displayName="未审核" value="0"/>
+				<option displayName="已审核" value="1"/>
+			</component>
+			<listColumn noquery="true"/>
+		</field>
+		<field name="CONFIRM_USER_ID" javaType="string" description="审核人">
+			<component type="richSelect" referenceTable="SYSOPERATOR_VIEW" referenceField="ID" displayReferenceField="NAME" readOnly="true"/>
+			<listColumn noquery="true"/>
+		</field>
+		<field name="CONFIRM_TIME" javaType="date" dataStyle="yyyy-MM-dd hh:mm:ss" description="审核时间">
+			<component type="date" readOnly="true"/>
+			<queryCondition type="none"/>
+			<listColumn noquery="true"/>
+		</field>
+		-->
+		<field name="USER_ID" javaType="string" description="经纪人">
+			<component type="richSelect" referenceTable="SYSOPERATOR_VIEW" referenceField="ID" displayReferenceField="NAME"/>
+			<queryCondition type="none"/>
+			<listColumn noquery="true"/>
+		</field>
+		<field name="CREATE_USER_ID" javaType="string" description="创建人">
+			<component type="richSelect" referenceTable="SYSOPERATOR_VIEW" referenceField="ID" displayReferenceField="NAME" readOnly="true"/>
+			<queryCondition type="none"/>
+			<listColumn noquery="true"/>
+		</field>
+		<field name="CREATE_TIME" javaType="date" dataStyle="yyyy-MM-dd HH:mm:ss" description="创建时间">
+			<component type="dateTime" readOnly="true"/>
+			<queryCondition type="none"/>
+			<listColumn noquery="true"/>
+		</field>
+		<!-- -->
+		<queryFilter>
+			<pluggedFilter methodName="exp" 
+						   parameter="If(InRole({manager},{boss}),{},{ and t_1.CREATE_USER_ID='}&amp;GetUser({ID})&amp;{'})"/>
+			<pluggedFilter methodName="exp" 
+						   parameter=" {and t_1.KX='0' and t_1.LIMIT_DATE&lt;}&amp;SQLCurrDate() "/>
+			<!--		
+			<pluggedFilter methodName="getSQL" parameter="test.drools"/>
+			-->
+		</queryFilter>
+		<!-- -->
+		<pluginInterceptor methodName="setDefaultValByHeadID" pluginName="edit" 
+						   parameter="CUSTOMER_ID,T_DIC_ORGA,ID,CUSTOMER_ID,NAME,__CUSTOMER_ID__NAME"/>
+		<!--
+		<pluginInterceptor methodName="setCreateOrga" parameter="DEPT_ID" pluginName="edit"/>
+		<pluginInterceptor methodName="setCreateUser" parameter="USER_ID" pluginName="edit"/>
+		-->
+		<pluginInterceptor methodName="exp" parameter="Set(CODE,Datetime())" pluginName="save"/>
+		<pluginInterceptor methodName="setCreateUser" parameter="USER_ID" pluginName="edit"/>
+		<pluginInterceptor methodName="setCreateUser" parameter="CREATE_USER_ID" pluginName="save"/>
+		<pluginInterceptor methodName="setCreateTime" parameter="CREATE_TIME,yyyy-MM-dd HH:mm:ss" pluginName="save"/>
+		<pluginInterceptor methodName="onlyByMaker" parameter="CREATE_USER_ID" pluginName="save"/>
+		<pluginInterceptor methodName="onlyByMaker" parameter="CREATE_USER_ID" pluginName="delete"/>
+		<!--
+		<pluginOperation name="Confirm" oprName="审核" accessKey="C" hostPage="edit"/>
+		-->
+		<Operation saveAndAdd="false" saveAndAddCopy="false"/>
+	</table>
+</Haiyan>

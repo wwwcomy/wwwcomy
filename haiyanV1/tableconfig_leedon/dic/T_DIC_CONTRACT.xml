@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Haiyan xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../haiyan.xsd">
+	<table name="T_DIC_CONTRACT" description="合同管理">
+		<id name="ID" javaType="string"/>
+		<field name="CODE" javaType="string" description="合同编码">
+			<component type="text" readOnly="true"/>
+		</field>
+		<field name="NAME" javaType="string" description="合同标题">
+			<component type="text"/>
+		</field>
+		<field name="CUSTOMER_ID" javaType="string" description="签约方客户">
+			<component type="richSelect" referenceTable="T_DIC_ORGA" referenceField="ID" displayReferenceField="NAME"/>
+		</field>
+		<field name="CONTACT_PERSON" javaType="string" description="签约方法人">
+			<component type="text"/>
+		</field>
+		<field name="DEPT_ID" javaType="string" description="我方部门">
+			<component type="richSelect" referenceTable="SYSORGA" referenceField="ID" displayReferenceField="NAME"/>
+		</field>
+		<field name="USER_ID" javaType="string" description="我方法人">
+			<component type="richSelect" referenceTable="SYSOPERATOR_VIEW" referenceField="ID" displayReferenceField="NAME"/>
+		</field>
+		<field name="WRITING_DATE" javaType="date" dataStyle="yyyy-MM-dd" description="签约日期">
+			<component type="date"/>
+		</field>
+		<field name="CONTRACT_DATE" javaType="date" dataStyle="yyyy-MM-dd" description="合同日期">
+			<component type="date"/>
+		</field>
+		<field name="LIMIT_DATE" javaType="date" dataStyle="yyyy-MM-dd" description="履约日期">
+			<component type="date"/>
+			<queryCondition type="none"/>
+			<listColumn noquery="true"/>
+		</field>
+		<field name="FINISH_DATE" javaType="date" dataStyle="yyyy-MM-dd" description="到期日期">
+			<component type="date"/>
+			<queryCondition type="none"/>
+			<listColumn noquery="true"/>
+		</field>
+		<field name="MONEY" javaType="string" description="合同金额">
+			<component type="text" maxFractionDigit="2" minFractionDigit="2" numberGrouping="true" style="align:right" colspan="3"/>
+			<queryCondition type="none"/>
+		</field>
+		<field name="DESCRIPTION" javaType="string" description="合同详情">
+			<component type="textArea" colspan="3" style="width:100%;height=75;"/>
+			<queryCondition type="none"/>
+			<listColumn noquery="true"/>
+		</field>
+		<field name="REMARK" javaType="string" description="合同备注">
+			<component type="textArea" colspan="3" style="width:100%;height=75;"/>
+			<queryCondition type="none"/>
+			<listColumn noquery="true"/>
+		</field>
+		<field name="TYPE_" javaType="string" description="合同类型">
+			<component type="dropdown">
+				<option displayName="客户合同" value="1"/>
+				<option displayName="其他合同" value="2"/>
+			</component>
+		</field>
+		<field name="CONTRACT_TYPE" javaType="string" description="合同种类">
+			<component type="richSelect" referenceTable="T_DIC_COMMON_CONTRACT_TYPE" referenceField="ID" displayReferenceField="NAME"/>
+		</field>
+		<field name="CONFIRM_STATUS" javaType="string" defaultValue="0" description="审核状态">
+			<component type="dropdown" readOnly="true">
+				<option displayName="未审核" value="0"/>
+				<option displayName="已审核" value="1"/>
+			</component>
+			<listColumn noquery="true"/>
+		</field>
+		<!--
+		<field name="CONFIRM_USER_ID" javaType="string" description="审核人">
+			<component type="richSelect" referenceTable="SYSOPERATOR_VIEW" referenceField="ID" displayReferenceField="NAME" readOnly="true"/>
+			<listColumn noquery="true"/>
+		</field>
+		<field name="CONFIRM_TIME" javaType="date" dataStyle="yyyy-MM-dd HH:mm:ss" description="审核时间">
+			<component type="date" readOnly="true"/>
+			<queryCondition type="none"/>
+			<listColumn noquery="true"/>
+		</field>
+		-->
+		<field name="CREATE_USER_ID" javaType="string" description="创建人">
+			<component type="richSelect" referenceTable="SYSOPERATOR_VIEW" referenceField="ID" displayReferenceField="NAME" readOnly="true"/>
+			<queryCondition type="none"/>
+			<listColumn noquery="true"/>
+		</field>
+		<field name="CREATE_TIME" javaType="date" dataStyle="yyyy-MM-dd dd:mm:ss" description="创建日期">
+			<component type="date" readOnly="true"/>
+			<queryCondition type="none"/>
+			<listColumn noquery="true"/>
+		</field>
+		<pluginInterceptor methodName="setCreateCode" parameter="CODE" pluginName="save"/>
+		<pluginInterceptor methodName="setCreateOrga" parameter="DEPT_ID" pluginName="edit"/>
+		<pluginInterceptor methodName="setCreateUser" parameter="USER_ID" pluginName="edit"/>
+		<pluginInterceptor methodName="setCreateUser" parameter="CREATE_USER_ID" pluginName="edit"/>
+		<pluginInterceptor methodName="setCreateTime" parameter="CREATE_TIME,yyyy-MM-dd HH:mm:ss" pluginName="save"/>
+		<!-- -->
+		<Operation saveAndAdd="false" saveAndAddCopy="false"/>
+	</table>
+</Haiyan>

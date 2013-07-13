@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Haiyan xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../haiyan.xsd">
+	<table name="SYSWFSTATUS" description="流程实例跟踪">
+		<id name="ID" javaType="string"/>
+		<field name="CODE" description="编码" javaType="string">
+			<component type="hidden"/>
+		</field>
+		<field name="NAME" description="名称" javaType="string">
+			<component type="hidden"/>
+		</field>
+		<field name="TABLENAME" javaType="string" description="表名">
+			<component type="readOnlyText"/>
+		</field>
+		<field name="FORMID" javaType="string" description="表单ID">
+			<component type="readOnlyText"/>
+		</field>
+		<field name="WFMAINNAME" javaType="string" description="主流程名">
+			<component type="text" readOnly="true"/>
+		</field>
+		<field name="WFCURRNODEID" javaType="string" description="当前节点">
+			<component type="readOnlyText"/>
+		</field>
+		<field name="WFENDNODEID" javaType="string" description="终结节点">
+			<component type="readOnlyText"/>
+		</field>
+		<!--
+		<field name="WFMODULE" javaType="dbBlob" description="工作流模板">
+			<component type="textArea" readOnly="true"/>
+		</field>
+		-->
+		<!--
+		<field name="WFROUTEID" javaType="string" description="路径ID">
+			<component type="readOnlyText"/>
+		</field>
+		-->
+		<field name="CREATE_TIME" javaType="date" description="启动时间" dataStyle="yyyy-MM-dd HH:mm:ss">
+			<component type="readOnlyText"/>
+		</field>
+		<pluginInterceptor methodName="setCreateTime" parameter="CREATE_TIME,yyyy-MM-dd HH:mm:ss" pluginName="save"/>
+	</table>
+</Haiyan>

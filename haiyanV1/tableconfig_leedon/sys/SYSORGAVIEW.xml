@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Haiyan xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../haiyan.xsd">
+	<table name="SYSORGA_VIEW" realTable="SYSORGA" description="组织机构" colspan="10">
+		<id name="ID" javaType="string">
+			<component type="hidden" url="#"/>
+		</id>
+		<field name="CODE" description="编码" javaType="string">
+			<component type="text"/>
+			<queryCondition type="blurMatching"/>
+		</field>
+		<field name="NAME" description="名称" javaType="string">
+			<component type="text"/>
+			<queryCondition type="blurMatching"/>
+		</field>
+		<field name="SHORTNAME" description="简称" javaType="string">
+			<component type="text"/>
+			<queryCondition type="blurMatching"/>
+		</field>
+		<field name="USED" description="是否使用" javaType="string" defaultValue="1">
+			<component type="dropdown">
+				<option displayName="是" value="1"/>
+				<option displayName="否" value="0"/>
+			</component>
+			<listColumn noquery="true"/>
+		</field>
+		<field name="PID" description="上级机构" javaType="string">
+			<component type="treePComb" referenceField="ID" referenceTable="SYSORGA" displayReferenceField="NAME"/>
+		</field>
+	</table>
+	<!-- deprecated -->
+	<table name="SYSORGA_VIEW_TEST" realTable="SYSORGA" description="组织机构">
+		<id name="ID" javaType="string">
+			<component type="hidden" url="#"/>
+		</id>
+		<field name="CODE" description="编码" javaType="string">
+			<component type="text"/>
+			<queryCondition type="blurMatching"/>
+		</field>
+		<field name="PRINCIPALID" description="机构负责人" javaType="string">
+			<component type="richSelect" quickQueryConditionField="CODE,NAME" referenceTable="SYSOPERATOR_COMBO" displayReferenceField="NAME"/>
+		</field>
+		<field name="MEMO" description="备注" javaType="string">
+			<component type="textArea" colspan="3" style="width:100%;height:120;"/>
+			<queryCondition type="none"/>
+			<listColumn noquery="true"/>
+		</field>
+		<field name="NAME" description="名称" javaType="string">
+			<component type="text"/>
+			<queryCondition type="blurMatching"/>
+		</field>
+		<field name="SHORTNAME" description="简称" javaType="string">
+			<component type="text"/>
+			<queryCondition type="blurMatching"/>
+		</field>
+		<field name="USED" description="是否使用" javaType="string" defaultValue="1">
+			<component type="dropdown">
+				<option displayName="是" value="1"/>
+				<option displayName="否" value="0"/>
+			</component>
+			<listColumn noquery="true"/>
+		</field>
+		<!--
+		<field name="ORGATYPE" description="机构类型" javaType="string">
+			<component type="dropdown">
+				<option displayName="单位" value="1"/>
+				<option displayName="职能部门" value="2"/>
+				<option displayName="财务部门" value="3"/>
+				<option displayName="其他" value="0"/>
+			</component>
+		</field>
+
+		<field name="SHOWED" description="是否隐藏" javaType="string" defaultValue="0">
+			<component type="dropdown">
+				<option displayName="是" value="1"/>
+				<option displayName="否" value="0"/>
+			</component>
+			<listColumn noquery="true"/>
+		</field>		
+		-->
+		<field name="PID" description="上级机构" javaType="string">
+			<component type="treePComb" quickQueryConditionField="CODE,NAME,SHORTNAME" referenceTable="SYSORGA" displayReferenceField="NAME"/>
+		</field>
+	</table>
+</Haiyan>

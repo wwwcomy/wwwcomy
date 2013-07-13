@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Haiyan xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../haiyan.xsd">
+	<table name="T_WM_TRANSDETAIL" description="移库单明细" colspan="6">
+		<id name="ID" javaType="string"/>
+		<field name="HEADID" description="单头" javaType="string">
+			<component type="readOnlyText"/>
+			<queryCondition type="equal"/>
+		</field>
+		<field name="PRO_WH" description="仓位" javaType="string">
+			<component type="combo" readOnly="false" displayReferenceField="CODE" referenceField="ID" referenceTable="T_DIC_WAREWHERE" parameter="{&amp;GRID=1}"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="PRODUCTID" description="EDP商品" displayOnly="false" javaType="string" lazyLoad="false">
+			<component type="combo" readOnly="false" displayReferenceField="CODE,NAME" referenceField="ID" referenceTable="V_WM_SDBPRODUCT" associatedFields="PRO_NAME,SUPP_CODE,PRO_WEIGHTNUM,PRO_IN_PRICE,PRO_OUT_PRICE" parameter="{&amp;__WHID=}&amp;Get(PRO_WH)"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="SUPP_CODE" description="供应商自有货号" displayOnly="true" javaType="string" lazyLoad="false">
+			<component type="text" readOnly="true" displayReferenceField="SUPP_CODE"/>
+			<listColumn noedit="false" noquery="false" width="90"/>
+		</field>
+		<field name="BATCH" description="批次" javaType="bigDecimal">
+			<component type="text" readOnly="false"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="PRO_COUNT" description="发生数量" displayOnly="false" javaType="bigDecimal" lazyLoad="false">
+			<component type="text" readOnly="false"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="TO_WH" description="目标仓位" javaType="string">
+			<component type="combo" readOnly="false" displayReferenceField="CODE" referenceField="ID" referenceTable="T_DIC_WAREWHERE" parameter="{&amp;GRID=1}"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="PRO_NAME" description="商品名称" displayOnly="true" javaType="string" lazyLoad="false">
+			<component type="text" readOnly="true" displayReferenceField="NAME"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="PRO_WEIGHTNUM" description="单位重量" displayOnly="true" javaType="bigDecimal" lazyLoad="false">
+			<component type="hidden" readOnly="true" displayReferenceField="WEIGHTNUM" maxFractionDigit="3" minFractionDigit="3"/>
+			<listColumn noedit="false" noquery="false" width="78"/>
+		</field>
+		
+		<field name="PRO_IN_PRICE" description="参考进价" displayOnly="true" javaType="bigDecimal" lazyLoad="false">
+			<component type="text" readOnly="true" maxFractionDigit="3" minFractionDigit="3" displayReferenceField="IN_PRICE"/>
+			<listColumn noedit="false" noquery="false" width="78"/>
+		</field>
+		<field name="PRO_OUT_PRICE" description="参考售价" displayOnly="true" javaType="bigDecimal" lazyLoad="false">
+			<component type="text" readOnly="true" maxFractionDigit="3" minFractionDigit="3" displayReferenceField="OUT_PRICE"/>
+			<listColumn noedit="false" noquery="false" width="78"/>
+		</field>		
+		<field name="AUDIT_USER_ID" javaType="string" description="审批人">
+			<component type="combo" quickQueryConditionField="NAME" referenceTable="SYSOPERATOR_VIEW" referenceField="ID" displayReferenceField="NAME" readOnly="true"/>
+			<listColumn noquery="true" nowrap="true"/>
+		</field>
+		<field name="AUDIT_TIME" javaType="date" dataStyle="yyyy-MM-dd HH:mm:ss" description="审批时间">
+			<component type="hidden" readOnly="true"/>
+			<queryCondition type="region"/>
+			<listColumn noquery="true" nowrap="true"/>
+		</field>
+		<field name="BILL_STATUS" javaType="string" description="单据状态">
+			<component type="dropdown" readOnly="true">
+				<option displayName="待批" value="init"/>
+				<option displayName="已审核" value="audit"/>
+			</component>
+		</field>
+		<pluginInterceptor methodName="exp" parameter="If(IsEmpty(GetPara(HEADID)),Warning({参数错误}),true)" pluginName="query" type="after"/>
+	</table>
+</Haiyan>

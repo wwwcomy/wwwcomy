@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Haiyan xsi:noNamespaceSchemaLocation="../../haiyan.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<table description="SGM shopes" name="T_SGMCI_SHOP" realTable="SYSORGA">
+		<id name="ID" description="ID" javaType="string">
+			<component type="hidden" readOnly="false" url="#"/>
+		</id>
+		<field name="CODE" javaType="string" description="ASC代码">
+			<component type="text"/>
+			<queryCondition type="blurMatching"/>
+			<listColumn noquery="false" nowrap="false"/>
+		</field>
+		<field name="NAME" javaType="string" description="公司名称" nullAllowed="false">
+			<component type="text"/>
+			<queryCondition type="blurMatching"/>
+			<listColumn noquery="false" width="200"/>
+		</field>
+		<field name="SHOP_ADDRESS" javaType="string" description="公司地址">
+			<component type="text"/>
+			<queryCondition type="blurMatching"/>
+			<listColumn noquery="false" nowrap="false"/>
+		</field>
+		<field name="TELEPHONE" javaType="string" description="公司电话">
+			<component type="text"/>
+			<listColumn noquery="false" nowrap="false"/>
+		</field>
+		<field name="PERSON" javaType="string" description="联系人">
+			<component type="text"/>
+			<queryCondition type="blurMatching"/>
+			<listColumn noquery="false" nowrap="false"/>
+		</field>
+		<field name="FAX" javaType="string" description="传真">
+			<component type="text"/>
+			<listColumn noquery="false" nowrap="false"/>
+		</field>
+		<field name="ZIP" javaType="string" description="邮编">
+			<component type="text"/>
+			<listColumn noquery="false" nowrap="false"/>
+		</field>
+		<field name="CREATE_TIME" javaType="date" dataStyle="yyyy-MM-dd HH:mm:ss" description="创建时间">
+			<component type="dateTime" readOnly="true"/>
+			<queryCondition type="none"/>
+			<listColumn noquery="false" nowrap="true"/>
+		</field>
+		<field name="INVOICE_INFO" javaType="string" description="发票信息">
+			<component type="textArea" style="width:300;height:60;"/>
+			<listColumn noquery="true" nowrap="true"/>
+		</field>
+		<field name="MEMO" javaType="string" description="特殊要求(例送货用什么物流/快递等)">
+			<component type="textArea" style="width:300;height:60;" appendStr=""/>
+			<listColumn noquery="true" nowrap="true"/>
+		</field>
+		<field name="ORGATYPE" description="机构类型" javaType="string" defaultValue="1">
+			<component type="dropdown">
+				<option displayName="单位" value="1"/>
+				<option displayName="职能部门" value="2"/>
+				<option displayName="财务部门" value="3"/>
+				<option displayName="其他" value="0"/>
+			</component>
+		</field>
+		<field name="USED" description="是否使用" javaType="string" defaultValue="1">
+			<component type="dropdown">
+				<option displayName="是" value="1"/>
+				<option displayName="否" value="0"/>
+			</component>
+			<listColumn noquery="true"/>
+		</field>
+		<field name="ACTICE" description="是否有效" javaType="string" defaultValue="0">
+			<component type="dropdown">
+				<option displayName="是" value="1"/>
+				<option displayName="否" value="0"/>
+			</component>
+			<listColumn noquery="true"/>
+		</field>
+		<!-- -->
+		<queryFilter>
+			<pluggedFilter methodName="exp" parameter="IF(InRole(admin),{},{ and t_1.ID='}&amp;GetUser(DEPT)&amp;{'})"/>
+			<!--可以用公式过滤-->
+		</queryFilter>
+		<!-- -->
+		<pluginInterceptor methodName="exp" pluginName="save" type="before" parameter="SetCreateTime(CREATE_TIME)"/>
+		<pluginInterceptor methodName="exp" pluginName="edit" type="after"><![CDATA[
+			If(IsEmpty(Get(ID)),DBFindByPK(T_SGMCI_SHOP,GetUser(DEPT),true),true)+If(Get(ID)=GetUser(DEPT),true,If(InRole(admin),true,Warning({无权查看他人信息})))
+			+If(Get(ACTICE)={1},If(InRole(admin),true,DisTbl()),true)
+			+If(InRole(admin),true,DisFlds(ACTIVE))
+		]]></pluginInterceptor>
+		<!-- -->
+		<Operation save="true" saveAndAdd="false" saveAndAddCopy="false"/>
+	</table>
+</Haiyan>

@@ -1,0 +1,384 @@
+<?xml version="1.0" encoding="GBK"?>
+<rule-set declaration="" name="Tests assignment rules" xmlns="http://drools.org/rules" xmlns:java="http://drools.org/semantics/java" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<java:import>com.tornado.genmis.core.db.DBManager</java:import>
+	<java:import>com.tornado.genmis.core.db.DBManagerFactory</java:import>
+	<java:import>com.tornado.genmis.core.db.DBTransaction</java:import>
+	<java:import>com.tornado.genmis.core.db.DBTransactionImp</java:import>
+	<java:import>com.tornado.genmis.core.right.RightUtil</java:import>
+	<java:import>java.util.ArrayList</java:import>
+	<java:import>com.tornado.genmis.core.MapForm</java:import>
+	<java:import>com.tornado.genmis.core.struts.GenMisForm</java:import>
+	<java:import>com.tornado.genmis.core.SrvContext</java:import>
+	<java:import>com.tornado.genmis.core.right.User</java:import>
+	<java:import>com.tornado.genmis.core.exception.*</java:import>
+	<java:import>com.tornado.genmis.castorgen.Table</java:import>
+	<java:import>com.tornado.genmis.util.StringUtil</java:import>
+	<java:import>tornado.interceptor.DroolsInterceptor</java:import>
+	<java:import>com.tornado.genmis.util.ConfigUtil</java:import>
+	<java:import>java.lang.String</java:import>
+	<java:import>java.util.HashMap</java:import>
+	<java:import>com.tornado.genmis.core.right.Role</java:import>
+	<java:import>com.tornado.genmis.core.right.User</java:import>
+	<application-data identifier="dbm">DBManager</application-data>
+	<application-data identifier="table">Table</application-data>
+	<application-data identifier="context">SrvContext</application-data>
+	<java:functions/>
+	<rule name="confirm_xskh" salience="0">
+		<parameter identifier="dForm">
+			<java:class>GenMisForm</java:class>
+		</parameter>
+		<java:condition>dForm.getParameter("STAGE").equals("1")</java:condition>
+		<java:consequence>
+		User user = context.getUser();
+		String id = user.getID();
+		Role[] roles = user.getRoles();
+		HashMap map = new HashMap();
+		for (int i = 0; i &lt; roles.length; i++) {
+			map.put(roles[i].getRoleName(), roles[i]);
+		}
+		if ( (map.get("系统管理员") != null) 
+				|| (map.get("区域经理") != null)
+				|| (map.get("部门经理") != null)
+				|| (map.get("销售总监") != null) 
+				|| (map.get("总经理") != null)
+				|| (map.get("总裁") != null)
+				|| id.equals(dForm.getParameter("USER_ID_3")) 
+				|| id.equals(dForm.getParameter("USER_ID")) ) {
+			 GenMisForm reqForm = new MapForm();
+			 reqForm.setParameter("CUSTOMER_ID",dForm.getParameter("ID"));
+			 ArrayList listProducts = (ArrayList) dbm
+				  .findByForm(ConfigUtil.getTable("T_CRM_PRODUCT" ), reqForm,
+						1000, 1, context,null).getData();
+			 if (listProducts.size() == 0) {
+			  	  context.addException(new DBBreakonAlert("对不起,操作失败,缺少信息:(客户所需产品),请在客户项目名片中填写."));
+			  	  return;
+			 }
+			 String stage = dForm.getParameter("STAGE"); 
+			 int stagef = new Integer(stage).intValue();
+			 if (stagef==1) {
+                 stagef=0; 
+                 dForm.setParameter("STAGE",""+stagef);
+			       drools.assertObject(dForm);
+                 context.addException(new DBGoonPrompt("操作成功"));
+			 }
+		} else {
+			 context.addException(new DBBreakonAlert("对不起,您无权操作!"));
+		}
+      	</java:consequence>
+	</rule>
+	<rule name="confirm_wfpkh" salience="1">
+		<parameter identifier="dForm">
+			<java:class>GenMisForm</java:class>
+		</parameter>
+		<java:condition>dForm.getParameter("STAGE").equals("0")</java:condition>
+		<java:consequence>
+		GenMisForm usernewform =dbm.findByPK("SYSOPERATOR",dForm.getParameter("USER_ID_1"),context);
+		User user = context.getUser();
+		String id = user.getID();
+		Role[] roles = user.getRoles();
+		HashMap map = new HashMap();
+		for (int i = 0; i &lt; roles.length; i++) {
+			map.put(roles[i].getRoleName(), roles[i]);
+		}
+		if(!StringUtil.isBlankOrNull(dForm.getParameter("USER_ID_1"))) {
+			GenMisForm myuserdept = RightUtil.getUserDept(dbm,user);		
+	 		if ( (map.get("系统管理员") != null) 
+				|| (map.get("销售总监") != null) 
+				|| (map.get("总经理") != null)
+				|| (map.get("总裁") != null)
+				|| ( 
+						( map.get("区域经理") != null || map.get("部门经理") != null ) &amp;&amp; myuserdept.getParameter("ID").equals(usernewform.getParameter("ORGAID")) 
+				   ) 
+			   ) {		
+	          String stage = dForm.getParameter("STAGE");
+			   String name = dForm.getParameter("NAME");
+			   String remake = dForm.getParameter("REMARK");
+			   String gdrelation = dForm.getParameter("GDRELATION"); 
+			   //
+			   GenMisForm reqForm = new MapForm();
+			   reqForm.setParameter("CUSTOMER_ID",dForm.getParameter("ID"));
+		      ArrayList list = (ArrayList) dbm
+			       .findByForm(ConfigUtil.getTable("T_CRM_CUSTOMER_DTL"), reqForm,
+								1000, 1, context,null).getData();
+			   ArrayList list1 = (ArrayList) dbm
+				   .findByForm(ConfigUtil.getTable("T_CRM_CUSTOMER_TECHNOW" ), reqForm,
+						1000, 1, context,null).getData(); 
+			   ArrayList listProducts = (ArrayList) dbm
+				   .findByForm(ConfigUtil.getTable("T_CRM_PRODUCT" ), reqForm,
+						1000, 1, context,null).getData(); 
+				//
+			   String error="";
+			   if (StringUtil.isBlankOrNull(remake)) {
+					error = "(客户基本介绍)";
+			   }
+			   if (StringUtil.isBlankOrNull(gdrelation)) {
+					error = error + "(股东及股权关系)";
+			   }
+	           if (StringUtil.isBlankOrNull(dForm.getParameter("USER_ID"))) {
+					error = error + "(客户经理)";
+			   }
+	          if (StringUtil.isBlankOrNull(dForm.getParameter("USER_ID_1"))) {
+					error = error + "(项目经理)";
+			   }
+			   if (list.size() == 0) {
+					error = "(拜访纪录)";
+				}
+				if (list1.size() == 0) {
+					error = error + "(信息化现状)";
+				}
+				if (listProducts.size() == 0) {
+					error = error + "(客户所需产品)";
+				}
+				error = error + "未填写完整!";
+	    		//
+		       if (!StringUtil.isBlankOrNull(stage)) {
+	              int stagef = new Integer(stage).intValue();
+	              if ((stagef==0)
+	   				    &amp;&amp; !StringUtil.isBlankOrNull(remake)
+						 &amp;&amp; !StringUtil.isBlankOrNull(gdrelation)
+						 &amp;&amp; !StringUtil.isBlankOrNull(dForm.getParameter("USER_ID"))
+						 &amp;&amp; !StringUtil.isBlankOrNull(dForm.getParameter("USER_ID_1"))
+						 &amp;&amp; (list.size() != 0)
+						 &amp;&amp; (list1.size() != 0)) {
+	                  stagef=2; 
+	                   dForm.setParameter("STAGE",""+stagef);
+				         drools.assertObject(dForm);
+	                   context.addException(new DBGoonPrompt("操作成功"));
+	                  
+				    }else{
+				     context.addException(new DBBreakonAlert("对不起,操作失败,升级条件不足!"+error));
+				    }			   
+				}
+			
+			} else {
+			 	context.addException(new DBBreakonAlert("对不起,您无权操作!"));
+			}
+		} else{ 
+			context.addException(new DBBreakonAlert("对不起,升级条件不足,请选择项目经理!"));
+		}
+      	</java:consequence>
+	</rule>
+	<rule name="confirm_sjkh" salience="2">
+		<parameter identifier="dForm">
+			<java:class>GenMisForm</java:class>
+		</parameter>
+		<java:condition>dForm.getParameter("STAGE").equals("2")</java:condition>
+		<java:consequence>
+		User user = context.getUser();
+		String id = user.getID();
+		Role[] roles = user.getRoles();
+		HashMap map = new HashMap();
+		for (int i = 0; i &lt; roles.length; i++) {
+			map.put(roles[i].getRoleName(), roles[i]);
+		}
+		if ((map.get("系统管理员") != null) 
+				|| (map.get("销售总监") != null)
+				|| (map.get("总经理") != null)
+				|| (map.get("总裁") != null)
+				|| (map.get("区域经理") != null)) {				
+	          String stage = dForm.getParameter("STAGE");
+			   String remake = dForm.getParameter("REMAKE");
+			   String gdrelation = dForm.getParameter("GDRELATION"); 
+			    GenMisForm reqForm = new MapForm();
+			   reqForm.setParameter("CUSTOMER_ID",dForm.getParameter("ID"));
+	
+		 		ArrayList list = (ArrayList) dbm
+					.findByForm(ConfigUtil.getTable("T_CRM_CUSTOMER_DTL"), reqForm,
+								1000, 1, context,null).getData();
+				ArrayList list1 = (ArrayList) dbm
+					.findByForm(ConfigUtil.getTable("T_CRM_CUSTOMER_TECHNOW" ), reqForm,
+						1000, 1, context,null).getData(); 
+				ArrayList list2 = (ArrayList) dbm
+					.findByForm(ConfigUtil.getTable("T_CRM_CUSTOMER_DECISION" ), reqForm,
+						1000, 1, context,null).getData();
+				ArrayList list3 = (ArrayList) dbm
+					.findByForm(ConfigUtil.getTable("T_CRM_CUSTOMER_COMPETITOR" ), reqForm,
+						1000, 1, context,null).getData(); 
+				ArrayList list4 = (ArrayList) dbm
+					.findByForm(ConfigUtil.getTable("T_CRM_PROJECT_AGREEMENT" ), reqForm,
+						1000, 1, context,null).getData();
+				ArrayList listProducts = (ArrayList) dbm
+				   .findByForm(ConfigUtil.getTable("T_CRM_PRODUCT" ), reqForm,
+						1000, 1, context,null).getData(); 
+				//
+		       if (!StringUtil.isBlankOrNull(stage)) {
+	             int stagef = new Integer(stage).intValue();
+		          String error="";
+					if (list.size() == 0) {
+						error = "(拜访纪录)";
+					}
+					if (list1.size() == 0) {
+						error = error + "(信息化现状)";
+					}
+					if (list2.size() == 0) {
+						error = error + "(项目决策组)";
+					}
+					if (list3.size() == 0) {
+						error = error + "(竞争对手)";
+					}
+					if (list4.size() == 0) {
+						error = error + "(项目合作契约)";
+					}
+					if (listProducts.size() == 0) {
+						error = error + "(客户所需产品)";
+					}
+					error = error + "未填写完整!";
+					
+	             if ((stagef==2)
+						 &amp;&amp; (list.size() != 0)
+						 &amp;&amp; (list1.size() != 0)
+						 &amp;&amp; (list2.size() != 0)
+						 &amp;&amp; (list3.size() != 0)
+						 &amp;&amp; (list4.size() != 0)
+						) {
+	                  stagef=5; 
+	                   dForm.setParameter("STAGE",""+stagef);
+				         drools.assertObject(dForm);
+	                   context.addException(new DBGoonPrompt("操作成功"));
+	              }
+				    else{
+				        //System.out.print(stage+"ssssssss"+remake+gdrelation+stagef);
+				        context.addException(new DBBreakonAlert("对不起,操作失败,升级条件不足!"+error));
+				    }   
+				}
+			} else {
+			 	context.addException(new DBBreakonAlert("对不起,您无权操作!"));
+			}
+      		</java:consequence>
+	</rule>
+	<rule name="confirm_zlxkh" salience="3">
+		<parameter identifier="dForm">
+			<java:class>GenMisForm</java:class>
+		</parameter>
+		<java:condition>dForm.getParameter("STAGE").equals("5")</java:condition>
+		<java:consequence>
+		User user = context.getUser();
+		String id = user.getID();
+		Role[] roles = user.getRoles();
+		HashMap map = new HashMap();
+		for (int i = 0; i &lt; roles.length; i++) {
+			map.put(roles[i].getRoleName(), roles[i]);
+		}
+		if ((map.get("系统管理员") != null) 
+				|| (map.get("销售总监") != null)
+				|| (map.get("总经理") != null)
+				|| (map.get("总裁") != null)) {		
+          String stage = dForm.getParameter("STAGE");
+		   String remake = dForm.getParameter("REMAKE");
+		   String gdrelation = dForm.getParameter("GDRELATION"); 
+		    GenMisForm reqForm = new MapForm();
+		   reqForm.setParameter("CUSTOMER_ID",dForm.getParameter("ID"));
+			//
+			ArrayList list = (ArrayList) dbm
+				.findByForm(ConfigUtil.getTable("T_CRM_CUSTOMER_DTL"), reqForm,
+							1000, 1, context,null).getData();
+			ArrayList list1 = (ArrayList) dbm
+				.findByForm(ConfigUtil.getTable("T_CRM_CUSTOMER_TECHNOW" ), reqForm,
+					1000, 1, context,null).getData(); 
+			ArrayList list2 = (ArrayList) dbm
+				.findByForm(ConfigUtil.getTable("T_CRM_CUSTOMER_DECISION" ), reqForm,
+					1000, 1, context,null).getData();
+			ArrayList list3 = (ArrayList) dbm
+				.findByForm(ConfigUtil.getTable("T_CRM_CUSTOMER_COMPETITOR" ), reqForm,
+					1000, 1, context,null).getData();
+			ArrayList listProducts = (ArrayList) dbm
+			   .findByForm(ConfigUtil.getTable("T_CRM_PRODUCT" ), reqForm,
+					1000, 1, context,null).getData(); 
+			//  
+	      if (!StringUtil.isBlankOrNull(stage)) {
+              int stagef = new Integer(stage).intValue();
+	          //
+	          String error="";
+				if (list.size() == 0) {
+					error = "(拜访纪录)";
+				}
+				if (list1.size() == 0) {
+					error = error + "(信息化现状)";
+				}
+				if (list2.size() == 0) {
+					error = error + "(项目决策组)";
+				}
+				if (list3.size() == 0) {
+					error = error + "(竞争对手)";
+				}
+				if (listProducts.size() == 0) {
+					error = error + "(客户所需产品)";
+				}
+				error = error + "未填写完整!";
+				//
+             if ((stagef==5)
+					 &amp;&amp; (list.size() != 0)
+					 &amp;&amp; (list1.size() != 0)
+					 &amp;&amp; (list2.size() != 0)
+					 &amp;&amp; (list3.size() != 0)
+					) {
+                   stagef=3; 
+                   dForm.setParameter("STAGE",""+stagef);
+			         drools.assertObject(dForm);
+                   context.addException(new DBGoonPrompt("操作成功"));
+			    } else{
+			         //System.out.print(stage+"ssssssss"+remake+gdrelation+stagef);
+			         context.addException(new DBBreakonAlert("对不起,操作失败,升级条件不足!"+error));
+			    }	      
+			}
+		} else {
+			 context.addException(new DBBreakonAlert("对不起,您无权操作!"));
+		}
+      	</java:consequence>
+	</rule>
+	<rule name="confirm_lxkh" salience="4">
+		<parameter identifier="dForm">
+			<java:class>GenMisForm</java:class>
+		</parameter>
+		<java:condition>dForm.getParameter("STAGE").equals("3")  &amp;&amp; !StringUtil.isBlankOrNull(dForm.getParameter("USER_ID"))  &amp;&amp; !StringUtil.isBlankOrNull(dForm.getParameter("USER_ID"))</java:condition>
+		<java:consequence>
+		User user = context.getUser();
+		String id = user.getID();
+		Role[] roles = user.getRoles();
+		HashMap map = new HashMap();
+		for (int i = 0; i &lt; roles.length; i++) {
+			map.put(roles[i].getRoleName(), roles[i]);
+		}
+		if ((map.get("系统管理员") != null) 
+				|| (map.get("销售总监") != null)
+				|| (map.get("总经理") != null)
+				|| (map.get("总裁") != null)
+				|| (id.equalsIgnoreCase(dForm.getParameter("USER_ID")))
+				|| (id.equalsIgnoreCase(dForm.getParameter("USER_ID_1")))) {				
+          String stage = dForm.getParameter("STAGE");
+          String user_id = dForm.getParameter("USER_ID");
+          String user_id_1 = dForm.getParameter("USER_ID_1");
+		   String remake = dForm.getParameter("REMAKE");
+		   String gdrelation = dForm.getParameter("GDRELATION");
+		  	//
+          GenMisForm reqForm = new MapForm();
+		   reqForm.setParameter("CUSTOMER_ID",dForm.getParameter("ID"));
+ 			//
+	      ArrayList list = (ArrayList) dbm
+					.findByForm(ConfigUtil.getTable("T_CRM_CONTRACT_VIEW"), reqForm,
+							1000, 1, context,null).getData();
+		   String error="";
+			if (list.size() == 0) {
+				error = "(合同内容)";
+			}
+			error = error + "未填写完整!";
+	       if (!StringUtil.isBlankOrNull(stage)) {
+              int stagef = new Integer(stage).intValue();
+              if ((stagef==3)
+   					 &amp;&amp; (list.size() != 0)
+					) {
+                   stagef++; 
+                   dForm.setParameter("STAGE",""+stagef);
+			         drools.assertObject(dForm);
+                   context.addException(new DBGoonPrompt("操作成功"));
+			    } else{
+			     	  System.out.print("sdsdds"+list.size());
+			     	  context.addException(new DBBreakonAlert("对不起,操作不成功!升级条件不足!"+error));
+			    }
+			}
+		} else {
+			 context.addException(new DBBreakonAlert("对不起，您无权操作!"));
+		}
+      	</java:consequence>
+	</rule>
+</rule-set>

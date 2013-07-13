@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Haiyan xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../haiyan.xsd">
+	<table name="T_DIC_MERCHANDISE" description="货品">
+		<id name="ID" javaType="string"/>
+		<field name="CODE" description="货品编码" javaType="string">
+			<component type="text"/>
+		</field>
+		<field name="NAME" description="货品名称" javaType="string">
+			<component type="text"/>
+		</field>
+		<field name="TYPE" description="货品类型" javaType="string">
+			<component type="richSelect" referenceTable="T_DIC_MERCHANDISETYPE" displayReferenceField="NAME" referenceField="ID"/>
+		</field>
+		<field name="UNIT" description="计量单位" javaType="string">
+			<component type="richSelect" referenceTable="T_DIC_ITEM_UNIT" displayReferenceField="NAME" referenceField="ID"/>
+		</field>
+		<field name="CAPACITY" description="单位容量" javaType="string">
+			<component type="text"/>
+		</field>
+		<field name="WEIGHT" description="重量" javaType="string">
+			<component type="text"/>
+		</field>
+		<field name="SPEC" description="版本号" javaType="string">
+			<component type="text"/>
+		</field>
+		<field name="SALEPRICE" description="单价" javaType="string">
+			<component type="text"/>
+		</field>
+		<field name="PID" description="所属货品" javaType="string">
+			<component type="richSelect" referenceTable="T_DIC_MERCHANDISE" displayReferenceField="NAME" referenceField="ID"/>
+		</field>
+		<!--
+		<field name="PROCURER" description="采购人员" javaType="string">
+	                <component type="richSelect" referenceTable="SYSOPERATOR" displayReferenceField="NAME" referenceField="ID"/>
+		</field>
+		<field name="SALER" description="销售人员" javaType="string">
+			<component type="richSelect" referenceTable="SYSOPERATOR" displayReferenceField="NAME" referenceField="ID"/>
+		</field>
+		<field name="COLOR" description="颜色" javaType="string">
+	                <component type="text"/>
+		</field>
+		<field name="WHOLESALINGPRICE" description="批发价" javaType="string">
+			<component type="text"/>
+		</field>
+		<field name="TAX" description="税率" javaType="string">
+			<component type="richSelect" referenceTable="T_DIC_TAX" displayReferenceField="NAME" referenceField="ID"/>
+		</field>
+		<field name="STARTDATE" description="生效日期" javaType="date" dateStyle="yyyy-MM-dd hh:mm:ss">
+			<component type="date"/>
+		</field>
+		<field name="ENDDATE" description="失效日期" javaType="date" dateStyle="yyyy-MM-dd hh:mm:ss">
+			<component type="date"/>
+		</field>
+		<field name="STATUS" description="状态" javaType="string">
+			<component type="text"/>
+		</field>
+		<field name="MADEDATE" description="生产日期" javaType="date"  dateStyle="yyyy-MM-dd hh:mm:ss">
+			<component type="date"/>
+		</field>
+		-->
+		<PageView type="querybyform" title="按条件查询"/>
+		<PageView showField="NAME" type="gentree" title="普通树型列表"/>
+		<pluginInterceptor methodName="completeAlert" pluginName="save" type="after"/>
+		<pluginInterceptor methodName="completeAlert" pluginName="delete" type="after"/>
+	</table>
+</Haiyan>

@@ -1,0 +1,327 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Haiyan xsi:noNamespaceSchemaLocation="../../haiyan.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<table description="供应商" name="T_RO_GYS" realTable="T_DIC_ORGA">
+		<id name="ID" javaType="string"/>
+		<field name="CODE" javaType="string" description="编码">
+			<component type="text" readOnly="true"/>
+			<queryCondition type="blurMatching"/>
+			<listColumn noquery="true"/>
+		</field>
+		<field name="NAME" javaType="string" description="全称" nullAllowed="false">
+			<component type="text"/>
+			<queryCondition type="blurMatching"/>
+			<listColumn noquery="false" width="200"/>
+		</field>
+		<field name="HYTYPE" javaType="string" description="行业" nullAllowed="false">
+			<component type="treeComb" referenceTable="T_DIC_COMMON_HY" referenceField="ID" displayReferenceField="NAME" quickQueryConditionField="NAME,CODE"/>
+			<queryCondition type="blurMatching"/>
+			<listColumn noquery="false" nowrap="true"/>
+		</field>
+		<field name="CITY_ID" javaType="string" description="城市" nullAllowed="false">
+			<component type="richSelect" referenceTable="T_DIC_COMMON_CITY" referenceField="ID" displayReferenceField="NAME" quickQueryConditionField="NAME,CODE"/>
+			<!--associatedFields="PROVINCE_NAME"-->
+			<queryCondition type="blurMatching"/>
+			<listColumn noquery="true" nowrap="true"/>
+		</field>
+		<field name="ADDRESS" javaType="string" description="客户地址" nullAllowed="false">
+			<component type="text"/>
+			<listColumn noquery="true" nowrap="false"/>
+		</field>
+		<field name="POSTCODE" javaType="string" description="邮编" nullAllowed="false">
+			<component type="text"/>
+			<queryCondition type="none"/>
+			<listColumn noquery="true"/>
+		</field>
+		<!-- -->
+		<field name="CONTACT_PERSON" javaType="string" description="联系人" nullAllowed="false">
+			<component type="text"/>
+			<queryCondition type="none"/>
+			<listColumn noquery="true" nowrap="false"/>
+		</field>
+		<field name="PHONE" javaType="string" description="联系电话" nullAllowed="false">
+			<component type="text" validatorText="(格式:086-0XX-XXXXXXXX)"/>
+			<queryCondition type="none"/>
+			<listColumn noquery="true" nowrap="false"/>
+		</field>
+		<field name="MOBILE_PHONE" javaType="string" description="手机">
+			<component type="text" validatorText="(格式:0XX-XXXXXXXXXXX)"/>
+			<queryCondition type="none"/>
+			<listColumn noquery="true" nowrap="false"/>
+		</field>
+		<field name="MSN" javaType="string" description="MSN">
+			<component type="text" appendStr=""/>
+			<queryCondition type="none"/>
+			<listColumn noquery="true" nowrap="false"/>
+		</field>
+		<field name="QQ" javaType="string" description="QQ">
+			<component type="text" appendStr=""/>
+			<queryCondition type="none"/>
+			<listColumn noquery="true" nowrap="false"/>
+		</field>
+		<field name="POSITION_" javaType="string" description="职位" nullAllowed="false">
+			<component type="text"/>
+			<queryCondition type="none"/>
+			<listColumn noquery="true" nowrap="true"/>
+		</field>
+		<field name="SEX" javaType="string" description="性别">
+			<component type="dropdown">
+				<option displayName="男" value="1"/>
+				<option displayName="女" value="2"/>
+			</component>
+			<queryCondition type="none"/>
+			<listColumn noquery="true" nowrap="true"/>
+		</field>
+		<field name="EMAIL" javaType="string" description="电子邮件">
+			<component type="text"/>
+			<queryCondition type="none"/>
+			<listColumn noquery="true" nowrap="false"/>
+		</field>
+		<field name="HOMEPAGE" javaType="string" description="公司主页">
+			<component type="text" displayReferenceField="HOMEPAGE"/>
+			<queryCondition type="none"/>
+			<listColumn noquery="true"/>
+		</field>
+		<field name="FAX" javaType="string" description="客户传真">
+			<component type="text"/>
+			<queryCondition type="none"/>
+			<listColumn noquery="true" nowrap="true"/>
+		</field>
+		<field name="ORGAUNIT_ID" description="所属单位" javaType="string">
+			<component type="hidden" readOnly="true" referenceTable="SYSORGA" displayReferenceField="NAME" referenceField="ID"/>
+			<listColumn noquery="true" nowrap="true"/>
+		</field>
+		<field name="TEMPORGAID" description="TEMPORGAID" javaType="string" displayOnly="true">
+			<component type="hidden" displayReferenceField="ORGAID"/>
+			<listColumn noquery="true" nowrap="true"/>
+		</field>
+		<field name="DEPT_ID" description="所属部门" javaType="string">
+			<component type="hidden"/>
+			<queryCondition type="none"/>
+			<listColumn noquery="true" nowrap="true"/>
+			<!--
+			readOnly="true" referenceTable="SYSORGA" displayReferenceField="NAME" referenceField="ID" className="com.haiyan.genmis.view.component.ListenerRichSelectComponent" conditionFields="ID" restrictiveFields="TEMPORGAID"
+			-->
+		</field>
+		<field name="USER_ID_3" description="电话销售" javaType="string" style="color:#000099;size:12;font-weight:bold;">
+			<component type="richSelect" colspan="3" referenceTable="SYSOPERATOR_VIEW" displayReferenceField="NAME" referenceField="ID" quickQueryConditionField="NAME"/>
+			<listColumn noquery="true" nowrap="true"/>
+		</field>
+		<field name="USER_ID_2" description="经纪人" javaType="string" style="color:#000099;size:12;font-weight:bold;">
+			<component type="richSelect" colspan="3" referenceTable="SYSOPERATOR_VIEW" displayReferenceField="NAME" referenceField="ID" quickQueryConditionField="NAME"/>
+			<listColumn noquery="false" nowrap="true"/>
+		</field>
+		<field name="USER_ID_1" description="项目经理" javaType="string" style="color:#000099;size:12;font-weight:bold;">
+			<component type="hidden" referenceTable="SYSOPERATOR_VIEW" displayReferenceField="NAME" referenceField="ID" quickQueryConditionField="NAME" colspan="3"/>
+			<listColumn noquery="true" nowrap="true"/>
+		</field>
+		<field name="USER_ID" description="客户经理" javaType="string" style="color:#000099;size:12;font-weight:bold;">
+			<component type="hidden" referenceTable="SYSOPERATOR_VIEW" displayReferenceField="NAME" referenceField="ID" quickQueryConditionField="NAME"/>
+			<listColumn noquery="true" nowrap="true"/>
+		</field>
+		<!-- select * from t_DIc_orga where (NOW()-CON_LASTTIME) >1*24*60*60*1000 -->
+		<field name="CQTS" javaType="bigDecimal" defaultValue="1" description="超期天数设置">
+			<component type="text" colspan="3"/>
+			<queryCondition type="none"/>
+			<listColumn noquery="true" nowrap="true"/>
+		</field>
+		<field name="REMARK" javaType="string" description="客户基本介绍" style="color:#990000;size:12;font-weight:bold;">
+			<component type="textArea" colspan="3" style="width:100%;height:65"/>
+			<queryCondition type="none"/>
+			<listColumn noquery="true"/>
+		</field>
+		<field name="GDRELATION" javaType="string" description="股东及股权关系">
+			<component type="textArea" colspan="3" style="width:100%;height:65"/>
+			<queryCondition type="none"/>
+			<listColumn noquery="true"/>
+		</field>
+		<field name="ACCESSORY" javaType="string" description="股份关系(附件)">
+			<component type="file" colspan="3"/>
+			<queryCondition type="none"/>
+			<listColumn noquery="true"/>
+		</field>
+		<!--
+		<field name="JCLC" javaType="string" description="决策流程">
+			<component type="textArea" colspan="3" style="width:100%;height:65"/>
+			<queryCondition type="none"/>
+			<listColumn noquery="true"/>
+		</field>
+		<field name="JCSJ2" javaType="string" description="决策时间">
+			<component type="textArea" colspan="3" style="width:100%;height:65"/>
+			<queryCondition type="none"/>
+			<listColumn noquery="true"/>
+		</field>
+		-->
+		<field name="LEVEL_" javaType="string" defaultValue="B" description="客户等级" nullAllowed="false">
+			<component type="dropdown" colspan="3">
+				<option displayName="A级" value="A"/>
+				<option displayName="B级" value="B"/>
+				<option displayName="C级" value="C"/>
+				<option displayName="D级" value="D"/>
+				<option displayName="E级" value="E"/>
+			</component>
+		</field>
+		<field name="TYPE_" javaType="string" defaultValue="1" description="客户类型">
+			<component type="hidden" readOnly="true" colspan="3">
+				<option displayName="无" value="0"/>
+				<option displayName="客户" value="1"/>
+				<option displayName="代理" value="2"/>
+				<option displayName="供应商" value="3"/>
+			</component>
+			<listColumn noquery="true"/>
+		</field>
+		<field name="STAGE" javaType="string" description="阶段分类" defaultValue="1">
+			<component type="hidden" readOnly="true" colspan="3">
+				<option displayName="线索客户" value="1"/>
+				<option displayName="未分配客户" value="0"/>
+				<option displayName="商机客户" value="2"/>
+				<option displayName="准立项客户" value="5"/>
+				<option displayName="立项客户" value="3"/>
+				<option displayName="合同客户" value="4"/>
+				<option displayName="休眠客户" value="-1"/>
+			</component>
+			<listColumn noquery="true"/>
+		</field>
+		<field name="STATUS" javaType="string" description="审批状态" defaultValue="1">
+			<component type="dropdown" readOnly="true" colspan="3">
+				<option displayName="初稿" value="1"/>
+				<option displayName="在批" value="2"/>
+				<option displayName="结束" value="3"/>
+			</component>
+			<listColumn noquery="true"/>
+		</field>
+		<field name="AVAILABLE" javaType="string" description="是否有效" defaultValue="1">
+			<component type="hidden" readOnly="true" colspan="3">
+				<option displayName="有效" value="1"/>
+				<option displayName="无效" value="0"/>
+			</component>
+			<listColumn noquery="true"/>
+		</field>
+		<!--
+		<field name="PID" javaType="string" description="上级企业">
+			<component type="richSelect" referenceTable="T_CRM_CUSTOMER" referenceField="ID" displayReferenceField="NAME"/>
+			<listColumn noquery="true"/>
+		</field>
+		-->
+		<!-- _NAME 结尾的冗余字段为了提高效率和开发便利而用 -->
+		<field name="COUNTRY" javaType="string" description="国家">
+			<component type="hidden" referenceTable="T_DIC_COMMON_COUNTRY" referenceField="ID" displayReferenceField="NAME"/>
+			<listColumn noquery="true"/>
+		</field>
+		<field name="COUNTRY_NAME" javaType="string" description="国家">
+			<component type="readOnlyText"/>
+			<queryCondition type="none"/>
+			<listColumn noquery="true"/>
+		</field>
+		<field name="AREA_CODE" javaType="string" description="大区编号">
+			<component type="readOnlyText"/>
+			<!-- displayReferenceField="LABEL4" -->
+			<queryCondition type="none"/>
+			<listColumn noquery="true" nowrap="true"/>
+		</field>
+		<field name="AREA" javaType="string" description="大区名称">
+			<component type="readOnlyText"/>
+			<!-- displayReferenceField="LABEL3" -->
+			<listColumn noquery="true" nowrap="true"/>
+		</field>
+		<field name="PROVINCE" javaType="string" description="省份">
+			<component type="hidden" referenceTable="T_DIC_COMMON_PROVINCE" referenceField="ID" displayReferenceField="NAME"/>
+			<listColumn noquery="true"/>
+		</field>
+		<field name="PROVINCE_NAME" javaType="string" description="省份">
+			<component type="readOnlyText"/>
+			<listColumn noquery="true" nowrap="true"/>
+		</field>
+		<!--
+		<field name="PATH" javaType="string" description="地理路径">
+			<component type="text"/>
+			<listColumn noquery="true"/>
+		</field>
+		-->
+		<!--
+		<field name="IMAGE" javaType="string" description="分析图" displayOnly="true">
+			<component type="hidden"/>
+		</field>
+		-->
+		<field name="CREATE_USER_ID" javaType="string" description="创建人">
+			<component type="richSelect" quickQueryConditionField="NAME" referenceTable="SYSOPERATOR_VIEW" referenceField="ID" displayReferenceField="NAME" readOnly="true"/>
+			<listColumn noquery="false" nowrap="true"/>
+		</field>
+		<field name="CREATE_TIME" javaType="date" dataStyle="yyyy-MM-dd HH:mm:ss" description="修改时间">
+			<component type="dateTime" readOnly="true"/>
+			<queryCondition type="none"/>
+			<listColumn noquery="true" nowrap="true"/>
+		</field>
+		<field name="CON_LASTTIME" javaType="date" dataStyle="yyyy-MM-dd HH:mm:ss" description="最近联系时间">
+			<component type="dateTime" readOnly="true"/>
+			<queryCondition type="region"/>
+			<listColumn noquery="false"/>
+		</field>
+		<!-- -->
+		<TabPanel name="tab1" description="客户信息">
+			<Panel name="t" description="">
+				<Group name="g01" description="基本资料" collapse="true" fields="NAME HYTYPE LEVEL_ CQTS REMARK"/>
+				<!-- SHANGSHI -->
+				<Group name="g02" description="联系方式" collapse="true" fields="HOMEPAGE FAX PHONE MOBILE_PHONE CONTACT_PERSON POSITION_ SEX EMAIL MSN QQ"/>
+				<Group name="g03" description="地理信息" collapse="true" fields="POSTCODE ADDRESS CITY_ID COUNTRY COUNTRY_NAME PROVINCE PROVINCE_NAME AREA_CODE AREA"/>
+			</Panel>
+		</TabPanel>
+		<TabPanel name="tab2" description="系统信息">
+			<!-- USER_ID USER_ID_1 -->
+			<Panel name="t2" description="">
+				<Group name="g09" description="销售资源分配" collapse="true" fields="USER_ID_3 USER_ID_2"/>
+				<Group name="g10" description="-" collapse="true" fields="CREATE_USER_ID CREATE_TIME CODE CONFLICT ORGAUNIT_ID TEMPORGAID DEPT_ID TYPE_ STAGE STATUS AVAILABLE"/>
+			</Panel>
+			<!-- TEMPWAREHOUSEID  UPDATE_USER_ID UPDATE_TIME UPDATETIME_SJ UPDATETIME_ZLX UPDATETIME_LX UPDATETIME_HT  -->
+		</TabPanel>
+		<!--
+		<PageView showField="*" methodName="editPageView" parameter="queryByForm.do?__opr_data=T_CRM_CUSTOMER_DTL&amp;CUSTOMER_ID={0},ID" hostPage="edit" type="userdefined" title="拜访记录"/>
+		<PageView showField="*" methodName="editPageView" parameter="queryByForm.do?__opr_data=T_CRM_ACTIVITY&amp;CUSTOMER_ID={0},ID" hostPage="edit" type="userdefined" title="客户活动"/> 
+		-->
+		<PageView showField="*" methodName="editPageView" parameter="queryByForm.do?__opr_data=T_CRM_CONTRACT&amp;CUSTOMER_ID={0},ID" hostPage="edit" type="userdefined" title="客户合同"/>
+		<PageView showField="*" methodName="editPageView" parameter="queryByForm.do?__opr_data=T_CRM_PAYMENT&amp;CUSTOMER_ID={0},ID" hostPage="edit" type="userdefined" title="回款记录"/>
+		<PageView showField="*" methodName="editPageView" parameter="queryByForm.do?__opr_data=SYSLOG&amp;SYSREALTABLE=T_DIC_ORGA&amp;TABLEID={0},ID" hostPage="edit" type="userdefined" title="修改日志"/>
+		<!-- -->
+		<queryFilter>
+			<pluggedFilter methodName="exp" parameter="If( InRole({manager},{boss}), {}, { and ( t_1.CREATE_USER_ID='}&amp;GetUser({ID})&amp;{' or t_1.USER_ID='}&amp;GetUser({ID})&amp;{' or t_1.USER_ID_1='}&amp;GetUser({ID})&amp;{' or t_1.USER_ID_2='}&amp;GetUser({ID})&amp;{' or t_1.USER_ID_3='}&amp;GetUser({ID})&amp;{' ) } )&amp;{ and t_1.TYPE_='1' and t_1.AVAILABLE='1' order by t_1.NAME }"/>
+		</queryFilter>
+		<!-- -->
+		<!--
+		<javascript hostPage="query"><![CDATA[// for query page
+		]]></javascript>
+		<javascript hostPage="ids" src="project/crm/CUSTOMER_RO_IDS.js"><![CDATA[
+       ]]></javascript>
+		<javascript hostPage="edit" src="project/crm/CUSTOMER_RO_EDIT.js"><![CDATA[
+       ]]></javascript>
+       -->
+		<!-- -->
+		<pluginInterceptor methodName="exp" pluginName="edit" parameter="SetCreateUser({USER_ID_3});" type="before"/>
+		<pluginInterceptor methodName="exp" pluginName="save" parameter="SetCreateTime({CREATE_TIME});SetCreateUser({CREATE_USER_ID});Set(CODE,PY(Get(NAME)));" type="before"/>
+		<pluginInterceptor methodName="exp" pluginName="delete" parameter="If(InRole({manager},{boss}),true,warning({你无权删除客户记录}))"/>
+		<!-- -->
+		<pluginInterceptor methodName="createAreaInfo" pluginName="save" type="before"/>
+		<pluginInterceptor methodName="completeAlert" pluginName="delete" type="after"/>
+		<pluginInterceptor methodName="completeAlert" pluginName="save" type="after"/>
+		<!-- -->
+		<!--
+		<pluginInterceptor methodName="setEditUser" parameter="UPDATE_USER_ID" pluginName="save"/>
+		<pluginInterceptor methodName="setEditTime" parameter="UPDATE_TIME,yyyy-MM-dd HH:mm:ss" pluginName="save"/>
+		-->
+		<!-- -->
+		<pluginInterceptor methodName="setCreateOrga" parameter="DEPT_ID" pluginName="edit"/>
+		<!-- set same flag -->
+		<pluginInterceptor methodName="checkSame" parameter="NAME,ADDRESS" pluginName="save"/>
+		<!--
+		<pluginOperation name="confirm" oprName="升级审批" className="haiyan.plugin.BshPlugin" accessKey="G" hostPage="edit" tblevel="1">
+			import crm.interceptor.StartProcess;
+			//if (StringUtil.isBlankOrNull(form.getParameter("USER_ID"))) {
+			//	context.addException(new DBBreakonAlert("客户经理不能为空!"));
+			//	return false;
+			//}
+			StartProcess.start(dbm, table, form, context, "T_CRM_CUSTOMER_QY_XS", "客户升级流程", "升级审批");
+			return true;
+		</pluginOperation>
+		-->
+		<!-- -->
+		<Operation queryPageAdd="true" queryPageDelete="true" saveAndAdd="false" saveAndAddCopy="false" customizeColumns="true"/>
+	</table>
+</Haiyan>

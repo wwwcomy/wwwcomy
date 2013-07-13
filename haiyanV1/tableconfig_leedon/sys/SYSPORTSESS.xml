@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Haiyan xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../haiyan.xsd">
+	<table name="SYSPORTSESS" description="SYSPORTSESS">
+		<id name="ID" javaType="string">
+			<component type="hidden" url="#"/>
+		</id>
+		<field name="SESSION" javaType="string" description="本地SESSION">
+			<component type="readOnlyText"/>
+		</field>
+		<!-- 直接调用SYSOPERATOR -->
+		<field name="USERID" javaType="string" description="登陆用户">
+			<component type="richSelect" readOnly="true" quickQueryConditionField="NAME" referenceTable="SYSOPERATOR" displayReferenceField="NAME"/>
+		</field>
+		<field name="MODULEID" javaType="string" description="登陆系统">
+			<component type="richSelect" readOnly="true" quickQueryConditionField="NAME" referenceTable="SYSPORTMODULE" displayReferenceField="NAME"/>
+		</field>
+		<field name="MODULESESSION" javaType="string" description="登陆系统SESSION">
+			<component type="readOnlyText"/>
+		</field>
+		<!--
+		<PageView showField="*" type="querybyform" title="列表索引"/>
+		<PageView showField="AREA_CODE,AREA,__PROVINCE_ID__NAME,__SYSTEMUSER__NAME" type="gentree" title="树形索引"/>
+		<pluginInterceptor className="haiyan.interceptor.SaveInterceptor" methodName="complete" pluginName="save" type="after"/>
+		<pluginInterceptor className="haiyan.interceptor.DeleteInterceptor" methodName="complete" pluginName="delete" type="after"/>
+		-->
+		<Operation selectedHidden="true" queryPageDelete="false" queryPageAdd="false"/>
+	</table>
+</Haiyan>

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Haiyan xsi:noNamespaceSchemaLocation="../../haiyan.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<table name="T_SGMCI_USER" realTable="SYSOPERATOR" description="4S店人员">
+		<id name="ID" javaType="string">
+			<component type="hidden" url="#"/>
+		</id>
+		<field name="CODE" description="登录名" javaType="string" nullAllowed="false">
+			<component type="text"/>
+		</field>
+		<field name="NAME" description="姓名" javaType="string" nullAllowed="false">
+			<component type="text"/>
+		</field>
+		<field name="PASSWORD" description="密码" javaType="string" createable="true" updateable="false" defaultValue="D033E22AE348AEB566FC214AEC3585C4DA997">
+			<component type="hidden"/>
+		</field>
+		<field name="ROLE" description="角色" javaType="string" displayOnly="true" mappingTable="SHOPROLE">
+			<component type="richSelect" referenceTable="SYSROLE" referenceField="ID" displayReferenceField="CODE" multipleSelect="true"/>
+			<queryCondition type="none"/>
+			<listColumn noquery="true"/>
+		</field>
+		<field name="USED" description="是否使用" javaType="string" defaultValue="1" nullAllowed="false">
+			<component type="dropdown">
+				<option displayName="是" value="1"/>
+				<option displayName="否" value="0"/>
+			</component>
+		</field>
+		<field name="ORGAID" description="登录机构" javaType="string" defaultValue="1">
+			<component type="hidden" referenceTable="SYSORGA" displayReferenceField="CODE" referenceField="ID"/>
+		</field>
+		<!-- -->
+		<pluginInterceptor className="haiyan.interceptor.FlowmisInterceptor" methodName="transPassword2" pluginName="save" type="before"/>
+		<Operation selectedHidden="true" queryPageQueryEdit="true" queryPageDelete="false"/>
+	</table>
+	<table name="SHOPROLE" realTable="SYSUSERROLE" description="店员-角色">
+		<id name="ID" javaType="string"/>
+		<field name="USERID" description="用户" javaType="string" length="50">
+			<component type="richSelect" className="haiyan.component.PagingComboboxComponent" referenceTable="T_SGMCI_USER" displayReferenceField="NAME"/>
+		</field>
+		<field name="ROLEID" description="角色" javaType="string" length="50">
+			<component type="richSelect" className="haiyan.component.PagingComboboxComponent" referenceTable="SYSROLE" displayReferenceField="CODE"/>
+		</field>
+		<Operation selectedHidden="true"/>
+	</table>
+</Haiyan>

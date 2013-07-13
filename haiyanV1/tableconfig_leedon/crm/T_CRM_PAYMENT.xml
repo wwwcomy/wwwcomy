@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Haiyan xsi:noNamespaceSchemaLocation="../../haiyan.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<table description="客户回款" name="T_CRM_PAYMENT" realTable="T_CRM_SALES" colspan="6">
+		<!-- childTable="T_CRM_PAYMENT_DTL" -->
+		<id name="ID" javaType="string"/>
+		<field name="CUSTOMER_ID" javaType="string" description="客户">
+			<component type="richSelect" referenceTable="T_CRM_CUSTOMER_QY" referenceField="ID" displayReferenceField="NAME,ADDRESS" 
+					   action="changeFilter()"/>
+			<!-- action="changeFilter(comboField_CONTRACT_ID,\'CUSTOMER_ID\',\'CUSTOMER_ID\');" -->
+			<!-- __CUSTOMER_ID__NAME -->
+		</field>
+		<field name="CONTRACT_ID" javaType="string" description="相关合同" nullAllowed="false">
+			<component type="richSelect" referenceTable="T_CRM_CONTRACT" referenceField="ID" displayReferenceField="NAME" 
+				associatedFields="HT_MONEY"/>
+		</field>
+		<!--
+			<field name="AGENT_ID" javaType="string" description="渠道">
+				<component type="richSelect" referenceTable="T_CRM_AGENT" referenceField="ID" displayReferenceField="NAME"/>
+			</field>
+			-->
+		<field name="HT_MONEY" javaType="bigDecimal" defaultValue="0" description="合同金额" sumable="true">
+			<component type="readOnlyText" displayReferenceField="MONEY" maxFractionDigit="2" minFractionDigit="2" numberGrouping="true" style="align:right"/>
+			<queryCondition type="none"/>
+		</field>
+		<field name="ACTUAL_MONEY" javaType="bigDecimal" defaultValue="0" description="应收金额" sumable="true">
+			<component type="regText" validator="^-?((\d{1,3}(,\d{3})*?)|\d+)(\.\d{1,2})?$" validatorText="必须为金额数字" maxFractionDigit="2" minFractionDigit="2" numberGrouping="true" style="align:right"/>
+			<queryCondition type="none"/>
+		</field>
+		<field name="PAYED_MONEY" javaType="bigDecimal" defaultValue="0" description="已收金额" sumable="true" style="color:green;font-weight: bold;">
+			<component type="readOnlyText" maxFractionDigit="2" minFractionDigit="2" numberGrouping="true" style="align:right"/>
+			<queryCondition type="none"/>
+		</field>
+		<field name="REMAINED_MONEY" javaType="bigDecimal" defaultValue="0" description="剩余金额" sumable="true" style="color:red;font-weight: bold;">
+			<component type="readOnlyText" maxFractionDigit="2" minFractionDigit="2" numberGrouping="true" style="align:right"/>
+			<!--  subQuerySQL="t_1.ACTUAL_MONEY-t_1.PAYED_MONEY" -->
+			<queryCondition type="none"/>
+		</field>
+		<field name="USER_ID" javaType="string" description="业务员">
+			<component type="richSelect" referenceTable="SYSOPERATOR_VIEW" referenceField="ID" displayReferenceField="NAME"/>
+		</field>
+		<field name="PAY_STATUS" javaType="string" description="收款状态" defaultValue="0">
+			<component type="dropdown" readOnly="true">
+				<option displayName="未付清" value="0"/>
+				<option displayName="已付清" value="1"/>
+			</component>
+		</field>
+		<field name="CODE" javaType="string" description="回款登记号">
+			<component type="text" readOnly="true"/>
+			<listColumn width="150"/>
+		</field>
+		<field name="NAME" javaType="string" description="回款注释">
+			<component type="text"/>
+		</field>
+		<field name="REMARK" javaType="string" description="备注">
+			<component type="textArea" colspan="3" style="width:90%;height:35"/>
+			<queryCondition type="none"/>
+			<listColumn noquery="true"/>
+		</field>
+		<field name="CREATE_USER_ID" javaType="string" description="创建人">
+			<component type="richSelect" quickQueryConditionField="NAME" referenceTable="SYSOPERATOR_VIEW" referenceField="ID" displayReferenceField="NAME" readOnly="true"/>
+			<listColumn noquery="false" nowrap="true"/>
+		</field>
+		<field name="CREATE_TIME" javaType="date" dataStyle="yyyy-MM-dd HH:mm:ss" description="创建时间">
+			<component type="dateTime" readOnly="true"/>
+			<queryCondition type="none"/>
+			<listColumn noquery="false" width="150" nowrap="true"/>
+		</field>
+		<!--
+			<field name="PAY_REMARK" javaType="string" description="付款备注">
+				<component type="textArea" colspan="3" style="width:560;height:75"/>
+				<queryCondition type="none"/>
+				<listColumn noquery="true"/>
+			</field>
+			-->
+		<!--
+			// interceptorOnItemClick in edit page
+			/* ********************************************
+			function interceptorOnItemClick(item, checked) {
+				if (item.name=='affirm') {
+				}
+				 return true;
+			}
+			******************************************** */
+			-->
+		<PageView showField="Not(IsEmpty(Get(ID)))" methodName="exp" parameter="{queryByForm.do?__opr_data=T_CRM_PAYMENT_DTL&amp;HEADID=}&amp;Get(ID)" hostPage="edit" type="userdefined" title="收款明细"/>
+		<!-- -->
+		<queryFilter>
+			<pluggedFilter methodName="exp" parameter="If(InRole({manager},{boss}),{},{ and t_1.CREATE_USER_ID='}&amp;GetUser({ID})&amp;{'})"/>
+			<!--
+				<pluggedFilter><![CDATA[
+				   and t_1.TYPE_='1' and t_1.AVAILABLE='1'
+			   ]]></pluggedFilter>
+			   -->
+		</queryFilter>
+		<!-- -->
+		<javascript hostPage="ids"><![CDATA[
+		]]></javascript>
+		<javascript hostPage="edit"><![CDATA[
+			// src="project/crm/PAYMENT_EDIT.js"
+			// alert($('ACTUAL_MONEY').value + ' ' + $('PAYED_MONEY').value);
+			// $('REMAINED_MONEY').value = replaceAll($('ACTUAL_MONEY').value, ',', '') * 1
+			// - replaceAll($('PAYED_MONEY').value, ',', '') * 1;
+			// alert($('REMAINED_MONEY').value);
+			function init(flag) {
+				try {
+					if (typeof(comboField_CUSTOMER_ID)!='undefined') {
+						if (!flag)
+							comboField_CONTRACT_ID.clearValue();
+						if (comboField_CUSTOMER_ID.getValue() == '') {
+							comboField_CONTRACT_ID.setFilter('&CUSTOMER_ID=-1');
+						} else {
+							comboField_CONTRACT_ID.setFilter('&CUSTOMER_ID='
+									+ comboField_CUSTOMER_ID.getValue());
+						}
+						comboField_CONTRACT_ID.onQuery();
+						comboField_CONTRACT_ID.store.load();
+					}
+				} catch (E) {
+					alert('changefilter.ERROR:'+E.message);
+					throw E;
+				}
+			}
+			Hy_UIFunction['changefilter'] = function(_paras) {
+				init(false);
+			}
+			init(true);
+		]]></javascript>
+		<pluginInterceptor methodName="setDefaultValByHeadID" pluginName="edit" parameter="CUSTOMER_ID,T_DIC_ORGA,ID,CUSTOMER_ID,NAME,__CUSTOMER_ID__NAME"/>
+		<!-- -->
+		<pluginInterceptor methodName="exp" parameter="If(GetDouble(PAYED_MONEY)>0,DisFields(ACTUAL_MONEY),true)" pluginName="edit" type="after"/>
+		<!-- <pluginInterceptor methodName="exp" parameter="DisFields(ACTUAL_MONEY,CODE,REMARK)" pluginName="edit" type="after"/> -->
+		<pluginInterceptor methodName="exp" parameter="If(GetDouble(ACTUAL_MONEY)=0,SetValue(ACTUAL_MONEY,GetValue(HT_MONEY)),true)" pluginName="save" type="before"/>
+		<pluginInterceptor methodName="exp" parameter="Set(CODE,Datetime({yyyy-MM-dd HH:mm:ss}))" pluginName="save" type="before"/>
+		<pluginInterceptor methodName="setCreateUser" parameter="CREATE_USER_ID" pluginName="save"/>
+		<pluginInterceptor methodName="setCreateTime" parameter="CREATE_TIME,yyyy-MM-dd HH:mm:ss" pluginName="save"/>
+		<pluginInterceptor methodName="onlyByMaker" parameter="CREATE_USER_ID" pluginName="save"/>
+		<pluginInterceptor methodName="onlyByMaker" parameter="CREATE_USER_ID" pluginName="delete"/>
+		<pluginInterceptor className="haiyan.crm.interceptor.CRMPaymentInterceptor" methodName="updateMoneyOnSave" parameter="" pluginName="save" type="after"/>
+		<!--
+			<Operation queryPageAdd="true" queryPageDelete="true"/>
+			-->
+	</table>
+</Haiyan>

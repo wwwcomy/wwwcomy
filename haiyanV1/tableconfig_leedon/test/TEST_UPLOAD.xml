@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Haiyan xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../haiyan.xsd">
+	<table name="TEST_UPLOAD" description="TEST_UPLOAD" realTable="TEST_UPLOAD" colspan="6">
+		<id name="ID" description="ID" javaType="string">
+			<component type="hidden" readOnly="false" url="#"/>
+		</id>
+		<field name="CODE" description="CODE" javaType="string" lazyLoad="false">
+			<component type="text" readOnly="false"/>
+			<queryCondition type="blurMatching"/>
+		</field>
+		<field name="CDATE" description="CDATE" javaType="date" lazyLoad="false">
+			<component type="date" readOnly="false"/>
+			<queryCondition type="region"/>
+		</field>
+		<field name="IMAGES" description="图像" displayOnly="false" javaType="string" lazyLoad="false">
+			<component type="image" readOnly="false" style="imageWidth:80;imageHeight:80;quality:0.5;" action="change({上传了图片})"/>
+			<queryCondition type="blurMatching"/>
+		</field>
+		<field name="IMAGE1" description="多选图片" displayOnly="false" javaType="string" lazyLoad="false" nullAllowed="true" length="250">
+			<component type="multiImage" readOnly="false" style="imageWidth:80;imageHeight:80;quality:0.5;"/>
+			<queryCondition type="blurMatching"/>
+		</field>
+		<field name="FILES" description="文件" displayOnly="false" javaType="string" lazyLoad="false">
+			<component type="file" readOnly="false" />
+			<queryCondition type="blurMatching"/>
+		</field>
+		<field name="FILES1" description="多选文件" displayOnly="false" javaType="string" lazyLoad="false" nullAllowed="true" length="250">
+			<component type="multiFile" readOnly="false" />
+			<queryCondition type="blurMatching" />
+		</field>
+		<field name="WFBILLID" description="WFBILLID" javaType="string" >
+			<component type="hidden" readOnly="false" />
+			<queryCondition type="equal" />
+		</field>
+		<!-- -->
+		<PageView methodName="midexp" parameter="Get(IMAGES)" title="midexp" 
+				  showField="true" img="refresh" hostPage="edit" type="userdefined"/>
+		<!-- -->
+		<queryFilter>
+			<pluggedFilter><![CDATA[ and 1=1 ]]></pluggedFilter>
+			<pluggedFilter methodName="exp" parameter="{ and 1=1 }"/>
+		</queryFilter>
+		<!-- -->
+		<javascript hostPage="edit"><![CDATA[
+	    onItemClick = onItemClick.createInterceptor(function(item, checked) {
+			if (item.name=='testjs') { // 'close'
+				alert('自定义脚本拦截');
+				return false;
+			}
+	    });
+	    onEditItemClick = onEditItemClick.createInterceptor(function(item, checked) {
+			if (item.name=='testjs') { // 'close'
+				alert('自定义脚本拦截');
+				return false;
+			}
+	    });
+	    Haiyan.ui.IUIFunction.prototype.change = function(paras) {
+			alert(paras[0]);
+	    }
+		]]></javascript>
+		<!-- -->
+		<pluginInterceptor methodName="exp" pluginName="testSQL" parameter="debug({1234567890------------------------------});" type="before"/>
+		
+		<pluginInterceptor methodName="exp" pluginName="save" parameter="If(IsEmpty(Get(WFBILLID)),true,DBSQL({update SYSWFBILL set BILLID='}&amp;Get(ID)&amp;{' where ID='}&amp;Get(WFBILLID)&amp;{'}))" type="after"/>
+		<!-- -->
+		<pluginOperation name="testui" oprName="测试action" hostPage="edit" tblevel="1" action="change({点击了按钮})"/>
+		<pluginOperation name="testjs" oprName="测试Js拦截" hostPage="edit" tblevel="2"/>
+		<pluginOperation name="testSQL" oprName="测试Bsh" hostPage="edit" tblevel="2" className="haiyan.plugin.BshPlugin"><![CDATA[
+			 context.getDBM().executeUpdate(form.getParameter("TESTSQL"),null);
+		]]></pluginOperation>
+		<pluginOperation name="test1" oprName="测试Exp" hostPage="edit" tblevel="2" className="haiyan.plugin.ExpPlugin"><![CDATA[
+			 debug({1234567890------------------------------});
+		]]></pluginOperation>
+		
+	</table>
+</Haiyan>

@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Haiyan xsi:noNamespaceSchemaLocation="../../haiyan.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<table description="用户桌面设置" name="SYSDESKHEAD" childTable="" childTableRefField="" parentTable="" parentTableRefField="">
+		<id name="ID" javaType="string">
+			<component type="hidden" url="#"/>
+		</id>
+		<field name="TABTITLE" javaType="string" description="标题" defaultValue="未命名">
+			<component type="text"/>
+		</field>
+		<field name="TABIMGID" javaType="string" description="图标名称">
+			<component type="richSelect" referenceTable="SYSRESOURCE" displayReferenceField="SHORTNAME" quickQueryConditionField="SHORTNAME" associatedFields="TABIMG" url="#"/>
+		</field>
+		<field name="TABIMG" javaType="string" description="图标文件">
+			<component type="readOnlyText" displayReferenceField="FILEURL" style="width:100%;" colspan="3"/>
+		</field>
+		<field name="TABURL" javaType="string" description="链接">
+			<component type="textArea" url="#" style="width:100%;" colspan="3"/>
+		</field>
+		<field name="TABPROCID" javaType="string" description="目录影射">
+			<component type="richSelect" referenceTable="SYSCATALOG" displayReferenceField="NAME" quickQueryConditionField="NAME" url="#"/>
+		</field>
+		<field name="TABWIDTH" javaType="string" description="宽度" defaultValue="70">
+			<component type="text" url="#"/>
+		</field>
+		<field name="TABBACK" javaType="string" description="背景" defaultValue="#FFFFFF">
+			<component type="text" url="#"/>
+		</field>
+		<field name="CREATOR" javaType="string" description="使用者">
+			<component type="richSelect" referenceTable="SYSOPERATOR" displayReferenceField="NAME" quickQueryConditionField="NAME" url="#"/>
+		</field>
+		<field name="CREATETIME" javaType="date" description="创建日期" dataStyle="yyyy-MM-dd">
+			<component type="date" readOnly="true"/>
+		</field>
+		<field name="USED" description="默认显示" javaType="string" defaultValue="1">
+			<component type="dropdown">
+				<option displayName="否" value="0"/>
+				<option displayName="是" value="1"/>
+			</component>
+		</field>
+		<!--
+		//Hy.DEFAULTTABMAX=1;
+		/*getTabItems=function() {
+			return [{
+				id:'home', name:'home',
+				title:prompt_desktop, iconCls:'desktop',
+				closable:false, frame:false, border:false,
+				autoHeight:true, autoScroll:true,
+				region:'center',
+				width:'100%', height:'100%',
+				enableTabScroll:true,
+				defaults:{autoScroll:true},
+				deferredRender:false,
+				resizeTabs:true,
+				margins:'0 0 0 0',
+				html:'<iframe id="center-panel" style="width:100%;height:100%;border:0;" frameborder="0" src="http://www.baidu.com">'
+			}];
+		}
+		//var tabItems=getTabItems();
+		//tabItems.slice();
+		mainTabs=new Ext.TabPanel({
+			region:'center',
+			id:'center-panel', name:'center-panel',
+			width:'100%', height:'100%',
+			minTabWidth:115, tabWidth:135,
+			enableTabScroll:true,
+			defaults:{autoScroll:true},
+			deferredRender:false, resizeTabs:true,
+			plugins:new Ext.ux.TabCloseMenu(),
+			activeTab:0, margins:'0 0 0 0',
+			items:getTabItems()
+		});*/
+		/*mainTabs={
+			region:'center',
+			id:'center-panel', name:'center-panel',
+			width:'100%', height:'100%',
+			//minTabWidth:115, //tabWidth:135,
+			enableTabScroll:true,
+			defaults:{autoScroll:true},
+			deferredRender:false,
+			resizeTabs:true,
+			//plugins:new Ext.ux.TabCloseMenu(), //activeTab:0,
+			margins:'0 0 0 0',
+			//items:getTabItems()
+			html:'<iframe id="center-panel" style="width:100%;height:100%;border:0;" frameborder="0" src="http://www.baidu.com">'
+		};*/
+		/*Ext.onReady(function() {
+			try {
+				var right=Hy_UIExp.eval('InRole({manager},{boss},{admin})');
+				if (eval(right)==false) {
+					Hy.setVisible('portal4',false);
+					Hy.setVisible('portal5',false);
+				}
+			} catch (E) {
+				throw Hy.error('sysdesk', E);
+			}
+		});*/
+		-->
+		<javascript hostPage="query" src="project/leedon/SYSDESKHEAD.js" parameter="If(InRole(user),false,true)"><![CDATA[
+		]]></javascript>
+		<!-- -->
+		<pluginInterceptor methodName="bsh" parameter="SYSDESKHEAD.bsh" pluginName="mainframe" type="before"/>
+		<!-- 
+		<pluginInterceptor methodName="exp" parameter="If(And(InRole(sp),Int(DBFindValue({select count(ID) from T_DIC_ORGA where USERID='}&amp;GetUser(ID)&amp;{'}))=0),Write({当前用户没有绑定供应商,请联系管理员.}),true)" pluginName="mainframe" type="before"/>
+		<pluginInterceptor methodName="exp" parameter="If(InRole(sp),SetUser(SUPPLIER,DBFindValue({select ID from T_DIC_ORGA where USERID='}&amp;GetUser(ID)&amp;{'}))+SetUser(__SUPPLIER__NAME,DBFindValue({select NAME from T_DIC_ORGA where USERID='}&amp;GetUser(ID)&amp;{'})),true)" pluginName="mainframe" type="before"/>
+		
+		<pluginInterceptor methodName="exp" parameter="startTask()" pluginName="mainframe"/>-->
+		<pluginInterceptor methodName="exp" parameter="setCreateTime(CREATETIME,{yyyy-MM-dd HH:mm:ss})" pluginName="save"/>
+		<!--
+		<pluginInterceptor className="haiyan.interceptor.CreateDeskInterceptor" methodName="createUrl" pluginName="save" type="after"/>
+		<pluginInterceptor className="haiyan.model.Interceptor" methodName="check" pluginName="mainframe" type="before"/>
+		<pluginInterceptor className="haiyan.model.Interceptor" methodName="check" pluginName="helper" type="before"/>
+		-->
+		<!-- -->
+		<Operation editOne="true"/>
+	</table>
+</Haiyan>

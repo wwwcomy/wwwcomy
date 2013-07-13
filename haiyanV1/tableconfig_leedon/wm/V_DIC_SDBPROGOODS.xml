@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Haiyan xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../haiyan.xsd">
+	<table name="V_DIC_SDBPROGOODS" description="网店订单商品" colspan="8">
+		<id name="PRODUCT_ID" description="SDB_PRODUCT_ID" javaType="string">
+			<component type="hidden" url=""/>
+		</id>
+		<field name="GOODS_ID" description="SDB_GOODS_ID" displayOnly="false" javaType="string" lazyLoad="false">
+			<component type="text" readOnly="true"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="WMCODE" description="WMCODE" displayOnly="false" javaType="string" lazyLoad="false">
+			<component type="text" readOnly="true"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		
+		<field name="STORE1" description="PROD库存量" displayOnly="false" javaType="bigDecimal" lazyLoad="false">
+			<component type="text" readOnly="true" maxFractionDigit="3" minFractionDigit="3" summaryType="sum" />
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="STORE2" description="GOODS库存量" displayOnly="false" javaType="bigDecimal" lazyLoad="false">
+			<component type="text" readOnly="true" maxFractionDigit="3" minFractionDigit="3"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		
+		<field name="IN_PRICE" description="IN_PRICE" displayOnly="false" javaType="string" lazyLoad="false">
+			<component type="text" readOnly="true"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="OUT_PRICE" description="OUT_PRICE" displayOnly="false" javaType="string" lazyLoad="false">
+			<component type="text" readOnly="false" colspan="1"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="P_21" description="P_21" displayOnly="false" javaType="string" lazyLoad="false">
+			<component type="text" readOnly="true" colspan="1"/>
+			<listColumn noedit="false" noquery="true"/>
+		</field>
+		<field name="PACKING_NUM" description="PACKING_NUM" displayOnly="false" javaType="string" lazyLoad="false">
+			<component type="text" readOnly="true"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="P_27" description="P_27" displayOnly="false" javaType="string" lazyLoad="false">
+			<component type="text" readOnly="true"/>
+			<listColumn noedit="false" noquery="true"/>
+		</field>
+		<field name="NAME" description="名称" displayOnly="false" javaType="string" lazyLoad="false">
+			<component type="text" readOnly="true"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="WEIGHTNUM" description="WEIGHTNUM" displayOnly="false" javaType="string" lazyLoad="false">
+			<component type="text" readOnly="true"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="P_24" description="P_24" displayOnly="false" javaType="string" lazyLoad="false">
+			<component type="text" readOnly="true"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="SPEC" description="SPEC" displayOnly="false" javaType="string" lazyLoad="false">
+			<component type="text" readOnly="true"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="MODEL" description="MODEL" displayOnly="false" javaType="string" lazyLoad="false">
+			<component type="text" readOnly="true"/>
+			<listColumn noedit="false" noquery="true"/>
+		</field>
+		<field name="BHZQ" description="BHZQ" displayOnly="false" javaType="string" lazyLoad="false">
+			<component type="text" readOnly="true"/>
+			<listColumn noedit="false" noquery="true"/>
+		</field>
+		<field name="BIG_PIC" description="BIG_PIC" displayOnly="false" javaType="string" lazyLoad="false">
+			<component type="text" readOnly="true"/>
+			<listColumn noedit="false" noquery="true"/>
+		</field>
+		<field name="TYPE_0" description="TYPE_0" displayOnly="false" javaType="string" lazyLoad="false">
+			<component type="text" readOnly="true"/>
+			<listColumn noedit="false" noquery="true"/>
+		</field>
+		<field name="TYPE_ID" description="TYPE_ID" displayOnly="false" javaType="string" lazyLoad="false">
+			<component type="text" readOnly="true"/>
+			<listColumn noedit="false" noquery="true"/>
+		</field>
+		<field name="COLOR" description="COLOR" displayOnly="false" javaType="string" lazyLoad="false">
+			<component type="text" readOnly="true"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="MARKETABLE" description="MARKETABLE" displayOnly="false" javaType="string" lazyLoad="false">
+			<component type="text" readOnly="true" colspan="7"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="MEMO" description="备注" displayOnly="false" javaType="string" lazyLoad="false">
+			<component type="fckeditor" readOnly="true" style="width:90%;height:480px;" colspan="7"/>
+			<queryCondition type="none"/>
+			<listColumn noedit="false" noquery="true" nowrap="true" />
+		</field>
+		<!--
+		<querySQL><![CDATA[
+			(select t_1.PRODUCT_ID, t_1.GOODS_ID,t_1.BN as WMCODE,t_1.COST as IN_PRICE,t_1.PRICE as OUT_PRICE,t_2.NAME,t_2.P_21,t_2.P_26 as PACKING_NUM,t_2.P_27,t_2.WEIGHT as WEIGHTNUM,t_2.P_22 as SPEC,t_2.P_1 as MODEL,t_2.P_2 as BHZQ,t_2.BIG_PIC,t_3.CAT_NAME as TYPE_0,t_2.INTRO as MEMO,t_2.MARKETABLE
+			from SDB_PRODUCTS t_1 left join SDB_GOODS t_2 on t_1.GOODS_ID=t_2.GOODS_ID left join SDB_GOODS_CAT t_3 on t_2.CAT_ID=t_3.CAT_ID
+			where t_1.disabled='false' and t_2.goods_type='normal' and t_2.disabled='false' and t_2.MARKETABLE='true')
+		]]></querySQL>
+		-->
+		<queryFilter>
+			<!-- 不能重复新增EDP商品 
+			where WAREHOUSE='}&amp;GetUser(WAREHOUSEID)&amp;{' and SUPPLIER='}&amp;GetUser(SUPPLIERID)&amp;{') or t_1.PRODUCT_ID='}&amp;GetPara(__filter)&amp;{')})"
+			-->
+			<pluggedFilter methodName="exp" parameter="If(IsEmpty(GetPara(__filter)),{},{ and (t_1.PRODUCT_ID not in (select distinct(SDB_PRODUCT_ID) from T_WM_PRO ) or t_1.PRODUCT_ID=}&amp;SQLSafe(GetPara(__filter))&amp;{)})"><![CDATA[
+			]]></pluggedFilter>
+		</queryFilter>
+		<!--t_1.disabled='false' and t_1.MARKETABLE='true' and  -->
+		<pluginInterceptor methodName="initDB" pluginName="initDB" type="before"><![CDATA[
+create or replace view V_DIC_SDBPROGOODS as 
+	(
+		select t_1.PRODUCT_ID,t_1.GOODS_ID,t_1.STORE as STORE1,t_1.BN as WMCODE,t_1.COST as IN_PRICE,t_1.PRICE as OUT_PRICE,t_1.MARKETABLE,
+		t_2.NAME,t_2.P_21,t_2.P_26 as PACKING_NUM,t_2.P_27,t_2.WEIGHT as WEIGHTNUM,t_2.P_22 as SPEC,t_2.P_2 as BHZQ,t_2.BIG_PIC,t_2.INTRO as MEMO,t_2.STORE as STORE2,t_2.P_1 as MODEL,t_2.TYPE_ID,t_2.P_24,
+		t_3.CAT_NAME as TYPE_0,t_1.PDT_DESC as COLOR
+		
+		from SDB_PRODUCTS t_1 left join SDB_GOODS t_2 on t_1.GOODS_ID=t_2.GOODS_ID left join SDB_GOODS_CAT t_3 on t_2.CAT_ID=t_3.CAT_ID
+		where t_2.goods_type='normal' and t_2.disabled='false'
+	)
+		]]></pluginInterceptor>
+		<Operation queryPageDelete="false" queryPageAdd="false" save="false" saveAndAdd="false" saveAndAddCopy="false"/>
+	</table>
+</Haiyan>

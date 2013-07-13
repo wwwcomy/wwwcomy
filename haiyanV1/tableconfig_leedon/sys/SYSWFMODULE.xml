@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Haiyan xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../haiyan.xsd">
+	<table name="SYSWFMODULE" description="流程设置">
+		<id name="ID" javaType="string">
+			<component type="hidden" url="#"/>
+		</id>
+		<field name="NAME" description="流程名称" javaType="string">
+			<component type="text"/>
+		</field>
+		<field name="CODE" description="流程编号" javaType="string">
+			<component type="text"/>
+		</field>
+		<field name="BILLID" description="使用表单" javaType="string">
+			<component type="richSelect" referenceTable="SYSBILLCONFIG" referenceField="ID" displayReferenceField="COMMENTS" associatedFields="BILLNAME,BILLCOMMENTS"/>
+		</field>
+		<field name="BILLNAME" description="表单名" javaType="string">
+			<component type="hidden" displayReferenceField="TABLENAME"/>
+		</field>
+		<field name="BILLCOMMENTS" description="表单注释" javaType="string">
+			<component type="hidden" displayReferenceField="COMMENTS"/>
+		</field>
+		<field name="WFBILLCLS" description="流程表单" javaType="string" defaultValue="haiyan.wfe.jbpm.WfeFormVar">
+			<component type="dropdown">
+				<option displayName="意见表单" value="haiyan.wfe.jbpm.WfeFormVar"/>
+				<option displayName="简述表单" value="haiyan.wfe.WfeSimpleForm"/>
+			</component>
+		</field>
+		<field name="WFTYPEID" description="流程分类" javaType="string">
+			<component type="richSelect" colspan="3" referenceTable="SYSWFTYPE" referenceField="ID" displayReferenceField="NAME"/>
+		</field>
+		<field name="MEMO" description="流程说明" javaType="string">
+			<component type="textArea" colspan="3" style="width:900;height:100;"/>
+			<queryCondition type="none"/>
+			<listColumn noquery="true"/>
+		</field>
+		<field name="VERSION" description="版本号" javaType="string">
+			<component type="readOnlyText"/>
+			<queryCondition type="none"/>
+		</field>
+		<field name="STATUS" description="流程状态" javaType="string" defaultValue="chugao">
+			<component type="dropdown" readOnly="true">
+				<option displayName="初稿" value="chugao"/>
+				<option displayName="已发布" value="fabu"/>
+				<option displayName="丢弃" value="diuqi"/>
+			</component>
+		</field>
+		<!-- BILLNAME -->
+		<!--
+			<PageView showField="*" title="基本信息" hostPage="edit" type="userdefined" className="haiyan.pageview.PageView" methodName="editPageView" parameter="edit.do?__opr_data={0}&amp;ID={1},SYSWMODULE,ID" img="leaf"/>http://localhost:8087/haiyan/save.do?__opr_data=SYSWFMODULE&__isNav=null&__procID=null#
+			-->
+		<PageView showField="*" title="流程设计" hostPage="edit" type="userdefined" className="haiyan.pageview.PageView" methodName="editPageView" parameter="wf_design.jsp?__tableName={0}&amp;__moduleID={1},BILLNAME,ID" img="page"/>
+		<PageView showField="*" title="查看表单设计" hostPage="edit" type="userdefined" className="haiyan.pageview.PageView" methodName="editPageView" parameter="edit.do?__opr_data=SYSBILLCONFIG&amp;ID={0},BILLID" img="page"/>
+		<!-- 列表编辑或快速编辑 -->
+		<javascript hostPage="ids"><![CDATA[
+			// var disign_count = 0;
+			function interceptorOnItemClick(item, checked) {
+				if (item.name=='disign') {
+					if (Hy.get('ID')==null || Hy.get('BILLNAME')==null)
+						return;
+					if (this.disign_count==0) {
+						window.open('wf_design.jsp?__tableName='+Hy.getValue('BILLNAME')+'&__moduleID='+Hy.getValue('CODE')+'#');
+						this.disign_count=1;
+					} else {
+						window.open('wf_design.jsp?__tableName='+Hy.getValue('BILLNAME')+'&__moduleID='+Hy.getValue('CODE'));
+						this.disign_count=0;
+					}
+					// addTab('wf_design.jsp?__tableName='+Hy.getValue('BILLNAME')+'&__moduleID='+Hy.getValue('CODE'),'流程图','lookupwf_iframe','todo');
+					// window.showModalDialog('wf_design.jsp?__tableName='+Hy.getValue('BILLNAME')+'&__moduleID='+Hy.getValue('CODE'),'',';dialogWidth=700px;dialogHeight=500px;resizable=yes;');
+					return false;
+				}
+				return true;
+			}	
+		]]></javascript>
+		<!--
+		<javascript hostPage="ids"><![CDATA[
+			// operation custom renderer function
+			function renderEditor(value, metaData, record) {
+				var vID = record.data.ID;
+				var vBILLNAME = record.data.BILLNAME;
+				var html = "";
+				// html += String.format('&nbsp;<img style="cursor:hand;" alt="查看" src="comResource/images/detail.png" ' + 
+				//	' width="16" height="16" onclick="javascript:showDetailFrame(\'{0}\', \'{1}\');"/>&nbsp;', 'queryOne.do?', vID);
+				html += String.format('&nbsp;<img style="cursor:hand;" alt="编辑" src="comResource/images/edit.png" ' + 
+					' width="16" height="16" onclick="javascript:showDetailFrame(\'{0}\', \'{1}\');"/>&nbsp;', 'edit.do?', vID);									   
+				html += String.format('&nbsp;<img style="cursor:hand;" alt="设计流程" src="comResource/images/haiyan/todo.png" ' + 
+					' width="16" height="16" onclick="javascript:showModuleFrame(\'{0}\', \'{1}\', \'{2}\');"/>&nbsp;', 'wf_design.jsp?', vID, vBILLNAME);
+				return html;
+			}
+		   function showModuleFrame(operation, ID, tableName) {
+			   // 
+			   var url = operation + '&__moduleID='+ID+'&__tableName='+tableName;
+			   showMyDialog(url);
+		   }
+		]]></javascript>
+		-->
+		<!-- 编辑界面 -->
+		<!--
+		<javascript hostPage="edit"><![CDATA[
+		]]></javascript>
+		-->
+		<pluginInterceptor className="haiyan.interceptor.WfInterceptor" methodName="deploy" parameter="" pluginName="deploy" type="before"/>
+		<pluginInterceptor methodName="exp" parameter="DBUpdate(Set(STATUS,&quot;fabu&quot;))" pluginName="deploy" type="after"/>
+		<!--
+		<pluginInterceptor  methodName="bsh" parameter="deploy" pluginName="deploy" type="before"><![CDATA[
+			// form.setParameter("STATUS","fabu");
+			dbm.executeUpdate(" update SYSWFMODULE set STATUS='fabu' where ID='"+form.getParameter("ID")+"'", null);
+		]]></pluginInterceptor>
+		-->
+		<!-- -->
+		<pluginInterceptor methodName="bsh" parameter="clear" pluginName="clear" type="before"><![CDATA[
+			import haiyan.wfe.jbpm.ext.WfeContext;
+			import com.haiyan.genmis.core.exception;
+			//if (true)
+			//	throw new Warning("不建议清除");
+			WfeContext.dropSchema();
+			WfeContext.createSchema();
+			context.getDBM().executeUpdate(" update SYSWFMODULE set STATUS='chugao' ", null);
+		]]></pluginInterceptor>
+		<pluginInterceptor methodName="bsh" parameter="clearBill" pluginName="clearBill" type="before"><![CDATA[
+			context.getDBM().executeUpdate(" update SYSWFBILL set PROC_INSTANCE_ID='' ", null);
+			context.getDBM().executeUpdate(" update SYSWFBILL set STATUS='chugao' ", null);
+		]]></pluginInterceptor>
+		<pluginOperation name="disign" oprName="设计" accessKey="D" hostPage="edit" tblevel="1"/>
+		<pluginOperation name="deploy" oprName="发布" accessKey="U" hostPage="edit" tblevel="1"/>
+		<pluginOperation name="clear" oprName="清空工作流" accessKey="D" hostPage="query" tblevel="1"/>
+		<pluginOperation name="clearBill" oprName="初始化审批单" accessKey="D" hostPage="query" tblevel="1"/>
+	</table>
+</Haiyan>

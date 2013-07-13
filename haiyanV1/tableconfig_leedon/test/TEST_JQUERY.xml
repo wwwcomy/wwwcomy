@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Haiyan xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../haiyan.xsd">
+	<table name="TEST_JQUERY" description="JQUERY测试" realTable="TEST_PANEL">
+		<id name="ID" description="ID" javaType="string">
+			<component type="hidden" readOnly="false" url="@"/>
+		</id>
+		<field name="CODE" description="编码" displayOnly="false" javaType="string" lazyLoad="false">
+			<component type="text" readOnly="false"/>
+			<queryCondition type="equal"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="NAME" description="名称" displayOnly="false" javaType="string" lazyLoad="false">
+			<component type="text" readOnly="false"/>
+			<queryCondition type="equal"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="TEST1" description="其他1" displayOnly="false" javaType="string" lazyLoad="false">
+			<component type="text" readOnly="false"/>
+			<queryCondition type="equal"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="TEST2" description="其他2" displayOnly="false" javaType="string" lazyLoad="false">
+			<component type="text" readOnly="false"/>
+			<queryCondition type="equal"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<!-- -->
+		<Panel name="root" description="ROOT">
+			<TabPanel name="tab1" description="基本组件" style="width:1000;height:220;">
+				<Panel name="pan1" description="pan1">
+					<Group name="g01" description="g01" collapse="true" fields="NAME CODE"/>
+					<!--
+					<Group name="g02" description="g02" collapse="false" fields="NAME"/>
+					-->
+				</Panel>
+				<Panel name="pan2" description="pan2">
+					<Group name="g03" description="g03" collapse="true" fields="TEST1 TEST2"/>
+				</Panel>
+			</TabPanel>
+		</Panel>
+		<!-- -->
+		<javascript hostPage="edit" src="test/TEST_JQUERY.js"><![CDATA[ // TestHyClass
+      ]]></javascript>
+		<!-- -->
+		<pluginInterceptor className="test.useful.ValidateExample" methodName="test" pluginName="EditPlugin" type="before"/>
+		<pluginInterceptor className="test.useful.ValidateExample" methodName="test" pluginName="EditPlugin2" type="before"/>
+		<pluginInterceptor className="test.useful.ValidateExample" methodName="test" pluginName="QueryPlugin" type="before"/>
+		<pluginInterceptor className="test.useful.ValidateExample" methodName="test" pluginName="QueryPlugin2" type="before"/>
+		<!--  style="color:red;size:20;" -->
+		<pluginOperation name="QueryPlugin" className="haiyan.plugin.TestPlugin" oprName="调试TestPlugin4Query" hostPage="query" tblevel="1"/>
+		<pluginOperation name="QueryPlugin2" oprName="调试QueryPlugin" hostPage="query"/>
+		<pluginOperation name="EditPlugin" className="haiyan.plugin.TestPlugin" oprName="调试TestPlugin4Edit" hostPage="edit" tblevel="1"/>
+		<pluginOperation name="EditPlugin2" oprName="调试EditPlugin" hostPage="edit"/>
+		<!-- -->
+		<pluginOperation name="close" className="haiyan.plugin.CommonPlugin" oprName="调试close" hostPage="edit"/>
+		<!-- -->
+		<!--
+		<role name="admin system">
+			<disComponent name="CODE"/>
+			<readOnlyComponent name="NAME"/>
+			<disOperation name="saveAndAdd close"/>
+		</role>
+		<role name="manager director">
+			<disComponent name="CODE"/>
+			<disOperation name="save saveAndAdd close"/>
+		</role>
+		-->
+		<!-- 
+		<Operation saveAndAdd="true"/>
+		-->
+		<doc>
+			<help><![CDATA[啦啦啦 測試JQUERY兼容]]></help>
+		</doc>
+	</table>
+</Haiyan>

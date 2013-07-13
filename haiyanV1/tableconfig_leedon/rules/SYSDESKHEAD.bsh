@@ -1,0 +1,50 @@
+try {
+	User user = context.getUser();
+	if (user==null) {
+	    throw new Warning(context.trans(100032, "session_overtime"));
+	}
+	String userID = user.getID();
+	// RightUtil.isUserInRole(User user, String roleCode) 
+	// RightUtil.isUserInRole(IRole[] roles, String roleCodes) user.getRoles()
+	//WareHouse
+	/*
+	Qbq3Form q = new MapForm();
+	q.set("USERID", userID);
+	pg = context.getDBM().findByForm("T_DIC_WAREHOUSE", q, 1, 1, context, null);
+	if(pg.getData(0)!=null){
+		String whID =pg.getData(0).get("ID");
+		if(!"".equals(whID)) {
+			Qbq3Form q1 = context.getDBM().findByPK("T_DIC_WAREHOUSE", whID, context);
+			if(q1!=null){
+				user.setProperty("WAREHOUSENAME", q1.get("NAME"));
+				user.setProperty("WAREHOUSEID", whID);
+			}
+		}
+	}
+	*/
+	//Supplier
+	if (RightUtil.isUserInRole(user, "sp,wm")) {
+		Filter f = new Filter(" and t_1.ID in (select SUPPLIER from T_DIC_SUPP_USER where USERID={0})", new Object[]{userID});
+		Page pg = context.getDBM().findByFilter("T_DIC_ORGA", f, 2, 1, context, null);
+		if (pg.getTotalRecordCount()==0) {
+			context.write("<script>alert('Error: 没有绑定供应商,请联系管理员');window.location.href='/haiyan'</script>");
+			throw new Warning("Error: No supplier binded");
+		}
+		if (pg.getTotalRecordCount()>1) {
+			context.write("<script>alert('Error: 账号已绑定多个供应商,请联系管理员');window.location.href='/haiyan'</script>");
+			throw new Warning("Error:Multi suppliers binded!");
+		}
+		Qbq3Form q2 = pg.getData(0);
+		if(q2!=null){
+			user.setProperty("SUPPLIERNAME", q2.get("NAME"));
+			user.setProperty("SUPPLIERID", q2.get("ID"));
+			user.setProperty("__SUPPLIER__NAME", q2.get("NAME"));
+			user.setProperty("SUPPLIER", q2.get("ID"));
+		}
+		context.setUser(user);
+		//throw new Warning(user.getProperty("SUPPLIER"));
+	}
+} catch(Throwable ex) {
+	DebugUtil.error(ex);
+	throw ex;
+} 

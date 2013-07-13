@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Haiyan xsi:noNamespaceSchemaLocation="../../haiyan.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<table description="Leedon contact" name="T_CRM_CONTACT" realTable="T_CRM_CONTACT">
+		<id name="ID" javaType="string">
+			<component type="hidden" url="@"/>
+		</id>
+		<field name="NAME" javaType="string" description="姓名" nullAllowed="false">
+			<component type="text"/>
+			<queryCondition type="blurMatching"/>
+			<listColumn noquery="false" width="200"/>
+		</field>
+		<field name="ENAME" javaType="string" description="英文名">
+			<component type="text"/>
+			<queryCondition type="blurMatching"/>
+			<listColumn noquery="false" width="200"/>
+		</field>
+		<field name="CUS_ID" description="对应客户" javaType="string">
+			<component type="richSelect" referenceTable="T_CRM_CLIENT" referenceField="ID" displayReferenceField="NAME" readOnly="true"/>
+		</field>
+		<field name="SEX" javaType="string" description="性别" nullAllowed="false">
+			<component type="dropdown">
+				<option displayName="男" value="1"/>
+				<option displayName="女" value="2"/>
+			</component>
+		</field>
+		<field name="PHONE" javaType="string" description="联系电话" nullAllowed="false">
+			<component type="text" validatorText="(格式:086-0XX-XXXXXXXX)"/>
+			<queryCondition type="blurMatching"/>
+			<listColumn noquery="false" nowrap="false"/>
+		</field>
+		<field name="MOBILE_PHONE" javaType="string" description="手机">
+			<component type="text" validatorText="(格式:0XX-XXXXXXXXXXX)"/>
+			<queryCondition type="blurMatching"/>
+			<listColumn noquery="false" nowrap="false"/>
+		</field>
+		<field name="MSN" javaType="string" description="MSN">
+			<component type="text" appendStr=""/>
+			<queryCondition type="none"/>
+			<listColumn noquery="true" nowrap="false"/>
+		</field>
+		<field name="QQ" javaType="string" description="QQ">
+			<component type="text" appendStr=""/>
+			<queryCondition type="none"/>
+			<listColumn noquery="true" nowrap="false"/>
+		</field>
+		<field name="DEPART" javaType="string" description="部门">
+			<component type="text"/>
+			<queryCondition type="none"/>
+			<listColumn noquery="true" nowrap="true"/>
+		</field>
+		<field name="POSITION_" javaType="string" description="职位">
+			<component type="text"/>
+			<queryCondition type="none"/>
+			<listColumn noquery="true" nowrap="true"/>
+		</field>
+		<field name="ADDRESS" javaType="string" description="地址">
+			<component type="text"/>
+			<queryCondition type="blurMatching"/>
+			<listColumn noquery="false" nowrap="false"/>
+		</field>
+		<field name="ZIPCODE" javaType="string" description="邮编">
+			<component type="text"/>
+			<queryCondition type="none"/>
+			<listColumn noquery="true" nowrap="false"/>
+		</field>
+		<field name="EMAIL" javaType="string" description="电子邮件">
+			<component type="text"/>
+			<queryCondition type="blurMatching"/>
+			<listColumn noquery="false" nowrap="false"/>
+		</field>
+		<field name="DELIVERYADDRESS" javaType="string" description="送货地址">
+			<component type="text"/>
+			<queryCondition type="none"/>
+			<listColumn noquery="true" nowrap="false"/>
+		</field>
+		<field name="CANDECIDE" javaType="string" description="决策权">
+			<component type="dropdown">
+				<option displayName="有" value="1"/>
+				<option displayName="无" value="0"/>
+			</component>
+			<queryCondition type="none"/>
+			<listColumn noquery="true" nowrap="true"/>
+		</field>
+		<!--		
+		<queryFilter>
+			<pluggedFilter methodName="exp" parameter="{ and t_1.CUS_ID='}&amp;GetPara(CUS_ID)&amp;{' }"/>
+		</queryFilter>
+		-->
+		<!-- -->
+		<!--
+		<pluginInterceptor methodName="exp" pluginName="edit" parameter="Set(CUS_ID,GetPara(CUS_ID))"/>
+		-->
+		<pluginInterceptor methodName="setDefaultValByHeadID" pluginName="edit" parameter="CUS_ID,T_CRM_CLIENT,ID,CUS_ID,NAME,__CUS_ID__NAME"/>
+	</table>
+</Haiyan>

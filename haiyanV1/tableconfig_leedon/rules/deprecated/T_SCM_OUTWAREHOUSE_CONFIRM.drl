@@ -1,0 +1,131 @@
+<rule-set declaration="" name="Tests assignment rules" xmlns="http://drools.org/rules"
+ xmlns:java="http://drools.org/semantics/java"
+ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+
+<java:import>com.tornado.genmis.core.*</java:import>
+<java:import>com.tornado.genmis.core.struts.*</java:import>
+<java:import>com.tornado.genmis.core.db.*</java:import>
+<java:import>com.tornado.genmis.core.exception.*</java:import>
+<java:import>com.tornado.genmis.core.paging.*</java:import>
+
+<java:import>com.tornado.genmis.castorgen.*</java:import>
+<java:import>com.tornado.genmis.util.*</java:import>
+
+<java:import>java.math.BigDecimal</java:import>
+<java:import>java.lang.String</java:import>  
+<java:import>java.util.*</java:import>  
+
+<application-data identifier="table">Table</application-data>
+<application-data identifier="tx">DBTransaction</application-data>
+<application-data identifier="context">SrvContext</application-data>
+
+<java:functions>
+   <!--
+   public static void getValue(String name) {
+   } 
+   public static void setValue(String name, String value) {
+   }
+   -->
+   //
+   public static void confirmBill(DBTransaction tx, GenMisForm form, Table table, SrvContext context) {
+       //
+       //System.out.println("STATUS=" + form.getParameter("STATUS"));
+       if (form.getParameter("STATUS").equals("2"))
+           throw new Warning("不能重复进行此操作!");
+       if (!form.getParameter("STATUS").equals("1"))
+           throw new Warning("只能确认上报后的出库单!");
+       //
+       try {
+           //
+           DBManager dbm = new DBManagerFactory().getDBManager(tx);
+           //
+           if (StringUtil.isBlankOrNull(form.getParameter("WAREWHEREOUT"))) {
+               throw new Warning("该出库单没有定义货位!");
+           }  
+           //判断该仓库的货位是否有空间
+           Table hwTable = ConfigUtil.getTable("T_DIC_WAREWHERE");
+           GenMisForm hwForm = dbm.findByPK(hwTable, new BigDecimal(form.getParameter("WAREWHEREOUT")), context);
+           //if (StringUtil.isBlankOrNull(hwForm.getParameter("CAPACITY"))) {
+               //throw new Warning("该出库货位没有定义单位容量!");
+           //}  
+           //该货位的最大单位容量
+           //int minCapacity = new Integer(hwForm.getParameter("CAPACITY").replaceAll(",","")).intValue();
+           //
+           GenMisForm qform = new MapForm();
+           qform.setParameter("HEADID", form.getParameter("ID"));
+           Table dTable = ConfigUtil.getTable(table.getChildTable());
+           Page dPage = dbm.findByForm(dTable, qform, 5000, 1, context);
+           if (dPage.getTotalRecordCount()==0) {
+               throw new Warning("该出库单没有明细数据!");
+           }
+           //更新库存
+           Iterator iter = dPage.getData().iterator();
+           while (iter.hasNext()) {
+               GenMisForm dForm = (GenMisForm)iter.next();
+               //
+               if (StringUtil.isBlankOrNull(dForm.getParameter("MERCHANDISE"))) {
+                   throw new Warning("该出库单明细中没有货品数据!");
+               }
+	           //获取货品单位容量
+	           String hpRstSql = "select CAPACITY,NAME from T_DIC_MERCHANDISE where ID="
+	               + dForm.getParameter("MERCHANDISE");
+	           String[][] hpRst = DBUtil.getResultStrArray(hpRstSql, 2, tx.getConnection());
+	           if (hpRst.length==0) {
+	               throw new Warning("没有找到货品数据 ID=" + dForm.getParameter("MERCHANDISE"));
+	           }
+	           //if (StringUtil.isBlankOrNull(hpRst[0][0]) || new Double(hpRst[0][0].replaceAll(",","")).doubleValue()==0){
+                   //throw new Warning("货品 ["+ hpRst[0][1] + "] 没有定义单位容量!");
+               //}
+               //货品单位容量
+               //int perCapacity = new Integer(hpRst[0][0]).intValue();
+               //获取现有库存数量
+               String qtyRstSql = "select sum(QTY) from T_SCM_WAREANDWAREWHERE where WAREID="
+	               + dForm.getParameter("MERCHANDISE") + " and WAREWHEREID=" + hwForm.getParameter("ID") ;
+	           String[][] qtyRst = DBUtil.getResultStrArray(qtyRstSql, 1, tx.getConnection());
+	           //
+	           if (qtyRst.length==0 || StringUtil.isBlankOrNull(qtyRst[0][0])){
+                   throw new Warning("仓库货位 [" + hwForm.getParameter("NAME") + "] 中里没有货品 ["+ hpRst[0][1] + "] 的库存!");
+                   //插入新库存记录
+	           } else {
+	               //已经有初始化库存 现有量=库存货品数量-出库单货品数量
+	               int actQty = new Integer(qtyRst[0][0]).intValue() - new Integer(dForm.getParameter("NUM").replaceAll(",","")).intValue();
+	               //int actCapacity = actQty * perCapacity;
+	               //if (actCapacity &lt; minCapacity) {
+	                   //throw new Warning("该货位货品 ["+ hpRst[0][1] + "] 总数 " + actQty + "　* 单位容量　" + perCapacity
+	                     //+ " = 总容量 "　+ actCapacity + " 低于货位库存最低单位容量 " + minCapacity + " , 请重新选择分配!");
+	               if (actQty &lt; 0) {
+	                   throw new Warning("该单据出库货品 ["+ hpRst[0][1] + "] 总数 " + actQty 
+	                     + " 低于货位库存量 " + qtyRst[0][0] + ", 请重新选择分配!");
+	               }
+	               String updateSql = "update T_SCM_WAREANDWAREWHERE set QTY=" + actQty + ", LASTINDATE=SYSDATE where WAREID="
+	                   + dForm.getParameter("MERCHANDISE") + " and WAREWHEREID=" + hwForm.getParameter("ID") ;
+	               System.out.println(updateSql);
+	               DBUtil.executeUpdate(updateSql, tx.getConnection());
+	           }
+	           //dbm.modify(table, unform, context);
+           }
+	       //
+	       form.setParameter("STATUS","2");
+	       form.setParameter("CONFIRMER", context.getUser().getID());
+	       form.setParameter("CONFIRMDATE", DateUtil.getLastTime("yyyy-MM-dd hh:mm:ss"));
+	       //
+	   } catch (Exception ex) {
+	       throw new Warning(ex);
+	   }
+   }
+</java:functions>
+
+<rule name="JudgeStatus" salience="0">
+   <parameter identifier="form">
+      <java:class>
+         GenMisForm
+      </java:class>
+   </parameter>
+   <java:condition>form.getParameter("STATUS")!=null</java:condition>
+   <java:consequence>
+      //(注：drl文件内大、小于号要使用&gt;和&lt;表示) 
+      confirmBill(tx, form, table, context);
+   </java:consequence>
+</rule>
+
+</rule-set>

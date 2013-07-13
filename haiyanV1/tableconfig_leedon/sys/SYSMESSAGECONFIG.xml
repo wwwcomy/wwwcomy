@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Haiyan xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../haiyan.xsd">
+	<table name="SYSMESSAGECONFIG" description="消息">
+		<id name="ID" javaType="string"/>
+		<field name="CODE" description="编码" javaType="string">
+			<component type="text"/>
+		</field>
+		<field name="NAME" description="名称" javaType="string">
+			<component type="text"/>
+		</field>
+		<!-- 路径已经包含了权限组和用户 -->
+		<field name="ACCEPTROLEID" description="发送给权限组" javaType="string">
+			<component type="richSelect" referenceTable="ROLE" displayReferenceField="NAME"/>
+		</field>
+		<field name="ACCEPTDEPTID" description="发送给部门" javaType="string">
+			<component type="richSelect" referenceTable="SYSORGA" displayReferenceField="NAME"/>
+		</field>
+		<field name="ACCEPTORID" description="发送给某人" javaType="string">
+			<component type="richSelect" referenceTable="SYSOPERATOR" displayReferenceField="NAME"/>
+		</field>
+		<field name="NEXTPROCID" description="后流程" javaType="string">
+			<component type="richSelect" referenceTable="SYSPROCESS" displayReferenceField="NAME"/>
+		</field>
+		<field name="DEALLEVEL" description="处理级别" javaType="string">
+			<component type="text" url="edit.do@Q@_opr_data@E@SYSMESSAGE@A@ID@E@@F@" urlField="ID"/>
+		</field>
+		<field name="UPTIME" description="升级间隔时间" javaType="string">
+			<component type="text"/>
+		</field>
+		<field name="TYPE" description="分类" javaType="string">
+			<component type="text"/>
+		</field>
+		<field name="USED" description="是否使用" javaType="string" defaultValue="1">
+			<component type="dropdown">
+				<option displayName="否" value="0"/>
+				<option displayName="是" value="1"/>
+			</component>
+		</field>
+		<field name="MEMO" description="消息内容" javaType="string" length="250">
+			<component type="textArea"/>
+			<queryCondition type="none"/>
+		</field>
+		<!--	
+		<saveInterceptor className="haiyan.interceptor.FlowmisInterceptor" methodName="sClearMap"/>
+		<deleteInterceptor className="haiyan.interceptor.FlowmisInterceptor" methodName="dClearMap"/>
+		-->
+		<pluginInterceptor className="haiyan.interceptor.SaveInterceptor" methodName="complete" pluginName="save" type="after"/>
+		<pluginInterceptor className="haiyan.interceptor.DeleteInterceptor" methodName="complete" pluginName="delete" type="after"/>
+		<Operation saveAndAdd="false" saveAndAddCopy="false"/>
+	</table>
+</Haiyan>

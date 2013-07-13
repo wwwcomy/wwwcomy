@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Haiyan xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../haiyan.xsd">
+	<table name="T_DOC_ERROR" description="错误信息汇总表">
+		<id name="ID" javaType="string">
+			<component type="hidden" url="#"/>
+		</id>
+		<field name="ERRORCODE" description="错误代码" javaType="string">
+			<component type="text" colspan="3"/>
+		</field>
+		<field name="INFORMATION" description="错误信息" javaType="string">
+			<component type="textArea" style="width:890;height:200;"/>
+		</field>
+		<field name="MEMO" description="处理办法" javaType="string">
+			<component type="textArea" style="width:890;height:200;"/>
+		</field>
+		<field name="ISPAGE" description="是否页面报错" javaType="string" defaultValue="1">
+			<component type="dropdown">
+				<option displayName="否" value="0"/>
+				<option displayName="是" value="1"/>
+			</component>
+		</field>
+		<field name="MODULAR" description="模块" javaType="string">
+			<component type="richSelect" colspan="3" referenceTable="SYSCATALOG" displayReferenceField="NAME" referenceField="ID"/>
+		</field>
+		<pluginInterceptor methodName="complete" pluginName="save" type="after"/>
+		<pluginInterceptor methodName="complete" pluginName="delete" type="after"/>
+		<Operation queryPageQueryEdit="true"/>
+	</table>
+</Haiyan>

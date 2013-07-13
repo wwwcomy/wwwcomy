@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Haiyan xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../haiyan.xsd">
+	<table name="SYSUSERUSER" description="用户-管辖人员">
+		<id name="ID" javaType="string"/>
+		<field name="USERID" description="用户" javaType="string">
+			<component type="richSelect" referenceTable="SYSOPERATOR" displayReferenceField="NAME"/>
+		</field>
+		<field name="CHILDID" description="管辖人员" javaType="string">
+			<component type="richSelect" referenceTable="SYSOPERATOR_CHILDREN" displayReferenceField="NAME"/>
+		</field>
+		<Operation selectedHidden="true"/>
+	</table>
+</Haiyan>

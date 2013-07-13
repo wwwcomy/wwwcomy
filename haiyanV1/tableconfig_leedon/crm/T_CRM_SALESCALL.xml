@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Haiyan xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../haiyan.xsd">
+	<table name="T_CRM_SALESCALL" description="电话呼叫记录" realTable="T_OA_JOURNAL">
+		<id name="ID" description="ID" javaType="string">
+			<component type="hidden" readOnly="false" url="#"/>
+		</id>
+		<field name="AVAILABLE" description="是否有效" displayOnly="false" defaultValue="1" javaType="bigDecimal" lazyLoad="false">
+			<component type="dropdown" readOnly="false" colspan="1">
+				<option displayName="有效" value="1"/>
+				<option displayName="无效" value="0"/>
+			</component>
+			<queryCondition type="equal"/>
+			<listColumn noedit="false" noquery="true"/>
+		</field>
+		<field name="CONTACT_WAY" description="联系方式" displayOnly="false" javaType="bigDecimal" lazyLoad="false">
+			<component type="dropdown" readOnly="false">
+				<option displayName="电话" value="1"/>
+				<option displayName="传真" value="2"/>
+				<option displayName="EMAIL" value="3"/>
+				<option displayName="面谈" value="4"/>
+				<option displayName="其他" value="5"/>
+			</component>
+			<queryCondition type="equal"/>
+		</field>
+		<field name="CONTENT" description="工作内容" displayOnly="false" style="color:red;size:12;font-weight:bold;" javaType="string" lazyLoad="false">
+			<component type="textArea" readOnly="false" colspan="3"/>
+			<queryCondition type="equal"/>
+			<listColumn noedit="false" noquery="true"/>
+		</field>
+		<field name="CREATE_TIME" description="创建时间" displayOnly="false" dataStyle="yyyy-MM-dd" javaType="date" lazyLoad="false">
+			<component type="date" readOnly="true" colspan="1"/>
+			<queryCondition type="equal"/>
+			<listColumn noedit="false" noquery="true"/>
+		</field>
+		<field name="CREATE_USER_ID" description="创建人" displayOnly="false" javaType="string" lazyLoad="false">
+			<component type="richSelect" readOnly="true" colspan="1" quickQueryConditionField="NAME" displayReferenceField="NAME" referenceField="ID" referenceTable="SYSOPERATOR_VIEW"/>
+			<queryCondition type="equal"/>
+			<listColumn noedit="false" noquery="true"/>
+		</field>
+		<field name="CUSTOMER_ADDRESS" description="客户地址" displayOnly="false" javaType="string" lazyLoad="false">
+			<component type="readOnlyText" readOnly="false" displayReferenceField="ADDRESS"/>
+			<queryCondition type="equal"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="CUSTOMER_ID" description="相关客户" displayOnly="false" javaType="string" lazyLoad="false">
+			<component type="richSelect" readOnly="false" associatedFields="CUSTOMER_ADDRESS" quickQueryConditionField="NAME" displayReferenceField="NAME" referenceField="ID" referenceTable="T_DIC_ORGA"/>
+			<queryCondition type="equal"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="HFUSER_ID" description="拜访人员" displayOnly="false" javaType="string" lazyLoad="false">
+			<component type="text" readOnly="false" colspan="3"/>
+			<queryCondition type="equal"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="JDTYPE" description="项目阶段" displayOnly="false" javaType="bigDecimal" lazyLoad="false">
+			<component type="dropdown" readOnly="false">
+				<option displayName="合同" value="2"/>
+				<option displayName="呈现" value="1"/>
+				<option displayName="立项" value="0"/>
+			</component>
+			<queryCondition type="equal"/>
+		</field>
+		<field name="JOURNAL_ENDTIME" description="联系结束时间" displayOnly="false" dataStyle="yyyy-MM-dd hh:mm" javaType="date" lazyLoad="false">
+			<component type="date" readOnly="false" colspan="3"/>
+			<queryCondition type="equal"/>
+			<listColumn noedit="false" noquery="true"/>
+		</field>
+		<field name="JOURNAL_STARTTIME" description="联系开始时间" displayOnly="false" dataStyle="yyyy-MM-dd hh:mm" javaType="date" lazyLoad="false">
+			<component type="date" readOnly="false"/>
+			<queryCondition type="equal"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="MAININFO" description="主要信息" displayOnly="false" style="color:red;size:12;font-weight:bold;" javaType="string" lazyLoad="false">
+			<component type="textArea" readOnly="false" colspan="3"/>
+			<queryCondition type="equal"/>
+			<listColumn noedit="false" noquery="true"/>
+		</field>
+		<field name="NEXT_CONTACT_DATE" description="下次联系日期" displayOnly="false" dataStyle="yyyy-MM-dd" javaType="date" lazyLoad="false">
+			<component type="date" readOnly="false"/>
+			<queryCondition type="equal"/>
+		</field>
+		<field name="OTHER_PRODUCTID" description="需要其他产品" displayOnly="false" javaType="string" lazyLoad="true">
+			<component type="richSelect" readOnly="false" multipleSelect="true" quickQueryConditionField="NAME" displayReferenceField="NAME" referenceField="ID" referenceTable="T_DIC_PRODUCT"/>
+			<queryCondition type="equal"/>
+		</field>
+		<field name="PLANCONTENT" description="下步策略" displayOnly="false" javaType="string" lazyLoad="false">
+			<component type="textArea" readOnly="false" colspan="3"/>
+			<queryCondition type="equal"/>
+			<listColumn noedit="false" noquery="true"/>
+		</field>
+		<field name="PRODUCTID" description="需要产品" displayOnly="false" javaType="string" lazyLoad="false">
+			<component type="richSelect" readOnly="false" quickQueryConditionField="NAME" displayReferenceField="NAME" referenceField="ID" referenceTable="T_DIC_PRODUCT"/>
+			<queryCondition type="equal"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="TYPE" description="记录类型" displayOnly="false" javaType="bigDecimal" lazyLoad="false">
+			<component type="dropdown" readOnly="false">
+				<option displayName="电话销售记录" value="0"/>
+				<option displayName="客户联系记录" value="1"/>
+				<option displayName="代理联系记录" value="2"/>
+				<option displayName="项目开发记录" value="3"/>
+				<option displayName="项目维护记录" value="4"/>
+			</component>
+			<queryCondition type="equal"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<pluginInterceptor methodName="setCreateUser" parameter="CREATE_USER_ID" pluginName="save" type="before"/>
+		<pluginInterceptor methodName="onlyByMaker" parameter="CREATE_USER_ID" pluginName="delete" type="before"/>
+		<pluginInterceptor methodName="setCreateTime" parameter="CREATE_TIME,yyyy-MM-dd HH:mm:ss" pluginName="save" type="before"/>
+		<!-- -->
+		<pluginInterceptor className="haiyan.crm.interceptor.DICJournalInterceptor" methodName="generate" pluginName="save" type="after"/>
+		<!-- -->
+		<pluginInterceptor methodName="setDefaultValByHeadID" parameter="CUSTOMER_ID,T_DIC_ORGA,NAME,__CUSTOMER_ID__NAME" pluginName="testedit1" type="before"/>
+		<pluginInterceptor methodName="setDefaultByHead" parameter="CUSTOMER_ID,T_DIC_ORGA,CITY,CITY,此方法根据关联字段设置当前表默认值(当前默认值字段可以为字典), 可以读取头表中的字典数据并给当前默认值控件赋值,包含setDefaultValByHeadID的功能" pluginName="testedit2" type="before"/>
+		<pluginInterceptor methodName="setDefaultByHead" parameter="CUSTOMER_ID,T_DIC_ORGA,NAME,CUSTOMER_ID" pluginName="edit" type="before"/>
+	</table>
+</Haiyan>

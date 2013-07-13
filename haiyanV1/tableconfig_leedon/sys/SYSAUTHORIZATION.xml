@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- edited with XMLSPY v2004 rel. 2 U (http://www.xmlspy.com) by psa (boke) -->
+<Haiyan xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../haiyan.xsd">
+	<table name="SYSAUTHORIZATION" description="个人授权">
+		<id name="ID" javaType="string">
+			<component type="hidden" url="#"/>
+		</id>
+		<field name="ORGAID" description="单位" javaType="string">
+			<component type="hidden"/>
+		</field>
+		<field name="TARGETUSERID" description="被授权人" javaType="string">
+			<component type="richSelect" referenceTable="SYSOPERATOR" referenceField="ID" displayReferenceField="NAME"/>
+		</field>
+		<field name="BEGINDATE" description="开始日期" javaType="date">
+			<component type="date"/>
+		</field>
+		<field name="PLANENDDATE" description="计划结束日期" javaType="date">
+			<component type="date"/>
+		</field>
+		<field name="ISAUTOSTOP" description="到期是否自动终止" javaType="string" defaultValue="0">
+			<component type="dropdown">
+				<option displayName="是" value="1"/>
+				<option displayName="否" value="0"/>
+			</component>
+		</field>
+		<field name="USERID" description="授权人" javaType="string">
+			<component type="richSelect" readOnly="true" referenceTable="SYSOPERATOR" referenceField="ID" displayReferenceField="NAME"/>
+		</field>
+		<field name="USERORGID" javaType="string" description="授权人所属机构">
+			<component type="richSelect" readOnly="true" referenceTable="SYSORGA" referenceField="ID" displayReferenceField="NAME"/>
+		</field>
+		<field name="CREATEDATE" description="授权建立时间" javaType="date" dataStyle="yyyy-MM-dd hh:mm:ss">
+			<component type="date" readOnly="true"/>
+			<queryCondition type="displayOnly"/>
+		</field>
+		<field name="ENDDATE" description="实际结束时间" javaType="date" dataStyle="yyyy-MM-dd hh:mm:ss" createable="false" updateable="false">
+			<component type="date" readOnly="true"/>
+			<queryCondition type="displayOnly"/>
+		</field>
+		<field name="STATE" description="授权状态" javaType="string" defaultValue="0">
+			<component type="dropdown">
+				<option displayName="未授权" value="0"/>
+				<option displayName="授权中" value="1"/>
+				<option displayName="授权终止" value="2"/>
+			</component>
+		</field>
+		<field name="REMARK" description="备注" javaType="string">
+			<component type="textArea"/>
+		</field>
+		<!--
+		<saveInterceptor className="flomistwo.interceptor.SaveInterceptor" methodName="checkAuthorization"/>
+		-->
+		<pluginInterceptor className="haiyan.interceptor.AuthInterceptor" methodName="endAuth" pluginName="query"/>
+		<pluginInterceptor className="haiyan.interceptor.SaveInterceptor" methodName="setEditOrga" parameter="USERORGID,__USERORGID__NAME" pluginName="edit"/>
+		<pluginInterceptor className="haiyan.interceptor.SaveInterceptor" methodName="setCreateOrga" parameter="ORGAID,__ORGAID__NAME" pluginName="edit"/>
+		<pluginInterceptor className="haiyan.interceptor.SaveInterceptor" methodName="setCreateUser" parameter="USERID,__USERID__NAME" pluginName="edit"/>
+		<pluginInterceptor className="haiyan.interceptor.SaveInterceptor" methodName="setCreateTime" parameter="CREATEDATE,yyyy-MM-dd hh:mm:ss" pluginName="save"/>
+		<pluginInterceptor className="haiyan.interceptor.SaveInterceptor" methodName="complete" pluginName="save" type="after"/>
+		<pluginInterceptor className="haiyan.interceptor.DeleteInterceptor" methodName="complete" pluginName="delete" type="after"/>
+		<pluginOperation name="endAuth" oprName="终止" accessKey="E" className="haiyan.plugin.CommonDialogPlugin" hostPage="edit"/>
+		<Operation/>
+	</table>
+</Haiyan>

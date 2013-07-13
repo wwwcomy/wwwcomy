@@ -1,0 +1,120 @@
+<rule-set declaration="" name="Tests assignment rules" xmlns="http://drools.org/rules" xmlns:java="http://drools.org/semantics/java" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<java:import>com.haiyan.genmis.core.db.DBManager</java:import>
+	<java:import>com.haiyan.genmis.core.struts.GenMisForm</java:import>
+	<java:import>com.haiyan.genmis.core.SrvContext</java:import>
+	<java:import>com.haiyan.genmis.core.exception.Warning</java:import>
+	<java:import>com.haiyan.genmis.castorgen.Table</java:import>
+	<java:import>com.haiyan.genmis.util.StringUtil</java:import>
+	<java:import>haiyan.interceptor.DroolsInterceptor</java:import>
+	<java:import>java.lang.String</java:import>
+	
+	<application-data identifier="dbm">DBManager</application-data>
+	<application-data identifier="table">Table</application-data>
+	<application-data identifier="form">GenMisForm</application-data>
+	<application-data identifier="passNum">String</application-data>
+	<application-data identifier="backNum">String</application-data>
+	<application-data identifier="hasJump">String</application-data>
+	<application-data identifier="context">SrvContext</application-data>
+	
+	<java:functions>
+	   public static boolean bigThan(String passNum,String num) {
+	       if (Integer.valueOf(passNum).intValue() >= Integer.valueOf(num).intValue())
+	           return true;
+	       return false;
+	   }
+	</java:functions>
+	<rule name="prepared" salience="0">
+		<parameter identifier="dForm">
+			<java:class>GenMisForm</java:class>
+		</parameter>
+		<java:condition>"0".equals("0")</java:condition>
+		<java:consequence>
+		System.out.println(">TEST_PROC.drl prepared="+context.getParameter("__pluginName"));
+      if (StringUtil.isBlankOrNull(form.getParameter("STATUS"))) {
+          form.setParameter("STATUS","0");
+          drools.assertObject(form);
+      }
+      dbm.update(table,form,context,null);
+   </java:consequence>
+	</rule>
+	<rule name="0_start" salience="0">
+		<parameter identifier="dForm">
+			<java:class>GenMisForm</java:class>
+		</parameter>
+		<java:condition>context.getParameter("__pluginName").equals("back") &amp;&amp; form.getParameter("STATUS").equals("0")</java:condition>
+		<java:consequence>
+      System.out.println(">TEST_PROC.drl 0_start="+context.getParameter("__pluginName"));
+      throw new Warning("此单据已撤销成原始单");
+   </java:consequence>
+	</rule>
+	<rule name="0_to_1" salience="0">
+		<parameter identifier="dForm">
+			<java:class>GenMisForm</java:class>
+		</parameter>
+		<java:condition>context.getParameter("__pluginName").equals("commit") &amp;&amp; bigThan(passNum,"2") &amp;&amp; form.getParameter("STATUS").equals("0")</java:condition>
+		<java:consequence>
+      System.out.println(">TEST_PROC.drl 0_to_1="+context.getParameter("__pluginName"));
+      DroolsInterceptor.goTo(dbm, table, form, "STATUS,1", context);
+   </java:consequence>
+	</rule>
+	<rule name="1_to_2" salience="1">
+		<parameter identifier="dForm">
+			<java:class>GenMisForm</java:class>
+		</parameter>
+		<java:condition>context.getParameter("__pluginName").equals("commit") &amp;&amp; bigThan(passNum,"3") &amp;&amp; form.getParameter("STATUS").equals("1")</java:condition>
+		<java:consequence>
+      System.out.println(">TEST_PROC.drl 1_to_2="+context.getParameter("__pluginName"));
+      DroolsInterceptor.goTo(dbm, table, form, "STATUS,2", context);
+   </java:consequence>
+	</rule>
+	<rule name="2_to_3" salience="1">
+		<parameter identifier="dForm">
+			<java:class>GenMisForm</java:class>
+		</parameter>
+		<java:condition>context.getParameter("__pluginName").equals("commit") &amp;&amp; bigThan(passNum,"1") &amp;&amp; form.getParameter("STATUS").equals("2")</java:condition>
+		<java:consequence>
+      System.out.println(">TEST_PROC.drl 2_to_3="+context.getParameter("__pluginName"));
+      DroolsInterceptor.goTo(dbm, table, form, "STATUS,3", context);
+   </java:consequence>
+	</rule>
+	<rule name="3_end" salience="1">
+		<parameter identifier="dForm">
+			<java:class>GenMisForm</java:class>
+		</parameter>
+		<java:condition>context.getParameter("__pluginName").equals("commit") &amp;&amp; form.getParameter("STATUS").equals("3")</java:condition>
+		<java:consequence>
+       System.out.println(">TEST_PROC.drl 3_end="+context.getParameter("__pluginName"));
+       throw new Warning("此单据已审批结束");
+   </java:consequence>
+	</rule>
+	<rule name="1_to_0" salience="1">
+		<parameter identifier="dForm">
+			<java:class>GenMisForm</java:class>
+		</parameter>
+		<java:condition>context.getParameter("__pluginName").equals("back") &amp;&amp; form.getParameter("STATUS").equals("1")</java:condition>
+		<java:consequence>
+      System.out.println(">TEST_PROC.drl 1_to_0="+context.getParameter("__pluginName"));
+      DroolsInterceptor.goTo(dbm, table, form, "STATUS,0", context);
+   </java:consequence>
+	</rule>
+	<rule name="2_to_1" salience="2">
+		<parameter identifier="dForm">
+			<java:class>GenMisForm</java:class>
+		</parameter>
+		<java:condition>context.getParameter("__pluginName").equals("back") &amp;&amp; form.getParameter("STATUS").equals("2")</java:condition>
+		<java:consequence>
+      System.out.println(">TEST_PROC.drl 2_to_1="+context.getParameter("__pluginName"));
+      DroolsInterceptor.goTo(dbm, table, form, "STATUS,1", context);
+   </java:consequence>
+	</rule>
+	<rule name="3_to_2" salience="2">
+		<parameter identifier="dForm">
+			<java:class>GenMisForm</java:class>
+		</parameter>
+		<java:condition>context.getParameter("__pluginName").equals("back") &amp;&amp; form.getParameter("STATUS").equals("3")</java:condition>
+		<java:consequence>
+      System.out.println(">TEST_PROC.drl 3_to_2="+context.getParameter("__pluginName"));
+      DroolsInterceptor.goTo(dbm, table, form, "STATUS,2", context);
+   </java:consequence>
+	</rule>
+</rule-set>

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Haiyan xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../haiyan.xsd">
+	<table name="T_DIC_ITEM_UNIT" description="计量单位">
+		<id name="ID" javaType="string">
+			<component type="hidden" url="#"/>
+		</id>
+		<field name="CODE" description="编码" javaType="string">
+			<component type="text" colspan="3"/>
+		</field>
+		<field name="NAME" description="简称" javaType="string">
+			<component type="text" colspan="3"/>
+		</field>
+		<field name="FULL_NAME" description="全称" javaType="string">
+			<component type="text" colspan="3"/>
+		</field>
+		<field name="REMARK" description="备注" javaType="string">
+			<component type="textArea" colspan="3"/>
+		</field>
+		<field name="PACK_ID" description="产品包装" javaType="string">
+			<component type="text" colspan="3"/>
+		</field>
+		<pluginInterceptor className="haiyan.interceptor.SaveInterceptor" methodName="completeAlert" pluginName="save" type="after"/>
+		<pluginInterceptor className="haiyan.interceptor.DeleteInterceptor" methodName="complete" pluginName="delete" type="after"/>
+	</table>
+</Haiyan>

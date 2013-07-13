@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Haiyan xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../haiyan.xsd">
+	<table name="TEST_WFE" description="WFE测试表单">
+		<!-- colspan="4" -->
+		<id name="ID" description="ID" javaType="string">
+			<component type="hidden" url="@"/>
+		</id>
+		<field name="DISID" description="DISID" displayOnly="false" javaType="string" lazyLoad="false">
+			<component type="text" readOnly="true" subQuerySQL="select ID from TEST_WFE where ID=t_1.ID"/>
+			<queryCondition type="equal"/>
+		</field>
+		<field name="CODE" description="编码" displayOnly="false" javaType="string" lazyLoad="false">
+			<component type="text" readOnly="false"/>
+			<queryCondition type="equal"/>
+		</field>
+		<field name="NAME" description="名称" displayOnly="false" javaType="string" lazyLoad="false">
+			<component type="text" readOnly="false"/>
+			<queryCondition type="equal"/>
+		</field>
+		<field name="PROC_ID" description="流程实例" displayOnly="false" javaType="string" lazyLoad="false" length="128">
+			<component type="text" readOnly="true"/>
+			<queryCondition type="equal"/>
+		</field>
+		<!--
+		<pluginInterceptor methodName="initDB" pluginName="initDB" type="before"><![CDATA[
+create or replace view V_TEST_DBM as
+(select * from TEST_DBM)
+		]]></pluginInterceptor>
+		<pluginOperation name="testSQL" className="haiyan.plugin.BshPlugin" oprName="调试SQL" hostPage="edit" tblevel="1"><![CDATA[
+		    dbm.executeUpdate(form.getParameter("TESTSQL"),null);
+		]]></pluginOperation>
+		-->
+		<pluginInterceptor methodName="exp" parameter="DisBtns(delete,saveAndAdd,saveAndAddCopy);" pluginName="query" type="after"/>
+		<pluginInterceptor methodName="exp" parameter="DisBtns(delete,saveAndAdd,saveAndAddCopy)" pluginName="edit" type="after"/>
+		<pluginInterceptor methodName="exp" pluginName="auditStart" parameter="StartWfe({},{测试简易表单流程},{审批动作1},{},{})"/>
+		<pluginInterceptor methodName="exp" pluginName="auditStart2" parameter="StartWfe({},{测试简易表单流程},{审批动作2},{},{haiyan.wfe.WfeSimpleForm})"/>
+		<!-- -->
+		<pluginOperation name="auditStart" oprName="启动审批" hostPage="edit" tblevel="1" action="Alert(Get(ID))"/>
+		<pluginOperation name="auditStart2" oprName="启动审批2" hostPage="edit" tblevel="1" action="Alert(Get(ID))"/>
+	</table>
+</Haiyan>

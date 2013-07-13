@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Haiyan xsi:noNamespaceSchemaLocation="../../haiyan.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<table description="订单信息" name="T_CRM_ORDER" realTable="T_DIC_ORGA" colspan="6">
+		<id name="ID" javaType="string"/>
+		<field name="STATUS" javaType="bigDecimal" description="订单状态">
+			<!-- 注释:在创建订单记录时自动记录当前日期 ；是否必填:自己生成的，不用填； 背景色：无；是否可见：都可见； 
+     是否可编辑： 不可编辑； 是否可删除：不可； 是否是后台字段：是； -->
+			<component type="dropdown" readOnly="false">
+				<option displayName="初始状态" value="0"/>
+				<option displayName="生产中" value="1"/>
+				<option displayName="完成" value="2"/>
+				<option displayName="完帐" value="3"/>
+			</component>
+			<queryCondition type="none"/>
+			<listColumn noquery="false"/>
+		</field>
+		<field name="ST_DATE" javaType="date" description="创建日期" dataStyle="yyyy-MM-dd">
+			<!-- 注释:在创建订单记录时自动记录当前日期 ；是否必填:自己生成的，不用填； 背景色：无；是否可见：都可见； 
+     是否可编辑： 不可编辑； 是否可删除：不可； 是否是后台字段：是； -->
+			<component type="date" readOnly="true"/>
+			<queryCondition type="none"/>
+			<listColumn noquery="false"/>
+		</field>
+		<field name="PD_DATE" javaType="date" description="生产日期" dataStyle="yyyy-MM-dd">
+			<!-- 注释:在“订单状态”字段转变为“生产中”时，自动记录当前日期 ；是否必填:自己生成的，不用填； 背景色：无；是否可见：都可见； 
+     是否可编辑： 不可编辑； 是否可删除：不可； 是否是后台字段：是； -->
+			<component type="date" readOnly="true"/>
+			<queryCondition type="none"/>
+			<listColumn noquery="false"/>
+		</field>
+		<field name="END_DATE" javaType="date" description="完成日期" dataStyle="yyyy-MM-dd">
+			<!-- 注释:在“订单状态”字段转变为“完成”时，自动记录当前日期 ；是否必填:自己生成的，不用填； 背景色：无；是否可见：都可见； 
+     是否可编辑： 不可编辑； 是否可删除：不可； 是否是后台字段：是； -->
+			<component type="date" readOnly="true"/>
+			<queryCondition type="none"/>
+			<listColumn noquery="false"/>
+		</field>
+		<field name="ENDA_DATE" javaType="date" description="完账日期" dataStyle="yyyy-MM-dd">
+			<!-- 注释:在“订单状态”字段转变为“完账”时，自动记录当前日期 ；是否必填:自己生成的，不用填； 背景色：无；是否可见：都可见； 
+     是否可编辑： 不可编辑； 是否可删除：不可； 是否是后台字段：是； -->
+			<component type="date" readOnly="true"/>
+			<queryCondition type="none"/>
+			<listColumn noquery="false"/>
+		</field>
+		<field name="PONO" javaType="string" description="订单号">
+			<!-- 注释:在订单生成是自动生成，生成规则：“LD+日期+销售组用户名+序列”，比如"LD20101121FC2"代表10年11月21日销售"FC"创建的第2个订单；
+			是否必填:自己生成的，不用填； 背景色：无；是否可见：都可见； 
+     是否可编辑： 不可编辑； 是否可删除：不可； 是否是后台字段：否，前台字段； -->
+			<component type="text" readOnly="true"/>
+			<queryCondition type="none"/>
+			<listColumn noquery="false"/>
+		</field>
+		<field name="SUBP" javaType="bigDecimal" description="是否子订单">
+			<!-- 注释:
+				1.子订单的情况，用于一个订单的附件额外定制，或一个项目制的订单组合									
+				2.子订单本质上还是以个独立订单，只是要实现以下两个功能									
+				a. 在生成的时候，部分字段默认继承母订单(但可以后期修改）								
+				b. 在同样状态的情况下，子订单要紧靠着母订单排列在一起显示	
+			值的类型："是"或"否"	（二选一的框）, 默认为"否"								
+			是否必填:是； 背景色：无；是否可见：都可见； 
+     		是否可编辑： 可编辑； 是否可删除：不可； 是否是后台字段：否，前台字段； -->
+			<component type="dropdown" readOnly="false">
+				<option displayName="否" value="0"/>
+				<option displayName="是" value="1"/>
+			</component>
+			<queryCondition type="none"/>
+			<listColumn noquery="false"/>
+		</field>
+		<field name="ACCOUNT" javaType="string" description="开票账户">
+			<!-- 注释: 选择用公司的哪个抬头操作订单
+			值的类型："LDO","LDA","LIDA"	（三选一的框，今后可能会增加选择项）, 默认:无，必须用户勾选								
+			是否必填:是； 背景色：无；是否可见：都可见； 
+     		是否可编辑： 可编辑； 是否可删除：不可； 是否是后台字段：否，前台字段； -->
+			<component type="text" readOnly="false"/>
+			<queryCondition type="none"/>
+			<listColumn noquery="false"/>
+		</field>
+		<field name="COMP" javaType="string" description="公司名">
+			<!-- 注释: 
+			值的类型: 暂时先设成文本类型,将来要设置成号码链接到公司表； 默认:无								
+			是否必填:是； 背景色：无；是否可见：都可见； 
+     		是否可编辑： 可编辑； 是否可删除：不可； 是否是后台字段：否，前台字段； -->
+			<component type="text" readOnly="false"/>
+			<queryCondition type="none"/>
+			<listColumn noquery="false"/>
+		</field>
+		<field name="CLIENT" javaType="string" description="客户名">
+			<!-- 注释: 
+			值的类型: 暂时先设成文本类型,将来要设置成号码链接到客户表； 默认:无									
+			是否必填:是； 背景色：无；是否可见：都可见； 
+     		是否可编辑： 可编辑； 是否可删除：不可； 是否是后台字段：否，前台字段； -->
+			<component type="text" readOnly="false"/>
+			<queryCondition type="none"/>
+			<listColumn noquery="false"/>
+		</field>
+		<field name="PRODT" javaType="string" description="产品名">
+			<!-- 注释: 选择用公司的哪个抬头操作订单
+			值的类型：文本, 默认:无，必须用户填								
+			是否必填:是； 背景色：无；是否可见：都可见； 
+     		是否可编辑： 可编辑； 是否可删除：不可； 是否是后台字段：否，前台字段； -->
+			<component type="text" readOnly="false"/>
+			<queryCondition type="none"/>
+			<listColumn noquery="false"/>
+		</field>
+		<field name="EST_SALES" javaType="string" description="销售创立">
+			<!-- 注释:自动生成，值为登陆用户名，如“FC" ；是否必填:自己生成的，不用填； 背景色：无；是否可见：都可见； 
+    		 是否可编辑： 不可编辑； 是否可删除：不可； 是否是后台字段：否，前台字段； -->
+			<component type="text" readOnly="true"/>
+			<queryCondition type="none"/>
+			<listColumn noquery="false"/>
+		</field>
+		<field name="SALESP" javaType="string" description="销售执行" length="512" lazyLoad="true">
+			<!-- 注释:多选框，选择范围是所有销售类用户的登录名，如“FC" ； 默认:当前创建用户名	
+			是否必填:是； 背景色：无；是否可见：都可见； 
+    		 是否可编辑： 可编辑； 是否可删除：不可； 是否是后台字段：否，前台字段； -->
+			<component type="combo" referenceField="ID" referenceTable="SYSOPERATOR" displayReferenceField="CODE" multipleSelect="true" readOnly="false"/>
+			<queryCondition type="none"/>
+			<listColumn noquery="false"/>
+		</field>
+		<field name="SOURCEP" javaType="string" description="采购执行" length="512" lazyLoad="true">
+			<!-- 注释:多选框，选择范围是所有采购类用户的登录名，如“BP" ； 默认:无	
+			是否必填:是； 背景色：无；是否可见：都可见； 
+    		 是否可编辑： 可编辑； 是否可删除：不可； 是否是后台字段：否，前台字段； -->
+			<component type="combo" referenceField="ID" referenceTable="SYSOPERATOR" displayReferenceField="CODE" multipleSelect="true" readOnly="false"/>
+			<queryCondition type="none"/>
+			<listColumn noquery="false"/>
+		</field>
+		<!-- If(IsEmpty(Value(PONO)),SetValue(PONO,{LD}&amp;Date({yyyyMMdd})&amp;GetUser({CODE}),true) -->
+		<!-- 
+			Print({++++}&amp;User(CODE)&amp;{ }&amp;IsEmpty(Get(EST_SALES))&amp;{++++}); 
+			
+			If(IsEmpty(Get(SALESP)),Set(SALESP,User(CODE)));
+			If(IsEmpty(Get(SOURCEP)),Set(SOURCEP,User(CODE)));
+		-->
+		<pluginInterceptor methodName="exp" pluginName="save" parameter="
+			If(
+				 Get(STATUS)=0,
+					 If(IsEmpty(Get(ST_DATE)),Set(ST_DATE,Date({yyyy-MM-dd})))
+				,Get(STATUS)=1,
+					 Set(PD_DATE,Date({yyyy-MM-dd}))
+				,Get(STATUS)=2,
+					 Set(END_DATE,Date({yyyy-MM-dd}))
+				,Get(STATUS)=3,
+					 Set(ENDA_DATE,Date({yyyy-MM-dd}))
+			);
+			If(IsEmpty(Get(EST_SALES)),Set(EST_SALES,User(CODE)));
+			BSH({CreatePONO.bsh});
+		" type="before"/>
+	</table>
+</Haiyan>

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Haiyan xsi:noNamespaceSchemaLocation="../../haiyan.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<table description="登录信息" name="SYSLOGININFO">
+		<id name="ID" javaType="string"/>
+		<field name="LOGINTIME" javaType="date" description="登录时间" dataStyle="yyyy-MM-dd hh:mm:ss">
+			<component type="date"/>
+		</field>
+		<field name="LASTACTIVETIME" javaType="date" description="最近访问时间" dataStyle="yyyy-MM-dd hh:mm:ss">
+			<component type="date"/>
+		</field>
+		<field name="LOGINIP" javaType="string" description="登录IP">
+			<component type="readOnlyText"/>
+		</field>
+		<field name="LOGINUSER" javaType="string" description="登录人">
+			<component type="richSelect" referenceTable="SYSOPERATOR" referenceField="ID" displayReferenceField="NAME"/>
+		</field>
+		<field name="LOGINSTATUS" javaType="string" description="登录状态">
+			<component type="readOnlyText"/>
+		</field>
+		<field name="LOGINMEMO" javaType="string" description="备注">
+			<component type="readOnlyText"/>
+		</field>
+	</table>
+</Haiyan>

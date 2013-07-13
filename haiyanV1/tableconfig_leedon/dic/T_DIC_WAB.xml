@@ -1,0 +1,385 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Haiyan xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../haiyan.xsd">
+	<table name="T_DIC_WAB" description="联系人" realTable="T_DIC_WAB" >
+	<!-- parentTable="T_CRM_CUSTOMER" parentTableRefField="CUSTOMER_ID" -->
+		<id name="ID" javaType="string"/>
+		<field name="FIRST_NAME" description="姓名" javaType="string" style="color:#990000;size:12;font-weight:bold;">
+			<component type="text"/>
+			<queryCondition type="none"/>
+		</field>
+		<field name="LAST_NAME" description="称呼" javaType="string">
+			<component type="text"/>
+			<queryCondition type="none"/>
+		</field>
+		<field name="NAME" description="姓名|称呼" javaType="string">
+			<component type="readOnlyText"/>
+			<queryCondition type="none"/>
+			<listColumn noquery="true"/>
+		</field>
+		<!--
+		<field name="SEX" description="性别" javaType="string" defaultValue="1" style="color:red;size:12;font-weight:bold;">
+			<component type="dropdown" url="#">
+				<option displayName="男" value="1"/>
+				<option displayName="女" value="2"/>
+			</component>
+			<listColumn noquery="false"/>
+		</field>
+		-->
+		<field name="SEX_2" description="性别" javaType="string" defaultValue="男">
+			<component type="dropdown" url="#">
+				<option displayName="男" value="男"/>
+				<option displayName="女" value="女"/>
+			</component>
+			<listColumn noquery="false"/>
+		</field>
+		<field name="BIRTHDAY" description="生日" defaultValue="1980-01-01" javaType="string" dataStyle="yyyy-MM-dd">
+			<component type="date"/>
+			<queryCondition type="none"/>
+			<listColumn noquery="true"/>
+		</field>
+		<field name="MARRY" description="婚姻" defaultValue="0" javaType="string">
+			<component type="dropdown">
+				<option displayName="已婚" value="1"/>
+				<option displayName="未婚" value="0"/>
+			</component>
+			<queryCondition type="none"/>
+			<listColumn noquery="true"/>
+		</field>
+		<field name="INTEREST" description="喜好" javaType="string" defaultValue="未知">
+			<component type="text"/>
+			<queryCondition type="none"/>
+			<listColumn noquery="true"/>
+		</field>
+		<field name="EDUCATION" description="教育程度" defaultValue="4" javaType="string">
+			<component type="dropdown" colspan="3">
+				<option displayName="博士" value="6"/>
+				<option displayName="研究生" value="5"/>
+				<option displayName="大本" value="4"/>
+				<option displayName="大专" value="3"/>
+				<option displayName="高中" value="2"/>
+				<option displayName="中学" value="1"/>
+				<option displayName="小学" value="0"/>
+			</component>
+			<queryCondition type="none"/>
+			<listColumn noquery="true"/>
+		</field>
+		<field name="IMAGE" description="照片" javaType="string">
+			<component type="image" colspan="3" style="width:100;height:80;cursor:pointer;cursor:hand;"/>
+			<queryCondition type="none"/>
+			<listColumn noquery="true"/>
+		</field>
+		<field name="SPLIT1" javaType="string" description="联系信息" displayOnly="true" style="display:none;">
+			<component type="userDefined" className="haiyan.component.SplitComponent" parameter="POSITION_ID,PHONE,MOBILE_PHONE,EMAIL,HOMEPAGE,MSN,QQ,ADDRESS" colspan="4"/>
+			<queryCondition type="none"/>
+			<listColumn noquery="true"/>
+		</field>
+		<!--
+		<field name="COMPANY" description="公司名称" javaType="string">
+			<component type="text"/>
+		</field>
+		-->
+		<field name="PHONE" description="家庭电话" javaType="string">
+			<component type="text" className="haiyan.component.RegTextComponent" parameter="/^(\d{3}\-)?\d{8}$/^^^^^格式应该例如: 区号+号码 xxx-xxxxxxxx"/>
+			<queryCondition type="none"/>
+			<listColumn noquery="true"/>
+		</field>
+		<field name="MOBILE_PHONE" description="移动电话" javaType="string" length="14">
+			<component type="text" className="haiyan.component.RegTextComponent" parameter="/^(\d{3}\-)?\d{11}$/^^^^^格式应该例如: 区号+号码 xxx-13xxxxxxxxx"/>
+			<queryCondition type="none"/>
+			<listColumn noquery="true"/>
+			<!--  className="haiyan.component.NumComponent" -->
+		</field>
+		<field name="EMAIL" description="EMAIL" javaType="string">
+			<component type="text" className="haiyan.component.EmailComponent"/>
+			<queryCondition type="none"/>
+			<listColumn noquery="true"/>
+		</field>
+		<field name="HOMEPAGE" description="HOMEPAGE" javaType="string">
+			<component type="text"/>
+			<queryCondition type="none"/>
+			<listColumn noquery="true"/>
+		</field>
+		<field name="MSN" description="MSN" javaType="string">
+			<component type="text"/>
+			<queryCondition type="none"/>
+			<listColumn noquery="true"/>
+		</field>
+		<field name="QQ" description="QQ" javaType="string">
+			<component type="text" className="haiyan.component.NumComponent"/>
+			<queryCondition type="none"/>
+			<listColumn noquery="true"/>
+		</field>
+		<field name="ADDRESS" description="家庭地址" javaType="string">
+			<component type="text" colspan="3" style="width:560"/>
+			<queryCondition type="none"/>
+			<listColumn noquery="true"/>
+		</field>
+		<!-- -->
+		<field name="CUSTOMER_ID" javaType="string" description="公司名称">
+			<!--
+			<component type="richSelect" referenceTable="T_CRM_CUSTOMER_VIEW" referenceField="ID" displayReferenceField="NAME"/>
+			-->
+			<component type="richSelect" className="haiyan.component.PagingComboboxComponent" referenceTable="T_CRM_CUSTOMER_VIEW" referenceField="ID" displayReferenceField="NAME" quickQueryConditionField="NAME"/>
+		</field>
+		<!--
+		<field name="POSITION_" description="公司职务" javaType="string">
+			<component type="text"/>
+		</field>
+		-->
+		<field name="POSITION_ID" description="公司职务" javaType="string">
+			<component type="dropdown" referenceTable="T_DIC_COMMON_POSITION" referenceField="ID" displayReferenceField="NAME"/>
+		</field>
+		<field name="REMARK" description="备注" javaType="string">
+			<component type="textArea" colspan="3" style="width:100%;height:80;"/>
+			<queryCondition type="none"/>
+			<listColumn noquery="true"/>
+		</field>
+		<field name="SOURCE" description="来源" javaType="string">
+			<component type="hidden"/>
+		</field>
+		<!--
+		<field name="USER_ID" description="客户经理" javaType="string">
+			<component type="hidden" referenceTable="SYSOPERATOR" displayReferenceField="NAME" referenceField="ID"/>
+			<listColumn noquery="true"/>
+		</field>
+		<field name="USER_ID_1" description="项目经理" javaType="string">
+			<component type="hidden" referenceTable="SYSOPERATOR" displayReferenceField="NAME" referenceField="ID"/>
+			<listColumn noquery="true"/>
+		</field>
+		<field name="USER_ID_2" description="方案经理" javaType="string">
+			<component type="hidden" referenceTable="SYSOPERATOR" displayReferenceField="NAME" referenceField="ID"/>
+			<listColumn noquery="true"/>
+		</field>
+-->
+		<field name="AVAILABLE" description="是否离职" javaType="string" defaultValue="1">
+			<component type="dropdown">
+				<option displayName="是" value="0"/>
+				<option displayName="否" value="1"/>
+			</component>
+			<queryCondition type="none"/>
+			<listColumn noquery="true"/>
+		</field>
+		<field name="CREATE_USER_ID" description="创建人" javaType="string">
+			<component type="richSelect" referenceTable="SYSOPERATOR_VIEW" displayReferenceField="NAME" referenceField="ID" readOnly="true" url="#"/>
+			<queryCondition type="none"/>
+			<listColumn noquery="true"/>
+		</field>
+		<field name="CREATE_TIME" description="创建时间" javaType="date" dataStyle="yyyy-MM-dd hh:mm:ss">
+			<component type="date" readOnly="true"/>
+			<queryCondition type="none"/>
+			<listColumn noquery="true"/>
+		</field>
+		<queryFilter>
+			<pluggedFilter>
+               and 
+               (
+                   (
+                   t_1.CREATE_USER_ID=@USERID@ 
+                   or 
+                   (t_1.CREATE_USER_ID in (select ID from SYSOPERATOR where ORGAID=@DEPTID@) and 6 in (@ROLEID@)) 
+                   or
+                   14 in (@ROLEID@)
+                   or
+                   1 in (@ROLEID@) 
+                   ) 
+               )
+	       </pluggedFilter>
+		</queryFilter>
+		<javascript hostPage="edit"><![CDATA[
+                function changeContent() {
+                    // if (T_DIC_WAB.LAST_NAME.value.length==0) {
+                        // return;
+                    // }                    
+                    var firstName = T_DIC_WAB.FIRST_NAME.value;
+                    var lastName = T_DIC_WAB.LAST_NAME.value;
+                    T_DIC_WAB.NAME.value = firstName + " " + lastName;
+                }
+                if (T_DIC_WAB.FIRST_NAME != null && T_DIC_WAB.LAST_NAME != null) {
+	            		T_DIC_WAB.FIRST_NAME.onpropertychange=getInterceptedFunc(T_DIC_WAB.FIRST_NAME.onpropertychange, function() {changeContent();});
+	            		T_DIC_WAB.LAST_NAME.onpropertychange=getInterceptedFunc(T_DIC_WAB.LAST_NAME.onpropertychange, function() {changeContent();});
+	            }
+            ]]></javascript>
+		<!--
+		<pluginOperation name="Import" oprName="从Outlook导入" accessKey="I" 
+	        className="haiyan.plugin.CommonNocheckPlugin" hostPage="query"/>
+		<pluginInterceptor className="haiyan.interceptor.ETLInterceptor"
+			methodName="trans" parameter="T_DIC_WAB_IMP" pluginName="Import"/>
+	    -->
+		<pluginInterceptor className="haiyan.interceptor.ETLInterceptor" methodName="trans" parameter="T_DIC_WAB_EXP" pluginName="Export"/>
+		<!--
+		<pluginInterceptor className="haiyan.interceptor.SaveInterceptor" methodName="setCreateUser" parameter="USER_ID,__USER_ID__NAME" pluginName="save"/>
+		-->
+		<pluginInterceptor methodName="complete" pluginName="delete" type="after"/>
+		<pluginInterceptor methodName="complete" pluginName="save" type="after"/>
+		<pluginInterceptor methodName="setDefaultValByHead" pluginName="edit" parameter="CUSTOMER_ID,__CUSTOMER_ID__NAME,ID"/>
+		<pluginInterceptor methodName="setCreateUser" parameter="CREATE_USER_ID" pluginName="save"/>
+		<pluginInterceptor methodName="setCreateTime" parameter="CREATE_TIME,yyyy-MM-dd HH:mm:ss" pluginName="save"/>
+		<pluginOperation name="Export" oprName="导出到Outlook" accessKey="E" className="haiyan.plugin.CommonDialogPlugin" hostPage="query"/>
+		<Operation queryPageQueryEdit="false" customizeColumns="true"/>
+	</table>
+	<table name="T_DIC_WAB_VIEW" description="联系人" realTable="T_DIC_WAB" >
+	<!-- parentTable="T_CRM_CUSTOMER" parentTableRefField="CUSTOMER_ID" -->
+		<id name="ID" javaType="string"/>
+		<field name="FIRST_NAME" description="姓名" javaType="string" style="color:#990000;size:12;font-weight:bold;">
+			<component type="text"/>
+			<listColumn noquery="true"/>
+		</field>
+		<field name="LAST_NAME" description="称呼" javaType="string" style="color:#990000;size:12;font-weight:bold;">
+			<component type="text"/>
+			<listColumn noquery="true"/>
+		</field>
+		<field name="NAME" description="姓名|称呼" javaType="string">
+			<component type="readOnlyText"/>
+		</field>
+		<!--
+		<field name="SEX" description="性别" javaType="string" defaultValue="1" style="color:red;size:12;font-weight:bold;">
+			<component type="dropdown" url="#">
+				<option displayName="男" value="1"/>
+				<option displayName="女" value="2"/>
+			</component>
+			<listColumn noquery="false"/>
+		</field>
+		-->
+		<field name="SEX_2" description="性别" javaType="string">
+			<component type="dropdown" url="#">
+				<option displayName="男" value="男"/>
+				<option displayName="女" value="女"/>
+			</component>
+			<listColumn noquery="false"/>
+		</field>
+		<field name="BIRTHDAY" description="生日" javaType="string">
+			<component type="text"/>
+		</field>
+		<field name="MARRY" description="婚姻" javaType="string">
+			<component type="dropdown">
+				<option displayName="已婚" value="1"/>
+				<option displayName="未婚" value="0"/>
+			</component>
+		</field>
+		<field name="INTEREST" description="喜好" javaType="string">
+			<component type="text"/>
+		</field>
+		<field name="EDUCATION" description="教育程度" javaType="string">
+			<component type="dropdown" colspan="3">
+				<option displayName="其他" value="7"/>
+				<option displayName="博士" value="6"/>
+				<option displayName="研究生" value="5"/>
+				<option displayName="大本" value="4"/>
+				<option displayName="大专" value="3"/>
+				<option displayName="高中" value="2"/>
+				<option displayName="中学" value="1"/>
+				<option displayName="小学" value="0"/>
+			</component>
+		</field>
+		<field name="IMAGE" description="头像" javaType="string">
+			<component type="image" colspan="3" style="width:100;height:80;cursor:pointer;cursor:hand;"/>
+			<queryCondition type="none"/>
+			<listColumn noquery="true"/>
+		</field>
+		<field name="SPLIT1" javaType="string" description="联系信息" displayOnly="true" style="display:none;">
+			<component type="userDefined" className="haiyan.component.SplitComponent" parameter="POSITION_,PHONE,MOBILE_PHONE,EMAIL,HOMEPAGE,MSN,QQ,ADDRESS" colspan="4"/>
+			<queryCondition type="none"/>
+			<listColumn noquery="true"/>
+		</field>
+		<field name="PHONE" description="家庭电话" javaType="string">
+			<component type="text"/>
+		</field>
+		<field name="MOBILE_PHONE" description="移动电话" javaType="string">
+			<component type="text"/>
+		</field>
+		<field name="EMAIL" description="EMAIL" javaType="string">
+			<component type="text"/>
+		</field>
+		<field name="HOMEPAGE" description="HOMEPAGE" javaType="string">
+			<component type="text"/>
+			<queryCondition type="none"/>
+			<listColumn noquery="true"/>
+		</field>
+		<field name="MSN" description="MSN" javaType="string">
+			<component type="text"/>
+			<queryCondition type="none"/>
+			<listColumn noquery="true"/>
+		</field>
+		<field name="QQ" description="QQ" javaType="string">
+			<component type="text"/>
+			<queryCondition type="none"/>
+			<listColumn noquery="true"/>
+		</field>
+		<field name="ADDRESS" description="联系地址" javaType="string">
+			<component type="text" colspan="3" style="width:560"/>
+			<queryCondition type="none"/>
+			<listColumn noquery="true"/>
+		</field>
+		<!-- -->
+		<field name="CUSTOMER_ID" javaType="string" description="公司名称">
+			<!--
+			<component type="richSelect" referenceTable="T_CRM_CUSTOMER_VIEW" referenceField="ID" displayReferenceField="NAME"/>
+			-->
+			<component type="richSelect" className="haiyan.component.PagingComboboxComponent" referenceTable="T_CRM_CUSTOMER_VIEW" referenceField="ID" displayReferenceField="NAME" quickQueryConditionField="NAME,CODE"/>
+		</field>
+		<field name="POSITION_" description="公司职务" javaType="string">
+			<component type="text"/>
+		</field>
+		<field name="REMARK" description="备注" javaType="string">
+			<component type="textArea" colspan="3" style="width:100%;height:80;"/>
+			<queryCondition type="none"/>
+			<listColumn noquery="true"/>
+		</field>
+		<field name="SOURCE" description="来源" javaType="string">
+			<component type="hidden"/>
+		</field>
+		<field name="AVAILABLE" description="是否在用" javaType="string" defaultValue="1">
+			<component type="dropdown">
+				<option displayName="是" value="1"/>
+				<option displayName="否" value="0"/>
+			</component>
+			<listColumn noquery="true"/>
+		</field>
+		<field name="CREATE_USER_ID" description="创建人" javaType="string">
+			<component type="richSelect" referenceTable="SYSOPERATOR" displayReferenceField="NAME" referenceField="ID" readOnly="true" url="#"/>
+			<listColumn noquery="true"/>
+		</field>
+		<field name="CREATE_TIME" description="创建时间" javaType="date" dataStyle="yyyy-MM-dd hh:mm:ss">
+			<component type="date" readOnly="true"/>
+			<queryCondition type="none"/>
+			<listColumn noquery="true"/>
+		</field>
+		<queryFilter>
+			<pluggedFilter>
+               and 
+               (
+                   (
+                   t_1.CREATE_USER_ID=@USERID@ 
+                   or 
+                   (t_1.CREATE_USER_ID in (select ID from SYSOPERATOR where ORGAID=@DEPTID@) and 6 in (@ROLEID@)) 
+                   or
+                   14 in (@ROLEID@)
+                   or
+                   1 in (@ROLEID@) 
+                   ) 
+               )
+	       		</pluggedFilter>
+		</queryFilter>
+		<javascript hostPage="edit"><![CDATA[
+                function changeContent() {                
+                    var firstName = T_DIC_WAB_VIEW.FIRST_NAME.value;
+                    var lastName = T_DIC_WAB_VIEW.LAST_NAME.value;
+                    if (T_DIC_WAB_VIEW.NAME!=null)
+                        T_DIC_WAB_VIEW.NAME.value = firstName + " " + lastName;
+                }
+                if (T_DIC_WAB_VIEW.FIRST_NAME != null && T_DIC_WAB_VIEW.LAST_NAME != null) {
+	            		T_DIC_WAB_VIEW.FIRST_NAME.onpropertychange=getInterceptedFunc(T_DIC_WAB_VIEW.FIRST_NAME.onpropertychange, function() {changeContent();});
+	            		T_DIC_WAB_VIEW.LAST_NAME.onpropertychange=getInterceptedFunc(T_DIC_WAB_VIEW.LAST_NAME.onpropertychange, function() {changeContent();});
+	             }
+            ]]></javascript>
+		<pluginInterceptor methodName="completeAlert" pluginName="delete" type="after"/>
+		<pluginInterceptor methodName="completeAlert" pluginName="save" type="after"/>
+		<pluginInterceptor methodName="onlyByMaker" parameter="CREATE_USER_ID" pluginName="delete"/>
+		<pluginInterceptor methodName="onlyByMaker" parameter="CREATE_USER_ID" pluginName="save"/>
+		<pluginInterceptor methodName="setCreateUser" parameter="CREATE_USER_ID" pluginName="save"/>
+		<pluginInterceptor methodName="setCreateTime" parameter="CREATE_TIME,yyyy-MM-dd HH:mm:ss" pluginName="save"/>
+		<pluginInterceptor className="haiyan.interceptor.ETLInterceptor" methodName="trans" parameter="T_DIC_WAB_EXP" pluginName="Export"/>
+		<pluginOperation name="Export" oprName="导出到Outlook" accessKey="E" className="haiyan.plugin.CommonDialogPlugin" hostPage="query"/>
+		<Operation saveAndAdd="true" queryPageQueryEdit="false" customizeColumns="false"/>
+	</table>
+</Haiyan>

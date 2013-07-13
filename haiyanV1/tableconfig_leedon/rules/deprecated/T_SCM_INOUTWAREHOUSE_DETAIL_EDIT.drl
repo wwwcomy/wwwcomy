@@ -1,0 +1,45 @@
+<rule-set declaration="" name="Tests assignment rules" xmlns="http://drools.org/rules" xmlns:java="http://drools.org/semantics/java" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<java:import>com.tornado.genmis.core.db.DBManager</java:import>
+	<java:import>com.tornado.genmis.core.struts.GenMisForm</java:import>
+	<java:import>com.tornado.genmis.core.SrvContext</java:import>
+	<java:import>com.tornado.genmis.core.right.User</java:import>
+	<java:import>com.tornado.genmis.core.exception.*</java:import>
+	<java:import>com.tornado.genmis.castorgen.Table</java:import>
+	<java:import>com.tornado.genmis.util.StringUtil</java:import>
+	<java:import>com.tornado.genmis.util.ConfigUtil</java:import>
+	<java:import>tornado.interceptor.DroolsInterceptor</java:import>
+	<java:import>java.lang.String</java:import>
+	<application-data identifier="dbm">DBManager</application-data>
+	<application-data identifier="table">Table</application-data>
+	<application-data identifier="context">SrvContext</application-data>
+
+	<java:functions>
+		<!--
+   public static void getValue(String name) {
+   } 
+   public static void setValue(String name, String value) {
+   }
+   -->
+	</java:functions>
+	<rule name="JudgeStatus" salience="0">
+		<parameter identifier="form">
+			<java:class>
+         GenMisForm
+      </java:class>
+		</parameter>
+		<java:condition>!StringUtil.isBlankOrNull(form.getParameter("HEADID"))</java:condition>
+		<java:consequence>
+      Table hTable = ConfigUtil.getTable(table.getName().replaceAll("_DETAIL",""));
+      GenMisForm hform = dbm.findByPK(hTable, form.getParameter("HEADID"), context,null);
+      if (StringUtil.isBlankOrNull(hform.getParameter("ID"))) {
+          throw new Warning("无法获取单据头表数据!");
+      }
+      if (hform.getParameter("STATUS").equals("2")) {
+          throw new Warning("不能修改确认的单据明细数据!");
+      }
+      if (hform.getParameter("STATUS").equals("3")) {
+          throw new Warning("不能修改作废的单据明细数据!");
+      }
+   </java:consequence>
+	</rule>
+</rule-set>

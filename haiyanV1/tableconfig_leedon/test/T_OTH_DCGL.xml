@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Haiyan xsi:noNamespaceSchemaLocation="../haiyan.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<table description="订餐单" name="T_OTH_DCGL" childTable="T_OTH_DCGL_DETAIL">
+		<id name="ID" javaType="string"/>
+		<field name="MEMO" javaType="string" description="备注">
+			<component type="textArea"/>
+		</field>
+		<field name="DCDATE" javaType="date" description="订餐时间">
+			<component type="date"/>
+		</field>
+		<field name="DCMONEY" javaType="string" description="订餐金额" displayOnly="true">
+			<component type="text" readOnly="true" subQuerySQL="(select sum(det.DCPRICE) from T_OTH_DCGL_DETAIL det where det.HEADID=t_1.ID)"/>
+		</field>
+		<field name="FKOPER" javaType="string" description="付款人">
+			<component type="richSelect" referenceTable="SYSOPERATOR" referenceField="ID" displayReferenceField="Name"/>
+		</field>
+		<field name="CODE" javaType="string" description="助记码">
+			<component type="text"/>
+		</field>
+	</table>
+</Haiyan>

@@ -1,0 +1,217 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Haiyan xsi:noNamespaceSchemaLocation="../../haiyan.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<table description="WM合同" name="T_WM_CONTRACT" realTable="T_WM_CONTRACT" colspan="6">
+		<id name="ID" javaType="string">
+			<component type="hidden" url=""/>
+		</id>
+		<field name="CODE" javaType="string" description="合同编码" style="color:gray;" nullAllowed="false">
+			<component type="text" readOnly="false"/>
+		</field>
+		<field name="NAME" javaType="string" description="合同标题">
+			<component type="text" colspan="1"/>
+		</field>
+		
+		<field name="CATEGORY" javaType="string" defaultValue="0" description="类型" nullAllowed="false">
+			<component type="dropdown" readOnly="false" colspan="6" action="if(
+			Get(CATEGORY)=1,
+			Set(SHIP_SUPPLIER,{EDP},__SHIP_SUPPLIER__NAME,{EDP},SHIP_SUPPLIERID,{EDP}),
+			Set(SHIP_SUPPLIER,{},__SHIP_SUPPLIER__NAME,{},SHIP_SUPPLIERID,{}) )">
+				<option displayName="产品合同" value="0"/>
+				<option displayName="返库单" value="1"/>
+			</component>
+			<listColumn noquery="true"/>
+		</field>
+		
+		<field name="SHIP_SUPPLIER" description="供应商" displayOnly="false" javaType="string" lazyLoad="false" nullAllowed="false">
+			<component type="combo" readOnly="false" displayReferenceField="NAME" associatedFields="SHIP_SUPPLIERID" referenceField="ID" referenceTable="T_DIC_SUPPLIER" />
+		<!--style="tpl:&lt;tpl for=&quot;.&quot;&gt;&lt;div  class=&quot;x-combo-list-item&quot;&gt;{Get(__SHIP_SUPPLIER__NAME)}_ 测试&lt;/div&gt;&lt;/tpl&gt;" -->
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="SHIP_SUPPLIERID" description="供应商编号" displayOnly="false" javaType="string" lazyLoad="false">
+			<component type="text" readOnly="true" displayReferenceField="CODE"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="IMAGE" description="扫描附件" displayOnly="false" javaType="string" length="255" lazyLoad="false">
+			<component type="image" readOnly="false" renderer="renderIMAGE" multipleSelect="true"  action="if(isEmpty(Get(IMAGE)),Set(STATUS,{0}),Set(STATUS,{1}))" />
+			<listColumn noedit="false" noquery="false" nowrap="true" width="165"/>
+		</field>
+		
+		<field name="WAREHOUSE" description="收货仓库" displayOnly="false" javaType="string" lazyLoad="false" nullAllowed="false">
+			<component type="richSelect" readOnly="true" colspan="1" displayReferenceField="NAME" referenceField="ID" referenceTable="T_DIC_WAREHOUSE"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="WHOWNER" description="库主" displayOnly="false" javaType="string" lazyLoad="false" nullAllowed="false">
+			<component type="richSelect" readOnly="true" colspan="1" displayReferenceField="NAME" referenceField="ID" referenceTable="SYSOPERATOR_COMBO"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="STATUS" description="状态" displayOnly="false" defaultValue="0" javaType="string" lazyLoad="false" nullAllowed="false">
+			<component type="dropdown" readOnly="true" colspan="6" >
+				<option displayName="操作中" value="0"/>
+				<option displayName="已完成" value="1"/>
+			</component>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="SUBGRID" javaType="string" description="商品列表" displayOnly="true">
+			<component type="grid" readOnly="false" colspan="6" style="width:980;height:550;" displayReferenceField="ID,HEADID,PRODUCTID,PRO_NAME,PRO_CODE,PRO_COUNT,PRO_COUNT2,PRO_COUNT3,CONTRACT_ID,PRO_WMCODE,PRO_PACKINGNUM,All_WEIGHTNUM,All_CAPACITYNUM,PRO_MEMO,IN_TIME,VALIDATE_DAY,CONTRACT_CODE" referenceField="HEADID" referenceTable="T_WM_CONPRODUCT" parameter="{&amp;HEADID=}&amp;If(IsEmpty(Get({ID})),-1,Get({ID}))" action="If(Get(BILL_STATUS)={audit},SetVisible({audit},false,{saveAll},false),SetVisible({audit},true,{saveAll},true))"/>
+			<!-- displayReferenceField="PRO_CODE"  action="alert(get(ID))" -->
+			<queryCondition type="none"/>
+			<listColumn noquery="true"/>
+		</field>
+		
+		<!--
+        <field name="CONTACT_IDS" javaType="string" description="相关文档" displayOnly="true">
+            <component type="richSelect" referenceTable="T_DIC_DOCUMENT" 
+              multipleSelect="true" mappingTable="CRM_CONTRACT_DOCMAP"
+              referenceField="ID" displayReferenceField="NAME"/>
+        </field>
+		<field name="CONTACT_PERSON" javaType="string" description="客户签约人" nullAllowed="false">
+			<component type="text"/>
+		</field>
+		<field name="CUSTOMER_ID" javaType="string" description="签约方客户">
+			<component type="richSelect" referenceTable="T_CRM_CUSTOMER_QY" referenceField="ID" displayReferenceField="NAME" associatedFields="CUS_CONTACTER,CUS_PHONE,CUS_MOBILE_PHONE,CUS_LEVEL_,CUS_TYPE_,CUS_ADDRESS"/>
+		</field>
+		<field name="CUS_CONTACTER" javaType="string" description="联系人" nullAllowed="false">
+			<component type="text" displayReferenceField="CONTACT_PERSON"/>
+			<queryCondition type="none"/>
+		</field>
+		<field name="CUS_PHONE" javaType="string" description="联系电话" nullAllowed="false">
+			<component type="text" displayReferenceField="PHONE" validatorText="(格式:086-0XX-XXXXXXXX)"/>
+			<queryCondition type="none"/>
+		</field>
+		<field name="CUS_MOBILE_PHONE" javaType="string" description="手机" nullAllowed="false">
+			<component type="text" displayReferenceField="MOBILE_PHONE" validatorText="(格式:0XX-XXXXXXXXXXX)"/>
+			<queryCondition type="none"/>
+		</field>
+		<field name="CUS_LEVEL_" javaType="string" description="客户等级" nullAllowed="false">
+			<component type="text" displayReferenceField="LEVEL_" colspan="3">
+				<option displayName="A级" value="A"/>
+				<option displayName="B级" value="B"/>
+				<option displayName="C级" value="C"/>
+				<option displayName="D级" value="D"/>
+				<option displayName="E级" value="E"/>
+			</component>
+			<listColumn noquery="true"/>
+		</field>
+		<field name="CUS_TYPE_" javaType="string" defaultValue="1" description="客户类型" nullAllowed="false">
+			<component type="dropdown" displayReferenceField="TYPE_" readOnly="true" colspan="3">
+				<option displayName="无" value="0"/>
+				<option displayName="客户" value="1"/>
+				<option displayName="代理" value="2"/>
+				<option displayName="供应商" value="3"/>
+			</component>
+			<listColumn noquery="true"/>
+		</field>
+		<field name="CUS_ADDRESS" javaType="string" description="客户地址" nullAllowed="false">
+			<component type="text" displayReferenceField="ADDRESS"/>
+			<queryCondition type="none"/>
+			<listColumn noquery="true"/>
+		</field>
+		<field name="ACTIVITY_ID" description="相关客户活动" javaType="string" displayOnly="false">
+			<component type="richSelect" referenceTable="T_CRM_ACTIVITY" referenceField="ID" displayReferenceField="NAME"/>
+			<queryCondition type="none"/>
+		</field>
+		<field name="WRITING_DATE" javaType="date" dataStyle="yyyy-MM-dd HH:mm:ss" description="合同签约时间">
+			<component type="dateTime"/>
+			<queryCondition type="none"/>
+			<listColumn noquery="true"/>
+		</field>
+		<field name="CONTRACT_DATE" javaType="date" dataStyle="yyyy-MM-dd HH:mm:ss" description="合同履约时间">
+			<component type="dateTime"/>
+			<queryCondition type="none"/>
+			<listColumn noquery="true"/>
+		</field>
+		<field name="FINISH_DATE" javaType="date" dataStyle="yyyy-MM-dd HH:mm:ss" description="合同到期时间">
+			<component type="dateTime"/>
+			<queryCondition type="none"/>
+			<listColumn noquery="true"/>
+		</field>
+		<field name="LIMIT_DATE" javaType="date" dataStyle="yyyy-MM-dd HH:mm:ss" description="回款截止时间">
+			<component type="dateTime"/>
+			<queryCondition type="none"/>
+			<listColumn noquery="true"/>
+		</field>
+		<field name="TYPE_" javaType="string" defaultValue="4" description="合同类型">
+			<component type="hidden" readOnly="true">
+				<option displayName="客户合同" value="1"/>
+				<option displayName="代理合同" value="2"/>
+				<option displayName="其他合同" value="3"/>
+			</component>
+			<listColumn noquery="true"/>
+		</field>
+		<field name="KX" javaType="string" defaultValue="0" description="收款状态">
+			<component type="dropdown" readOnly="false">
+				<option displayName="未结清" value="0"/>
+				<option displayName="已结清" value="1"/>
+			</component>
+			<listColumn noquery="true"/>
+		</field>
+		<field name="CREATE_USER_ID" javaType="string" description="创建人">
+			<component type="richSelect" referenceTable="SYSOPERATOR_VIEW" referenceField="ID" displayReferenceField="NAME" readOnly="true"/>
+			<queryCondition type="none"/>
+			<listColumn noquery="true"/>
+		</field>
+		<field name="CREATE_TIME" javaType="date" dataStyle="yyyy-MM-dd HH:mm:ss" description="创建时间">
+			<component type="dateTime" readOnly="true"/>
+			<queryCondition type="none"/>
+			<listColumn noquery="true"/>
+		</field>
+        -->
+		<!--
+		<queryFilter>
+			<pluggedFilter>
+               and 
+               (
+               t_1.TYPE=1 and 
+                   (
+                   t_1.CREATE_USER_ID=@USERID@ 
+                   or 
+                   t_1.USER_ID=@USERID@ 
+                   or 
+                   (t_1.CREATE_USER_ID in (select ID from SYSOPERATOR where ORGAID=@DEPTID@) and 6 in (@ROLEID@)) 
+                   or 
+                   1 in (@ROLEID@) 
+                   ) 
+               )
+	       </pluggedFilter>
+		</queryFilter>
+		-->
+		<javascript hostPage="query"><![CDATA[
+			function renderIMAGE(v) {
+				var vals=v.split(',');
+				var t='';
+				vals.each(function(_s, _index){
+					if (!Ext.isEmpty(_s))
+						t+='<img src="'+_s+'" style="width:30;height30;" width=30 height=30><a href="'+_s+'" target="_blank">图片'+_index+'</a></img>';
+				});
+				return t;
+			}
+		]]></javascript>
+		<javascript hostPage="edit" ><![CDATA[
+			Ext.onReady(function(){
+				var g;
+				g = Ext.getCmp('SUBGRID');
+				g.getStore().clearGrouping();
+				g.getColumnModel().setHidden(2,true);
+			});
+		]]></javascript>
+		<!--<pluginInterceptor methodName="setDefaultValByHeadID" pluginName="edit" parameter="CUSTOMER_ID,T_DIC_ORGA,ID,CUSTOMER_ID,NAME,AutoNaming__CUSTOMER_ID__NAME"/>-->
+		<!--
+		<pluginInterceptor methodName="exp" parameter="DisBtns(delete,save,saveAndAdd,saveAndAddCopy)" pluginName="query" type="after"/>
+		-->
+		<pluginInterceptor methodName="exp" parameter="DisBtns(delete,save,saveAndAdd,saveAndAddCopy)
+		+Set(WAREHOUSE,GetUser(WAREHOUSEID),__WAREHOUSE__NAME,GetUser(WAREHOUSENAME))
+			+Set(WHOWNER,GetUser(WHOWNERID),__WHOWNER__NAME,GetUser(WHOWNERNAME))" pluginName="edit" type="after"/>
+		<pluginInterceptor methodName="exp" parameter="Set(BILL_STATUS,{audit})+Set(AUDIT_USER_ID,User(ID))" pluginName="audit"/>
+		<!--
+		<pluginInterceptor className="hyiis.interceptor.SaveInterceptor" methodName="confirm" pluginName="Confirm" parameter="客户合同"/>
+		<pluginInterceptor className="hyiis.interceptor.SaveInterceptor" methodName="check" pluginName="save" parameter="CONFIRM_STATUS,1,已审核的-客户合同-内容不能修改!,NAME,CUSTOMER_ID,CONTACT_PERSON,DEPT_ID,USER_ID,WRITING_DATE,CONTRACT_DATE,LIMIT_DATE,FINISH_DATE,MONEY,CONTRACT_TYPE"/>
+		-->
+		<!--
+		<pluginOperation name="Confirm" oprName="审核" accessKey="C" hostPage="edit"/>
+		-->
+		<!-- -->
+		<pluginOperation name="saveAll" oprName="保存" hostPage="edit" tblevel="1" img="save" action="Save({},{},{SUBGRID})+brk()"/>
+		<!-- -->
+		<Operation queryPageDelete="false" save="false" saveAndAdd="false" saveAndAddCopy="false" />
+	</table>
+</Haiyan>

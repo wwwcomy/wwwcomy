@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Haiyan xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../haiyan.xsd">
+	<table name="T_MOBILE_EXP" description="公式测试" realTable="TEST_EXP">
+		<id name="ID" description="ID" javaType="string">
+			<component type="hidden" readOnly="false" url="#"/>
+		</id>
+		<field name="CODE" description="CODE" displayOnly="false" javaType="string" lazyLoad="false">
+			<component type="text" readOnly="false" action="change({触发CODE:}&amp;GetValue(CODE))"/>
+			<queryCondition type="equal"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="NAME" description="NAME" displayOnly="false" javaType="string" lazyLoad="false">
+			<component type="text" readOnly="false" action="change({触发NAME:}&amp;GetValue(NAME))"/>
+			<queryCondition type="equal"/>
+			<listColumn noedit="false" noquery="false" width="200"/>
+		</field>
+		<field name="MONEY" description="发送(MONEY)" displayOnly="false" javaType="bigDecimal" lazyLoad="false"
+			nullAllowed="false">
+			<component type="text" readOnly="false" action="change({触发MONEY:}&amp;GetValue(MONEY))"/>
+			<queryCondition type="equal"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="CDATE" description="时间" displayOnly="false" javaType="date" lazyLoad="false">
+			<component type="date" colspan="3" readOnly="false" action="change({触发CDATE:}&amp;GetValue(CDATE))"/>
+			<queryCondition type="equal"/>
+		</field>
+		<field name="TEST1" description="反馈" displayOnly="false" javaType="string" lazyLoad="false">
+			<component type="text" readOnly="false" action="change({触发TEST1:}&amp;GetValue(TEST1))"/>
+			<queryCondition type="equal"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="TEST2" description="下拉框" displayOnly="false" javaType="string" lazyLoad="false" defaultValue="true">
+			<component type="dropdown" action="change({触发TEST2:}&amp;GetValue(TEST2))">
+				<option displayName="否" value="false"/>
+				<option displayName="是" value="true"/>
+			</component>
+			<queryCondition type="equal"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="IMAGES" description="图像" displayOnly="false" javaType="string" lazyLoad="false">
+			<component type="image" readOnly="false" style="imageWidth:80;imageHeight:80;quality:0.5;" action="change({上传了图片})"/>
+			<queryCondition type="blurMatching"/>
+		</field>
+		<field name="DEPT" javaType="string" description="部门(单选树可选根)" style="color:#990000;size:12;font-weight:bold;" nullAllowed="false">
+			<component type="treeComb" action="debugJs(getValue(&quot;__DEPT__NAME&quot;));" referenceTable="SYSORGA_VIEW" referenceField="ID" displayReferenceField="NAME" quickQueryConditionField="NAME" style=""/>
+			<!-- associatedFields="PROVINCE_NAME,COUNTRY_NAME" -->
+			<listColumn noquery="false"/>
+		</field>
+		<field name="TEST_LOVMUL" javaType="string" description="LOV(多选列表)" style="color:#990000;size:12;font-weight:bold;" lazyLoad="true">
+			<component type="combo" action="debugJs(getValue(&quot;__TEST_LOVMUL__NAME&quot;));" referenceTable="SYSORGA_VIEW" referenceField="ID" displayReferenceField="NAME" quickQueryConditionField="NAME,CODE" multipleSelect="true" style=""/>
+			<queryCondition type="none"/>
+		</field>
+		<field name="TEST_PGCMUL" javaType="string" description="PGC(单选列表)" style="color:#990000;size:12;font-weight:bold;" lazyLoad="true">
+			<!-- mappingTable="" -->
+			<component type="combo" action="debugJs(getValue(&quot;__TEST_PGCMUL__NAME&quot;));" referenceTable="SYSORGA_VIEW" referenceField="ID" displayReferenceField="NAME" quickQueryConditionField="NAME,CODE" style=""/>
+			<queryCondition type="none"/>
+		</field>
+		<!-- fields="TEST1 TEST2" --><!-- style="width:1000;height:80;"
+		<Panel name="root" description="ROOT">
+			<Panel name="pan1" description="PAN1">
+				<Group name="g00" description="g00" collapse="false" fields="TEST1 TEST2 MONEY CDATE"/>
+			</Panel>
+			<Panel name="pan2" description="PAN2">
+				<TabPanel name="tab" description="tab">
+					<Panel name="tab1" description="tab1">
+						<Group name="g01" description="g01" collapse="true" fields="CODE"/>
+					</Panel>
+					<Panel name="tab2" description="tab2">
+						<Group name="g02" description="g02" collapse="true" fields="NAME"/>
+					</Panel>
+				</TabPanel>
+			</Panel>
+		</Panel> -->
+		<!-- 
+		<PageView methodName="exp" parameter="{http://www.baidu.com}" title="baidu" showField="true" img="refresh" hostPage="edit" type="userdefined"/> -->
+		<queryFilter>
+			<!-- <pluggedFilter><![CDATA[ and 1=1 ]]></pluggedFilter> -->
+			<pluggedFilter methodName="exp" parameter="{ and 1=1 }"/>
+		</queryFilter>
+		<!-- -->
+		<javascript hostPage="ids"><![CDATA[
+			Hy.UIFunction.debugjs=function(p) {
+				debugJs(p);
+			}
+		]]></javascript>
+		<javascript hostPage="edit"><![CDATA[
+			if (onItemClick.createInterceptor)
+			    onItemClick = onItemClick.createInterceptor(function(item, checked) {
+					if (item.name=='testjs') {
+						alert('Hello!');
+						return false;
+					}
+			    });
+			Hy.UIFunction.change = function(paras) {
+				debugJs(paras[0]);
+				return false;
+			}
+			Hy.UIFunction.debugjs=function(paras) {
+				debugJs(paras[0]);
+				return false;
+			}
+		]]></javascript>
+		<!-- 
+		<pluginInterceptor methodName="exp" pluginName="edit" parameter="alert({test})" type="after"/>
+		<pluginInterceptor className="test.useful.ValidateExample" methodName="test" pluginName="EditPlugin" type="before"/>
+		<pluginInterceptor className="test.useful.ValidateExample" methodName="test" pluginName="EditPlugin2" type="before"/>
+		<pluginInterceptor className="test.useful.ValidateExample" methodName="test" pluginName="QueryPlugin" type="before"/>
+		<pluginInterceptor className="test.useful.ValidateExample" methodName="test" pluginName="QueryPlugin2" type="before"/>
+		<pluginOperation name="QueryPlugin" className="haiyan.plugin.TestPlugin" oprName="后台调用ids+plugin" hostPage="query" tblevel="1"/>
+		<pluginOperation name="QueryPlugin2" oprName="后台调用ids" hostPage="query" tblevel="1"/>
+		<pluginOperation name="EditPlugin" className="haiyan.plugin.TestPlugin" oprName="后台调用form+plugin" hostPage="edit" tblevel="1"/>
+		<pluginOperation name="EditPlugin2" oprName="后台调用form" hostPage="edit" tblevel="1"/> 
+		-->
+		<pluginInterceptor methodName="exp" pluginName="testemail" parameter="SendEmail(Page(SYSOPERATOR,{and t_1.CODE like 'admin'}),{smtp.163.com},{suddenzhou@163.com},{xxxxx},{suddenzhou@163.com},{SendEmail测试},{txt},{www.google.com})" type="after"/>
+		<!-- -->
+		<pluginOperation name="testui" oprName="act" hostPage="edit" tblevel="1" action="and(change({点击了按钮testui}),false)"/>
+		<pluginOperation name="testbsh" oprName="bsh" hostPage="edit" tblevel="1" className="haiyan.plugin.BshPlugin"><![CDATA[
+			 form.set("TEST1", "用BSH设值");
+			 com.haiyan.genmis.core.GeneralCore core = new com.haiyan.genmis.core.GeneralCore(context);
+			 core.doSaveOne(context, table, form);
+		]]></pluginOperation>
+		<pluginOperation name="testexp" oprName="exp" hostPage="edit" tblevel="1" className="haiyan.plugin.ExpPlugin"><![CDATA[
+			 Rmb(GetDouble(MONEY));Println(GetVar(0));ToString();Println(GetVar(2));Set(NAME,GetVar(0));Set(TEST1,{用EXP设值});DBUpdate();
+		]]></pluginOperation>
+		<pluginOperation name="testrxtx" oprName="rxtx" hostPage="edit" tblevel="1" className="haiyan.plugin.ExpPlugin"><![CDATA[
+			 RXTX_Write(4,Get(MONEY));
+		]]></pluginOperation>
+		<pluginOperation name="testemail" oprName="email" hostPage="edit" tblevel="1"/>
+		<!--
+		<role name="admin system sourcing_manager">
+			<disComponent name="CODE"/>
+			<readOnlyComponent name="NAME"/>
+			<disOperation name="saveAndAdd close"/>
+		</role>
+		<role name="manager director">
+			<disComponent name="CODE"/>
+			<disOperation name="save saveAndAdd close"/>
+		</role>
+		-->
+		<!-- -->
+		<Operation saveAndAdd="false" saveAndAddCopy="false"/>
+	</table>
+</Haiyan>

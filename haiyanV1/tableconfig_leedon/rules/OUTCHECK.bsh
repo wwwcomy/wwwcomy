@@ -1,0 +1,46 @@
+void checkStock() {
+	String ID = form.get("ID");
+	String warehouseID = form.get("WAREHOUSE");
+	DBManager dbm = context.getDBM();
+	// 取所有明细中 每个库位,某种商品的移库数量之和, 检查是否大于库存数量
+	// 201209加入批次维度
+	String sql = "select PRO_WH,PRODUCTID,BATCH,sum(PRO_COUNT) from T_WM_OUTDETAIL where HEADID='"+ID+"' group by PRO_WH, PRODUCTID,BATCH";
+	String[][] rs = dbm.getResultStrArray(sql, 4, null);
+	if(rs.length>0) {
+		int l = rs.length;
+		for(int i = 0; i<l;i++){
+			String WHID = rs[i][0];
+			String proID = rs[i][1];
+			String batch = rs[i][2];
+			String proCount = rs[i][3];
+			//throw new Warning(WHID+","+proID+","+proCount);
+			int transCount = Integer.valueOf(proCount);
+			//String checkSql = "select PRO_COUNT,PRO_WMCODE from V_WM_STOCKWHERE where WAREHOUSE='"+warehouseID+"' and PRODUCTID='"+proID+"' and WAREWHERE='"+WHID+"'";
+			String checkSql = "select t_1.PRO_COUNT,t_2.CODE from V_WM_STOCKWHEREBATCH t_1,T_WM_PRO t_2 where t_1.PRODUCTID=t_2.ID and t_1.WAREHOUSE='"+warehouseID+"' and t_1.PRODUCTID='"+proID+"' and t_1.WAREWHERE='"+WHID+"' and t_1.BATCH="+batch;
+			String[][] result = dbm.getResultStrArray(checkSql, 2, null);
+			if (result.length>0) {
+				int t = 0;
+				t = Integer.valueOf(result[0][0]);
+				String proWmcode = result[0][1];
+				if(transCount>t){
+					String whCode = getWarewhereCode(WHID,dbm);
+					//throw new Warning("审批失败,商品 '"+proWmcode+"' 库存不足, 仓位ID:"+WHID+",批次:"+batch+", 出库数量:"+transCount+", 现有仓位库存:"+t);
+					throw new Warning("审批失败,商品 '"+proWmcode+"' 库存不足, 仓位:"+whCode+",批次:"+batch+", 出库数量:"+transCount+", 现有仓位库存:"+t);
+				}
+			}else{
+				String whCode = getWarewhereCode(WHID,dbm);
+				throw new Warning("审批失败,商品无库存, 仓位:"+whCode+",批次:"+batch+", 出库数量:"+transCount);
+			}
+		}
+	}
+}
+String getWarewhereCode(String whID,DBManager dbm){
+	String whCode=null;
+	String wareWhereSql = "select CODE from T_DIC_WAREWHERE where ID =" +whID;
+	String[][] result = dbm.getResultStrArray(wareWhereSql, 1, null);
+	if (result.length>0) {
+		whCode = result[0][0];
+	}
+	return whCode;
+}
+checkStock();

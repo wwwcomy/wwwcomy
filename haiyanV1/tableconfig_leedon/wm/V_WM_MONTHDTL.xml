@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Haiyan xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../haiyan.xsd">
+	<table name="V_WM_MONTHDTL" description="财务统计月度对账表">
+		<id name="ID" javaType="string"/>
+		<field name="SUPP_MONTH" description="供应商月度对账表(单头)" javaType="string">
+			<component type="text" readOnly="true"/>
+			<listColumn noedit="false" noquery="true"/>
+		</field>
+		<field name="WM_MONTH" description="所属月份" javaType="string" lazyLoad="false">
+			<component type="text" readOnly="true" colspan="1"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="PRODUCTID" description="EDP商品名" displayOnly="false" javaType="string" lazyLoad="false">
+			<component type="combo" readOnly="true" colspan="1" displayReferenceField="NAME" referenceField="ID" referenceTable="V_WM_SDBPRODUCT" associatedFields="WMCODE"/>
+			<queryCondition type="equal"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="WMCODE" description="货号" displayOnly="true" javaType="string" lazyLoad="false">
+			<component type="text" readOnly="true" colspan="1" displayReferenceField="WMCODE"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="SUPP_CODE" description="供应商自有货号" javaType="string" lazyLoad="false">
+			<component type="text" readOnly="true" />
+			<listColumn noedit="false" noquery="false" width="70"/>
+		</field>
+		<field name="PRO_COUNT" description="库存变化" javaType="bigDecimal" defaultValue="0">
+			<component type="text" readOnly="true" />
+			<listColumn noedit="false" noquery="false" width="60"/>
+		</field>
+		<field name="IN_PRICE" description="供应商单价" javaType="string">
+			<component type="text" readOnly="true" />
+			<listColumn noedit="false" noquery="false" width="85"/>
+		</field>
+		<field name="OUT_PRICE" description="EDP销售总价" javaType="string">
+			<component type="text" readOnly="true"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="OUT_ALL_PRICE" description="销售总额" javaType="bigDecimal" defaultValue="0">
+			<component type="text" readOnly="true"  maxFractionDigit="3" minFractionDigit="3" summaryType="sum" summaryRenderer="sum_COST"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="SUP_ALL_RETURNRPRICE" description="供应商总退款额" javaType="bigDecimal" defaultValue="0">
+			<component type="text" readOnly="true" maxFractionDigit="3" minFractionDigit="3" summaryType="sum" summaryRenderer="sum_COST"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="OUT_ALL_AMOUNT" description="销售合计" javaType="string">
+			<component type="text" readOnly="true" maxFractionDigit="3" minFractionDigit="3" summaryType="sum" summaryRenderer="sum_COST"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="SUPPLIER" description="供应商" javaType="string">
+			<component type="combo" readOnly="true" displayReferenceField="NAME" referenceField="ID" referenceTable="T_DIC_SUPPLIER"/>
+		</field>
+		<field name="WAREHOUSE" description="收货仓库" displayOnly="false" javaType="string" lazyLoad="false" nullAllowed="false">
+			<component type="combo" readOnly="true" colspan="1" displayReferenceField="NAME" referenceField="ID" referenceTable="T_DIC_WAREHOUSE_COMBO"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="SUPP_MONTH" description="供应商月度对账表" javaType="string">
+			<component type="hidden" readOnly="true"/>
+			<listColumn noedit="false" noquery="true"/>
+		</field>
+		<field name="SUPP_PRO_MONTH" description="供应商商品月度" javaType="string">
+			<component type="hidden" readOnly="true"/>
+			<listColumn noedit="false" noquery="true"/>
+		</field>
+		<!-- -->
+		<queryFilter>
+			<pluggedFilter methodName="exp" parameter="{ and t_1.WAREHOUSE='}&amp;GetUser(WAREHOUSEID)&amp;{' }"/>
+		</queryFilter>
+		<role name="user sp">
+		</role>
+		<role name="admin boss manager wm pe ac"/>
+		<javascript hostPage="query"><![CDATA[
+		function sum_COST(value, params, data, fldName) {
+				return value; // 汇总行显示
+		}
+		]]></javascript>
+		<!-- -->
+		<pluginInterceptor methodName="initDB" pluginName="initDB" type="before"><![CDATA[
+create or replace view V_WM_MONTHDTL as 
+	(
+		select t_1.ID as ID,t_1.HEADID,t_1.WM_MONTH,
+		t_1.PRODUCTID,t_1.WMCODE,t_1.SUPP_CODE,
+		t_1.SALE_COUNT as PRO_COUNT,
+		'' as IN_PRICE,'' as OUT_PRICE,
+		t_1.SALE_VALUE as OUT_ALL_AMOUNT,
+		t_1.SALE_VALUE+SUP_ALL_RETURNRPRICE as OUT_ALL_PRICE,
+		t_2.SUP_ALL_RETURNRPRICE,t_1.SUPPLIER,t_1.WAREHOUSE,
+		t_1.SUPP_MONTH,t_1.SUPP_PRO_MONTH
+		from V_WM_STORESALE t_1 
+		left join V_WM_STOCKRETURN t_2 on t_1.SUPP_PRO_MONTH=t_2.SUPP_PRO_MONTH
+		group by t_1.SUPP_PRO_MONTH
+	)
+		]]></pluginInterceptor>
+		<pluginInterceptor methodName="exp" parameter="DisBtns(add,delete,save,saveAndAdd,saveAndAddCopy);" pluginName="query" type="after"/>
+		<pluginInterceptor methodName="exp" parameter="DisBtns(add,delete,save,saveAndAdd,saveAndAddCopy);" pluginName="edit" type="after"/>
+	</table>
+</Haiyan>

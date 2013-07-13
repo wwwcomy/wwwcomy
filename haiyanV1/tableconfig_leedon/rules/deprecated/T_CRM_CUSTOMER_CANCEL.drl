@@ -1,0 +1,226 @@
+<?xml version="1.0" encoding="GBK"?>
+<rule-set declaration="" name="Tests assignment rules" xmlns="http://drools.org/rules" xmlns:java="http://drools.org/semantics/java" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<java:import>com.tornado.genmis.core.db.DBManager</java:import>
+	<java:import>com.tornado.genmis.core.db.DBManagerFactory</java:import>
+	<java:import>com.tornado.genmis.core.db.DBTransaction</java:import>
+	<java:import>com.tornado.genmis.core.db.DBTransactionImp</java:import>
+	<java:import>java.util.ArrayList</java:import>
+	<java:import>com.tornado.genmis.core.MapForm</java:import>
+	<java:import>com.tornado.genmis.core.struts.GenMisForm</java:import>
+	<java:import>com.tornado.genmis.core.SrvContext</java:import>
+	<java:import>com.tornado.genmis.core.right.User</java:import>
+	<java:import>com.tornado.genmis.core.exception.*</java:import>
+	<java:import>com.tornado.genmis.castorgen.Table</java:import>
+	<java:import>com.tornado.genmis.util.StringUtil</java:import>
+	<java:import>tornado.interceptor.DroolsInterceptor</java:import>
+	<java:import>com.tornado.genmis.util.ConfigUtil</java:import>
+	<java:import>java.lang.String</java:import>
+	<java:import>java.util.HashMap</java:import>
+	<java:import>com.tornado.genmis.core.right.Role</java:import>
+	<java:import>com.tornado.genmis.core.right.User</java:import>
+	<application-data identifier="dbm">DBManager</application-data>
+	<application-data identifier="table">Table</application-data>
+	<application-data identifier="context">SrvContext</application-data>
+	<java:functions>
+		public static boolean isUserInRoleName(User user, String[] roleNames) {
+			Role[] roles = user.getRoles();
+			if (roles ==null || roles.length==0) {
+			} else {
+				for (int i = 0; i &lt; roles.length; i++) {
+					for (int j=0;j&lt;roleNames.length;j++) {
+						if (roles[i].getRoleName()==roleNames[j])
+							return true;
+					}
+				}
+			}
+			return false;
+		}
+	</java:functions>
+	<rule name="confirm_wfpkh" salience="0">
+		<parameter identifier="dForm">
+			<java:class>GenMisForm</java:class>
+		</parameter>
+		<java:condition>dForm.getParameter("STAGE").equals("0")</java:condition>
+		<java:consequence>
+		User user = context.getUser();
+		String id = user.getID();
+		Role[] roles = user.getRoles();
+		HashMap map = new HashMap();
+		for (int i = 0; i &lt; roles.length; i++) {
+			 map.put(roles[i].getRoleName(), roles[i]);
+		}
+		if ((map.get("系统管理员") != null) 
+				|| (map.get("区域经理") != null)
+				|| (map.get("部门经理") != null)
+				|| (map.get("销售总监") != null) 
+				|| (map.get("总经理") != null)
+				|| (map.get("总裁") != null)) {				
+           String stage = dForm.getParameter("STAGE");
+	        if (!StringUtil.isBlankOrNull(stage)) {
+                int stagef = new Integer(stage).intValue();
+                if (stagef==0) {
+                    stagef=1; 
+                		dForm.setParameter("STAGE",""+stagef);
+			          drools.assertObject(dForm);
+                    // context.addException(new DBGoonPrompt("操作成功"));
+		         } else {
+			          // System.out.print(stage+"ssssssss"+remake+gdrelation+stagef);
+			          context.addException(new DBBreakonAlert("对不起,操作不成功!"));
+		         }      
+		     }
+		} else {
+			  context.addException(new DBBreakonAlert("对不起，您无权操作!"));
+		}
+	   </java:consequence>
+	</rule>
+	<rule name="confirm_xskh" salience="1">
+		<parameter identifier="dForm">
+			<java:class>GenMisForm</java:class>
+		</parameter>
+		<java:condition>dForm.getParameter("STAGE").equals("1")</java:condition>
+		<java:consequence>
+		 drools.assertObject(dForm);
+		</java:consequence>
+	</rule>
+	<rule name="confirm_sjkh" salience="2">
+		<parameter identifier="dForm">
+			<java:class>GenMisForm</java:class>
+		</parameter>
+		<java:condition>dForm.getParameter("STAGE").equals("2")</java:condition>
+		<java:consequence>
+		User user = context.getUser();
+		String id = user.getID();
+		Role[] roles = user.getRoles();
+		HashMap map = new HashMap();
+		for (int i = 0; i &lt; roles.length; i++) {
+			map.put(roles[i].getRoleName(), roles[i]);
+		}
+		if ((map.get("系统管理员") != null) 
+				|| (map.get("区域经理") != null)
+				|| (map.get("部门经理") != null)
+				|| (map.get("销售总监") != null) 
+				|| (map.get("总经理") != null)
+				|| (map.get("总裁") != null)) {				
+          String stage = dForm.getParameter("STAGE");
+	       if (!StringUtil.isBlankOrNull(stage)) {
+              int stagef = new Integer(stage).intValue();
+              if (stagef==2) {
+                  stagef--; 
+                  dForm.setParameter("STAGE",""+stagef);
+			        drools.assertObject(dForm);
+                  // context.addException(new DBGoonPrompt("操作成功")); 
+			    } else{
+			        // System.out.print(stage+"ssssssss"+remake+gdrelation+stagef);
+			        context.addException(new DBBreakonAlert("对不起,操作不成功!"));
+			    }	      
+			}
+		} else {
+			 context.addException(new DBBreakonAlert("对不起，您无权操作!"));
+		}
+      	</java:consequence>
+	</rule>
+	<rule name="confirm_zlxkh" salience="3">
+		<parameter identifier="dForm">
+			<java:class>GenMisForm</java:class>
+		</parameter>
+		<java:condition>dForm.getParameter("STAGE").equals("5")</java:condition>
+		<java:consequence>
+		User user = context.getUser();
+		String id = user.getID();
+		Role[] roles = user.getRoles();
+		HashMap map = new HashMap();
+		for (int i = 0; i &lt; roles.length; i++) {
+			map.put(roles[i].getRoleName(), roles[i]);
+		}
+		if ((map.get("系统管理员") != null) 
+				|| (map.get("销售总监") != null)
+				|| (map.get("总经理") != null)
+				|| (map.get("总裁") != null)) {				
+          String stage = dForm.getParameter("STAGE");				
+	       if (!StringUtil.isBlankOrNull(stage)) {
+              int stagef = new Integer(stage).intValue();
+              if (stagef==5) {
+                  stagef=2; 
+                  dForm.setParameter("STAGE",""+stagef);
+			        drools.assertObject(dForm);
+                  // context.addException(new DBGoonPrompt("操作成功"));
+			    } else{
+			        context.addException(new DBBreakonAlert("对不起,操作不成功!"));
+			    }      
+			}
+		} else {
+			context.addException(new DBBreakonAlert("对不起，您无权操作!"));
+		}
+      	</java:consequence>
+	</rule>
+	<rule name="confirm_lxkh" salience="5">
+		<parameter identifier="dForm">
+			<java:class>GenMisForm</java:class>
+		</parameter>
+		<java:condition>dForm.getParameter("STAGE").equals("3")</java:condition>
+		<java:consequence>
+		User user = context.getUser();
+		String id = user.getID();
+		Role[] roles = user.getRoles();
+		HashMap map = new HashMap();
+		for (int i = 0; i &lt; roles.length; i++) {
+			map.put(roles[i].getRoleName(), roles[i]);
+		}
+		if ((map.get("系统管理员") != null) 
+				|| (map.get("销售总监") != null)
+				|| (map.get("总经理") != null)
+				|| (map.get("总裁") != null)) {				
+          String stage = dForm.getParameter("STAGE");				
+	       if (!StringUtil.isBlankOrNull(stage)) {
+              int stagef = new Integer(stage).intValue();
+              if (stagef==3) {
+                  stagef=5; 
+                  dForm.setParameter("STAGE",""+stagef);
+			        drools.assertObject(dForm);
+                  // context.addException(new DBGoonPrompt("操作成功"));
+			    } else{
+			        context.addException(new DBBreakonAlert("对不起,操作不成功!"));
+			    }      
+			}
+		} else {
+			context.addException(new DBBreakonAlert("对不起，您无权操作!"));
+		}
+      	</java:consequence>
+	</rule>
+	<rule name="confirm_htkh" salience="4">
+		<parameter identifier="dForm">
+			<java:class>GenMisForm</java:class>
+		</parameter>
+		<java:condition>dForm.getParameter("STAGE").equals("4")</java:condition>
+		<java:consequence>
+		User user = context.getUser();
+		String id = user.getID();
+		Role[] roles = user.getRoles();
+		HashMap map = new HashMap();
+		for (int i = 0; i &lt; roles.length; i++) {
+			map.put(roles[i].getRoleName(), roles[i]);
+		}
+		if ((map.get("系统管理员") != null) 
+				|| (map.get("销售总监") != null)
+				|| (map.get("总经理") != null)
+				|| (map.get("总裁") != null)
+				|| (id.equalsIgnoreCase(dForm.getParameter("USER_ID")))
+				|| (id.equalsIgnoreCase(dForm.getParameter("USER_ID_1")))) {				
+           String stage = dForm.getParameter("STAGE");				
+	       if (!StringUtil.isBlankOrNull(stage)) {
+              int stagef = new Integer(stage).intValue();
+              if (stagef==4) {
+                  stagef--; 
+                  dForm.setParameter("STAGE",""+stagef);
+			        drools.assertObject(dForm);
+                  // context.addException(new DBGoonPrompt("操作成功")); 
+			    } else {
+			        context.addException(new DBBreakonAlert("对不起,操作不成功!"));
+			    }      
+			}
+	   } else {
+			context.addException(new DBBreakonAlert("对不起，您无权操作!"));
+	   }
+      	</java:consequence>
+	</rule>
+</rule-set>

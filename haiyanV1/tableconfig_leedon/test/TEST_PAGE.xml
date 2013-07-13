@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Haiyan xsi:noNamespaceSchemaLocation="../../haiyan.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<table description="PAGE测试" name="TEST_PAGE" realTable="TEST_COMP">
+		<!-- modelid="9" -->
+		<id name="ID" javaType="string"/>
+		<field name="CODE" javaType="string" description="编码" style="color:#990099;size:13;font-weight:bold;" one2oneField="CODE" one2oneTable="TEST_ONE2ONE" defaultValue="$Date()">
+			<component type="text" style="color:#990099;size:12;font-weight:bold;"/>
+			<listColumn noquery="false"/>
+		</field>
+		<field name="NAME" javaType="string" description="名称" style="color:#990099;size:13;font-weight:bold;" nullAllowed="false" one2oneField="NAME" one2oneTable="TEST_ONE2ONE">
+			<component type="text" validator="^(\d{3}\-)?\d{8}$" validatorText="格式应该例如:000-12345678"/>
+			<listColumn noquery="false"/>
+		</field>
+		<!-- -->
+		<PageView showField="NAME" title="视图1" type="userdefined" methodName="exp" parameter="{gen_queryform.do?__opr_data=TEST_PAGE}" hostPage="query" img="refresh"/>
+		<PageView showField="NAME" title="视图2" type="userdefined" methodName="exp" parameter="{ext_shownav.do?__opr_data=TEST_PAGE}" hostPage="query" img="refresh"/>
+		<PageView showField="NAME" title="视图3" type="userdefined" methodName="exp" parameter="{ext_showtree.do?__opr_data=TEST_PAGE}" hostPage="query" img="refresh"/>
+		<!-- -->
+		<PageView showField="NAME" title="查看1" type="userdefined" methodName="exp" parameter="{gen_queryform.do?__opr_data=TEST_PAGE}" hostPage="edit" img="refresh"/>
+		<PageView showField="NAME" title="查看2" type="userdefined" methodName="exp" parameter="{query.do?__opr_data=SYSCATALOG}" hostPage="edit" img="query"/>
+		<PageView showField="NAME" title="查看3" type="userdefined" methodName="exp" parameter="{edit.do?__opr_data=TEST_ONE2ONE&amp;__one2oneID=}&amp;Value(ID)" hostPage="edit" img="refresh"/>
+		<!-- -->
+		<queryFilter>
+			<pluggedFilter><![CDATA[]]></pluggedFilter>
+			<pluggedFilter methodName="exp" parameter="{ and 1=1 }"/>
+		</queryFilter>
+		<pluginOperation name="test" className="haiyan.plugin.BshPlugin" oprName="测试Bsh" hostPage="edit"><![CDATA[
+			 form.set("CODE", "BSH...");
+		]]></pluginOperation>
+		<pluginOperation name="test2" className="haiyan.plugin.ExpPlugin" oprName="测试Exp" hostPage="edit"><![CDATA[
+			 SetValue("CODE", "EXP...");
+		]]></pluginOperation>
+		<pluginOperation name="dbtest" className="haiyan.plugin.BshPlugin" oprName="生成测试数据" hostPage="edit"><![CDATA[
+			 new java.lang.Thread(new java.lang.Runnable() {				
+				final SrvContext context = new TempSrvContext("1");
+				public void run() {
+					try {
+						for (int i = 1; i <= 400; i++) {
+							Qbq3Form form = new MapForm();
+							form.set("CODE", "CODE_" + Math.random());
+							form.set("NAME", "NAME_" + Math.random());
+							try {
+								context.getDBM().insert("TEST_PAGE", form, context);
+							} catch (Throwable e) {
+								throw new RuntimeException(e);
+							}
+							if (i % 100 == 0 && i > 1) {
+								try {
+									context.commit();
+								} catch (Throwable e) {
+									e.printStackTrace();
+								}
+								try {
+									context.begin();
+								} catch (Throwable e) {
+									e.printStackTrace();
+								}
+							}
+						}
+					} finally {
+						context.close();
+					}
+				}
+			}).start();
+		]]></pluginOperation>
+		<Operation save="true" saveAndAdd="false" saveAndAddCopy="false" customizeColumns="false" selectedHidden="true"/>
+		<!-- -->
+		<doc>
+			<help><![CDATA[
+			    啦啦啦 帮助说明
+			]]></help>
+		</doc>
+		<!-- -->
+	</table>
+</Haiyan>

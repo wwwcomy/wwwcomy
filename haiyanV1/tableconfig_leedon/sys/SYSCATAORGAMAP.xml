@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Haiyan xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../haiyan.xsd">
+	<table name="SYSCATAORGAMAP" description="目录--组织结构关系">
+		<id name="ID" javaType="string"/>
+		<field name="CATALOGID" description="节点" javaType="string">
+			<component type="richSelect" referenceTable="SYSCATALOG" displayReferenceField="NAME"/>
+		</field>
+		<field name="ORGAID" description="组织机构" javaType="string">
+			<component type="richSelect" referenceTable="SYSORGA" displayReferenceField="NAME"/>
+		</field>
+		<Operation selectedHidden="true"/>
+	</table>
+</Haiyan>

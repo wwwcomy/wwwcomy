@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Haiyan xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../haiyan.xsd">
+	<table name="T_DIC_CONTRACTDETAIL" description="合同明细表">
+		<id name="ID" javaType="string"/>
+		<field name="CONTRACTID" description="合同主表" javaType="string">
+			<component type="hidden" referenceTable="T_DIC_CONTRACT"/>
+		</field>
+		<field name="PAYDATE" description="付款日期" javaType="date">
+			<component type="date"/>
+		</field>
+		<field name="MONEY" description="付款金额" javaType="string" sumable="true">
+			<component type="text" numberGrouping="true" minFractionDigit="2"/>
+			<!--<component type="text"/>-->
+		</field>
+		<!--<pluginInterceptor pluginName="edit" className="finance.interceptor.DefaultValueInterceptor" methodName="putMoney"/>-->
+	</table>
+</Haiyan>

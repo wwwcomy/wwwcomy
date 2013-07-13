@@ -1,0 +1,42 @@
+<rule-set declaration="" name="Tests assignment rules" xmlns="http://drools.org/rules" xmlns:java="http://drools.org/semantics/java" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<java:import>com.haiyan.genmis.core.db.DBManager</java:import>
+	<java:import>com.haiyan.genmis.core.struts.GenMisForm</java:import>
+	<java:import>com.haiyan.genmis.core.SrvContext</java:import>
+	<java:import>com.haiyan.genmis.core.exception.Warning</java:import>
+	<java:import>com.haiyan.genmis.castorgen.Table</java:import>
+	<java:import>com.haiyan.genmis.util.StringUtil</java:import>
+	<java:import>haiyan.interceptor.DroolsInterceptor</java:import>
+	<java:import>java.lang.String</java:import>
+	<application-data identifier="dbm">DBManager</application-data>
+	<application-data identifier="table">Table</application-data>
+	<application-data identifier="form">GenMisForm</application-data>
+	<application-data identifier="passNum">String</application-data>
+	<application-data identifier="backNum">String</application-data>
+	<application-data identifier="hasJump">String</application-data>
+	<application-data identifier="context">SrvContext</application-data>
+	<java:functions/>
+	<rule name="prepared" salience="0">
+		<parameter identifier="dForm">
+			<java:class>GenMisForm</java:class>
+		</parameter>
+		<java:condition>"0".equals("0")</java:condition>
+		<java:consequence>
+      if (StringUtil.isBlankOrNull(form.getParameter("STATUS"))) {
+          form.setParameter("STATUS","0");
+          drools.assertObject(form);
+      }
+   </java:consequence>
+	</rule>
+	<!--
+	<rule name="0_start" salience="0">
+		<parameter identifier="dForm">
+			<java:class>GenMisForm</java:class>
+		</parameter>
+		<java:condition>context.getParameter("__pluginName").equals("back") &amp;&amp; form.getParameter("STATUS").equals("0")</java:condition>
+		<java:consequence>
+      System.out.println(context.getParameter("__pluginName"));
+      throw new Warning("此单据已撤销成原始单");
+   </java:consequence>
+	</rule>
+	-->
+</rule-set>

@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Haiyan xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../haiyan.xsd">
+	<table name="T_DIC_VENDOR" description="供应商" realTable="T_DIC_ORGA">
+		<id name="ID" description="ID" javaType="string">
+			<component type="text" readOnly="false" displayReferenceField="NAME" url="#"/>
+		</id>
+		<field name="CODE" javaType="string" description="助记码" style="color:gray;">
+			<component type="text" readOnly="true" style="color:gray;"/>
+		</field>
+		<field name="NAME" javaType="string" description="单位全称">
+			<component type="text"/>
+		</field>
+		<field name="SHORTNAME" javaType="string" description="简称" style="color:#990000;size:12;font-weight:bold;">
+			<component type="text"/>
+		</field>
+		<field name="HYTYPE" javaType="string" description="行业" nullAllowed="false">
+			<component type="dropdown" colspan="3" referenceTable="T_DIC_COMMON_HY" referenceField="ID" displayReferenceField="NAME" quickQueryConditionField="NAME,CODE"/>
+		</field>
+		<field name="PHONE" javaType="string" description="客户电话" style="color:red;size:12;font-weight:bold;">
+			<component type="text" appendStr="(格式:086-0XX-XXXXXXXX)" validator="^(\d{3})\D*(\d{4})\D*(\d*)$" validatorText="(电话格式:086-0XX-XXXXXXXX)"/>
+			<queryCondition type="none"/>
+		</field>
+		<field name="FAX" javaType="string" description="客户传真">
+			<component type="text"/>
+			<queryCondition type="none"/>
+		</field>
+		<field name="EMAIL" javaType="string" description="单位电邮">
+			<component type="text"/>
+			<queryCondition type="none"/>
+		</field>
+		<field name="HOMEPAGE" javaType="string" description="单位主页">
+			<component type="text"/>
+			<listColumn noquery="true"/>
+		</field>
+		<field name="CONTACT_PERSON" javaType="string" description="联系人1" style="color:red;size:12;font-weight:bold;">
+			<component type="text"/>
+			<queryCondition type="none"/>
+		</field>
+		<!-- -->
+		<field name="LEV" description="评级" displayOnly="false" javaType="string" lazyLoad="false">
+			<component type="dropdown" readOnly="false">
+				<option displayName="最优" value="1"/>
+				<option displayName="较优" value="2"/>
+				<option displayName="优" value="3"/>
+				<option displayName="一般" value="4"/>
+				<option displayName="差" value="5"/>
+			</component>
+			<queryCondition type="equal"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<!--
+		<field name="MAJORPRODUCT" description="主要产品" displayOnly="false" javaType="string" lazyLoad="false">
+			<component type="text" readOnly="false" displayReferenceField="NAME"/>
+			<queryCondition type="equal"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		-->
+		<field name="TYPE_" javaType="string" description="客户类型" defaultValue="3">
+			<component type="hidden">
+				<option displayName="客户" value="1"/>
+				<option displayName="代理" value="2"/>
+				<option displayName="供应商" value="3"/>
+			</component>
+			<listColumn noquery="true"/>
+		</field>
+		<!-- -->
+		<field name="COUNTRY" javaType="string" description="国家">
+			<component type="hidden" referenceTable="T_DIC_COMMON_COUNTRY" referenceField="ID" displayReferenceField="NAME"/>
+			<listColumn noquery="true"/>
+		</field>
+		<field name="COUNTRY_NAME" javaType="string" description="国家">
+			<component type="hidden" displayReferenceField="PPIDNAME"/>
+			<queryCondition type="none"/>
+			<listColumn noquery="true"/>
+		</field>
+		<field name="PROVINCE" javaType="string" description="省份">
+			<component type="hidden" referenceTable="T_DIC_COMMON_PROVINCE" referenceField="ID" displayReferenceField="NAME"/>
+			<listColumn noquery="true"/>
+		</field>
+		<field name="PROVINCE_NAME" javaType="string" description="省份">
+			<component type="text"/>
+			<queryCondition type="none"/>
+			<listColumn noquery="true"/>
+		</field>
+		<field name="AREA_CODE" javaType="string" description="地区代码">
+			<component type="hidden"/>
+			<queryCondition type="none"/>
+			<listColumn noquery="true"/>
+		</field>
+		<field name="AREA" javaType="string" description="区域">
+			<component type="text"/>
+			<queryCondition type="none"/>
+			<listColumn noquery="true"/>
+		</field>
+		<field name="CITY_ID" javaType="string" description="城市" nullAllowed="false">
+			<component type="richSelect" colspan="3" referenceTable="T_DIC_COMMON_CITY" referenceField="ID" displayReferenceField="NAME" quickQueryConditionField="NAME,CODE"/>
+			<listColumn noquery="false" nowrap="true"/>
+		</field>
+		<field name="ADDRESS" javaType="string" description="单位地址">
+			<component type="text" colspan="3" style="width:100%" displayReferenceField="ADDRESS"/>
+			<queryCondition type="none"/>
+			<listColumn noquery="true"/>
+		</field>
+		<field name="POSTCODE" javaType="string" description="邮编">
+			<component type="text" colspan="3"/>
+			<queryCondition type="none"/>
+			<listColumn noquery="true"/>
+		</field>
+		<field name="CREATE_USER_ID" javaType="string" description="创建人">
+			<component type="richSelect" quickQueryConditionField="NAME" referenceTable="SYSOPERATOR_VIEW" referenceField="ID" displayReferenceField="NAME" readOnly="true"/>
+			<listColumn noquery="false" nowrap="true"/>
+		</field>
+		<field name="CREATE_TIME" javaType="date" dataStyle="yyyy-MM-dd hh:mm:ss" description="创建时间">
+			<component type="hidden" readOnly="true"/>
+			<queryCondition type="none"/>
+			<listColumn noquery="false" nowrap="true"/>
+		</field>
+		<field name="UPDATE_USER_ID" javaType="string" description="修改人">
+			<component type="hidden" referenceTable="SYSOPERATOR_VIEW" referenceField="ID" displayReferenceField="NAME" readOnly="true"/>
+			<queryCondition type="none"/>
+			<listColumn noquery="false" nowrap="true"/>
+		</field>
+		<field name="UPDATE_TIME" javaType="date" dataStyle="yyyy-MM-dd hh:mm:ss" description="修改时间">
+			<component type="hidden" readOnly="true"/>
+			<queryCondition type="none"/>
+			<listColumn noquery="false" nowrap="true"/>
+		</field>
+		<!-- -->
+		<queryFilter>
+			<pluggedFilter> and t_1.TYPE_ like '3' order by t_1.CODE</pluggedFilter>
+		</queryFilter>
+		<!-- -->
+		<pluginInterceptor className="haiyan.interceptor.CommonInterceptor" methodName="completeAlert" pluginName="delete" type="after"/>
+		<pluginInterceptor className="haiyan.interceptor.CommonInterceptor" methodName="completeAlert" pluginName="save" type="after"/>
+		<pluginInterceptor className="haiyan.interceptor.CommonInterceptor" methodName="createAreaInfo" pluginName="save"/>
+		<pluginInterceptor className="haiyan.interceptor.CommonInterceptor" methodName="exp" parameter="Set(CODE,PY(Get(NAME)))" pluginName="save"/>
+		<!-- -->
+		<pluginInterceptor className="haiyan.interceptor.CommonInterceptor" methodName="setCreateUser" parameter="CREATE_USER_ID" pluginName="save"/>
+		<pluginInterceptor className="haiyan.interceptor.CommonInterceptor" methodName="setCreateTime" parameter="CREATE_TIME,yyyy-MM-dd HH:mm:ss" pluginName="save"/>
+		<pluginInterceptor className="haiyan.interceptor.CommonInterceptor" methodName="setEditUser" parameter="UPDATE_USER_ID" pluginName="save"/>
+		<pluginInterceptor className="haiyan.interceptor.CommonInterceptor" methodName="setEditTime" parameter="UPDATE_TIME,yyyy-MM-dd HH:mm:ss" pluginName="save"/>
+		<!-- -->
+		<Operation saveAndAdd="false" saveAndAddCopy="false"/>
+	</table>
+</Haiyan>
