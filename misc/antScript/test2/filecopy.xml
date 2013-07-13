@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<project default="dist">
+	<description>
+		My first ANT example.
+	</description>
+	<property name="srcFile" location="\\pxy-pc\map_1_4_dev\1.4_20110811-20795-20795\map-dev-src.jar"/>
+	<property name="distFile" location="dist\map-dev-src.jar"/>
+	
+	<target name="init">
+		<tstamp/>
+	</target>
+	
+	<target name="dist" depends="init">
+		<echo message="正在拷贝Jar文件到${distFile}中..." />
+		<copy file="${srcFile}" tofile="${distFile}"/> 
+		<echo message="拷贝完成" />
+	</target>
+	
+	<target name="clean">
+		<delete dir="${distFile}"/>
+	</target>
+</project>

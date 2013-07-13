@@ -1,0 +1,34 @@
+<?xml version="1.0"?>
+<project default="dist">
+	<description>
+		My first ANT example.
+	</description>
+	<property name="srcDir" location="src"/>
+	<property name="buildDir" location="build"/>
+	<property name="distDir" location="dist"/>
+	
+	<target name="init">
+		<tstamp/>
+		<mkdir dir="${buildDir}"/>
+		<mkdir dir="${distDir}"/>
+	</target>
+	
+	<target name="compile" depends="init">
+		<javac srcdir="${srcDir}" destdir="${buildDir}"/>
+	</target>
+	
+	<target name="dist" depends="compile">
+		<jar destfile="${distDir}/package-${DSTAMP}.jar" basedir="${buildDir}">
+			<manifest>
+				<attribute name="built-by" value="${user.name}"/>
+				<attribute name="main-class" value="test.json.stringTest"/>
+			</manifest>
+		</jar>
+		<jar destfile="${distDir}/package-src-${DSTAMP}.jar" basedir="${srcDir}"/>
+	</target>
+	
+	<target name="clean">
+		<delete dir="${buildDir}"/>
+		<delete dir="${distDir}"/>
+	</target>
+</project>

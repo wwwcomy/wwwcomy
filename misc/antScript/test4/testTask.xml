@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<project default="dist">
+	<description>
+		My first ANT example.
+	</description>
+	<property name="parentFolder" location="\\pxy-pc\map_1_4_release"/>
+	
+	<taskdef name="OwnTask" classname="GetLatestFolderName" classpath="."/>
+	
+	<target name="init">
+		<OwnTask property="latestFolder" parentFolder="${parentFolder}"/>
+	</target>
+	
+	<target name="dist" depends="init">
+		<echo message="Process Complete!"/>
+		<echo message="Latest folder is ${latestFolder}"/>
+	</target>
+</project>

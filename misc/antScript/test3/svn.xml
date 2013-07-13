@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<project default="dist">
+	<description>
+		My first ANT example.
+	</description>
+	<property name="project" location="E:\testsvn"/>
+	<property name="remoteurl" value="http://ccserver:8080/svn/MyERP/o9_scm/Config_finance_831/Module/SCM/Bill"/>
+	<typedef resource="org/tigris/subversion/svnant/svnantlib.xml" classpath="svnant.jar"/>
+	
+	<target name="init" >
+		<echo message="updating" />
+		<svn username="liuxn" password="111111">
+			<update dir="${project}"/>
+			<!--<checkout url="${remoteurl}" revision="HEAD" destPath="e:/testsvn" />-->
+		</svn>
+	</target>
+
+	<target name="dist" depends="init">
+		<echo message="complete" />
+	</target>
+
+</project>

@@ -1,0 +1,86 @@
+<?xml version="1.0"?>
+<project default="dest">
+	<description>
+		Update the test Server(831Web:1.1.6.120)
+	</description>
+	
+	<property name="parentFolder" value="\\pxy-pc\map_1_4_release"/>
+	
+	<property name="devFile" value="/map-dev.jar"/>
+	<property name="dev-srcFile" value="/map-dev-src.jar"/>
+	
+	<property name="reportdesignFile" value="/map-reportdesign.jar"/>
+	<property name="startFile" value="/map-start.jar"/>
+	<property name="uiFile" value="/map-ui.jar"/>
+	
+	<property name="destMap3BinFolder" value="\\1.1.6.120\Tomcat5.0\webapps\map3\bin"/>
+	<property name="destMap3LibFolder" value="\\1.1.6.120\Tomcat5.0\webapps\map3\WEB-INF\lib"/>
+	
+	<property name="destZswlBinFolder" value="\\1.1.6.120\Tomcat5.0\webapps\zswl\bin"/>
+	<property name="destZswlLibFolder" value="\\1.1.6.120\Tomcat5.0\webapps\zswl\WEB-INF\lib"/>
+	
+	<property name="MAP3ConfigFolder" value="\\1.1.6.120\Tomcat5.0\webapps\config_831\"/>
+	<property name="MAP3WebFolder" value="\\1.1.6.120\Tomcat5.0\webapps\map3\web\"/>
+	
+	<property name="ZSWLConfigFolder" value="\\1.1.6.120\Tomcat5.0\webapps\config_zswl\"/>
+	<property name="ZSWLWebFolder" value="\\1.1.6.120\Tomcat5.0\webapps\zswl\web\"/>
+	<property name="ZSWLJspFolder" value="\\1.1.6.120\Tomcat5.0\webapps\zswl\zswl\"/>
+	
+	<taskdef name="GetLatestFolderName" classname="GetLatestFolderName" classpath="."/>
+	
+	<target name="init">
+		<echo message="Getting Folder..."/>
+		<GetLatestFolderName property="latestFolder" parentFolder="${parentFolder}"/>
+	</target>
+	
+	<target name="copy" depends="init">
+		<echo message="Start Copying Files for Map3..."/>
+		<copy file="${latestFolder}${devFile}" tofile="${destMap3LibFolder}${devFile}" preservelastmodified="true" overwrite="true"/> 
+		<copy file="${latestFolder}${dev-srcFile}" tofile="${destMap3LibFolder}${dev-srcFile}" preservelastmodified="true" overwrite="true"/> 
+		<copy file="${latestFolder}${reportdesignFile}" tofile="${destMap3BinFolder}${reportdesignFile}" preservelastmodified="true" overwrite="true"/> 
+		<copy file="${latestFolder}${startFile}" tofile="${destMap3BinFolder}${startFile}" preservelastmodified="true" overwrite="true"/> 
+		<copy file="${latestFolder}${uiFile}" tofile="${destMap3BinFolder}${uiFile}" preservelastmodified="true" overwrite="true"/> 
+		<echo message="Map3 Copy Complete!"/>
+		
+		<echo message="Start Copying Files for ZSWL..."/>
+		<copy file="${latestFolder}${devFile}" tofile="${destZswlLibFolder}${devFile}" preservelastmodified="true" overwrite="true"/> 
+		<copy file="${latestFolder}${dev-srcFile}" tofile="${destZswlLibFolder}${dev-srcFile}" preservelastmodified="true" overwrite="true"/> 
+		<copy file="${latestFolder}${reportdesignFile}" tofile="${destZswlBinFolder}${reportdesignFile}" preservelastmodified="true" overwrite="true"/> 
+		<copy file="${latestFolder}${startFile}" tofile="${destZswlBinFolder}${startFile}" preservelastmodified="true" overwrite="true"/> 
+		<copy file="${latestFolder}${uiFile}" tofile="${destZswlBinFolder}${uiFile}" preservelastmodified="true" overwrite="true"/> 
+		<echo message="ZSWL Copy Complete!"/>
+	</target>
+	
+	<target name="dest" depends="copy">
+		<echo message="SVN updating MAP3"/>
+		<exec executable="TortoiseProc"> 
+			<arg value="/command:update"/>
+			<arg value="/path:&quot;${MAP3ConfigFolder}&quot;"/>  
+			<arg value="/closeonend:1"/>
+		</exec>
+		<exec executable="TortoiseProc"> 
+			<arg value="/command:update"/>
+			<arg value="/path:&quot;${MAP3WebFolder}&quot;"/>  
+			<arg value="/closeonend:1"/>
+		</exec>
+		<echo message="SVN updating ZSWL"/>
+		<!--
+		<exec executable="TortoiseProc"> 
+			<arg value="/command:update"/>
+			<arg value="/path:&quot;${ZSWLConfigFolder}&quot;"/>  
+			<arg value="/closeonend:1"/>
+		</exec>
+		
+		<exec executable="TortoiseProc"> 
+			<arg value="/command:update"/>
+			<arg value="/path:&quot;${ZSWLJspFolder}&quot;"/>  
+			<arg value="/closeonend:1"/>
+		</exec>
+		-->
+		<exec executable="TortoiseProc"> 
+			<arg value="/command:update"/>
+			<arg value="/path:&quot;${ZSWLWebFolder}&quot;"/>  
+			<arg value="/closeonend:1"/>
+		</exec>
+	</target>
+</project>

@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+<project default="dist">
+	<description>
+		My first ANT example.
+	</description>
+	
+	<property name="parentFolder" value="\\pxy-pc\map_1_4_release"/>
+	
+	<property name="devFile" value="/map-dev.jar"/>
+	<property name="dev-srcFile" value="/map-dev-src.jar"/>
+	
+	<property name="reportdesignFile" value="/map-reportdesign.jar"/>
+	<property name="startFile" value="/map-start.jar"/>
+	<property name="uiFile" value="/map-ui.jar"/>
+	
+	<property name="distFolder1" value="e:/folder1"/>
+	<property name="distFolder2" value="e:/folder2"/>
+	
+	<taskdef name="GetLatestFolderName" classname="GetLatestFolderName" classpath="."/>
+	
+	<target name="init">
+		<echo message="Getting Folder..."/>
+		<GetLatestFolderName property="latestFolder" parentFolder="${parentFolder}"/>
+	</target>
+	
+	<target name="copy" depends="init">
+		<echo message="Start Copying..."/>
+		<copy file="${latestFolder}${devFile}" tofile="${distFolder1}${devFile}" preservelastmodified="true"/> 
+		<copy file="${latestFolder}${dev-srcFile}" tofile="${distFolder1}${dev-srcFile}" preservelastmodified="true"/> 
+		<copy file="${latestFolder}${reportdesignFile}" tofile="${distFolder2}${reportdesignFile}" preservelastmodified="true"/> 
+		<copy file="${latestFolder}${startFile}" tofile="${distFolder2}${startFile}" preservelastmodified="true"/> 
+		<copy file="${latestFolder}${uiFile}" tofile="${distFolder2}${uiFile}" preservelastmodified="true"/> 
+		
+		<echo message="Copy Complete!"/>
+	</target>
+	
+	<target name="dist" depends="copy">
+	</target>
+</project>

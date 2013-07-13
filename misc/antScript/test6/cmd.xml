@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<project default="dist">
+	<description>
+		My first ANT example.
+	</description>
+	
+	<target name="init">
+	</target>
+	<target name="copy" depends="init">
+		<exec executable="TortoiseProc"> 
+			<arg value="/command:update"/>
+			<arg value="/path:&quot;\\1.1.6.120\Tomcat5.0\webapps\config_831\&quot;"/>  
+			<arg value="/closeonend:1"/>
+		</exec>
+	</target>
+	
+	<target name="dist" depends="copy">
+	</target>
+</project>

@@ -1,0 +1,75 @@
+﻿<?xml version="1.0"?>
+<project default="deploy">
+	<description>
+		Deploy the test Server(1.1.2.28)
+	</description>
+
+	<property name="startFile" value="/map-start.jar"/>
+	<property name="uiFile" value="/map-ui.jar"/>
+	<property name="reportdesignFile" value="/map-reportdesign.jar"/>
+	<property name="devFile" value="/map-dev.jar"/>
+	<property name="dev-srcFile" value="/map-dev-src.jar"/>
+
+	<property name="srcFolder" value="\\1.1.2.28\Tomcat5.0\webapps\map3\"/>
+	<property name="srcWebFolder" value="\\1.1.2.28\Tomcat5.0\webapps\map3\web\"/>
+	<property name="srcBinFolder" value="\\1.1.2.28\Tomcat5.0\webapps\map3\bin\"/>
+	<property name="srcLibFolder" value="\\1.1.2.28\Tomcat5.0\webapps\map3\WEB-INF\lib\"/>
+
+	<property name="destFolder" value="\\1.1.2.28\Tomcat5.0\webapps\update\"/>
+	<property name="destWebFolder" value="\\1.1.2.28\Tomcat5.0\webapps\update\patch\web\"/>
+	<property name="destBinFolder" value="\\1.1.2.28\Tomcat5.0\webapps\update\patch\bin\"/>
+	<property name="destLibFolder" value="\\1.1.2.28\Tomcat5.0\webapps\update\patch\WEB-INF\lib\"/>
+
+	<target name="default">        
+        <tstamp/> 
+        <echo message="System:"/> 
+        <echo message="DSTAMP = ${DSTAMP}"/> 
+        <echo message="TSTAMP = ${TSTAMP}"/> 
+        <echo message="TODAY = ${TODAY}"/> 
+    </target>
+
+	<tstamp prefix="my"> 
+        <format property="day" pattern="yyyy-MM-dd"/> 
+        <format property="time" pattern="HH:mm:ss"/> 
+        <format property="dt" pattern="yyyy-MM-dd HH:mm:ss.SSS"/> 
+        <format property="dt2" pattern="yyyyMMdd(HHmm)"/> 
+    </tstamp> 
+	
+	<target name="deploy">
+		<copy file="${srcBinFolder}\${startFile}" tofile="${destBinFolder}\${startFile}" preservelastmodified="true" overwrite="true"/> 
+		<copy file="${srcBinFolder}\${uiFile}" tofile="${destBinFolder}\${uiFile}" preservelastmodified="true" overwrite="true"/> 
+		<copy file="${srcBinFolder}\${reportdesignFile}" tofile="${destBinFolder}\${reportdesignFile}" preservelastmodified="true" overwrite="true"/> 
+		
+		<copy file="${srcLibFolder}\${devFile}" tofile="${destLibFolder}\${devFile}" preservelastmodified="true" overwrite="true"/> 
+		<copy file="${srcLibFolder}\${dev-srcFile}" tofile="${destLibFolder}\${dev-srcFile}" preservelastmodified="true" overwrite="true"/> 
+
+		
+		
+		<copy file="${srcWebFolder}\css\MAP-all.css" tofile="${destWebFolder}\css\MAP-all.css" preservelastmodified="true" overwrite="true"/>
+		<copy file="${srcWebFolder}\css\MAP-all-debug.css" tofile="${destWebFolder}\css\MAP-all-debug.css" preservelastmodified="true" overwrite="true"/>
+		
+		
+
+		<copy todir="${destWebFolder}">
+			<fileset dir="${srcWebFolder}" includes="*.js,*.jsp,*.css,*.html" excludes="**/@deprecated/*.*" />
+		</copy>
+		<copy todir="${destWebFolder}\search">
+			<fileset dir="${srcWebFolder}\search" includes="*.js,*.jsp,*.css,*.html" excludes="**/@deprecated/*.*" />
+		</copy>
+		<copy todir="${destWebFolder}\assets">
+			<fileset dir="${srcWebFolder}\assets" includes="*.js,*.jsp,*.css,*.html" excludes="**/@deprecated/*.*" />
+		</copy>
+
+		
+		
+		<copy todir="${destFolder}\patch\WEB-INF">
+			<fileset dir="${srcFolder}\WEB-INF" includes="*.xml,*.tld,*.wsdd" excludes="**/@deprecated/*.*,web.xml,urlrewrite.xml" />
+		</copy>
+
+
+		<zip destfile="${destFolder}\patch_${my.dt2}.zip">
+			<fileset dir="${destFolder}\patch" includes="**/*.*,**"/>
+		</zip>
+	</target>
+	
+</project>

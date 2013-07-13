@@ -1,0 +1,42 @@
+﻿<?xml version="1.0"?>
+<project default="dest">
+	<description>
+		Update the test Server(1.1.2.28)
+	</description>
+
+	<property name="MAP3ConfigFolder" value="\\1.1.2.28\Tomcat5.0\webapps\config_831\"/>
+	
+	<property name="MAP3WebFolder" value="\\1.1.2.28\Tomcat5.0\webapps\map3\web\"/>
+	
+	<property name="ZSWLWebFolder" value="\\1.1.2.28\Tomcat5.0\webapps\zswl\web\"/>
+	<!--property name="ZSWLJspFolder" value="\\1.1.2.28\Tomcat5.0\webapps\zswl\zswl\"/-->
+	
+	<property name="CMCCWebFolder" value="\\1.1.2.28\Tomcat5.0\webapps\cmcc\web\"/>
+	
+	<target name="dest">
+		<echo message="SVN updating MAP3"/>
+		
+		<exec executable="TortoiseProc"> 
+			<arg value="/command:update"/>
+			<arg value="/path:&quot;${MAP3ConfigFolder}&quot;"/>  
+			<arg value="/closeonend:1"/>
+		</exec>
+		<exec executable="TortoiseProc"> 
+			<arg value="/command:update"/>
+			<arg value="/path:&quot;${MAP3WebFolder}&quot;"/>  
+			<arg value="/closeonend:1"/>
+		</exec>
+		<echo message="SVN updating ZSWL"/>
+		<exec executable="TortoiseProc"> 
+			<arg value="/command:update"/>
+			<arg value="/path:&quot;${ZSWLWebFolder}&quot;"/>  
+			<arg value="/closeonend:1"/>
+		</exec>
+		<echo message="SVN updating CMCC"/>
+		<exec executable="TortoiseProc"> 
+			<arg value="/command:update"/>
+			<arg value="/path:&quot;${CMCCWebFolder}&quot;"/>  
+			<arg value="/closeonend:1"/>
+		</exec>
+	</target>
+</project>

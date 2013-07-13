@@ -1,0 +1,189 @@
+﻿<?xml version="1.0"?>
+<project default="dest">
+	<description>
+		Deploy the test Server(1.1.2.28)
+	</description>
+	
+	<property name="parentFolder" value="\\pxy-pc\map1.4$\"/>
+	
+	<property name="midFile" value="\map-mid.jar"/>
+	<property name="devFile" value="\map-dev.jar"/>
+	<property name="dev-srcFile" value="\map-dev-src.jar"/>
+	
+	<property name="reportdesignFile" value="\map-reportdesign.jar"/>
+	<property name="startFile" value="\map-start.jar"/>
+	<property name="uiFile" value="\map-ui.jar"/>
+	
+	<property name="MAP3ConfigFolder"  value="\\1.1.2.28\Tomcat5.0\webapps\config_831\"/>
+	<!-- property name="ZSWLConfigFolder"  value="\\1.1.2.28\Tomcat5.0\webapps\config_zswl\"/ -->
+	
+	<property name="destMAP3Folder" value="\\1.1.2.28\Tomcat5.0\webapps\map3\"/>
+	<property name="destMap3BinFolder" value="\\1.1.2.28\Tomcat5.0\webapps\map3\bin\"/>
+	<property name="destMap3LibFolder" value="\\1.1.2.28\Tomcat5.0\webapps\map3\WEB-INF\lib\"/>
+	<property name="destMAP3WebFolder" value="\\1.1.2.28\Tomcat5.0\webapps\map3\web\"/>
+	
+	<property name="destCMCCFolder" value="\\1.1.2.28\Tomcat5.0\webapps\cmcc\"/>
+	<property name="destCMCCBinFolder" value="\\1.1.2.28\Tomcat5.0\webapps\cmcc\bin\"/>
+	<property name="destCMCCLibFolder" value="\\1.1.2.28\Tomcat5.0\webapps\cmcc\WEB-INF\lib\"/>
+	<property name="destCMCCWebFolder" value="\\1.1.2.28\Tomcat5.0\webapps\cmcc\web\"/>
+	
+	<property name="destZSWLFolder" value="\\1.1.2.28\Tomcat5.0\webapps\zswl\"/>
+	<property name="destZSWLBinFolder" value="\\1.1.2.28\Tomcat5.0\webapps\zswl\bin\"/>
+	<property name="destZSWLLibFolder" value="\\1.1.2.28\Tomcat5.0\webapps\zswl\WEB-INF\lib\"/>
+	<property name="destZSWLWebFolder" value="\\1.1.2.28\Tomcat5.0\webapps\zswl\web\"/>
+	<property name="destZSWLJspFolder" value="\\1.1.2.28\Tomcat5.0\webapps\zswl\zswl\"/>
+	
+	<property name="destDeployFolder" value="\\1.1.2.28\Tomcat5.0\webapps_bak\map-1.4\"/>
+	<property name="destDeployBinFolder" value="\\1.1.2.28\Tomcat5.0\webapps_bak\map-1.4\bin\"/>
+	<property name="destDeployLibFolder" value="\\1.1.2.28\Tomcat5.0\webapps_bak\map-1.4\WEB-INF\lib\"/>
+	<property name="destDeployWebFolder" value="\\1.1.2.28\Tomcat5.0\webapps_bak\map-1.4\web\"/>
+
+	<property name="destFolder" value="\\1.1.2.28\Tomcat5.0\webapps\update\"/>
+	<property name="destBinFolder" value="\\1.1.2.28\Tomcat5.0\webapps\update\patch\bin\"/>
+	<property name="destLibFolder" value="\\1.1.2.28\Tomcat5.0\webapps\update\patch\WEB-INF\lib\"/>
+	<property name="destWebFolder" value="\\1.1.2.28\Tomcat5.0\webapps\update\patch\web\"/>
+	
+	<taskdef name="GetLatestFolderName" classname="GetLatestFolderName2" classpath="."/>
+	
+	<target name="default">        
+        <tstamp/> 
+        <echo message="System:"/> 
+        <echo message="DSTAMP = ${DSTAMP}"/> 
+        <echo message="TSTAMP = ${TSTAMP}"/> 
+        <echo message="TODAY = ${TODAY}"/> 
+    </target>
+
+	<tstamp prefix="my"> 
+        <format property="day" pattern="yyyy-MM-dd"/> 
+        <format property="time" pattern="HH:mm:ss"/> 
+        <format property="dt" pattern="yyyy-MM-dd HH:mm:ss.SSS"/> 
+        <format property="dt2" pattern="yyyyMMdd(HHmm)"/> 
+    </tstamp> 
+	
+	<target name="init">
+		<echo message="Getting Folder..."/>
+		<GetLatestFolderName property="latestFolder" parentFolder="${parentFolder}"/>
+	</target>
+	
+	<target name="copy-test" depends="init">
+		<echo message="Start Copying Files for MAP3..."/>
+		<copy file="${parentFolder}${latestFolder}${devFile}" tofile="${destMap3LibFolder}${devFile}" preservelastmodified="true" overwrite="true"/> 
+		<copy file="${parentFolder}${latestFolder}${dev-srcFile}" tofile="${destMap3LibFolder}${dev-srcFile}" preservelastmodified="true" overwrite="true"/> 
+		<copy file="${parentFolder}${latestFolder}${reportdesignFile}" tofile="${destMap3BinFolder}${reportdesignFile}" preservelastmodified="true" overwrite="true"/> 
+		<copy file="${parentFolder}${latestFolder}${startFile}" tofile="${destMap3BinFolder}${startFile}" preservelastmodified="true" overwrite="true"/> 
+		<copy file="${parentFolder}${latestFolder}${uiFile}" tofile="${destMap3BinFolder}${uiFile}" preservelastmodified="true" overwrite="true"/> 
+		<echo message="MAP3 Copy Complete!"/>
+		
+		<echo message="Start Copying Files for ZSWL..."/>
+		<copy file="${parentFolder}${latestFolder}${devFile}" tofile="${destZSWLLibFolder}${devFile}" preservelastmodified="true" overwrite="true"/> 
+		<copy file="${parentFolder}${latestFolder}${dev-srcFile}" tofile="${destZSWLLibFolder}${dev-srcFile}" preservelastmodified="true" overwrite="true"/> 
+		<copy file="${parentFolder}${latestFolder}${reportdesignFile}" tofile="${destZSWLBinFolder}${reportdesignFile}" preservelastmodified="true" overwrite="true"/> 
+		<copy file="${parentFolder}${latestFolder}${startFile}" tofile="${destZSWLBinFolder}${startFile}" preservelastmodified="true" overwrite="true"/> 
+		<copy file="${parentFolder}${latestFolder}${uiFile}" tofile="${destZSWLBinFolder}${uiFile}" preservelastmodified="true" overwrite="true"/> 
+		<echo message="ZSWL Copy Complete!"/>
+		
+		<echo message="Start Copying Files for CMCC..."/>
+		<copy file="${parentFolder}${latestFolder}${devFile}" tofile="${destCMCCLibFolder}${devFile}" preservelastmodified="true" overwrite="true"/> 
+		<copy file="${parentFolder}${latestFolder}${dev-srcFile}" tofile="${destCMCCLibFolder}${dev-srcFile}" preservelastmodified="true" overwrite="true"/> 
+		<copy file="${parentFolder}${latestFolder}${reportdesignFile}" tofile="${destCMCCBinFolder}${reportdesignFile}" preservelastmodified="true" overwrite="true"/> 
+		<copy file="${parentFolder}${latestFolder}${startFile}" tofile="${destCMCCBinFolder}${startFile}" preservelastmodified="true" overwrite="true"/> 
+		<copy file="${parentFolder}${latestFolder}${uiFile}" tofile="${destCMCCBinFolder}${uiFile}" preservelastmodified="true" overwrite="true"/> 
+		<echo message="CMCC Copy Complete!"/>
+	</target>
+	
+	<target name="update-config-web" depends="copy-test">
+		<echo message="SVN updating MAP3"/>
+		<exec executable="TortoiseProc"> 
+			<arg value="/command:update"/>
+			<arg value="/path:&quot;${MAP3ConfigFolder}&quot;"/>  
+			<arg value="/closeonend:1"/>
+		</exec>
+		<exec executable="TortoiseProc"> 
+			<arg value="/command:update"/>
+			<arg value="/path:&quot;${destMAP3WebFolder}&quot;"/>  
+			<arg value="/closeonend:1"/>
+		</exec>
+		
+		<echo message="SVN updating ZSWL"/>
+		<exec executable="TortoiseProc"> 
+			<arg value="/command:update"/>
+			<arg value="/path:&quot;${destZSWLWebFolder}&quot;"/>  
+			<arg value="/closeonend:1"/>
+		</exec>
+		
+		<echo message="SVN updating CMCC"/>
+		<exec executable="TortoiseProc"> 
+			<arg value="/command:update"/>
+			<arg value="/path:&quot;${destCMCCWebFolder}&quot;"/>  
+			<arg value="/closeonend:1"/>
+		</exec>
+	</target>
+	
+	<target name="dest-all" depends="update-config-web">
+		<echo message="Start MAP All deploy..."/>
+		<copy file="${parentFolder}${latestFolder}${devFile}" tofile="${destDeployLibFolder}${midFile}" preservelastmodified="true" overwrite="true"/> 
+		<copy file="${parentFolder}${latestFolder}${dev-srcFile}" tofile="${destDeployLibFolder}${dev-srcFile}" preservelastmodified="true" overwrite="true"/> 
+		<copy file="${parentFolder}${latestFolder}${reportdesignFile}" tofile="${destDeployBinFolder}${reportdesignFile}" preservelastmodified="true" overwrite="true"/> 
+		<copy file="${parentFolder}${latestFolder}${startFile}" tofile="${destDeployBinFolder}${startFile}" preservelastmodified="true" overwrite="true"/> 
+		<copy file="${parentFolder}${latestFolder}${uiFile}" tofile="${destDeployBinFolder}${uiFile}" preservelastmodified="true" overwrite="true"/> 
+		
+		
+		<copy file="${destMAP3WebFolder}\css\MAP-all.css" tofile="${destDeployWebFolder}\css\MAP-all.css" preservelastmodified="true" overwrite="true"/>
+		<copy file="${destMAP3WebFolder}\css\MAP-all-debug.css" tofile="${destDeployWebFolder}\css\MAP-all-debug.css" preservelastmodified="true" overwrite="true"/>
+		
+		
+		<copy todir="${destDeployWebFolder}">
+			<fileset dir="${destMAP3WebFolder}" includes="*.js,*.jsp,*.css,*.html" excludes="**/@deprecated/*.*" />
+		</copy>
+		<copy todir="${destDeployWebFolder}\search">
+			<fileset dir="${destMAP3WebFolder}\search" includes="*.js,*.jsp,*.css,*.html" excludes="**/@deprecated/*.*" />
+		</copy>
+		<copy todir="${destDeployWebFolder}\assets">
+			<fileset dir="${destMAP3WebFolder}\assets" includes="*.js,*.jsp,*.css,*.html" excludes="**/@deprecated/*.*" />
+		</copy>
+		
+		
+		<copy todir="${destDeployFolder}\WEB-INF">
+			<fileset dir="${destMAP3Folder}\WEB-INF" includes="*.xml,*.tld,*.wsdd" excludes="**/@deprecated/*.*,web.xml,urlrewrite.xml" />
+		</copy>
+
+		
+		<echo message="MAP All Deploy Complete!"/>
+	</target>
+	<target name="dest" depends="dest-all">
+		<echo message="Start MAP deploy..."/>
+		<copy file="${parentFolder}${latestFolder}${devFile}" tofile="${destLibFolder}${midFile}" preservelastmodified="true" overwrite="true"/> 
+		<copy file="${parentFolder}${latestFolder}${dev-srcFile}" tofile="${destLibFolder}${dev-srcFile}" preservelastmodified="true" overwrite="true"/> 
+		<copy file="${parentFolder}${latestFolder}${reportdesignFile}" tofile="${destBinFolder}${reportdesignFile}" preservelastmodified="true" overwrite="true"/> 
+		<copy file="${parentFolder}${latestFolder}${startFile}" tofile="${destBinFolder}${startFile}" preservelastmodified="true" overwrite="true"/> 
+		<copy file="${parentFolder}${latestFolder}${uiFile}" tofile="${destBinFolder}${uiFile}" preservelastmodified="true" overwrite="true"/> 
+		
+		
+		<copy file="${destMAP3WebFolder}\css\MAP-all.css" tofile="${destWebFolder}\css\MAP-all.css" preservelastmodified="true" overwrite="true"/>
+		<copy file="${destMAP3WebFolder}\css\MAP-all-debug.css" tofile="${destWebFolder}\css\MAP-all-debug.css" preservelastmodified="true" overwrite="true"/>
+		
+		
+		<copy todir="${destWebFolder}">
+			<fileset dir="${destMAP3WebFolder}" includes="*.js,*.jsp,*.css,*.html" excludes="**/@deprecated/*.*" />
+		</copy>
+		<copy todir="${destWebFolder}\search">
+			<fileset dir="${destMAP3WebFolder}\search" includes="*.js,*.jsp,*.css,*.html" excludes="**/@deprecated/*.*" />
+		</copy>
+		<copy todir="${destWebFolder}\assets">
+			<fileset dir="${destMAP3WebFolder}\assets" includes="*.js,*.jsp,*.css,*.html" excludes="**/@deprecated/*.*" />
+		</copy>
+		
+		
+		<copy todir="${destDeployFolder}\WEB-INF">
+			<fileset dir="${destMAP3Folder}\WEB-INF" includes="*.xml,*.tld,*.wsdd" excludes="**/@deprecated/*.*,web.xml,urlrewrite.xml" />
+		</copy>
+		
+		
+		<zip destfile="${destFolder}\patch_${latestFolder}.zip">
+			<fileset dir="${destFolder}\patch" includes="**/*.*,**"/>
+		</zip>
+
+
+		<echo message="MAP Deploy Complete!"/>
+	</target>
+</project>

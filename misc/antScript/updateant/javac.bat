@@ -1,0 +1,1 @@
+javac GetLatestFolderName2.java -classpath E:\eclipse_workspace\map3\WEB-INF\lib\ant-1.5.1.jar

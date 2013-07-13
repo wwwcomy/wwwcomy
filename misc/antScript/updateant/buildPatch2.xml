@@ -1,0 +1,39 @@
+﻿<?xml version="1.0"?>
+<project default="deploy">
+	<description>
+		Deploy the test Server(1.1.2.28)
+	</description>
+
+	<property name="startFile" value="/map-start.jar"/>
+	<property name="uiFile" value="/map-ui.jar"/>
+	<property name="reportdesignFile" value="/map-reportdesign.jar"/>
+	<property name="devFile" value="/map-dev.jar"/>
+	<property name="dev-srcFile" value="/map-dev-src.jar"/>
+
+	<property name="destFolder" value="\\1.1.2.28\Tomcat5.0\webapps\update\"/>
+	<property name="destWebFolder" value="\\1.1.2.28\Tomcat5.0\webapps\update\patch\web\"/>
+	<property name="destBinFolder" value="\\1.1.2.28\Tomcat5.0\webapps\update\patch\bin\"/>
+	<property name="destLibFolder" value="\\1.1.2.28\Tomcat5.0\webapps\update\patch\WEB-INF\lib\"/>
+
+	<target name="default">        
+        <tstamp/> 
+        <echo message="System:"/> 
+        <echo message="DSTAMP = ${DSTAMP}"/> 
+        <echo message="TSTAMP = ${TSTAMP}"/> 
+        <echo message="TODAY = ${TODAY}"/> 
+    </target>
+
+	<tstamp prefix="my"> 
+        <format property="day" pattern="yyyy-MM-dd"/> 
+        <format property="time" pattern="HH:mm:ss"/> 
+        <format property="dt" pattern="yyyy-MM-dd HH:mm:ss.SSS"/> 
+        <format property="dt2" pattern="yyyyMMdd(HHmm)"/> 
+    </tstamp> 
+	
+	<target name="deploy">
+		<zip destfile="${destFolder}\tmp_patch_${my.dt2}.zip">
+			<fileset dir="${destFolder}\patch" includes="**/*.*,**"/>
+		</zip>
+	</target>
+	
+</project>
