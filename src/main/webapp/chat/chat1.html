@@ -1,0 +1,77 @@
+<html>
+<head>
+<title>chat</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<script type="text/javascript" src="jquery-ui/js/jquery-1.7.2.js"></script>
+<script type="text/javascript" src="jquery-ui/js/jquery-ui-1.8.22.custom.min.js"></script>
+
+<link type="text/css" href="jquery-ui/css/ui-lightness/jquery-ui-1.8.22.custom.css" rel="stylesheet" />
+<style>
+</style>
+	<script>
+	function isEmpty(v, allowBlank){
+        return v === null || v === undefined ||  (!allowBlank ? v === '' : false);
+    }
+	function getMsg(){
+		$.ajax({
+			url : "getmsg.do",
+			data : {
+				username : "b"
+			},
+			success : function(xmlRes) {
+				$("<div/>").text(xmlRes).prependTo("#log");
+			},
+			complete : function(xmlReq, e){
+				getMsg();
+			}
+		});
+	};
+	$(function() {
+		//function log( message ) {
+		//	$( "<div/>" ).text( message ).prependTo( "#log" );
+		//	$( "#log" ).scrollTop( 0 );
+		//}
+		$( "#send" ).button();
+		$( "#send" ).click(function(){
+			var words = $("#words").val();
+			$("#words").val("")
+			if(isEmpty(words))
+				return;
+			$( "<div/>" ).text("me: "+words).prependTo( "#log" );
+			$.ajax({
+					url : "chat.do",
+					data : {
+						username : "b",
+						msg : words,
+						tousr : "admin"
+					},
+					success : function(xmlRes) {
+						var success = xmlRes.success;
+						$("<div/>").text(success).prependTo("#log");
+					}
+				});
+			});
+		getMsg();
+		});
+	</script>
+</head>
+<body>
+
+<div class="demo">
+
+<div class="ui-widget" style="margin-top:2em; font-family:Arial">
+	Content:
+<div id="log" style="height: 600px; width: 800px; overflow: auto; border-style: solid;border-width:1px" class=""></div>
+</div>
+
+<div class="ui-widget">
+	<label for="words">Ur words: </label>
+	<input id="words" name="words"/>
+</div>
+<button id="send">Send</button>
+</div><!-- End demo -->
+
+<div class="demo-description">
+</div>
+
+</html>

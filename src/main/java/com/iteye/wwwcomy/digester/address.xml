@@ -1,0 +1,15 @@
+<?xml version='1.0' encoding='utf-8'?>
+<address-book>
+	<contact myType="individual">
+		<name>Zane Pasolini</name>
+		<address>999 W. Prince St.</address>
+		<city>New York</city>
+		<country>USA</country>
+	</contact>
+	<contact myType="business">
+		<name>SAMOFIX d.o.o.</name>
+		<address>Ilica 47-2</address>
+		<city>Zagreb</city>
+		<country short="cn">Croatia</country>
+	</contact>
+</address-book>

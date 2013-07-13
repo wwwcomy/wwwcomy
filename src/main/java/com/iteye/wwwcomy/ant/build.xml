@@ -1,0 +1,19 @@
+<project name="testproject" default="test" basedir=".">
+
+	<description>
+		Deploy new DataBase.
+	</description>
+
+	<property name="destDBUrl" value="" />
+
+	<tstamp prefix="my">
+		<format property="day" pattern="yyyy-MM-dd" />
+		<format property="time" pattern="HH:mm:ss" />
+		<format property="dt" pattern="yyyy-MM-dd HH:mm:ss.SSS" />
+		<format property="dt2" pattern="yyyyMMdd(HHmm)" />
+	</tstamp>
+
+	<target name="test">
+		<echo message="Hello ${name}" />
+	</target>
+</project>
