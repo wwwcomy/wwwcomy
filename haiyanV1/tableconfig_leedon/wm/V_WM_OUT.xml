@@ -177,7 +177,7 @@ create or replace view V_WM_OUTPART_INIT as
 		);
 create or replace view V_WM_OUTPART_HISTORY as 
 		(
-			select * from T_WM_OUTPART where BILL_STATUS<>'init' 
+			select * from T_WM_OUTPART where BILL_STATUS='audit' 
 		);
 create or replace view V_SDB_ORDERS_INIT as 
 		(
