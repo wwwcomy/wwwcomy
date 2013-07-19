@@ -1,12 +1,8 @@
 create or replace view V_WM_SDBITEMCOUNT as (
-select t2.ID AS PRODUCTID,t1.PRODUCT_ID AS SDB_PRODUCT_ID,t1.FREEZ AS NUMS 
-from SDB_PRODUCTS t1 join T_WM_PRO t2 on t1.PRODUCT_ID = t2.SDB_PRODUCT_ID
+select `t2`.`ID` AS `productid`,`t`.`product_id` AS `sdb_product_id`,`t`.`freez` AS `nums`,sum((case when (`t4`.`member_id` = 51) then `t3`.`nums` else 0 end)) AS `XD_nums`,sum((case when (`t4`.`pay_status` = _utf8'1') then `t3`.`nums` else 0 end)) AS `other_nums` from (((`sdb_products` `t` join `t_wm_pro` `t2` on((`t`.`product_id` = `t2`.`SDB_PRODUCT_ID`))) join `sdb_order_items` `t3` on((`t2`.`SDB_PRODUCT_ID` = `t3`.`product_id`))) join `sdb_orders` `t4` on((`t4`.`order_id` = `t3`.`order_id`))) where ((`t4`.`status` = _utf8'active') and (`t4`.`disabled` = _utf8'false') and ((`t4`.`pay_status` = _utf8'0') or ((`t4`.`pay_status` = _utf8'1') and (`t4`.`ship_status` = _utf8'0')))) group by `t2`.`ID`,`t`.`product_id`,`t`.`freez`
 )
 
 
 
 create or replace view V_WM_IN as
-(select sum(t_1.PRO_COUNT) AS PRO_COUNT,t_1.PRODUCTID AS PRODUCTID
-from T_WM_SDBINPRE t_1 left join T_WM_SDBIN t_2 on t_1.HEADID = t_2.ID
-where t_2.BILL_STATUS = 'init'
-group by t_1.PRO_COUNT,t_1.PRODUCTID)
+(select `t_3`.`ID` AS `PRODUCTID`,`t_3`.`CODE` AS `code`,`t_3`.`SUPP_CODE` AS `supp_code`,(case when isnull(sum(`t_1`.`PRO_COUNT`)) then 0 else sum(`t_1`.`PRO_COUNT`) end) AS `PRO_IN_SUM` from (`t_wm_pro` `t_3` left join (`t_wm_sdbinpre` `t_1` join `t_wm_sdbin` `t_2` on(((`t_1`.`HEADID` = `t_2`.`ID`) and (`t_2`.`BILL_STATUS` = _utf8'init')))) on((`t_3`.`ID` = `t_1`.`PRODUCTID`))) group by `t_3`.`ID`)
