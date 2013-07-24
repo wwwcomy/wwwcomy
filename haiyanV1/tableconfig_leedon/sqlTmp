@@ -22,3 +22,6 @@ create or replace view V_WM_OUT as
 			from V_WM_OUTPART_INIT t_1 
 			where t_1.ORDER_ID like 'CK%' 
 		)
+
+4.T_WM_PRO添加ID_INT字段，添加索引
+5. update T_WM_PRO set ID_INT=ID

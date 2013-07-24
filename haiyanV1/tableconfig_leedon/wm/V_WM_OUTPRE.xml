@@ -167,7 +167,7 @@ create or replace view V_WM_OUTPRE as
 		t_2.ITEM_ID,t_2.ORDER_ID,t_2.NAME,t_2.PRICE as OUT_PRICE,t_2.NUMS as PRO_COUNT,t_2.AMOUNT as OUT_ALL_PRICE,
 		concat(CONVERT(t_2.ORDER_ID,char),':',t_3.WMCODE,'(' ,t_2.NAME,')') as OUT_CODE
 		
-		from (V_SDB_ORDER_ITEMS_ALL t_2 left join V_WM_SDBPRODUCT t_3 on t_2.PRODUCT_ID=t_3.SDB_PRODUCT_PK) left join T_WM_OUTPREPART t_1 on t_1.ITEM_ID_PK=t_2.ITEM_ID
+		from (V_SDB_ORDER_ITEMS_ALL t_2 left join V_WM_SDBPRODUCT t_3 on t_2.PRODUCT_ID=t_3.ID_INT) left join T_WM_OUTPREPART t_1 on t_1.ITEM_ID_PK=t_2.ITEM_ID
 	)
 	union all
 	(
