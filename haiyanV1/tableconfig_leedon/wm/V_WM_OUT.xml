@@ -6,6 +6,10 @@
 			<component type="text" readOnly="true" colspan="1"/>
 			<listColumn noedit="false" noquery="false" width="130"/>
 		</field>
+		<field name="ORDER_ID_INT" description="订单号(连接用)" displayOnly="false" javaType="bigDecimal" lazyLoad="false" defaultValue="0">
+			<component type="hidden" readOnly="true"/>
+			<listColumn noedit="true" noquery="true"/>
+		</field>
 		<field name="OUT_TYPE" javaType="string" description="出库类别" defaultValue="consign">
 			<component type="dropdown" readOnly="false">
 				<option displayName="出库" value="consign"/>
@@ -187,14 +191,18 @@ create or replace view V_SDB_ORDERS_INIT as
 		);
 create or replace view V_WM_OUT as 
 		(
-			select t_1.ORDER_ID as ID,t_1.ORDER_ID,t_1.MEMBER_ID,t_1.SHIP_NAME,t_1.SHIP_ADDR,t_1.SHIP_TEL,t_1.SHIP_MOBILE,t_1.FINAL_AMOUNT ,t_1.PMT_AMOUNT,t_1.COST_FREIGHT,t_1.SHIPPING,
+			select t_1.ORDER_ID as ID,t_1.ORDER_ID,t_2.ORDER_ID_INT,t_1.MEMBER_ID,t_1.SHIP_NAME,t_1.SHIP_ADDR,t_1.SHIP_TEL,t_1.SHIP_MOBILE,t_1.FINAL_AMOUNT ,t_1.PMT_AMOUNT,t_1.COST_FREIGHT,t_1.SHIPPING,
 			t_2.ORDER_MEMO,t_2.AUDIT_TIME,t_2.OUT_TYPE,t_2.AUDIT_USER_ID,t_2.BILL_STATUS,t_2.WHOWNER,t_2.LOGISTICS_NAME,t_2.LOGISTICS_CODE,t_2.LOGISTICS_MEMO,t_2.HYVERSION
-			
-			from V_SDB_ORDERS_INIT t_1 left join V_WM_OUTPART_INIT t_2 on t_1.ORDER_ID=t_2.ORDER_ID
+			from SDB_ORDERS t_1 
+			left join T_WM_OUTPART t_2 
+			on t_1.ORDER_ID=t_2.ORDER_ID_INT
+			where (t_2.BILL_STATUS='init' or t_2.BILL_STATUS is null)
+			and ((t_1.STATUS='active' and t_1.PAY_STATUS='1' and t_1.DISABLED='false') or (t_1.STATUS='finish' and t_1.DISABLED='false'))
+			and t_1.ORDER_ID not like '2011%'
 		)
 		union all
 		(
-			select t_1.ID,t_1.ORDER_ID,t_1.MEMBER_ID,t_1.SHIP_NAME,t_1.SHIP_ADDR,t_1.SHIP_TEL,t_1.SHIP_MOBILE,t_1.FINAL_AMOUNT ,t_1.PMT_AMOUNT,t_1.COST_FREIGHT,t_1.SHIPPING,t_1.ORDER_MEMO,
+			select t_1.ID,t_1.ORDER_ID,0 as ORDER_ID_INT,t_1.MEMBER_ID,t_1.SHIP_NAME,t_1.SHIP_ADDR,t_1.SHIP_TEL,t_1.SHIP_MOBILE,t_1.FINAL_AMOUNT ,t_1.PMT_AMOUNT,t_1.COST_FREIGHT,t_1.SHIPPING,t_1.ORDER_MEMO,
 			t_1.AUDIT_TIME,t_1.OUT_TYPE,t_1.AUDIT_USER_ID,t_1.BILL_STATUS,t_1.WHOWNER,t_1.LOGISTICS_NAME,t_1.LOGISTICS_CODE,t_1.LOGISTICS_MEMO,t_1.HYVERSION
 			from V_WM_OUTPART_INIT t_1 
 			where t_1.ORDER_ID like 'CK%' 
@@ -206,7 +214,8 @@ create or replace view V_WM_OUT as
 			+SetCreate(WAREHOUSE,GetUser(WAREHOUSEID),__WAREHOUSE__NAME,GetUser(WAREHOUSENAME))
 			" pluginName="edit" type="after"/>
 		<pluginInterceptor methodName="exp" parameter="
-			Save({T_WM_OUTPART},GetForm())
+			if(SubStr(Get(ORDER_ID),0,2)={CK},Set(ORDER_ID_INT,0),Set(ORDER_ID_INT,get(ORDER_ID)))
+			+Save({T_WM_OUTPART},GetForm())
 			+If(Get(BILL_STATUS)={audit},DisBtns(select,saveView,auditOut)+DisFlds(SUBGRID1)+HidFlds(SUBGRID2,TEST2),true)
 			" pluginName="saveView" />
 		<pluginInterceptor methodName="bsh" parameter="V_WM_OUT.bsh" pluginName="saveViewBatch" type="after" />

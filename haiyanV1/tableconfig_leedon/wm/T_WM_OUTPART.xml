@@ -6,6 +6,10 @@
 			<component type="text" readOnly="true" colspan="1"/>
 			<listColumn noedit="false" noquery="false" width="130"/>
 		</field>
+		<field name="ORDER_ID_INT" description="订单号(连接用)" displayOnly="false" javaType="bigDecimal" lazyLoad="false">
+			<component type="hidden" readOnly="true"/>
+			<listColumn noedit="true" noquery="true"/>
+		</field>
 		<field name="OUT_TYPE" javaType="string" description="出库类别" defaultValue="consign">
 			<component type="dropdown" readOnly="false">
 				<option displayName="出库" value="consign"/>
@@ -150,6 +154,7 @@
 			" pluginName="edit" type="after"/>
 		<pluginInterceptor methodName="exp" parameter="
 			SetCreate(ORDER_ID,Get(ID))
+			+if(SubStr(Get(ORDER_ID),0,2)={CK},Set(ORDER_ID_INT,0),Set(ORDER_ID_INT,get(ORDER_ID)))
 			+Save()
 			+If(Get(BILL_STATUS)={audit},DisBtns(select,saveView,auditOut)+DisFlds(SUBGRID1)+HidFlds(SUBGRID2,TEST2),true)
 			" pluginName="saveView" />
