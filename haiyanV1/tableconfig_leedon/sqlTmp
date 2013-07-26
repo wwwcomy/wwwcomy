@@ -24,4 +24,5 @@ create or replace view V_WM_OUT as
 		)
 
 4.T_WM_PRO添加ID_INT字段，添加索引
-5. update T_WM_PRO set ID_INT=ID
+5.update T_WM_PRO set ID_INT=ID
+6.t_wm_indetail 的batch， t_wm_transdetail的batch、pro_wh、pro_count、to_wh、productid、字段设置为非空
