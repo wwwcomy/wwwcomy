@@ -9,7 +9,11 @@ public class TestExecuter {
 
 	public static void main(String[] args) {
 		for (int i = 0; i < 10; i++) {
-			pool.execute(new A(i));
+			try {
+				pool.execute(new A(i));
+			} catch (Throwable e) {
+				System.out.println("外层检查到异常");
+			}
 		}
 	}
 }
@@ -24,7 +28,7 @@ class A implements Runnable {
 
 	@Override
 	public void run() {
-		System.out.println(Thread.currentThread().getName() + "--> Value is:"
-				+ value);
+		System.out.println(Thread.currentThread().getName() + "--> Value is:" + value);
+		throw new RuntimeException("test");
 	}
 }

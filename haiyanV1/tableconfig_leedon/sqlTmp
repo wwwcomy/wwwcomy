@@ -1,7 +1,7 @@
 
 
 
-1.ORDER_ID_INT bigint 加索引
+1.T_WM_OUTPART表 ORDER_ID_INT bigint 加索引
 2.update T_WM_OUTPART set order_id_INT = ORDER_ID where ORDER_ID not like "%CK%"
 3.V_WM_OUT修改为
 create or replace view V_WM_OUT as 
