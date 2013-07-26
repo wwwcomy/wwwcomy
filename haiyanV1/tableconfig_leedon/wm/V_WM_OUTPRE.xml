@@ -145,7 +145,6 @@
 		<javascript hostPage="edit"><![CDATA[
 		]]></javascript>
 		-->
-		<!-- 上面这句很慢 -->
 		<pluginInterceptor methodName="initDB" pluginName="initDB" type="before"><![CDATA[
 create or replace view V_SDB_ORDERS_ALL as 
 		(
@@ -181,7 +180,7 @@ create or replace view V_WM_OUTPRE as
 		t_2.ITEM_ID,t_2.ORDER_ID,'' as NAME,'' as OUT_PRICE,'' as PRO_COUNT,'' as OUT_ALL_PRICE,
 		concat(CONVERT(t_2.ORDER_ID,char),':',t_3.WMCODE,'(' ,t_3.NAME,')') as OUT_CODE
 		
-		from (T_WM_OUTPREPART t_2 left join V_WM_SDBPRODUCT t_3 on t_2.PRODUCTID=t_3.ID and t_2.ITEM_ID like "CKItem%")
+		from T_WM_OUTPREPART t_2 left join V_WM_SDBPRODUCT t_3 on t_2.PRODUCTID=t_3.ID and t_2.ITEM_ID like "CKItem%"
 	)
 		]]></pluginInterceptor>
 		<pluginInterceptor methodName="exp" parameter="
@@ -192,7 +191,9 @@ create or replace view V_WM_OUTPRE as
 			+If(Or(isEmpty(Get(ORDER_ID)),SubStr(Get(ORDER_ID),0,2)={CK}),true,DisFlds(PRODUCTID,OUT_PRICE,OUT_ALL_PRICE))
 			" pluginName="grid" />
 	
-		<pluginInterceptor methodName="exp" parameter="if(SubStr(Get(ORDER_ID),0,2)={CK},Set(ITEM_ID_PK,0),Set(ITEM_ID_PK,get(ITEM_ID)))+Save({T_WM_OUTPREPART},GetForm())" pluginName="saveView" />
+		<pluginInterceptor methodName="exp" parameter="
+			if(SubStr(Get(ORDER_ID),0,2)={CK},Set(ITEM_ID_PK,0),Set(ITEM_ID_PK,get(ITEM_ID)))
+			+Save({T_WM_OUTPREPART},GetForm())" pluginName="saveView" />
 		<pluginInterceptor methodName="exp" parameter="DBSQL({update T_WM_OUTDETAIL set BILL_STATUS='audit' where HEADID='}&amp;Get(ORDER_ID)&amp;{' and PRODUCTID='}&amp;Get(PRODUCTID)&amp;{'})" pluginName="audit" />
 		<pluginInterceptor methodName="exp" parameter="DBSQL({update T_WM_OUTDETAIL set BILL_STATUS='init' where HEADID='}&amp;Get(ORDER_ID)&amp;{' and PRODUCTID='}&amp;Get(PRODUCTID)&amp;{'})" pluginName="unaudit" />
 		<!-- -->
