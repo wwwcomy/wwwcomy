@@ -19,7 +19,7 @@
 			<component type="text" readOnly="true" displayReferenceField="NAME"/>
 			<listColumn noedit="false" noquery="false"/>
 		</field>
-		<field name="BATCH" description="批次" javaType="bigDecimal">
+		<field name="BATCH" description="批次" javaType="bigDecimal" nullAllowed="false">
 			<component type="text" readOnly="false"/>
 			<listColumn noedit="false" noquery="false" width="75"/>
 		</field>
