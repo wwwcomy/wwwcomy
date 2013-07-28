@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Haiyan xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../haiyan.xsd">
+	<!-- added by Bog -->
 	<table name="V_WM_STORESALE_CONPRI" description="库存销售情况">
 		<id name="ID" javaType="string"/>
 		<field name="HEADID" description="单头" javaType="string">
