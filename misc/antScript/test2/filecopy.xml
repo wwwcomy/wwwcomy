@@ -11,9 +11,9 @@
 	</target>
 	
 	<target name="dist" depends="init">
-		<echo message="正在拷贝Jar文件到${distFile}中..." />
+		<echo message="copying ${distFile}..." />
 		<copy file="${srcFile}" tofile="${distFile}"/> 
-		<echo message="拷贝完成" />
+		<echo message="copy complete" />
 	</target>
 	
 	<target name="clean">
