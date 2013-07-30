@@ -9,7 +9,7 @@
 			<component type="combo" readOnly="false" referenceTable="V_DIC_SDBPROGOODS" referenceField="PRODUCT_ID" displayReferenceField="WMCODE,NAME" quickQueryConditionField="WMCODE,NAME" associatedFields="SDB_NAME,WMCODE,P_21,PACKING_NUM,P_27,WEIGHTNUM,SPEC,MODEL,BHZQ,BIG_PIC,IN_PRICE,OUT_PRICE,TYPE_0,MARKETABLE,SDB_PRODUCT_ID,TYPE_ID,COLOR"  parameter="{&amp;__filter=}&amp;If(IsEmpty(Get(PRODUCT_ID)),-1,Get(PRODUCT_ID))" action="GetModel()"/>
 			<listColumn noedit="false" noquery="false" width="170"/>
 		</field>
-		<field name="SDB_PRODUCT_ID" description="SDB_PRODUCT_ID" javaType="string">
+		<field name="SDB_PRODUCT_ID" description="SDB_PRODUCT_ID" javaType="bigDecimal">
 			<component type="text" readOnly="true" displayReferenceField="PRODUCT_ID" colspan="7"/>
 			<listColumn noedit="false" noquery="true"/>
 		</field>
