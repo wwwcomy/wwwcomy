@@ -389,6 +389,16 @@
 			<listColumn noquery="false" nowrap="true"/>
 		</field>
 		-->
+		<field name="HYVERSION" description="HYVERSION" javaType="string">
+			<component type="hidden" readOnly="false" />
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="BILL_STATUS" javaType="string" description="单据明细状态">
+			<component type="hidden" readOnly="true">
+				<option displayName="待批" value="init"/>
+				<option displayName="审批确认" value="audit"/>
+			</component>
+		</field>
 		<!-- -->
 		<Panel name="root" description="root">
 			<TabPanel name="tab" description="tab">
@@ -401,7 +411,7 @@
 				</Panel>
 				<Panel name="tab2" description="系统信息">
 					<!-- USER_ID USER_ID_1 -->
-					<Group name="g10" description="-" collapse="true" fields="CON_LASTTIME LXTSJG JQ CREATE_USER_ID CREATE_TIME CODE CONFLICT ORGAUNIT_ID TEMPORGAID DEPT_ID TYPE_ STAGE STATUS AVAILABLE"/>
+					<Group name="g10" description="-" collapse="true" fields="CON_LASTTIME LXTSJG JQ CREATE_USER_ID CREATE_TIME CODE CONFLICT ORGAUNIT_ID TEMPORGAID DEPT_ID TYPE_ STAGE STATUS AVAILABLE HYVERSION"/>
 					<!-- TEMPWAREHOUSEID  UPDATE_USER_ID UPDATE_TIME UPDATETIME_SJ UPDATETIME_ZLX UPDATETIME_LX UPDATETIME_HT  -->
 				</Panel>
 			</TabPanel>
