@@ -30,7 +30,7 @@ Ext.onReady(function() {
 		closable : true,
 		// anchorOffset : 85,
 		// autoLoad : {
-		// url : 'comResource/jsp/crm/crm_usertip.jsp?__cusid=' + Hy.getValue('CUSTOMER_ID')
+		// url : 'project/crm/crm_usertip.jsp?__cusid=' + Hy.getValue('CUSTOMER_ID')
 		// },
 		// contentEl : 'content-tip',
 		listeners : {
@@ -38,7 +38,7 @@ Ext.onReady(function() {
 				if (this.cusid != Hy.getValue('CUSTOMER_ID')) {
 					this.cusid = Hy.getValue('CUSTOMER_ID');
 					if (!Hy.isEmpty(this.cusid)) {
-						var url = 'comResource/jsp/crm/crm_usertip.jsp?__cusid=' + this.cusid;
+						var url = 'project/crm/crm_usertip.jsp?__cusid=' + this.cusid;
 						this.load(url);
 					}
 				}

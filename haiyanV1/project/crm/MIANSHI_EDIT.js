@@ -1,6 +1,6 @@
 // remoteValidate
 function remoteValidate() {
-	var result = byXmlhttp('comResource/jsp/crm/checkMsAddr.jsp?' //
+	var result = byXmlhttp('project/crm/checkMsAddr.jsp?' //
 			+ '&CITY_ID=' + Hy.getEncodeURIValue('CITY_ID') //
 			+ '&MS_ADDR_QU=' + Hy.getEncodeURIValue('MS_ADDR_QU') //
 			+ '&MS_ADDR_LU=' + Hy.getEncodeURIValue('MS_ADDR_LU') //

@@ -21,7 +21,7 @@ function remoteValidate() {
 		alert('"QQ msn 邮箱" 三项可以不全填但必填一个');
 		return false;
 	}
-	var result = byXmlhttp('comResource/jsp/crm/checkCusName.jsp?' //
+	var result = byXmlhttp('project/crm/checkCusName.jsp?' //
 			+ '&NAME=' + encodeURI($('NAME').value) //
 			+ '&ADDRESS=' + encodeURI($('ADDRESS').value) //
 			+ '&ID=' + $('ID').value);
