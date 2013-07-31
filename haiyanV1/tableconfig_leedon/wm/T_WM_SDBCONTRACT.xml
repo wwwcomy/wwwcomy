@@ -86,10 +86,10 @@
 				var t='';
 				v.split(',').each(function(_s, _index){
 					if (!Ext.isEmpty(_s))
-						if (_s.endsWith('.doc'))
-							t+='<a href="'+_s+'" target="_blank">附件'+_index+'</a>';
-						else
+						if (_s.endsWith('.jpg')||_s.endsWith('.png')||_s.endsWith('.gif'))
 							t+='<img src="'+_s+'" style="width:30;height30;" width=30 height=30><a href="'+_s+'" target="_blank">图片'+_index+'</a></img>';
+						else
+							t+='<a href="'+_s+'" target="_blank">附件'+_index+'</a>';
 					});
 				return t;
 			}
