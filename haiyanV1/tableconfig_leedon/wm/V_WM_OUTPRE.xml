@@ -180,7 +180,7 @@ create or replace view V_WM_OUTPRE as
 		t_2.ITEM_ID,t_2.ORDER_ID,'' as NAME,'' as OUT_PRICE,'' as PRO_COUNT,'' as OUT_ALL_PRICE,
 		concat(CONVERT(t_2.ORDER_ID,char),':',t_3.WMCODE,'(' ,t_3.NAME,')') as OUT_CODE
 		
-		from T_WM_OUTPREPART t_2 left join V_WM_SDBPRODUCT t_3 on t_2.PRODUCTID=t_3.ID and t_2.ITEM_ID like "CKItem%"
+		from T_WM_OUTPREPART t_2 left join V_WM_SDBPRODUCT t_3 on t_2.PRODUCTID=t_3.ID where t_2.ITEM_ID like "CKItem%"
 	)
 		]]></pluginInterceptor>
 		<pluginInterceptor methodName="exp" parameter="
