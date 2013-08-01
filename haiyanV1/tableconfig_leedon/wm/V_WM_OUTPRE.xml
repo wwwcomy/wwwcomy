@@ -15,7 +15,7 @@
 			<component type="readOnlyText"/>
 		</field>
 		<field name="PRODUCTID" description="EDP商品" javaType="string" >
-			<component type="combo" readOnly="false" displayReferenceField="WMCODE,NAME" referenceField="ID" referenceTable="V_WM_SDBPRODUCT" associatedFields="WMCODE,NAME,PACKING_NUM,WAREHOUSE,SUPP_CODE" />
+			<component type="combo" readOnly="false" displayReferenceField="WMCODE,NAME" referenceField="ID" referenceTable="V_WM_SDBPRODUCT" associatedFields="WMCODE,NAME,PACKING_NUM,WAREHOUSE,SUPP_CODE,IN_PRICE" />
 			<listColumn noedit="false" noquery="false"/>
 		</field>
 		<field name="PRODUCT_ID" description="SDB商品ID" javaType="string" >
@@ -30,7 +30,7 @@
 			<component type="text" readOnly="true" displayReferenceField="WMCODE"/>
 			<listColumn noedit="false" noquery="false"/>
 		</field>
-		<field name="SUPP_CODE" description="供应商自有货号" javaType="string">
+		<field name="SUPP_CODE" description="供应商自有货号" displayOnly="true" javaType="string">
 			<component type="text" readOnly="true" displayReferenceField="SUPP_CODE"/>
 			<listColumn noedit="false" noquery="false"/>
 		</field>
@@ -54,8 +54,8 @@
 			<component type="text" readOnly="false"/>
 			<listColumn noedit="false" noquery="false"/>
 		</field>
-		<field name="IN_PRICE" description="进货单价" displayOnly="false" javaType="string" lazyLoad="false">
-			<component type="text" readOnly="false"/>
+		<field name="IN_PRICE" description="进货单价" displayOnly="true" javaType="string" lazyLoad="false">
+			<component type="text" readOnly="false" displayReferenceField="IN_PRICE"/>
 			<listColumn noedit="false" noquery="false"/>
 		</field>
 		<field name="OUT_PRICE" description="EDP销售单价" displayOnly="false" javaType="string" lazyLoad="false">
@@ -78,16 +78,16 @@
 			<component type="text" readOnly="true" maxFractionDigit="3" minFractionDigit="3"/>
 			<listColumn noedit="false" noquery="false"/>
 		</field>
-		<field name="WEIGHTNUM" description="每箱重量(g)" displayOnly="false" javaType="string" lazyLoad="false">
+		<field name="WEIGHTNUM" description="每箱重量(g)" displayOnly="true" javaType="string" lazyLoad="false">
 			<component type="text" readOnly="true" />
 			<listColumn noedit="false" noquery="false"/>
 		</field>
 		
-		<field name="SUPPLIER" description="供应商" displayOnly="false" javaType="string" lazyLoad="false">
+		<field name="SUPPLIER" description="供应商" displayOnly="true" javaType="string" lazyLoad="false">
 			<component type="text" readOnly="true" colspan="1"/>
 			<listColumn noedit="false" noquery="false"/>
 		</field>
-		<field name="WAREHOUSE" description="产品所属仓库" displayOnly="false" javaType="string" lazyLoad="false" nullAllowed="false" >
+		<field name="WAREHOUSE" description="产品所属仓库" displayOnly="true" javaType="string" lazyLoad="false" nullAllowed="false" >
 			<component type="text" readOnly="true" colspan="1" displayReferenceField="WAREHOUSE"/>
 			<listColumn noedit="false" noquery="false"/>
 		</field>
@@ -156,7 +156,7 @@ create or replace view V_SDB_ORDER_ITEMS_ALL as
 		);
 create or replace view V_WM_OUTPRE as 
 	(
-		select t_1.HYVERSION,t_1.OUT_COUNT,'' as PRE,'' as AUDIT,t_1.OUT_RCOUNT,t_1.ITEM_ID_PK,
+		select t_1.HYVERSION,t_1.OUT_COUNT,t_1.OUT_RCOUNT,t_1.ITEM_ID_PK,
 		t_1.All_CAPACITYNUM,t_1.All_WEIGHTNUM,t_1.BILL_STATUS,t_1.REMAINDER_NUM,
 		t_1.LOGISTICS_NAME,t_1.LOGISTICS_CODE,t_1.LOGISTICS_MEMO,
 		
@@ -170,7 +170,7 @@ create or replace view V_WM_OUTPRE as
 	)
 	union all
 	(
-		select t_2.HYVERSION,t_2.OUT_COUNT,'' as PRE,'' as AUDIT,t_2.OUT_RCOUNT,0 as ITEM_ID_PK,
+		select t_2.HYVERSION,t_2.OUT_COUNT,t_2.OUT_RCOUNT,0 as ITEM_ID_PK,
 		t_2.All_CAPACITYNUM,t_2.All_WEIGHTNUM,t_2.BILL_STATUS,t_2.REMAINDER_NUM,
 		t_2.LOGISTICS_NAME,t_2.LOGISTICS_CODE,t_2.LOGISTICS_MEMO,
 		
