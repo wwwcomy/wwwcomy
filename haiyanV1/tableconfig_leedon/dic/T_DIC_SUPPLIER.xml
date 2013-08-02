@@ -42,7 +42,7 @@
 			<component type="text"/>
 		</field>
 		<field name="IMAGE" description="附件图片" displayOnly="false" javaType="string" length="255" lazyLoad="false" nullAllowed="false">
-			<component type="image" readOnly="false" renderer="renderIMAGE" multipleSelect="true"/>
+			<component type="image" readOnly="false" renderer="renderIMAGE" multipleSelect="true"/><!--  -->
 			<listColumn noedit="false" noquery="false" nowrap="true" width="165"/>
 		</field>
 		<field name="FREE_INSPACTION" javaType="string" description="是否免检" nullAllowed="false">
@@ -120,12 +120,14 @@
 		</queryFilter>
 		<javascript hostPage="query"><![CDATA[
 			function renderIMAGE(v) {
-				var vals=v.split(',');
 				var t='';
-				vals.each(function(_s, _index){
+				v.split(',').each(function(_s, _index){
 					if (!Ext.isEmpty(_s))
-						t+='<img src="'+_s+'" style="width:30;height30;" width=30 height=30><a href="'+_s+'" target="_blank">图片'+_index+'</a></img>';
-				});
+						if (_s.endsWith('.jpg')||_s.endsWith('.png')||_s.endsWith('.gif'))
+							t+='<img src="'+_s+'" style="width:30;height30;" width=30 height=30><a href="'+_s+'" target="_blank">图片'+_index+'</a></img>';
+						else
+							t+='<a href="'+_s+'" target="_blank">附件'+_index+'</a>';
+					});
 				return t;
 			}
 		]]></javascript>
@@ -133,7 +135,7 @@
 			If(InRole(admin),true,DisBtns(add,delete,save,saveAndAdd,saveAndAddCopy))" pluginName="query" type="after"/>
 		<pluginInterceptor className="haiyan.interceptor.SaveInterceptor" methodName="createAreaInfo" pluginName="save"/>
 	</table>
-	<!-- -->
+
 	<table name="T_DIC_SUPP_USER" description="供应商-用户账号">
 		<id name="ID" description="ID" javaType="string">
 			<component type="hidden" readOnly="false" url="#"/>
@@ -145,7 +147,7 @@
 			<component type="richSelect" referenceField="ID" referenceTable="SYSOPERATOR_COMBO" displayReferenceField="NAME,CODE"/>
 		</field>
 	</table>
-	<!-- -->
+
 	<table name="T_DIC_ACCOUNT" description="银行账户">
 		<id name="ID" description="ID" javaType="string">
 			<component type="hidden" readOnly="false" url="#"/>
@@ -165,7 +167,7 @@
 			<component type="text"/>
 		</field>
 	</table>
-	<!-- -->
+
 	<table name="T_DIC_SUP_ACC" description="供应商-银行账户">
 		<id name="ID" description="ID" javaType="string">
 			<component type="hidden" readOnly="false" url="#"/>
@@ -177,7 +179,7 @@
 			<component type="richSelect" referenceField="ID" referenceTable="T_DIC_ACCOUNT" displayReferenceField="ACC_CODE,ACC_NAME,ACC_NUM"/>
 		</field>
 	</table>
-	<!-- -->
+
 	<table name="T_DIC_CUS_ACC" realTable="T_DIC_SUP_ACC" description="客户-银行账户">
 		<id name="ID" description="ID" javaType="string">
 			<component type="hidden" readOnly="false" url="#"/>
@@ -189,4 +191,5 @@
 			<component type="richSelect" referenceField="ID" referenceTable="T_DIC_ACCOUNT" displayReferenceField="ACC_CODE,ACC_NAME,ACC_NUM"/>
 		</field>
 	</table>
+	
 </Haiyan>

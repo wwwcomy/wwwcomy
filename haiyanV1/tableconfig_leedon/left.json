@@ -2,7 +2,8 @@
 /*
  * { text : 'OLAP库存分析', // http for Outer cataUrl : Hy.getHostName() +
  * '/haiyan_olap/olap.jsp?query=wm_product', leaf : true },
- */{
+ */		
+		{
 			text : '在线用户',
 			id : 'userlist',
 			cataUrl : 'showUserListPage.do?',
@@ -102,5 +103,13 @@
 		}, {
 			text : 'T_WM_ACCOUNTSTATEMENT',
 			cataUrl : 'query.do?__opr_data=T_WM_ACCOUNTSTATEMENT',
+			leaf : true
+		}, {
+			text : 'T_DIC_SDBPROGOODS',
+			cataUrl : 'query.do?__opr_data=T_DIC_SDBPROGOODS',
+			leaf : true
+		}, {
+			text : 'T_WM_SDBPRODUCT',
+			cataUrl : 'query.do?__opr_data=T_WM_SDBPRODUCT',
 			leaf : true
 		}]

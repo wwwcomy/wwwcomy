@@ -29,11 +29,11 @@
 			<component type="text" readOnly="true" displayReferenceField="SUPP_CODE"/>
 			<listColumn noedit="false" noquery="false"/>
 		</field>
-		<field name="WAREHOUSE" description="收货仓库" displayOnly="false" javaType="string" lazyLoad="false" nullAllowed="false">
+		<field name="WAREHOUSE" description="收货仓库" displayOnly="false" javaType="string" lazyLoad="true" loadType="cache" nullAllowed="false">
 			<component type="richSelect" readOnly="false" colspan="1" displayReferenceField="NAME" referenceField="ID" referenceTable="T_DIC_WAREHOUSE_COMBO" parameter="If(Get(FREE_INSPACTION)=1,{&amp;__filter=filter1},{&amp;__filter=filter})"/>
 			<listColumn noedit="false" noquery="false"/>
 		</field>
-		<field name="WHOWNER" description="库主" displayOnly="false" javaType="string" lazyLoad="false" nullAllowed="true">
+		<field name="WHOWNER" description="库主" displayOnly="false" javaType="string" lazyLoad="true" loadType="cache" nullAllowed="true">
 			<component type="richSelect" readOnly="false" colspan="1" displayReferenceField="NAME" referenceField="ID" referenceTable="T_WM_OPERATOR"/>
 			<listColumn noedit="false" noquery="false"/>
 		</field>
@@ -49,12 +49,12 @@
 			<listColumn noedit="false" noquery="false" nowrap="true"/>
 		</field>
 		<field name="SUBGRID" javaType="string" description="商品列表" displayOnly="true">
-			<component type="grid" readOnly="false" colspan="6" style="width:950;height:530;grouping:false;" displayReferenceField="ID,HEADID,PRODUCTID,PRO_NAME,SUPP_CODE,MODEL,PRO_COUNT,ZDKC,SPEC,PRO_CAPACITYNUM,PRO_WEIGHTNUM,P_24,PRO_PACKINGNUM,PRO_IN_PRICE,PRO_OUT_PRICE,VALIDATE_DAY,VALIDATE_END,MARKETABLE,CONTRACT_CODE" referenceField="HEADID" referenceTable="T_WM_SDBCONPRODUCT" parameter="{&amp;HEADID=}&amp;If(IsEmpty(Get({ID})),-1,Get({ID}))" />
+			<component type="grid" readOnly="false" colspan="6" style="width:950;height:505;grouping:false;" displayReferenceField="ID,HEADID,PRODUCTID,PRO_NAME,SUPP_CODE,MODEL,PRO_COUNT,ZDKC,SPEC,PRO_CAPACITYNUM,PRO_WEIGHTNUM,P_24,PRO_PACKINGNUM,PRO_IN_PRICE,PRO_OUT_PRICE,VALIDATE_DAY,VALIDATE_END,MARKETABLE,CONTRACT_CODE" referenceField="HEADID" referenceTable="T_WM_SDBCONPRODUCT" parameter="{&amp;HEADID=}&amp;If(IsEmpty(Get({ID})),-1,Get({ID}))" />
 			<!-- displayReferenceField="PRO_CODE"  action="alert(get(ID))" -->
 			<queryCondition type="none"/>
 			<listColumn noquery="true"/>
 		</field>
-		<field name="AUDIT_USER_ID" javaType="string" description="审批人">
+		<field name="AUDIT_USER_ID" javaType="string" description="审批人" lazyLoad="true" loadType="cache" >
 			<component type="combo" quickQueryConditionField="NAME" referenceTable="SYSOPERATOR_VIEW" referenceField="ID" displayReferenceField="NAME" readOnly="true"/>
 			<listColumn noquery="true" nowrap="true"/>
 		</field>
