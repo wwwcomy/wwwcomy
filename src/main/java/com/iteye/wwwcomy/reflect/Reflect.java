@@ -4,6 +4,9 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 
 class Car {
+	static {
+		System.out.println("Let us see....");
+	}
 	private String brand;
 	private int Speed;
 
@@ -18,8 +21,7 @@ class Car {
 	}
 
 	public void introduce() {
-		System.out.println("The Car brand is " + this.brand
-				+ "; and the Maxspeed is " + this.Speed);
+		System.out.println("The Car brand is " + this.brand + "; and the Maxspeed is " + this.Speed);
 	}
 
 	public String getBrand() {
