@@ -42,6 +42,13 @@ class Car {
 
 }
 
+/**
+ * @author wwwcomy 
+ * 
+ * the static code block will only run once, even in different
+ *         classload
+ * 
+ */
 public class Reflect {
 
 	public static Car getCar() throws Throwable {
