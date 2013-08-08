@@ -527,6 +527,7 @@ create or replace view V_WM_SDBPRODUCT as
 		<pluginInterceptor methodName="exp" pluginName="edit" parameter="
 			SetCreate(WAREHOUSE,GetUser(WAREHOUSEID),__WAREHOUSE__NAME,GetUser(WAREHOUSENAME))
 			+If(InRole(sp,wm),DisFlds(SUPPLIER)+Set(SUPPLIER,GetUser(SUPPLIER),__SUPPLIER__NAME,GetUser(__SUPPLIER__NAME)),true)
+			+DisBtns(syncView)
 			" type="after"/>
 		<pluginInterceptor methodName="exp" pluginName="saveView" parameter="
 			If(InRole(sp,wm),If(Int(DBFindValue({select count(ID) from T_WM_AGREEMENT where STATUS='1' and SUPPLIER='}&amp;Get(SUPPLIER)&amp;{'}))=0,Warning({未能有一份完成的协议，无法新建产品 }),true),true)
@@ -534,6 +535,20 @@ create or replace view V_WM_SDBPRODUCT as
 			+Save({T_WM_PRO},GetForm())
 			" />
 		<!-- t_1.CONTRACT;比较P_27和CAPACITYNUM,重新计算C1 C2 C3 -->
+		<pluginInterceptor methodName="bsh" pluginName="syncView" type="after"><![CDATA[
+			void refreshDB() throws Throwable {
+				String PRODUCT_ID = context.getParameter("PRODUCT_ID");
+				if (StringUtil.isEmpty(PRODUCT_ID)) {
+					throw new Warning("PRODUCT_ID Lost");
+				}
+				String sql1 = "delete from T_WM_SDBPRODUCT where PRODUCT_ID=?";
+				String sql2 = "insert into  T_WM_SDBPRODUCT(HYVERSION,ID,NAME,CODE,WAREHOUSE,SUPPLIER,STATUS,WHOWNER,SDB_PRODUCT_ID,C1,C2,C3,COLOR,ZDKC,CAPACITYNUM,EDPMODEL,P_27_LAST,P_27,P_21,PRODUCT_ID,SUPP_CODE,SDB_NAME,WMCODE,PACKING_NUM,WEIGHTNUM,P_24,SPEC,BHZQ,BIG_PIC,IN_PRICE,OUT_PRICE,TYPE_0,MEMO,MARKETABLE,MODEL,TYPE_ID) (select HYVERSION,ID,NAME,CODE,WAREHOUSE,SUPPLIER,STATUS,WHOWNER,SDB_PRODUCT_ID,C1,C2,C3,COLOR,ZDKC,CAPACITYNUM,EDPMODEL, P_27_LAST,P_27,P_21,PRODUCT_ID,SUPP_CODE,SDB_NAME,WMCODE,PACKING_NUM,WEIGHTNUM,P_24,SPEC,BHZQ,BIG_PIC,IN_PRICE,OUT_PRICE,TYPE_0,MEMO,MARKETABLE,MODEL,TYPE_ID from V_WM_SDBPRODUCT where PRODUCT_ID=?)";
+				final DBManager dbm = context.getDBM();
+				dbm.executeUpdatePre(sql1, new Object[]{PRODUCT_ID}, null);
+				dbm.executeUpdatePre(sql2, new Object[]{PRODUCT_ID}, null);
+			}
+			refreshDB();
+		]]></pluginInterceptor>
 		<pluginInterceptor methodName="bsh" pluginName="saveView" type="after"><![CDATA[
 			void refreshDB() throws Throwable {
 				String sql1 = "delete from T_WM_SDBPRODUCT where ID=?";
@@ -557,6 +572,7 @@ create or replace view V_WM_SDBPRODUCT as
 		<!-- -->
 		<pluginOperation name="saveView" oprName="保存" hostPage="edit" tblevel="1" img="save" action="if(checkcap()=1,plugin({},{saveView})+brk(),alert('确认体积是否正确')+brk())"/>
 		<pluginOperation name="refreshDB" oprName="重载SDB商品" hostPage="query" tblevel="1" img="refresh" action="plugin({},{refreshDB})+brk()"/>
+		<pluginOperation name="syncView" oprName="同步当前SDB商品" hostPage="edit" tblevel="1" img="refresh" action="alert('无效')+brk()"/>
 		<!-- -->
 		<Operation queryPageDelete="false" save="false" saveAndAdd="false" saveAndAddCopy="false"/>
 	</table>
