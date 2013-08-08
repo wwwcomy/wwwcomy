@@ -551,23 +551,35 @@ create or replace view V_WM_SDBPRODUCT as
 		]]></pluginInterceptor>
 		<pluginInterceptor methodName="bsh" pluginName="saveView" type="after"><![CDATA[
 			void refreshDB() throws Throwable {
+				String ID = form.get("ID");
+				if (StringUtil.isEmpty(ID)) {
+					throw new Warning("ID Lost");
+				}
 				String sql1 = "delete from T_WM_SDBPRODUCT where ID=?";
 				String sql2 = "insert into  T_WM_SDBPRODUCT(HYVERSION,ID,NAME,CODE,WAREHOUSE,SUPPLIER,STATUS,WHOWNER,SDB_PRODUCT_ID,C1,C2,C3,COLOR,ZDKC,CAPACITYNUM,EDPMODEL,P_27_LAST,P_27,P_21,PRODUCT_ID,SUPP_CODE,SDB_NAME,WMCODE,PACKING_NUM,WEIGHTNUM,P_24,SPEC,BHZQ,BIG_PIC,IN_PRICE,OUT_PRICE,TYPE_0,MEMO,MARKETABLE,MODEL,TYPE_ID) (select HYVERSION,ID,NAME,CODE,WAREHOUSE,SUPPLIER,STATUS,WHOWNER,SDB_PRODUCT_ID,C1,C2,C3,COLOR,ZDKC,CAPACITYNUM,EDPMODEL, P_27_LAST,P_27,P_21,PRODUCT_ID,SUPP_CODE,SDB_NAME,WMCODE,PACKING_NUM,WEIGHTNUM,P_24,SPEC,BHZQ,BIG_PIC,IN_PRICE,OUT_PRICE,TYPE_0,MEMO,MARKETABLE,MODEL,TYPE_ID from V_WM_SDBPRODUCT where ID=?)";
 				final DBManager dbm = context.getDBM();
-				dbm.executeUpdatePre(sql1, new Object[]{form.get("ID")}, null);
-				dbm.executeUpdatePre(sql2, new Object[]{form.get("ID")}, null);
+				dbm.executeUpdatePre(sql1, new Object[]{ID}, null);
+				dbm.executeUpdatePre(sql2, new Object[]{ID}, null);
 			}
 			refreshDB();
 		]]></pluginInterceptor>
 		<pluginInterceptor methodName="bsh" pluginName="refreshDB" type="after"><![CDATA[
-			void refreshDB() throws Throwable {
+			void refreshDB1() throws Throwable {
+				String sql1 = "delete from T_DIC_SDBPROGOODS";
+				String sql2 = "insert into  T_DIC_SDBPROGOODS(PRODUCT_ID,GOODS_ID,WMCODE,STORE1,STORE2,IN_PRICE,OUT_PRICE,P_21,PACKING_NUM,P_27,NAME,WEIGHTNUM,P_24,SPEC,MODEL,BHZQ,BIG_PIC,TYPE_0,TYPE_ID,COLOR,MARKETABLE,MEMO) (select PRODUCT_ID,GOODS_ID,WMCODE,STORE1,STORE2,IN_PRICE,OUT_PRICE,P_21,PACKING_NUM,P_27,NAME,WEIGHTNUM,P_24,SPEC,MODEL, BHZQ,BIG_PIC,TYPE_0,TYPE_ID,COLOR,MARKETABLE,MEMO from V_DIC_SDBPROGOODS)";
+				final DBManager dbm = context.getDBM();
+				dbm.executeUpdate(sql1, null);
+				dbm.executeUpdate(sql2, null);
+			}
+			refreshDB1();
+			void refreshDB2() throws Throwable {
 				String sql1 = "delete from T_WM_SDBPRODUCT";
 				String sql2 = "insert into  T_WM_SDBPRODUCT(HYVERSION,ID,NAME,CODE,WAREHOUSE,SUPPLIER,STATUS,WHOWNER,SDB_PRODUCT_ID,C1,C2,C3,COLOR,ZDKC,CAPACITYNUM,EDPMODEL,P_27_LAST,P_27,P_21,PRODUCT_ID,SUPP_CODE,SDB_NAME,WMCODE,PACKING_NUM,WEIGHTNUM,P_24,SPEC,BHZQ,BIG_PIC,IN_PRICE,OUT_PRICE,TYPE_0,MEMO,MARKETABLE,MODEL,TYPE_ID) (select HYVERSION,ID,NAME,CODE,WAREHOUSE,SUPPLIER,STATUS,WHOWNER,SDB_PRODUCT_ID,C1,C2,C3,COLOR,ZDKC,CAPACITYNUM,EDPMODEL, P_27_LAST,P_27,P_21,PRODUCT_ID,SUPP_CODE,SDB_NAME,WMCODE,PACKING_NUM,WEIGHTNUM,P_24,SPEC,BHZQ,BIG_PIC,IN_PRICE,OUT_PRICE,TYPE_0,MEMO,MARKETABLE,MODEL,TYPE_ID from V_WM_SDBPRODUCT)";
 				final DBManager dbm = context.getDBM();
 				dbm.executeUpdate(sql1, null);
 				dbm.executeUpdate(sql2, null);
 			}
-			refreshDB();
+			refreshDB2();
 		]]></pluginInterceptor>
 		<!-- -->
 		<pluginOperation name="saveView" oprName="保存" hostPage="edit" tblevel="1" img="save" action="if(checkcap()=1,plugin({},{saveView})+brk(),alert('确认体积是否正确')+brk())"/>
