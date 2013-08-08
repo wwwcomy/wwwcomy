@@ -6,7 +6,7 @@
 			<component type="hidden"/>
 		</field>
 		<field name="PRODUCTID" description="EDP商品名" displayOnly="false" javaType="string" lazyLoad="false">
-			<component type="combo" readOnly="true" colspan="1" displayReferenceField="NAME" referenceField="ID" referenceTable="V_WM_SDBPRODUCT" associatedFields="PRO_WMCODE,PRO_NAME,PRO_CAPACITYNUM,PRO_WEIGHTNUM,PRO_IN_PRICE,PRO_OUT_PRICE"/>
+			<component type="combo" readOnly="true" colspan="1" displayReferenceField="NAME" referenceField="ID" referenceTable="T_WM_SDBPRODUCT" associatedFields="PRO_WMCODE,PRO_NAME,PRO_CAPACITYNUM,PRO_WEIGHTNUM,PRO_IN_PRICE,PRO_OUT_PRICE"/>
 			<queryCondition type="equal"/>
 			<listColumn noedit="false" noquery="false"/>
 		</field>
@@ -98,7 +98,7 @@ create or replace view V_WM_STOCK2 as
 		t_1.PRO_IN_PRICE,sum(t_1.PRO_COUNT) as PRO_COUNT,
 		sum(t_1.PRO_COUNT*t_1.PRO_IN_PRICE) as ALL_IN_COST, 0 as PRO_OUT_PRICE,0 as ALL_OUT_COST,
 		t_2.BILL_STATUS,t_3.WHOWNER,t_3.WAREHOUSE,t_3.SUPPLIER
-		from (T_WM_INDETAIL t_1 left join T_WM_SDBIN t_2 on t_1.HEADID=t_2.ID) left join V_WM_SDBPRODUCT t_3 on t_3.ID=t_1.PRODUCTID
+		from (T_WM_INDETAIL t_1 left join T_WM_SDBIN t_2 on t_1.HEADID=t_2.ID) left join T_WM_SDBPRODUCT t_3 on t_3.ID=t_1.PRODUCTID
 		where t_2.BILL_STATUS='audit'
 		group by PRODUCTID
 	)
@@ -110,7 +110,7 @@ create or replace view V_WM_STOCK2 as
 		t_1.PRO_OUT_PRICE,
 		sum(t_1.PRO_COUNT*t_1.PRO_OUT_PRICE) as ALL_OUT_COST,
 		t_1.BILL_STATUS,t_3.WHOWNER,t_3.WAREHOUSE,t_3.SUPPLIER
-		from (T_WM_OUTDETAIL t_1 left join V_WM_OUT t_2 on t_1.HEADID=t_2.ID) left join V_WM_SDBPRODUCT t_3 on t_3.ID=t_1.PRODUCTID
+		from (T_WM_OUTDETAIL t_1 left join V_WM_OUT t_2 on t_1.HEADID=t_2.ID) left join T_WM_SDBPRODUCT t_3 on t_3.ID=t_1.PRODUCTID
 		where t_1.BILL_STATUS='audit' and t_2.BILL_STATUS<>'reject'
 		group by PRODUCTID
 	)	

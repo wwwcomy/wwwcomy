@@ -1,6 +1,6 @@
 void autoChangeProP27() throws Throwable {
 	DBManager dbm = context.getDBM();
-	String sql = "select ID,P_27 from V_WM_SDBPRODUCT where P_27<>P_27_LAST";
+	String sql = "select ID,P_27 from T_WM_SDBPRODUCT where P_27<>P_27_LAST";
 	String[][] rs = dbm.getResultStrArray(sql,2,null);
 	if(rs.length>0) {
 		int l = rs.length;

@@ -20,7 +20,7 @@
 			<listColumn noedit="false" noquery="true"/>
 		</field>
 		<field name="PRODUCTID" description="EDP商品名" displayOnly="false" javaType="string" lazyLoad="false">
-			<component type="combo" readOnly="true" colspan="1" displayReferenceField="NAME" referenceField="ID" referenceTable="V_WM_SDBPRODUCT" associatedFields="WMCODE"/>
+			<component type="combo" readOnly="true" colspan="1" displayReferenceField="NAME" referenceField="ID" referenceTable="T_WM_SDBPRODUCT" associatedFields="WMCODE"/>
 			<queryCondition type="equal"/>
 			<listColumn noedit="false" noquery="false"/>
 		</field>
@@ -94,16 +94,16 @@
 		<role name="admin boss manager wm pe ac"/>
 		<javascript hostPage="query"><![CDATA[
 		function renderInfo(v,metaData,record) {
-				//return "<a href='#' onclick=\"window.location.href = 'edit.do?ID="+record.json.PRODUCTID+"&__opr_data=V_WM_SDBPRODUCT'\">"+v+"</a>";
-				//return "<a href='#' onclick=\"showNavDetailFrame('edit','"+record.json.PRODUCTID+"','V_WM_SDBPRODUCT')\">"+v+"</a>"
-				return "<a href='#' onclick=\"Hy.showBill('edit.do?ID="+record.json.PRODUCTID+"&__opr_data=V_WM_SDBPRODUCT','产品链接')\">"+v+"</a>"
+				//return "<a href='#' onclick=\"window.location.href = 'edit.do?ID="+record.json.PRODUCTID+"&__opr_data=T_WM_SDBPRODUCT'\">"+v+"</a>";
+				//return "<a href='#' onclick=\"showNavDetailFrame('edit','"+record.json.PRODUCTID+"','T_WM_SDBPRODUCT')\">"+v+"</a>"
+				return "<a href='#' onclick=\"Hy.showBill('edit.do?ID="+record.json.PRODUCTID+"&__opr_data=T_WM_SDBPRODUCT','产品链接')\">"+v+"</a>"
 		}
 		function renderCount(v,metaData,record) {
-				//return "<a href='#' onclick=\"showNavDetailFrame('query','','V_WM_SDBPRODUCT')\">"+v+"</a>"
+				//return "<a href='#' onclick=\"showNavDetailFrame('query','','T_WM_SDBPRODUCT')\">"+v+"</a>"
 				return "<a href='#' onclick=\"Hy.showBill('query.do?PRODUCTID="+record.json.PRODUCTID+"&__opr_data=V_WM_STOCK1','产品销售明细')\">"+v+"</a>"
 		}
 		function renderSaleValue(v,metaData,record) {
-				//return "<a href='#' onclick=\"showNavDetailFrame('query','','V_WM_SDBPRODUCT')\">"+v+"</a>"
+				//return "<a href='#' onclick=\"showNavDetailFrame('query','','T_WM_SDBPRODUCT')\">"+v+"</a>"
 				
 				return "<a href='#' onclick=\"Hy.showBill('query.do?PRODUCTID="+record.json.PRODUCTID+"&__opr_data=V_WM_STOCK1','产品销售明细')\">"+v+"</a>"
 		}

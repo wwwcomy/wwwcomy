@@ -12,7 +12,7 @@
 			<listColumn noedit="false" noquery="false"/>
 		</field>
 		<field name="PRODUCTID" description="EDP商品名" displayOnly="false" javaType="string" lazyLoad="false">
-			<component type="combo" readOnly="true" colspan="1" displayReferenceField="NAME" referenceField="ID" referenceTable="V_WM_SDBPRODUCT" associatedFields="PRO_WMCODE,PRO_NAME,SUPP_CODE,PRO_CAPACITYNUM,PRO_WEIGHTNUM,PRO_IN_PRICE"/>
+			<component type="combo" readOnly="true" colspan="1" displayReferenceField="NAME" referenceField="ID" referenceTable="T_WM_SDBPRODUCT" associatedFields="PRO_WMCODE,PRO_NAME,SUPP_CODE,PRO_CAPACITYNUM,PRO_WEIGHTNUM,PRO_IN_PRICE"/>
 			<queryCondition type="equal"/>
 			<listColumn noedit="false" noquery="false"/>
 		</field>
@@ -148,7 +148,7 @@ create or replace view V_WM_STOCK1 as
 		(CASE WHEN t_1.headID=t_4.TRANS_ID THEN  1 ELSE -1 END) as YK ,
 		t_1.BATCH,
 		1 as STOCKCHANGE,0 as FINANCECHANGE
-		from (T_WM_INDETAIL t_1 left join T_WM_SDBIN t_2 on t_1.HEADID=t_2.ID) left join V_WM_SDBPRODUCT t_3 on t_3.ID=t_1.PRODUCTID
+		from (T_WM_INDETAIL t_1 left join T_WM_SDBIN t_2 on t_1.HEADID=t_2.ID) left join T_WM_SDBPRODUCT t_3 on t_3.ID=t_1.PRODUCTID
 		left join T_WM_STOCKTRANS t_4 on t_1.headID=t_4.TRANS_ID
 		where t_2.BILL_STATUS='audit' or t_1.headID=t_4.TRANS_ID
 	)
@@ -169,7 +169,7 @@ create or replace view V_WM_STOCK1 as
 		-1 as STOCKCHANGE,
 		(CASE WHEN t_2.OUT_TYPE='consign' THEN 1 WHEN t_2.OUT_TYPE ='reject' THEN 0 ELSE 0 END) as FINANCECHANGE
 		
-		from (T_WM_OUTDETAIL t_1 left join T_WM_OUTPART t_2 on t_1.HEADID=t_2.ID) left join V_WM_SDBPRODUCT t_3 on t_3.ID=t_1.PRODUCTID
+		from (T_WM_OUTDETAIL t_1 left join T_WM_OUTPART t_2 on t_1.HEADID=t_2.ID) left join T_WM_SDBPRODUCT t_3 on t_3.ID=t_1.PRODUCTID
 		left join T_WM_STOCKTRANS t_4 on t_1.headID=t_4.TRANS_ID
 		where t_1.BILL_STATUS='audit' and t_2.BILL_STATUS<>'reject' or t_1.headID=t_4.TRANS_ID
 	)
@@ -188,7 +188,7 @@ create or replace view V_WM_STOCK1 as
 		1 as STOCKCHANGE,
 		-1 as FINANCECHANGE
 		
-		from (T_WM_SDBRETURNDETAIL t_1 left join T_WM_SDBRETURN t_2 on t_1.HEADID=t_2.ID) left join V_WM_SDBPRODUCT t_3 on t_3.ID=t_1.PRODUCTID
+		from (T_WM_SDBRETURNDETAIL t_1 left join T_WM_SDBRETURN t_2 on t_1.HEADID=t_2.ID) left join T_WM_SDBPRODUCT t_3 on t_3.ID=t_1.PRODUCTID
 		where t_2.BILL_STATUS='audit'
 	)
 	union all
@@ -206,7 +206,7 @@ create or replace view V_WM_STOCK1 as
 		1 as STOCKCHANGE,
 		-1 as FINANCECHANGE
 		
-		from (T_WM_SDBRETURNPRE t_1 left join T_WM_SDBRETURN t_2 on t_1.HEADID=t_2.ID) left join V_WM_SDBPRODUCT t_3 on t_3.ID=t_1.PRODUCTID
+		from (T_WM_SDBRETURNPRE t_1 left join T_WM_SDBRETURN t_2 on t_1.HEADID=t_2.ID) left join T_WM_SDBPRODUCT t_3 on t_3.ID=t_1.PRODUCTID
 		where t_2.BILL_STATUS='audit'
 	)
 		]]></pluginInterceptor>

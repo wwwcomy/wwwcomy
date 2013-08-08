@@ -12,7 +12,7 @@
 			<queryCondition type="equal"/>
 		</field>
 		<field name="PRODUCTID" description="EDP商品" javaType="string" >
-			<component type="combo" readOnly="true" colspan="1" displayReferenceField="CODE" referenceField="ID" referenceTable="V_WM_SDBPRODUCT"/>
+			<component type="combo" readOnly="true" colspan="1" displayReferenceField="CODE" referenceField="ID" referenceTable="T_WM_SDBPRODUCT"/>
 			<listColumn noedit="false" noquery="false"/>
 		</field>
 		<field name="PRODUCT_ID" description="SDB商品ID" javaType="string" >

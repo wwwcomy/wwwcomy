@@ -58,7 +58,7 @@
 			<listColumn noedit="false" noquery="false"/>
 		</field>
 		<field name="SUBGRID" javaType="string" description="----------------------------------------------------------------应出库明细----------------------------------------------------------------" displayOnly="true">
-			<component type="grid" readOnly="false" colspan="6" style="width:950;height:260;grouping:false;" displayReferenceField="ITEM_ID,ORDER_ID,PRODUCTID,PRO_CODE,SUPP_CODE,PRE,AUDIT,OUT_RCOUNT,OUT_COUNT,NAME,WMCODE,PACKING_NUM,CAPACITYNUM,WEIGHTNUM,OUT_PRICE,PRO_COUNT,OUT_ALL_PRICE,All_CAPACITYNUM,All_WEIGHTNUM,LOGISTICS_NAME,LOGISTICS_CODE,LOGISTICS_MEMO,BILL_STATUS" referenceField="ORDER_ID" referenceTable="V_WM_OUTPRE" parameter="{&amp;ORDER_ID=}&amp;If(IsEmpty(Get({ID})),-1,Get({ID}))"/>
+			<component type="grid" readOnly="false" colspan="6" style="width:950;height:260;grouping:false;" displayReferenceField="ITEM_ID,ORDER_ID,PRODUCTID,PRO_CODE,SUPP_CODE,PRE,AUDIT,OUT_RCOUNT,OUT_COUNT,NAME,WMCODE,PACKING_NUM,CAPACITYNUM,WEIGHTNUM,OUT_PRICE,PRO_COUNT,OUT_ALL_PRICE,All_CAPACITYNUM,All_WEIGHTNUM,LOGISTICS_NAME,LOGISTICS_CODE,LOGISTICS_MEMO,BILL_STATUS" referenceField="ORDER_ID" referenceTable="T_WM_OUTPRE" parameter="{&amp;ORDER_ID=}&amp;If(IsEmpty(Get({ID})),-1,Get({ID}))"/>
 			<queryCondition type="none"/>
 			<listColumn noquery="true"/>
 		</field>
@@ -125,8 +125,8 @@
 		<queryFilter>
 			<pluggedFilter methodName="exp" parameter="
 			If(InRole(sp,wm),
-				{ and t_1.ID in (select ORDER_ID from V_WM_OUTPRE  where PRODUCTID in (select ID from V_WM_SDBPRODUCT where SUPPLIER='}&amp;GetUser(SUPPLIER)&amp;{' and WAREHOUSE='}&amp;GetUser(WAREHOUSEID)&amp;{')) },
-				{ and t_1.ID in (select ORDER_ID from V_WM_OUTPRE  where PRODUCTID in (select ID from V_WM_SDBPRODUCT where WAREHOUSE='}&amp;GetUser(WAREHOUSEID)&amp;{')) }
+				{ and t_1.ID in (select ORDER_ID from T_WM_OUTPRE  where PRODUCTID in (select ID from T_WM_SDBPRODUCT where SUPPLIER='}&amp;GetUser(SUPPLIER)&amp;{' and WAREHOUSE='}&amp;GetUser(WAREHOUSEID)&amp;{')) },
+				{ and t_1.ID in (select ORDER_ID from T_WM_OUTPRE  where PRODUCTID in (select ID from T_WM_SDBPRODUCT where WAREHOUSE='}&amp;GetUser(WAREHOUSEID)&amp;{')) }
 			)"/>
 		</queryFilter>
 		<!-- -->

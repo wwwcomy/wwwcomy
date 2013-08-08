@@ -225,6 +225,17 @@ create or replace view V_DIC_SDBPROGOODS as
 			<pluggedFilter methodName="exp" parameter="If(IsEmpty(GetPara(__filter)),{},{ and (t_1.PRODUCT_ID not in (select distinct(SDB_PRODUCT_ID) from T_WM_PRO ) or t_1.PRODUCT_ID=}&amp;SQLSafe(GetPara(__filter))&amp;{)})"><![CDATA[
 			]]></pluggedFilter>
 		</queryFilter>
+		<pluginInterceptor methodName="bsh" pluginName="refreshDB" type="after"><![CDATA[
+			void refreshDB() throws Throwable {
+				String sql1 = "delete from T_DIC_SDBPROGOODS";
+				String sql2 = "insert into  T_DIC_SDBPROGOODS(PRODUCT_ID,GOODS_ID,WMCODE,STORE1,STORE2,IN_PRICE,OUT_PRICE,P_21,PACKING_NUM,P_27,NAME,WEIGHTNUM,P_24,SPEC,MODEL,BHZQ,BIG_PIC,TYPE_0,TYPE_ID,COLOR,MARKETABLE,MEMO) (select PRODUCT_ID,GOODS_ID,WMCODE,STORE1,STORE2,IN_PRICE,OUT_PRICE,P_21,PACKING_NUM,P_27,NAME,WEIGHTNUM,P_24,SPEC,MODEL, BHZQ,BIG_PIC,TYPE_0,TYPE_ID,COLOR,MARKETABLE,MEMO from V_DIC_SDBPROGOODS)";
+				final DBManager dbm = context.getDBM();
+				dbm.executeUpdate(sql1, null);
+				dbm.executeUpdate(sql2, null);
+			}
+			refreshDB();
+		]]></pluginInterceptor>
+		<pluginOperation name="refreshDB" oprName="重载SDB订单商品" hostPage="query" tblevel="1" img="refresh" action="plugin({},{refreshDB})+brk()"/>
 		<!--t_1.disabled='false' and t_1.MARKETABLE='true' and  -->
 		<Operation queryPageDelete="false" queryPageAdd="false" save="false" saveAndAdd="false" saveAndAddCopy="false"/>
 	</table>

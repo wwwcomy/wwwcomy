@@ -59,7 +59,7 @@
 		</field>
 		<!-- "ID,HEADID,PRODUCTID,CODE,PRE_COUNT,PRE_PACKING,PRO_PACKING_NAME,IN_TIME,IN_TYPE,PRO_COUNT,PRO_CAPACITYNUM,PRO_WEIGHTNUM,PRO_IN_PRICE,PRO_MEMO" -->
 		<field name="PRODUCTID" description="入库EDP商品" displayOnly="true" javaType="string" lazyLoad="false">
-			<component type="combo" readOnly="false" displayReferenceField="CODE,NAME" referenceField="ID" referenceTable="V_WM_SDBPRODUCT" associatedFields="HIDDEN_CODE,PRO_PACKINGNUM,SUPP_CODE,PRO_CAPACITYNUM,PRO_WEIGHTNUM,HIDDEN_WMCODE" parameter="{&amp;WMINID=}&amp;If(IsEmpty(Get(ID)),-1,Get(ID))"/>
+			<component type="combo" readOnly="false" displayReferenceField="CODE,NAME" referenceField="ID" referenceTable="T_WM_SDBPRODUCT" associatedFields="HIDDEN_CODE,PRO_PACKINGNUM,SUPP_CODE,PRO_CAPACITYNUM,PRO_WEIGHTNUM,HIDDEN_WMCODE" parameter="{&amp;WMINID=}&amp;If(IsEmpty(Get(ID)),-1,Get(ID))"/>
 			<listColumn noedit="false" noquery="true"/>
 			<!-- ,PRO_PACKING,PRO_PACKING_NAME -->
 		</field>

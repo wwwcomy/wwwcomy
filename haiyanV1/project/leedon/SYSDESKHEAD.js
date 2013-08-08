@@ -57,6 +57,9 @@
 					success:function(response, options) {
 						scope.close();
 						Hy.unmask();
+						
+						Ext.getCmp('west-panel').collapse();
+						Ext.getCmp('west-panel').expand();
 					}
 				});
 			}

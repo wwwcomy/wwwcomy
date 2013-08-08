@@ -6,7 +6,7 @@
 			<component type="hidden"/>
 		</field>
 		<field name="PRODUCTID" description="EDP商品编号" displayOnly="false" javaType="string" lazyLoad="false">
-			<component type="combo" readOnly="true" displayReferenceField="CODE" referenceField="ID" referenceTable="V_WM_SDBPRODUCT" associatedFields="PRO_WMCODE,PRO_NAME,PRO_CAPACITYNUM,PRO_WEIGHTNUM,SUPP_CODE"/>
+			<component type="combo" readOnly="true" displayReferenceField="CODE" referenceField="ID" referenceTable="T_WM_SDBPRODUCT" associatedFields="PRO_WMCODE,PRO_NAME,PRO_CAPACITYNUM,PRO_WEIGHTNUM,SUPP_CODE"/>
 			<queryCondition type="equal"/>
 			<listColumn noedit="false" noquery="false" width="170"/>
 		</field>

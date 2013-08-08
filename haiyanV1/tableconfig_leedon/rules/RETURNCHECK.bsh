@@ -16,7 +16,7 @@ void checkStock() {
 			String proCount = rs[i][3];
 			String orderID = rs[i][4];
 			int transCount = Integer.valueOf(proCount);
-			String checkSql =  "select sum(t_1.PRO_COUNT),t_2.CODE from T_WM_OUTDETAIL t_1,V_WM_SDBPRODUCT t_2 where t_1.PRODUCTID=t_2.ID and t_1.PRODUCTID='"+proID+"' and t_1.BATCH="+batch +" and HEADID='"+orderID+"'";
+			String checkSql =  "select sum(t_1.PRO_COUNT),t_2.CODE from T_WM_OUTDETAIL t_1,T_WM_SDBPRODUCT t_2 where t_1.PRODUCTID=t_2.ID and t_1.PRODUCTID='"+proID+"' and t_1.BATCH="+batch +" and HEADID='"+orderID+"'";
 			// throw new Warning(checkSql);
 			String[][] result = dbm.getResultStrArray(checkSql, 2, null);
 			if (result.length>0) {
@@ -29,7 +29,7 @@ void checkStock() {
 				}
 			}else{
 				String whCode = getWarewhereCode(WHID,dbm);
-				String proSql = "select CODE from V_WM_SDBPRODUCT where ID='"+proID+"'";
+				String proSql = "select CODE from T_WM_SDBPRODUCT where ID='"+proID+"'";
 				String[][] result1 = dbm.getResultStrArray(proSql, 1, null);
 				if (result1.length>0) {
 					throw new Warning("审批出库单无此商品:"+result1[0][0]+" 批次出库记录, 仓位:"+whCode+",批次:"+batch+", 退货数量:"+transCount);

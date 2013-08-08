@@ -7,7 +7,7 @@
 			<queryCondition type="equal"/>
 		</field>
 		<field name="PRODUCTID" description="EDP商品" displayOnly="false" javaType="string" lazyLoad="false">
-			<component type="combo" readOnly="false" displayReferenceField="CODE,NAME" referenceField="ID" referenceTable="V_WM_SDBPRODUCT" associatedFields="PRO_NAME,PRO_WMCODE,SUPP_CODE,PRO_CAPACITYNUM,PRO_WEIGHTNUM,PRO_IN_PRICE,PRO_OUT_PRICE" parameter="{&amp;WMOUTID=}&amp;If(IsEmpty(Get(HEADID)),-1,Get(HEADID))"/>
+			<component type="combo" readOnly="false" displayReferenceField="CODE,NAME" referenceField="ID" referenceTable="T_WM_SDBPRODUCT" associatedFields="PRO_NAME,PRO_WMCODE,SUPP_CODE,PRO_CAPACITYNUM,PRO_WEIGHTNUM,PRO_IN_PRICE,PRO_OUT_PRICE" parameter="{&amp;WMOUTID=}&amp;If(IsEmpty(Get(HEADID)),-1,Get(HEADID))"/>
 			<listColumn noedit="false" noquery="false" width="170"/>
 			<!-- ,PRO_PACKING,PRO_PACKING_NAME -->
 		</field>

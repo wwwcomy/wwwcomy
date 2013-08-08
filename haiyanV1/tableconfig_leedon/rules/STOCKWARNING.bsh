@@ -13,7 +13,7 @@ void stockWarning() throws Throwable {
 			String proID = rs[i][0];
 			String outCount = rs[i][1];
 			// 只有一条
-			String sql1 = "select t_1.PRO_COUNT, t_2.ZDKC, t_3.NAME, t_3.ID, t_2.NAME from V_WM_STOCK3 t_1, V_WM_SDBPRODUCT t_2, T_DIC_ORGA t_3 where t_1.PRODUCTID="+proID +" and t_2.ID="+proID+" and t_3.id=t_2.SUPPLIER";
+			String sql1 = "select t_1.PRO_COUNT, t_2.ZDKC, t_3.NAME, t_3.ID, t_2.NAME from V_WM_STOCK3 t_1, T_WM_SDBPRODUCT t_2, T_DIC_ORGA t_3 where t_1.PRODUCTID="+proID +" and t_2.ID="+proID+" and t_3.id=t_2.SUPPLIER";
 			// 需求:要当前库存加上未审批的入库单商品数量(算在途数量)
 			String sql2 = "select sum(PRO_COUNT) from T_WM_SDBINPRE t_1 left join T_WM_SDBIN t_2 on t_1.HEADID=t_2.ID where t_2.BILL_STATUS='init' and PRODUCTID="+proID;
 			String[][] rs1 = dbm.getResultStrArray(sql1,5,null);

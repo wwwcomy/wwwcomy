@@ -47,7 +47,7 @@
 			<listColumn noquery="true"/>
 		</field>
 		<field name="PRODUCTID" description="退货商品" displayOnly="true" javaType="string" lazyLoad="true" loadType="cache">
-			<component type="combo" readOnly="false" displayReferenceField="CODE,NAME" referenceField="ID" referenceTable="V_WM_SDBPRODUCT" associatedFields="HIDDEN_CODE,PRO_PACKINGNUM,SUPP_CODE,PRO_CAPACITYNUM,PRO_WEIGHTNUM,HIDDEN_WMCODE" parameter="{&amp;RETURNID=}&amp;If(IsEmpty(Get(ID)),-1,Get(ID))" action="getbatchinfo()"/>
+			<component type="combo" readOnly="false" displayReferenceField="CODE,NAME" referenceField="ID" referenceTable="T_WM_SDBPRODUCT" associatedFields="HIDDEN_CODE,PRO_PACKINGNUM,SUPP_CODE,PRO_CAPACITYNUM,PRO_WEIGHTNUM,HIDDEN_WMCODE" parameter="{&amp;RETURNID=}&amp;If(IsEmpty(Get(ID)),-1,Get(ID))" action="getbatchinfo()"/>
 			<listColumn noedit="false" noquery="true"/>
 		</field>
 		<field name="PRO_COUNT" description="退货数量(个)" displayOnly="true" javaType="bigDecimal" defaultValue="0">
@@ -203,10 +203,22 @@
 		<pluginInterceptor methodName="exp" parameter="
 			Set(BILL_STATUS,{init},AUDIT_USER_ID,{})
 			" pluginName="unaudit"/>
+		<pluginInterceptor methodName="bsh" pluginName="refreshDB" type="after"><![CDATA[
+			void refreshDB() throws Throwable {
+				String sql1 = "delete from T_WM_OUTPRE";
+				String sql2 = "insert into  T_WM_OUTPRE(NAME,ITEM_ID,ORDER_ID,OUT_CODE,ITEM_ID_PK,PRODUCTID,PRODUCT_ID,WMCODE,SUPP_CODE,OUT_COUNT,OUT_RCOUNT,IN_PRICE,OUT_PRICE,PRO_COUNT,OUT_ALL_PRICE,PACKING_NUM,CAPACITYNUM,WEIGHTNUM,SUPPLIER,WAREHOUSE,All_CAPACITYNUM,All_WEIGHTNUM,REMAINDER_NUM,LOGISTICS_NAME,LOGISTICS_CODE,LOGISTICS_MEMO,HYVERSION,BILL_STATUS) (select NAME,ITEM_ID,ORDER_ID,OUT_CODE,ITEM_ID_PK,PRODUCTID,PRODUCT_ID,WMCODE,SUPP_CODE,OUT_COUNT,OUT_RCOUNT,IN_PRICE,OUT_PRICE,PRO_COUNT,OUT_ALL_PRICE,PACKING_NUM,CAPACITYNUM,WEIGHTNUM,SUPPLIER,WAREHOUSE,All_CAPACITYNUM,All_WEIGHTNUM,REMAINDER_NUM,LOGISTICS_NAME,LOGISTICS_CODE,LOGISTICS_MEMO,HYVERSION,BILL_STATUS from T_WM_OUTPRE)";
+				final DBManager dbm = context.getDBM();
+				dbm.executeUpdate(sql1, null);
+				dbm.executeUpdate(sql2, null);
+			}
+			refreshDB();
+		]]></pluginInterceptor>
 		<!-- -->
 		<pluginOperation name="saveAll" oprName="保存A" hostPage="edit" tblevel="1" img="save" action="if(checkeq()=1,Save({},{},{SUBGRID2},{SUBGRID}),true)+brk()"/>
 		<pluginOperation name="audit" oprName="退货审批" hostPage="edit" tblevel="1" img="settings" action="If(Confirm({确认审批后,不可恢复,确认审批?}),Save({},{audit},{SUBGRID}),true)+brk()"/>
 		<pluginOperation name="unaudit" oprName="取消审核" hostPage="edit" action="If(Confirm({请确认是否要取消审核?}),Save({},{unaudit},{SUBGRID},{SUBGRID2}),true)+brk()"/>
+		<pluginOperation name="refreshDB" oprName="重载应出库明细" hostPage="query" tblevel="1" img="refresh" action="plugin({},{refreshDB})+brk()"/>
+		
 		<Operation queryPageDelete="false" save="false" saveAndAdd="false" saveAndAddCopy="false"/>
 		<!-- -->
 		<doc>

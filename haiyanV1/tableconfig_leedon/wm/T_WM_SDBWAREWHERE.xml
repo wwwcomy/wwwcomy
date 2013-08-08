@@ -19,7 +19,7 @@
 			<listColumn noedit="false" noquery="false"/>
 		</field>
 		<field name="PRODUCTID" description="商品名称" displayOnly="true" javaType="string" lazyLoad="false">
-			<component type="combo" readOnly="false" displayReferenceField="NAME" referenceField="ID" referenceTable="V_WM_SDBPRODUCT" associatedFields="PRO_CODE,PRO_WMCODE,PRO_CAPACITYNUM,PRO_WEIGHTNUM,PRO_IN_PRICE,PRO_OUT_PRICE"/>
+			<component type="combo" readOnly="false" displayReferenceField="NAME" referenceField="ID" referenceTable="T_WM_SDBPRODUCT" associatedFields="PRO_CODE,PRO_WMCODE,PRO_CAPACITYNUM,PRO_WEIGHTNUM,PRO_IN_PRICE,PRO_OUT_PRICE"/>
 			<listColumn noedit="false" noquery="false"/>
 			<!-- PRO_PACKING,PRO_PACKING_NAME, -->
 		</field>

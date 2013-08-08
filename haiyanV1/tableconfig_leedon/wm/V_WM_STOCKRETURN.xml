@@ -14,7 +14,7 @@
 			<listColumn noedit="false" noquery="false"/>
 		</field>
 		<field name="OUT_CODE" description="订单:商品号" displayOnly="false" javaType="string" lazyLoad="false">
-			<component type="combo" readOnly="false" displayReferenceField="OUT_CODE" referenceField="OUT_CODE" referenceTable="V_WM_OUTPRE" associatedFields="ORDER_ID" parameter="{&amp;RETURNPRE=1}"/>
+			<component type="combo" readOnly="false" displayReferenceField="OUT_CODE" referenceField="OUT_CODE" referenceTable="T_WM_OUTPRE" associatedFields="ORDER_ID" parameter="{&amp;RETURNPRE=1}"/>
 			<listColumn noedit="false" noquery="false" width="155" style="sortName:__OUT_CODE__OUT_CODE"/>
 		</field>
 		<field name="ORDER_ID" description="ORDER_ID出库单号" javaType="string">
@@ -26,7 +26,7 @@
 			<listColumn noedit="false" noquery="false"/>
 		</field>
 		<field name="PRODUCTID" description="EDP商品名" displayOnly="false" javaType="string" lazyLoad="false">
-			<component type="combo" readOnly="true" colspan="1" displayReferenceField="NAME" referenceField="ID" referenceTable="V_WM_SDBPRODUCT" associatedFields="WMCODE"/>
+			<component type="combo" readOnly="true" colspan="1" displayReferenceField="NAME" referenceField="ID" referenceTable="T_WM_SDBPRODUCT" associatedFields="WMCODE"/>
 			<queryCondition type="equal"/>
 			<listColumn noedit="false" noquery="false"/>
 		</field>

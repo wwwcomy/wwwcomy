@@ -7,7 +7,7 @@
 			<queryCondition type="equal"/>
 		</field>
 		<field name="PRODUCTID" description="EDP商品" javaType="string">
-			<component type="combo" readOnly="false" displayReferenceField="CODE,NAME" referenceField="ID" referenceTable="V_WM_SDBPRODUCT" associatedFields="PRO_NAME,SUPP_CODE,PRO_CODE,SPEC,ZDKC,PRO_CAPACITYNUM,MODEL,PRO_WEIGHTNUM,P_24,PRO_PACKINGNUM,MARKETABLE,PRO_IN_PRICE,PRO_OUT_PRICE" parameter="{&amp;__SUPPLIER=}&amp;If(IsEmpty(GetHeadValue(SHIP_SUPPLIER)),{-1},GetHeadValue(SHIP_SUPPLIER))"/>
+			<component type="combo" readOnly="false" displayReferenceField="CODE,NAME" referenceField="ID" referenceTable="T_WM_SDBPRODUCT" associatedFields="PRO_NAME,SUPP_CODE,PRO_CODE,SPEC,ZDKC,PRO_CAPACITYNUM,MODEL,PRO_WEIGHTNUM,P_24,PRO_PACKINGNUM,MARKETABLE,PRO_IN_PRICE,PRO_OUT_PRICE" parameter="{&amp;__SUPPLIER=}&amp;If(IsEmpty(GetHeadValue(SHIP_SUPPLIER)),{-1},GetHeadValue(SHIP_SUPPLIER))"/>
 			<!-- parameter="{&amp;MARKETABLE=true}" -->
 			<queryCondition type="blurMatching"/>
 			<listColumn noedit="false" noquery="false" width="170" style="sortName:__PRODUCTID__CODE"/>
@@ -131,6 +131,7 @@
 		-->
 		<field name="CONTRACT_CODE" description="HIDDEN合同-商品号" displayOnly="false" javaType="string" lazyLoad="false">
 			<component type="hidden" readOnly="true"/>
+			<queryCondition type="blurMatching"/>
 			<listColumn noedit="false" noquery="false" width="150"/>
 		</field>
 		<field name="MARKETABLE" description="是否上架" displayOnly="false" javaType="string" lazyLoad="false">

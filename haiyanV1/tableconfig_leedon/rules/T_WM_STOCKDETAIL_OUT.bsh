@@ -9,7 +9,7 @@ void removekc() throws Throwable {
 	}
 	if(orderID.startsWith("CK_")&&("reject".equals(outType)||"loss".equals(outType))){
 		DBManager dbm = context.getDBM();
-		String sql = "select PRODUCT_ID,GOODS_ID,NAME,STORE from SDB_PRODUCTS where PRODUCT_ID in (select PRODUCT_ID from V_WM_SDBPRODUCT where ID='"+form.get("PRODUCTID")+"') ";
+		String sql = "select PRODUCT_ID,GOODS_ID,NAME,STORE from SDB_PRODUCTS where PRODUCT_ID in (select PRODUCT_ID from T_WM_SDBPRODUCT where ID='"+form.get("PRODUCTID")+"') ";
 		String[][] rs = dbm.getResultStrArray(sql,4,null);
 		DebugUtil.debug("商品 ["+rs[0][2]+"] 库存:"+rs[0][3]+"+"+form.get("PRO_COUNT"));
 		//if (rs.length>0) {
@@ -35,7 +35,7 @@ void newRemoveKC() throws Throwable {
 	if(orderID.startsWith("CK_")&&("reject".equals(outType)||"loss".equals(outType))){
 		DBManager dbm = context.getDBM();
 		String sql = "select sum(t_1.PRO_COUNT),t_1.PRODUCTID,t_3.PRODUCT_ID,t_3.GOODS_ID,t_3.NAME,t_3.STORE,t_4.STORE as GOODS_STORE from T_WM_OUTDETAIL t_1 left join T_WM_PRO t_2 on t_1.PRODUCTID=t_2.ID left join SDB_PRODUCTS t_3 on t_3.PRODUCT_ID=t_2.SDB_PRODUCT_ID left join SDB_GOODS t_4 on t_3.GOODS_ID = t_4.GOODS_ID where HEADID ='"+ID+"' group by t_1.PRODUCTID";
-		//"select PRODUCT_ID,GOODS_ID,NAME,STORE from SDB_PRODUCTS where PRODUCT_ID in (select PRODUCT_ID from V_WM_SDBPRODUCT where ID='"+form.get("PRODUCTID")+"') ";
+		//"select PRODUCT_ID,GOODS_ID,NAME,STORE from SDB_PRODUCTS where PRODUCT_ID in (select PRODUCT_ID from T_WM_SDBPRODUCT where ID='"+form.get("PRODUCTID")+"') ";
 		String[][] rs = dbm.getResultStrArray(sql,7,null);
 		if(rs.length>0) {
 			int l = rs.length;

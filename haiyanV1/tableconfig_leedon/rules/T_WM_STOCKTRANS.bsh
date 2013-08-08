@@ -15,7 +15,7 @@ void checkStock() {
 			String proCount = rs[i][3];
 			//throw new Warning(WHID+","+proID+","+proCount);
 			int transCount = Integer.valueOf(proCount);
-			String checkSql = "select t_1.PRO_COUNT,t_2.CODE from V_WM_STOCKWHEREBATCH t_1,V_WM_SDBPRODUCT t_2 where t_1.PRODUCTID=t_2.ID and t_1.WAREHOUSE='"+warehouseID+"' and t_1.PRODUCTID='"+proID+"' and t_1.WAREWHERE='"+WHID+"' and t_1.BATCH="+batch;
+			String checkSql = "select t_1.PRO_COUNT,t_2.CODE from V_WM_STOCKWHEREBATCH t_1,T_WM_SDBPRODUCT t_2 where t_1.PRODUCTID=t_2.ID and t_1.WAREHOUSE='"+warehouseID+"' and t_1.PRODUCTID='"+proID+"' and t_1.WAREWHERE='"+WHID+"' and t_1.BATCH="+batch;
 			String[][] result = dbm.getResultStrArray(checkSql, 2, null);
 			if (result.length>0) {
 				int t = 0;
