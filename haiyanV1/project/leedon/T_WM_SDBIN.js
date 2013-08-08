@@ -467,7 +467,8 @@ Ext.onReady(function(){
 			else
 				return '';
 		}
-		g.getStore().clearGrouping();
+		if (g.getStore().clearGrouping)
+			g.getStore().clearGrouping();
 		g.getColumnModel().setHidden(2,true);
 	}
 	
@@ -481,6 +482,7 @@ Ext.onReady(function(){
 	resizer.on('resize', function() {
 		var box = resizer.getEl().getSize();
 		this.setSize(box);
+		this.body.setHeight(box.height);
 		//this.syncSize();
 		this.doLayout();
 	}, g);
