@@ -541,7 +541,7 @@ create or replace view V_WM_SDBPRODUCT as
 				if (StringUtil.isEmpty(PRODUCT_ID)) {
 					throw new Warning("PRODUCT_ID Lost");
 				}
-				String sql1 = "delete from T_DIC_SDBPROGOODS where PRODUCT_ID=?)";
+				String sql1 = "delete from T_DIC_SDBPROGOODS where PRODUCT_ID=?";
 				String sql2 = "insert into  T_DIC_SDBPROGOODS(PRODUCT_ID,GOODS_ID,WMCODE,STORE1,STORE2,IN_PRICE,OUT_PRICE,P_21,PACKING_NUM,P_27,NAME,WEIGHTNUM,P_24,SPEC,MODEL,BHZQ,BIG_PIC,TYPE_0,TYPE_ID,COLOR,MARKETABLE,MEMO) (select PRODUCT_ID,GOODS_ID,WMCODE,STORE1,STORE2,IN_PRICE,OUT_PRICE,P_21,PACKING_NUM,P_27,NAME,WEIGHTNUM,P_24,SPEC,MODEL, BHZQ,BIG_PIC,TYPE_0,TYPE_ID,COLOR,MARKETABLE,MEMO from V_DIC_SDBPROGOODS where PRODUCT_ID=?)";
 				final DBManager dbm = context.getDBM();
 				dbm.executeUpdatePre(sql1, new Object[]{PRODUCT_ID}, null);
