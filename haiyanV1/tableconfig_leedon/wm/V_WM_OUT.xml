@@ -221,7 +221,8 @@ create or replace view V_WM_OUT as
 		<pluginInterceptor methodName="bsh" parameter="V_WM_OUT.bsh" pluginName="saveViewBatch" type="after" />
 		<!-- -->
 		<pluginInterceptor methodName="exp" parameter="
-			bsh(OUTCHECK.bsh)
+			if(SubStr(Get(ORDER_ID),0,2)={CK},Set(ORDER_ID_INT,0),Set(ORDER_ID_INT,get(ORDER_ID)))
+			+bsh(OUTCHECK.bsh)
 			+Set(AUDIT_USER_ID,User(ID),BILL_STATUS,{audit})
 			+SetCreateTime(AUDIT_TIME,{yyyy-MM-dd HH:mm:ss})
 			+Save({T_WM_OUTPART},GetForm())
