@@ -9,15 +9,15 @@
 	leaf : true
 }, {
 	text : 'T_WM_OUTPRE实体表',
-	cataUrl : 'query.do?__opr_data=T_WM_OUTPRE',
+	cataUrl : 'quick.do?__opr_data=T_WM_OUTPRE',
 	leaf : true
 }, {
 	text : 'T_SDBPROGOODS实体表',
-	cataUrl : 'query.do?__opr_data=T_DIC_SDBPROGOODS',
+	cataUrl : 'quick.do?__opr_data=T_DIC_SDBPROGOODS',
 	leaf : true
 }, {
 	text : 'T_SDBPRODUCT实体表',
-	cataUrl : 'query.do?__opr_data=T_WM_SDBPRODUCT',
+	cataUrl : 'quick.do?__opr_data=T_WM_SDBPRODUCT',
 	leaf : true
 }, {
 	text : 'V_WM_OUT2',
