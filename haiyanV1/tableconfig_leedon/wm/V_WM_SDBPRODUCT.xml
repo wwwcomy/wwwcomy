@@ -536,6 +536,18 @@ create or replace view V_WM_SDBPRODUCT as
 			" />
 		<!-- t_1.CONTRACT;比较P_27和CAPACITYNUM,重新计算C1 C2 C3 -->
 		<pluginInterceptor methodName="bsh" pluginName="syncView" type="after"><![CDATA[
+			void refreshDB1() throws Throwable {
+				String PRODUCT_ID = context.getParameter("PRODUCT_ID");
+				if (StringUtil.isEmpty(PRODUCT_ID)) {
+					throw new Warning("PRODUCT_ID Lost");
+				}
+				String sql1 = "delete from T_DIC_SDBPROGOODS where PRODUCT_ID=?)";
+				String sql2 = "insert into  T_DIC_SDBPROGOODS(PRODUCT_ID,GOODS_ID,WMCODE,STORE1,STORE2,IN_PRICE,OUT_PRICE,P_21,PACKING_NUM,P_27,NAME,WEIGHTNUM,P_24,SPEC,MODEL,BHZQ,BIG_PIC,TYPE_0,TYPE_ID,COLOR,MARKETABLE,MEMO) (select PRODUCT_ID,GOODS_ID,WMCODE,STORE1,STORE2,IN_PRICE,OUT_PRICE,P_21,PACKING_NUM,P_27,NAME,WEIGHTNUM,P_24,SPEC,MODEL, BHZQ,BIG_PIC,TYPE_0,TYPE_ID,COLOR,MARKETABLE,MEMO from V_DIC_SDBPROGOODS where PRODUCT_ID=?)";
+				final DBManager dbm = context.getDBM();
+				dbm.executeUpdatePre(sql1, new Object[]{PRODUCT_ID}, null);
+				dbm.executeUpdatePre(sql2, new Object[]{PRODUCT_ID}, null);
+			}
+			refreshDB1();
 			void refreshDB() throws Throwable {
 				String PRODUCT_ID = context.getParameter("PRODUCT_ID");
 				if (StringUtil.isEmpty(PRODUCT_ID)) {
