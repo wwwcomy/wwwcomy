@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Haiyan xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../haiyan.xsd">
-	<table name="V_WM_SDBPRODUCT" description="EDP商品" colspan="8">
+	<table name="T_WM_SDBPRODUCT" description="EDP商品" colspan="8">
 		<id name="ID" description="ID" javaType="string">
 			<component type="hidden" url=""/>
 		</id>
@@ -113,15 +113,15 @@
 			<queryCondition type="blurMatching"/>
 			<listColumn noedit="false" noquery="false"/>
 		</field>
-		<field name="SUPPLIER" description="供应商" displayOnly="false" javaType="string" lazyLoad="false" nullAllowed="false">
+		<field name="SUPPLIER" description="供应商" displayOnly="false" javaType="string" lazyLoad="true" loadType="cache" nullAllowed="false">
 			<component type="combo" readOnly="false" displayReferenceField="NAME" referenceField="ID" referenceTable="T_DIC_SUPPLIER" parameter="{&amp;__filter=filter}"/>
 			<listColumn noedit="false" noquery="false"/>
 		</field>
-		<field name="WAREHOUSE" description="所属仓库" displayOnly="false" javaType="string" lazyLoad="false" nullAllowed="false">
+		<field name="WAREHOUSE" description="所属仓库" displayOnly="false" javaType="string" lazyLoad="true" loadType="cache" nullAllowed="false">
 			<component type="combo" readOnly="true" displayReferenceField="NAME" referenceField="ID" referenceTable="T_DIC_WAREHOUSE_COMBO"/>
 			<listColumn noedit="false" noquery="false"/>
 		</field>
-		<field name="WHOWNER" description="库主" displayOnly="false" javaType="string" lazyLoad="false">
+		<field name="WHOWNER" description="库主" displayOnly="false" javaType="string" lazyLoad="true" loadType="cache">
 			<component type="combo" readOnly="false" displayReferenceField="NAME" referenceField="ID" referenceTable="T_WM_OPERATOR"/>
 			<listColumn noedit="false" noquery="false"/>
 		</field>
@@ -244,19 +244,6 @@
 				return 1;
 			}
 		]]></javascript>
-		<!-- t_1.CONTRACT;比较P_27和CAPACITYNUM,重新计算C1 C2 C3 -->
-		<pluginInterceptor methodName="initDB" pluginName="initDB" type="before"><![CDATA[
-create or replace view V_WM_SDBPRODUCT as 
-	(
-		select t_1.ID_INT as ID_INT,t_1.SDB_PRODUCT_ID,t_1.HYVERSION,t_1.ID,t_1.NAME,t_1.CODE,t_1.WAREHOUSE,t_1.SUPPLIER,t_1.STATUS,t_1.WHOWNER,t_1.C1,t_1.C2,t_1.C3,t_2.COLOR,t_1.ZDKC,t_1.CAPACITYNUM,t_1.EDPMODEL,t_1.P_27 as P_27_LAST,
-		t_2.P_27,t_2.P_21,t_2.PRODUCT_ID,t_2.NAME as SDB_NAME,t_2.WMCODE,t_2.PACKING_NUM,t_2.WEIGHTNUM, t_2.P_24,t_2.SPEC,t_2.BHZQ,t_2.BIG_PIC,t_2.IN_PRICE,t_2.OUT_PRICE,t_2.TYPE_0,t_2.MEMO,t_2.MARKETABLE,t_2.MODEL,t_2.TYPE_ID,
-		t_1.SUPP_CODE,t_1.LATEST_BATCH,
-		t_1.CONTRA_INPRICE
-		
-		from T_WM_PRO t_1 left join T_DIC_SDBPROGOODS t_2 on t_1.SDB_PRODUCT_ID=t_2.PRODUCT_ID
-		and t_2.MARKETABLE=true
-	)
-		]]></pluginInterceptor>
 		<!--材质本来有两个双引号 substring_index(substring_index(EDPMODEL,'"',-2),'"',1) -->
 		<pluginInterceptor methodName="exp" pluginName="new" parameter="
 			SetCreate(ID,GetNewID(T_WM_PRO))
@@ -264,14 +251,76 @@ create or replace view V_WM_SDBPRODUCT as
 		<pluginInterceptor methodName="exp" pluginName="edit" parameter="
 			SetCreate(WAREHOUSE,GetUser(WAREHOUSEID),__WAREHOUSE__NAME,GetUser(WAREHOUSENAME))
 			+If(InRole(sp,wm),DisFlds(SUPPLIER)+Set(SUPPLIER,GetUser(SUPPLIER),__SUPPLIER__NAME,GetUser(__SUPPLIER__NAME)),true)
+			+DisBtns(syncView)
 			" type="after"/>
 		<pluginInterceptor methodName="exp" pluginName="saveView" parameter="
 			If(InRole(sp,wm),If(Int(DBFindValue({select count(ID) from T_WM_AGREEMENT where STATUS='1' and SUPPLIER='}&amp;Get(SUPPLIER)&amp;{'}))=0,Warning({未能有一份完成的协议，无法新建产品 }),true),true)
 			+Set(CAPACITYNUM,Get(C1)*Get(C2)*Get(C3)/1000000,NAME,Get(SDB_NAME),CODE,Get(WMCODE))
 			+Save({T_WM_PRO},GetForm())
 			" />
+		<!-- t_1.CONTRACT;比较P_27和CAPACITYNUM,重新计算C1 C2 C3 -->
+		<pluginInterceptor methodName="bsh" pluginName="syncView" type="after"><![CDATA[
+			void refreshDB1() throws Throwable {
+				String PRODUCT_ID = context.getParameter("PRODUCT_ID");
+				if (StringUtil.isEmpty(PRODUCT_ID)) {
+					throw new Warning("PRODUCT_ID Lost");
+				}
+				String sql1 = "delete from T_DIC_SDBPROGOODS where PRODUCT_ID=?";
+				String sql2 = "insert into  T_DIC_SDBPROGOODS(PRODUCT_ID,GOODS_ID,WMCODE,STORE1,STORE2,IN_PRICE,OUT_PRICE,P_21,PACKING_NUM,P_27,NAME,WEIGHTNUM,P_24,SPEC,MODEL,BHZQ,BIG_PIC,TYPE_0,TYPE_ID,COLOR,MARKETABLE,MEMO) (select PRODUCT_ID,GOODS_ID,WMCODE,STORE1,STORE2,IN_PRICE,OUT_PRICE,P_21,PACKING_NUM,P_27,NAME,WEIGHTNUM,P_24,SPEC,MODEL, BHZQ,BIG_PIC,TYPE_0,TYPE_ID,COLOR,MARKETABLE,MEMO from V_DIC_SDBPROGOODS where PRODUCT_ID=?)";
+				final DBManager dbm = context.getDBM();
+				dbm.executeUpdatePre(sql1, new Object[]{PRODUCT_ID}, null);
+				dbm.executeUpdatePre(sql2, new Object[]{PRODUCT_ID}, null);
+			}
+			refreshDB1();
+			void refreshDB() throws Throwable {
+				String PRODUCT_ID = context.getParameter("PRODUCT_ID");
+				if (StringUtil.isEmpty(PRODUCT_ID)) {
+					throw new Warning("PRODUCT_ID Lost");
+				}
+				String sql1 = "delete from T_WM_SDBPRODUCT where PRODUCT_ID=?";
+				String sql2 = "insert into  T_WM_SDBPRODUCT(HYVERSION,ID,NAME,CODE,WAREHOUSE,SUPPLIER,STATUS,WHOWNER,SDB_PRODUCT_ID,C1,C2,C3,COLOR,ZDKC,CAPACITYNUM,EDPMODEL,P_27_LAST,P_27,P_21,PRODUCT_ID,SUPP_CODE,SDB_NAME,WMCODE,PACKING_NUM,WEIGHTNUM,P_24,SPEC,BHZQ,BIG_PIC,IN_PRICE,OUT_PRICE,TYPE_0,MEMO,MARKETABLE,MODEL,TYPE_ID) (select HYVERSION,ID,NAME,CODE,WAREHOUSE,SUPPLIER,STATUS,WHOWNER,SDB_PRODUCT_ID,C1,C2,C3,COLOR,ZDKC,CAPACITYNUM,EDPMODEL, P_27_LAST,P_27,P_21,PRODUCT_ID,SUPP_CODE,SDB_NAME,WMCODE,PACKING_NUM,WEIGHTNUM,P_24,SPEC,BHZQ,BIG_PIC,IN_PRICE,OUT_PRICE,TYPE_0,MEMO,MARKETABLE,MODEL,TYPE_ID from V_WM_SDBPRODUCT where PRODUCT_ID=?)";
+				final DBManager dbm = context.getDBM();
+				dbm.executeUpdatePre(sql1, new Object[]{PRODUCT_ID}, null);
+				dbm.executeUpdatePre(sql2, new Object[]{PRODUCT_ID}, null);
+			}
+			refreshDB();
+		]]></pluginInterceptor>
+		<pluginInterceptor methodName="bsh" pluginName="saveView" type="after"><![CDATA[
+			void refreshDB() throws Throwable {
+				String ID = form.get("ID");
+				if (StringUtil.isEmpty(ID)) {
+					throw new Warning("ID Lost");
+				}
+				String sql1 = "delete from T_WM_SDBPRODUCT where ID=?";
+				String sql2 = "insert into  T_WM_SDBPRODUCT(HYVERSION,ID,NAME,CODE,WAREHOUSE,SUPPLIER,STATUS,WHOWNER,SDB_PRODUCT_ID,C1,C2,C3,COLOR,ZDKC,CAPACITYNUM,EDPMODEL,P_27_LAST,P_27,P_21,PRODUCT_ID,SUPP_CODE,SDB_NAME,WMCODE,PACKING_NUM,WEIGHTNUM,P_24,SPEC,BHZQ,BIG_PIC,IN_PRICE,OUT_PRICE,TYPE_0,MEMO,MARKETABLE,MODEL,TYPE_ID) (select HYVERSION,ID,NAME,CODE,WAREHOUSE,SUPPLIER,STATUS,WHOWNER,SDB_PRODUCT_ID,C1,C2,C3,COLOR,ZDKC,CAPACITYNUM,EDPMODEL, P_27_LAST,P_27,P_21,PRODUCT_ID,SUPP_CODE,SDB_NAME,WMCODE,PACKING_NUM,WEIGHTNUM,P_24,SPEC,BHZQ,BIG_PIC,IN_PRICE,OUT_PRICE,TYPE_0,MEMO,MARKETABLE,MODEL,TYPE_ID from V_WM_SDBPRODUCT where ID=?)";
+				final DBManager dbm = context.getDBM();
+				dbm.executeUpdatePre(sql1, new Object[]{ID}, null);
+				dbm.executeUpdatePre(sql2, new Object[]{ID}, null);
+			}
+			refreshDB();
+		]]></pluginInterceptor>
+		<pluginInterceptor methodName="bsh" pluginName="refreshDB" type="after"><![CDATA[
+			void refreshDB1() throws Throwable {
+				String sql1 = "delete from T_DIC_SDBPROGOODS";
+				String sql2 = "insert into  T_DIC_SDBPROGOODS(PRODUCT_ID,GOODS_ID,WMCODE,STORE1,STORE2,IN_PRICE,OUT_PRICE,P_21,PACKING_NUM,P_27,NAME,WEIGHTNUM,P_24,SPEC,MODEL,BHZQ,BIG_PIC,TYPE_0,TYPE_ID,COLOR,MARKETABLE,MEMO) (select PRODUCT_ID,GOODS_ID,WMCODE,STORE1,STORE2,IN_PRICE,OUT_PRICE,P_21,PACKING_NUM,P_27,NAME,WEIGHTNUM,P_24,SPEC,MODEL, BHZQ,BIG_PIC,TYPE_0,TYPE_ID,COLOR,MARKETABLE,MEMO from V_DIC_SDBPROGOODS)";
+				final DBManager dbm = context.getDBM();
+				dbm.executeUpdate(sql1, null);
+				dbm.executeUpdate(sql2, null);
+			}
+			refreshDB1();
+			void refreshDB2() throws Throwable {
+				String sql1 = "delete from T_WM_SDBPRODUCT";
+				String sql2 = "insert into  T_WM_SDBPRODUCT(HYVERSION,ID,NAME,CODE,WAREHOUSE,SUPPLIER,STATUS,WHOWNER,SDB_PRODUCT_ID,C1,C2,C3,COLOR,ZDKC,CAPACITYNUM,EDPMODEL,P_27_LAST,P_27,P_21,PRODUCT_ID,SUPP_CODE,SDB_NAME,WMCODE,PACKING_NUM,WEIGHTNUM,P_24,SPEC,BHZQ,BIG_PIC,IN_PRICE,OUT_PRICE,TYPE_0,MEMO,MARKETABLE,MODEL,TYPE_ID) (select HYVERSION,ID,NAME,CODE,WAREHOUSE,SUPPLIER,STATUS,WHOWNER,SDB_PRODUCT_ID,C1,C2,C3,COLOR,ZDKC,CAPACITYNUM,EDPMODEL, P_27_LAST,P_27,P_21,PRODUCT_ID,SUPP_CODE,SDB_NAME,WMCODE,PACKING_NUM,WEIGHTNUM,P_24,SPEC,BHZQ,BIG_PIC,IN_PRICE,OUT_PRICE,TYPE_0,MEMO,MARKETABLE,MODEL,TYPE_ID from V_WM_SDBPRODUCT)";
+				final DBManager dbm = context.getDBM();
+				dbm.executeUpdate(sql1, null);
+				dbm.executeUpdate(sql2, null);
+			}
+			refreshDB2();
+		]]></pluginInterceptor>
 		<!-- -->
 		<pluginOperation name="saveView" oprName="保存" hostPage="edit" tblevel="1" img="save" action="if(checkcap()=1,plugin({},{saveView})+brk(),alert('确认体积是否正确')+brk())"/>
+		<pluginOperation name="refreshDB" oprName="重载SDB商品" hostPage="query" tblevel="1" img="refresh" action="plugin({},{refreshDB})+brk()"/>
+		<pluginOperation name="syncView" oprName="同步当前SDB商品" hostPage="edit" tblevel="1" img="refresh" action="alert('无效')+brk()"/>
 		<!-- -->
 		<Operation queryPageDelete="false" save="false" saveAndAdd="false" saveAndAddCopy="false"/>
 	</table>
