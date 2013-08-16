@@ -1,4 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+﻿<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ page import="com.haiyan.genmis.core.*"%>
 <%@ page import="com.haiyan.genmis.core.exception.*"%>
 <%@ page import="com.haiyan.genmis.core.db.*"%>
@@ -12,6 +12,7 @@
 <%@ page import="javax.servlet.*"%>
 <%@ page import="java.util.*"%>
 <%@ page import="java.io.*"%>
+<%@ page import="net.sf.json.*"%>
 <%!
 PluginOperation getPluginOperation(SrvContext context, Table table) {
 		String pluginName = context.getPluginName();
@@ -25,7 +26,8 @@ PluginOperation getPluginOperation(SrvContext context, Table table) {
 				}
 			}
 		}
-		return null;
+		throw new Warning("不存在的插件:"+pluginName);
+		//return null;
 	}
 %>
 <%
@@ -42,11 +44,19 @@ try {
 	PluginOperation plugin = getPluginOperation(srvContext, table);
 	core.doExecutePlugin(srvContext, table, plugin, (Qbq3Form)null);
     
-	srvContext.write("success");
+	//srvContext.write("{success:true}");
+	out.clear();
+    out.print("{success:true}");
 } catch(Throwable ex) {
 	DebugUtil.error(ex);
+	//out.clear();
+    //out.print(Warning.getClientErr(ex.getMessage()));
+	//srvContext.write(Warning.getClientErr(ex.getMessage()));
+	JSONObject json = new JSONObject();
+	json.put("success",false);
+	json.put("error",ex.getMessage());
 	out.clear();
-    out.print(Warning.getClientErr(ex.getMessage()));
+    out.print(json);
 } finally {
 	srvContext.close();
 }
