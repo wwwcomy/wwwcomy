@@ -1,4 +1,4 @@
-String getWarewhereCode(String WHID){
+String getWarewhereCode(String WHID, DBManager dbm){
 	Qbq3Form bean = dbm.findByPK("T_DIC_WAREWHERE",WHID,context);
 	if (bean!=null)
 		return bean.get("CODE");
@@ -20,8 +20,8 @@ void checkStock() {
 		String batch = rs[i][2];
 		checkSql += " or (t_1.PRODUCTID=t_2.ID and t_1.WAREHOUSE='"+warehouseID+"' and t_1.WAREWHERE='"+WHID+"' and t_1.PRODUCTID='"+proID+"' and t_1.BATCH="+batch+")";
 	}
-	Map<String, Integer> INDEX = new HashMap<String, Integer>();
-	String[][] result = dbm.getResultStrArray(checkSql, 2, null);
+	Map INDEX = new HashMap();
+	String[][] result = dbm.getResultStrArray(checkSql, 6, null);
 	l = result.length;
 	for (int i=0;i<l;i++) {
 		// 0:仓位-批次库存数量 1:产品货号 
@@ -37,17 +37,19 @@ void checkStock() {
 		String proID = rs[i][1];
 		String batch = rs[i][2];
 		String key = warehouseID+":"+WHID+":"+proID+":"+batch;
-		Integer row = INDEX.get(key);
-		if (row!=null && row>0) {
+		
+		Integer row = (Integer)INDEX.get(key);
+		if (row!=null) {
 			int transCount = Integer.valueOf(rs[i][3]); // 应出库数量
 			int kcCount = Integer.valueOf(result[row][0]); // 仓位-批次库存数量
 			String proWmcode = result[row][1]; // 产品货号
 			if(transCount>kcCount){
-				String whCode = getWarewhereCode(WHID);
+				String whCode = getWarewhereCode(WHID, dbm);
+				//System.out.println("审批失败,商品 '"+proWmcode+"' 库存不足, 仓位:"+whCode+",批次:"+batch+", 出库数量:"+transCount+", 现有仓位库存:"+t);
 				throw new Warning("审批失败,商品 '"+proWmcode+"' 库存不足, 仓位:"+whCode+",批次:"+batch+", 出库数量:"+transCount+", 现有仓位库存:"+t);
 			}
 		}else{
-			String whCode = getWarewhereCode(WHID);
+			String whCode = getWarewhereCode(WHID, dbm);
 			throw new Warning("审批失败,商品无库存, 仓位:"+whCode+",批次:"+batch+", 出库数量:"+transCount);
 		}
 	}
