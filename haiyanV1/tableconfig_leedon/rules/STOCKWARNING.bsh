@@ -1,44 +1,55 @@
+
 void stockWarning() throws Throwable {
-
-	String ID = form.get("ID");
-	DBManager dbm = context.getDBM();
-	
-	//获取所有商品和商品出库数量
-	String sql = "select distinct(PRODUCTID),sum(PRO_COUNT) from T_WM_OUTDETAIL where HEADID='"+ID+"' group by PRODUCTID";
-	String[][] rs = dbm.getResultStrArray(sql,2,null);
-	
-	if(rs.length>0) {
-		int l = rs.length;
-		for(int i = 0; i<l;i++){
-			String proID = rs[i][0];
-			String outCount = rs[i][1];
-			// 只有一条
-			String sql1 = "select t_1.PRO_COUNT, t_2.ZDKC, t_3.NAME, t_3.ID, t_2.NAME from V_WM_STOCK3 t_1, T_WM_SDBPRODUCT t_2, T_DIC_ORGA t_3 where t_1.PRODUCTID="+proID +" and t_2.ID="+proID+" and t_3.id=t_2.SUPPLIER";
-			// 需求:要当前库存加上未审批的入库单商品数量(算在途数量)
-			String sql2 = "select sum(PRO_COUNT) from T_WM_SDBINPRE t_1 left join T_WM_SDBIN t_2 on t_1.HEADID=t_2.ID where t_2.BILL_STATUS='init' and PRODUCTID="+proID;
-			String[][] rs1 = dbm.getResultStrArray(sql1,5,null);
-			String proKC = rs1[0][0];
-			String zdKC = rs1[0][1];
-			String supName = rs1[0][2];
-			String supID = rs1[0][3];
-			String proName = rs1[0][4];
-			
-			int afterKC = TypeConvert.toInt(proKC) - TypeConvert.toInt(outCount);
-			
-			String[][] rs2 = dbm.getResultStrArray(sql2,1,null);
-			// 在途库存
-			String ztKC = rs2[0][0];
-			
-			System.out.println("库存预警:"+TypeConvert.toInt(zdKC)+",当前库存:"+afterKC+",在途数量:"+TypeConvert.toInt(ztKC));
-//			String Exp = "SendEmail(Page(SYSOPERATOR,{ and (t_1.ID=1 or t_1.ID in (select USERID from T_DIC_SUPP_USER where SUPPLIER = "+supID+") )}),{smtp.126.com},{noreply_edp@126.com},{123qwe},{noreply_edp@126.com},{库存预警},{txt},{尊敬的供应商:"+supName+"  您在易得品有一款或多款产品库存数已经低于警戒数了，请尽快登录我们的业务系统查看详细情况并尽快安排补货入库。商品名称:"+proName+", 当前库存数量:"+afterKC+", 当前在途数量:"+ztKC+", 预警数量:"+zdKC+"})";
-			String Exp = "SendEmail(Page(SYSOPERATOR, { and (t_1.ID=1 )}),{smtp.126.com},{noreply_edp@126.com},{123qwe},{noreply_edp@126.com},{库存预警},{txt},{尊敬的供应商:"+supName+"  您在易得品有一款或多款产品库存数已经低于警戒数了，请尽快登录我们的业务系统查看详细情况并尽快安排补货入库。商品名称:"+proName+", 当前库存数量:"+afterKC+", 当前在途数量:"+ztKC+", 预警数量:"+zdKC+"})";
-			if(afterKC<=TypeConvert.toInt(zdKC)){
-				//System.out.println(Exp);
-				context.getExpUtil().evalExp(Exp);
+	final String DSN = context.getDSN();
+	final String ID = form.get("ID");
+	final SrvContext ctx = new TempSrvContext(context.getUser().getID(), DSN) ;
+	Thread t = new Thread(new Runnable(){
+		public void run() {
+			try{
+				DBManager dbm = ctx.getDBM();
+				
+				//获取所有商品和商品出库数量
+				String sql = "select distinct(PRODUCTID),sum(PRO_COUNT) from T_WM_OUTDETAIL where HEADID='"+ID+"' group by PRODUCTID";
+				String[][] rs = dbm.getResultStrArray(sql,2,null);
+				
+				if(rs.length>0) {
+					int l = rs.length;
+					for(int i = 0; i<l;i++){
+						String proID = rs[i][0];
+						String outCount = rs[i][1];
+						// 只有一条
+						String sql1 = "select t_1.PRO_COUNT, t_2.ZDKC, t_3.NAME, t_3.ID, t_2.NAME from V_WM_STOCK3 t_1, T_WM_SDBPRODUCT t_2, T_DIC_ORGA t_3 where t_1.PRODUCTID="+proID +" and t_2.ID="+proID+" and t_3.id=t_2.SUPPLIER";
+						// 需求:要当前库存加上未审批的入库单商品数量(算在途数量)
+						String sql2 = "select sum(PRO_COUNT) from T_WM_SDBINPRE t_1 left join T_WM_SDBIN t_2 on t_1.HEADID=t_2.ID where t_2.BILL_STATUS='init' and PRODUCTID="+proID;
+						String[][] rs1 = dbm.getResultStrArray(sql1,5,null);
+						String proKC = rs1[0][0];
+						String zdKC = rs1[0][1];
+						String supName = rs1[0][2];
+						String supID = rs1[0][3];
+						String proName = rs1[0][4];
+						
+						int afterKC = TypeConvert.toInt(proKC) - TypeConvert.toInt(outCount);
+						
+						String[][] rs2 = dbm.getResultStrArray(sql2,1,null);
+						// 在途库存
+						String ztKC = rs2[0][0];
+						
+						System.out.println("库存预警:"+TypeConvert.toInt(zdKC)+",当前库存:"+afterKC+",在途数量:"+TypeConvert.toInt(ztKC));
+	//					String Exp = "SendEmail(Page(SYSOPERATOR,{ and (t_1.ID=1 or t_1.ID in (select USERID from T_DIC_SUPP_USER where SUPPLIER = "+supID+") )}),{smtp.126.com},{noreply_edp@126.com},{123qwe},{noreply_edp@126.com},{库存预警},{txt},{尊敬的供应商:"+supName+"  您在易得品有一款或多款产品库存数已经低于警戒数了，请尽快登录我们的业务系统查看详细情况并尽快安排补货入库。商品名称:"+proName+", 当前库存数量:"+afterKC+", 当前在途数量:"+ztKC+", 预警数量:"+zdKC+"})";
+						String Exp = "SendEmail(Page(SYSOPERATOR, { and (t_1.ID=1 )}),{smtp.126.com},{noreply_edp@126.com},{123qwe},{noreply_edp@126.com},{库存预警},{txt},{尊敬的供应商:"+supName+"  您在易得品有一款或多款产品库存数已经低于警戒数了，请尽快登录我们的业务系统查看详细情况并尽快安排补货入库。商品名称:"+proName+", 当前库存数量:"+afterKC+", 当前在途数量:"+TypeConvert.toInt(ztKC)+", 预警数量:"+zdKC+"})";
+						if(afterKC<=TypeConvert.toInt(zdKC)){
+							//System.out.println(Exp);
+							ctx.getExpUtil().evalExp(Exp);
+						}
+					}
+				}
+			} catch(Throwable e){
+				e.printStackTrace();
+			} finally{
+				ctx.close();
 			}
-//			throw new Warning("库存预警:"+TypeConvert.toInt(zdKC)+",当前库存:"+afterKC+",在途数量:"+TypeConvert.toInt(ztKC));
 		}
-	}
-
+	});
+	t.start();
 }
 stockWarning();
