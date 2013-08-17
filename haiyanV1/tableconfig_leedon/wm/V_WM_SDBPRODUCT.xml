@@ -254,7 +254,7 @@ create or replace view V_WM_SDBPRODUCT as
 		t_1.CONTRA_INPRICE
 		
 		from T_WM_PRO t_1 left join T_DIC_SDBPROGOODS t_2 on t_1.SDB_PRODUCT_ID=t_2.PRODUCT_ID
-		and t_2.MARKETABLE=true
+		and t_2.MARKETABLE='true'
 	)
 		]]></pluginInterceptor>
 		<!--材质本来有两个双引号 substring_index(substring_index(EDPMODEL,'"',-2),'"',1) -->

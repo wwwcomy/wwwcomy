@@ -220,6 +220,16 @@ create or replace view V_WM_OUT as
 			+If(Get(BILL_STATUS)={audit},DisBtns(select,saveView,auditOut)+DisFlds(SUBGRID1)+HidFlds(SUBGRID2,TEST2),true)
 			" pluginName="saveView" />
 		<pluginInterceptor methodName="bsh" parameter="V_WM_OUT.bsh" pluginName="saveViewBatch" type="after" />
+		<pluginInterceptor methodName="bsh" pluginName="saveViewBatch" type="after"><![CDATA[
+			void refreshDB() throws Throwable {
+				String sql1 = "delete from T_WM_OUTPRE where ORDER_ID=?";
+				String sql2 = "insert into  T_WM_OUTPRE(NAME,ITEM_ID,ORDER_ID,OUT_CODE,ITEM_ID_PK,PRODUCTID,PRODUCT_ID,WMCODE,SUPP_CODE,OUT_COUNT,OUT_RCOUNT,IN_PRICE,OUT_PRICE,PRO_COUNT,OUT_ALL_PRICE,PACKING_NUM,CAPACITYNUM,WEIGHTNUM,SUPPLIER,WAREHOUSE,All_CAPACITYNUM,All_WEIGHTNUM,REMAINDER_NUM,LOGISTICS_NAME,LOGISTICS_CODE,LOGISTICS_MEMO,HYVERSION,BILL_STATUS) (select NAME,ITEM_ID,ORDER_ID,OUT_CODE,ITEM_ID_PK,PRODUCTID,PRODUCT_ID,WMCODE,SUPP_CODE,OUT_COUNT,OUT_RCOUNT,IN_PRICE,OUT_PRICE,PRO_COUNT,OUT_ALL_PRICE,PACKING_NUM,CAPACITYNUM,WEIGHTNUM,SUPPLIER,WAREHOUSE,All_CAPACITYNUM,All_WEIGHTNUM,REMAINDER_NUM,LOGISTICS_NAME,LOGISTICS_CODE,LOGISTICS_MEMO,HYVERSION,BILL_STATUS from V_WM_OUTPRE where ORDER_ID=?)";
+				final DBManager dbm = context.getDBM();
+				dbm.executeUpdatePre(sql1, new Object[]{form.get("ORDER_ID")}, null);
+				dbm.executeUpdatePre(sql2, new Object[]{form.get("ORDER_ID")}, null);
+			}
+			refreshDB();
+		]]></pluginInterceptor>
 		<!-- -->
 		<pluginInterceptor methodName="exp" parameter="
 			if(SubStr(Get(ORDER_ID),0,2)={CK},Set(ORDER_ID_INT,0),Set(ORDER_ID_INT,get(ORDER_ID)))

@@ -28,3 +28,8 @@ create or replace view V_WM_OUT as
 6.t_wm_indetail 的batch， t_wm_transdetail的batch、pro_wh、pro_count、to_wh、productid、字段设置为非空
 7.T_WM_PRO的SDB_PRODUCT_ID字段修改为mediumint 加索引， V_WM_OUTPRE不使用ID_INT， 而是使用SDB_PRODUCT_ID
 
+20130816修改：
+1.V_DIC_SDBPROGOODS增加实体表，注意MEMO字段的长度
+2.V_WM_SDBPRODUCT修改为实体表，并且数据库中注意把T_WM_PRO的SDB_PRODUCT_ID字段修改回varchar(50)，因为和T_DIC_SDBPROGOODS联立时还是用回varchar了
+3.BSH的方式在使用Batch最后执行时，只有以外联文件的方式才能执行，后来更新后才会执行写在配置xml中的bsh脚本
+

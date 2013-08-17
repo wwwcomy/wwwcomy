@@ -346,7 +346,6 @@ create or replace view V_WM_OUTPRE as
 		<!-- 
 		<javascript hostPage="edit"><![CDATA[
 		]]></javascript>
-		-->
 		<pluginInterceptor methodName="bsh" pluginName="saveView" type="after"><![CDATA[
 			void refreshDB() throws Throwable {
 				String sql1 = "delete from T_WM_OUTPRE where ITEM_ID=?";
@@ -357,6 +356,7 @@ create or replace view V_WM_OUTPRE as
 			}
 			refreshDB();
 		]]></pluginInterceptor>
+		-->
 		<pluginInterceptor methodName="bsh" pluginName="refreshDB" type="after"><![CDATA[
 			void refreshDB() throws Throwable {
 				String sql1 = "delete from T_WM_OUTPRE";

@@ -206,7 +206,7 @@ create or replace view V_DIC_SDBPROGOODS as
 			<component type="text" readOnly="true" colspan="7"/>
 			<listColumn noedit="false" noquery="false"/>
 		</field>
-		<field name="MEMO" description="备注" displayOnly="false" javaType="string" lazyLoad="false" length="5000">
+		<field name="MEMO" description="备注" displayOnly="false" javaType="string" lazyLoad="false" length="20000">
 			<component type="fckeditor" readOnly="true" style="width:90%;height:480px;" colspan="7"/>
 			<queryCondition type="none"/>
 			<listColumn noedit="false" noquery="true" nowrap="true" />
