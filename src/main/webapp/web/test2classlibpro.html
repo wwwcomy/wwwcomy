@@ -1,0 +1,35 @@
+﻿<script>
+var Class = function(){
+	var klass = function(){
+		this.init.apply(this.arguments);
+	};
+	klass.prototype.init = function(){};
+	klass.fn = klass.prototype;
+	klass.fn.parent = klass;
+	klass.extend = function(obj){
+		var extended = obj.extended;
+		for(var i in obj){
+			klass[i] = obj[i];
+		}
+		if(extended) extended(klass);
+	};
+	klass.include = function(obj){
+		var included = obj.included;
+		for(var i in obj){
+			klass.fn[i] = obj[i];
+		}
+		if(included) included(klass);
+	};
+	return klass;
+}
+var Person = new Class;
+Person.extend({
+	func1 : function(id){console.log("static func1")},
+	func2 : function(id){console.log("static func2")}
+});
+Person.include({
+	func1 : function(id){console.log("func1")},
+	func2 : function(id){console.log("func2")}
+});
+var p1 = new Person;
+</script>

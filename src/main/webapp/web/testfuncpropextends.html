@@ -1,0 +1,23 @@
+﻿<script>
+var Person = function(){
+	this.func1 = function(){
+		console.log("this is func1");
+	};
+}
+Person.prototype.func2 = function(){
+	console.log("this is func2");
+}
+var p1 = new Person();
+var xiaoming = function(){
+	// 这里,调用xiaoming实例的func1方法时,会在xiaoming类中查找对应实例方法,如果func1没有找到,会在xiaoming.prototype查找。
+	this.func1 = function(){
+		console.log("this is xiaoming func1");
+	}
+}
+xiaoming.prototype = new Person;
+xiaoming.prototype.func3 = function(){
+	console.log("this is xiaoming func3");
+}
+var realXM = new xiaoming;
+
+</script>
