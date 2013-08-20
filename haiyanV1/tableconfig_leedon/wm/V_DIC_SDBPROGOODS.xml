@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Haiyan xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../haiyan.xsd">
 	<table name="V_DIC_SDBPROGOODS" description="网店订单商品" colspan="8">
-		<id name="PRODUCT_ID" description="SDB_PRODUCT_ID" javaType="string">
+		<id name="PRODUCT_ID" description="SDB_PRODUCT_ID" javaType="bigDecimal">
 			<component type="hidden" url=""/>
 		</id>
 		<field name="GOODS_ID" description="SDB_GOODS_ID" displayOnly="false" javaType="string" lazyLoad="false">
@@ -121,7 +121,7 @@ create or replace view V_DIC_SDBPROGOODS as
 	</table>
 	
 	<table name="T_DIC_SDBPROGOODS" description="网店订单商品" colspan="8">
-		<id name="PRODUCT_ID" description="SDB_PRODUCT_ID" javaType="string">
+		<id name="PRODUCT_ID" description="SDB_PRODUCT_ID" javaType="bigDecimal">
 			<component type="hidden" url=""/>
 		</id>
 		<field name="GOODS_ID" description="SDB_GOODS_ID" displayOnly="false" javaType="string" lazyLoad="false">

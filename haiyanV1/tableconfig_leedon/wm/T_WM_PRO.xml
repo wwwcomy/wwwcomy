@@ -32,7 +32,7 @@
 			<component type="combo" colspan="3" displayReferenceField="NAME" referenceField="ID" referenceTable="T_WM_OPERATOR"/>
 			<listColumn noedit="false" noquery="false"/>
 		</field>
-		<field name="SDB_PRODUCT_ID" description="SDB_PRODUCT_ID" displayOnly="false" javaType="string" lazyLoad="false" nullAllowed="false">
+		<field name="SDB_PRODUCT_ID" description="SDB_PRODUCT_ID" displayOnly="false" javaType="bigDecimal" lazyLoad="false" nullAllowed="false">
 			<component type="text"/>
 			<listColumn noedit="false" noquery="false"/>
 		</field>

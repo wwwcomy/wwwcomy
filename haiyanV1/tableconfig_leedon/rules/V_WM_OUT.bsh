@@ -1,8 +1,9 @@
+//设置实际出库数量
 void setSum() throws Throwable {
 	final DBManager dbm = context.getDBM();
 	Qbq3Form q = new MapForm();
 	q.set("ORDER_ID", form.get("ID"));
-	dbm.dealByForm("V_WM_OUTPRE", q, new IPageCallBack(){
+	dbm.dealByForm("T_WM_OUTPRE", q, new IPageCallBack(){
 		public void deal(Qbq3Form f2) {
 			String sql = "select sum(PRO_COUNT) from T_WM_OUTDETAIL where HEADID='"+f2.get("ORDER_ID")+"' and PRODUCTID='"+f2.get("PRODUCTID")+"' ";
 			String[][] rs = dbm.getResultStrArray(sql, 1, null);
@@ -13,4 +14,13 @@ void setSum() throws Throwable {
 		}
 	}, context, null);
 }
+void refreshDB() throws Throwable {
+	String sql1 = "delete from T_WM_OUTPRE where ORDER_ID=?";
+	String sql2 = "insert into  T_WM_OUTPRE(NAME,ITEM_ID,ORDER_ID,OUT_CODE,ITEM_ID_PK,PRODUCTID,PRODUCT_ID,WMCODE,SUPP_CODE,OUT_COUNT,OUT_RCOUNT,IN_PRICE,OUT_PRICE,PRO_COUNT,OUT_ALL_PRICE,PACKING_NUM,CAPACITYNUM,WEIGHTNUM,SUPPLIER,WAREHOUSE,All_CAPACITYNUM,All_WEIGHTNUM,REMAINDER_NUM,LOGISTICS_NAME,LOGISTICS_CODE,LOGISTICS_MEMO,HYVERSION,BILL_STATUS) (select NAME,ITEM_ID,ORDER_ID,OUT_CODE,ITEM_ID_PK,PRODUCTID,PRODUCT_ID,WMCODE,SUPP_CODE,OUT_COUNT,OUT_RCOUNT,IN_PRICE,OUT_PRICE,PRO_COUNT,OUT_ALL_PRICE,PACKING_NUM,CAPACITYNUM,WEIGHTNUM,SUPPLIER,WAREHOUSE,All_CAPACITYNUM,All_WEIGHTNUM,REMAINDER_NUM,LOGISTICS_NAME,LOGISTICS_CODE,LOGISTICS_MEMO,HYVERSION,BILL_STATUS from V_WM_OUTPRE where ORDER_ID=?)";
+	final DBManager dbm = context.getDBM();
+	dbm.executeUpdatePre(sql1, new Object[]{form.get("ORDER_ID")}, null);
+	dbm.executeUpdatePre(sql2, new Object[]{form.get("ORDER_ID")}, null);
+}
 setSum();
+//先设置实际出库数量，再刷新表
+refreshDB();

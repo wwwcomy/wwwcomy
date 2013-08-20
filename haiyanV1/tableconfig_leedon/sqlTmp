@@ -33,3 +33,6 @@ create or replace view V_WM_OUT as
 2.V_WM_SDBPRODUCT修改为实体表，并且数据库中注意把T_WM_PRO的SDB_PRODUCT_ID字段修改回varchar(50)，因为和T_DIC_SDBPROGOODS联立时还是用回varchar了
 3.BSH的方式在使用Batch最后执行时，只有以外联文件的方式才能执行，后来更新后才会执行写在配置xml中的bsh脚本
 
+20130820修改：
+1. 所有商品的SDB_PRODUCT_ID还是修改为mediumint并添加索引，包括T_WM_PRO,T_WM_SDBPRODUCT,V_DIC_SDBPROGOODS,T_DIC_SDBPROGOODS
+
