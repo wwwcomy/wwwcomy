@@ -2,6 +2,7 @@ package com.iteye.wwwcomy.jdbc;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -9,6 +10,11 @@ import java.sql.Statement;
 public class TestTransaction {
 
 	public static void main(String[] args) {
+		testStmtBatch();
+		testPrepareStmtBatch();
+	}
+
+	public static void testStmtBatch() {
 		Connection conn = null;
 		Statement stmt = null;
 		ResultSet rs = null;
@@ -62,4 +68,42 @@ public class TestTransaction {
 		}
 	}
 
+	private static void testPrepareStmtBatch() {
+		Connection conn = null;
+		PreparedStatement stmt = null;
+		conn = DBManager.getConn();
+		stmt = DBManager.prepare(conn, "insert into worker values(?,?,?)");
+		try {
+			conn.setAutoCommit(false);
+			int i = 0;
+			while (i < 5) {
+				stmt.setString(1, "Name" + i);
+				stmt.setString(2, "female");
+				stmt.setString(3, "" + i);
+				stmt.addBatch();
+				i++;
+			}
+			stmt.executeBatch();
+			conn.commit();
+		} catch (Throwable e) {
+			try {
+				if (conn != null) {
+					// 出错后回滚
+					conn.rollback();
+				}
+			} catch (SQLException e1) {
+				e1.printStackTrace();
+			}
+			e.printStackTrace();
+		} finally {
+			try {
+				conn.setAutoCommit(true);
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+			DBManager.closeStatement(stmt);
+			DBManager.closeConnection(conn);
+		}
+
+	}
 }
