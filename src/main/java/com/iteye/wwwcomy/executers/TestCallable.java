@@ -38,6 +38,12 @@ public class TestCallable {
 		}
 	}
 
+	/**
+	 * callable 使用Executors.submit方法开启线程
+	 * @return
+	 * @throws InterruptedException
+	 * @throws ExecutionException
+	 */
 	public static ExecutorService testSingle() throws InterruptedException, ExecutionException {
 		Callable<Integer> c1 = new MyCall(1);
 		Callable<Integer> c2 = new MyCall(11);
