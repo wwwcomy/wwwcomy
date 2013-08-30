@@ -249,6 +249,13 @@ create or replace view V_WM_OUT_HISTORY as
 			}
 			refreshDB();
 		]]></pluginInterceptor>
+		<pluginInterceptor methodName="exp" parameter="
+			WriteJS({Hy.showBill('http://www.yidepin.com/tools/order_print.php?order_id=','配货单打印','test')})" 
+			pluginName="printInvoice" type="after"/>
+		
+		<pluginInterceptor methodName="exp" parameter="
+			WriteJS({Hy.showBill('http://www.yidepin.com/tools/out_print.php?order_id=}&amp;Get(ORDER_ID)&amp;{','装箱单打印','test')})" 
+			pluginName="printPacking" type="after"/>
 		<!-- 
 		<pluginInterceptor methodName="exp" parameter="
 			Set(BILL_STATUS,{init},AUDIT_USER_ID,{})
@@ -261,6 +268,9 @@ create or replace view V_WM_OUT_HISTORY as
 		<pluginOperation name="auditOut" oprName="出库审批" hostPage="edit" tblevel="1" img="settings" action="
 			If(Confirm({确认审批后,不可恢复,确认审批?}),plugin({},{auditOut},{SUBGRID1})+brk(),brk())"/>
 		<pluginOperation name="refreshDB" oprName="重载应出库明细" hostPage="query" tblevel="1" img="refresh" action="plugin({},{refreshDB})+brk()"/>
+		<pluginOperation name="printInvoice" oprName="配货单打印" hostPage="edit" tblevel="1" action="
+			Plugin({},{printInvoice})+brk()"/>
+		<pluginOperation name="printPacking" oprName="装箱单打印" hostPage="edit" tblevel="1" action="Plugin({},{printPacking})+brk()"/>
 		<!--
 		<pluginOperation name="unaudit" oprName="取消审核" hostPage="edit" action="If(Confirm({请确认是否要取消审核?}),plugin({},{unaudit},{SUBGRID1}),true)+brk()"/>
 		 -->
