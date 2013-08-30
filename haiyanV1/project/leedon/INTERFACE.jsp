@@ -15,20 +15,19 @@
 <%@ page import="net.sf.json.*"%>
 <%!
 PluginOperation getPluginOperation(SrvContext context, Table table) {
-		String pluginName = context.getPluginName();
-		if (!StringUtil.isBlankOrNull(pluginName)) {
-			PluginOperation[] plugins = table.getPluginOperation();
-			if (plugins != null) {
-				for (int i = 0; i < plugins.length; i++) {
-					if (plugins[i].getName().equals(pluginName)) {
-						return plugins[i];
-					}
+	String pluginName = context.getPluginName();
+	if (!StringUtil.isBlankOrNull(pluginName)) {
+		PluginOperation[] plugins = table.getPluginOperation();
+		if (plugins != null) {
+			for (int i = 0; i < plugins.length; i++) {
+				if (plugins[i].getName().equals(pluginName)) {
+					return plugins[i];
 				}
 			}
 		}
-		throw new Warning("不存在的插件:"+pluginName);
-		//return null;
 	}
+	throw new Warning("不存在的插件:"+pluginName);
+}
 %>
 <%
 // <action path="/leedon_interface" scope="request" forward="/project/leedon/INTERFACE.jsp"/>
@@ -46,7 +45,7 @@ try {
     
 	//srvContext.write("{success:true}");
 	out.clear();
-    out.print("{success:true}");
+    out.print("[{success:true}]");
 } catch(Throwable ex) {
 	DebugUtil.error(ex);
 	//out.clear();
@@ -56,7 +55,7 @@ try {
 	json.put("success",false);
 	json.put("error",ex.getMessage());
 	out.clear();
-    out.print(json);
+    out.print("["+json+"]");
 } finally {
 	srvContext.close();
 }
