@@ -21,7 +21,7 @@ public class ArithUtil {
 	}
 
 	/**
-	 * 提供精确的加法运算。
+	 * 提供精确的加法运算。 注意这里用的是以String为参数的构造函数
 	 * 
 	 * @param v1
 	 *            被加数
