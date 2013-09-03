@@ -17,8 +17,7 @@ public class TestRejectedExecutionException {
 
 	private static void exec(final int tmpint) {
 		try {
-			ThreadPoolUtil.setCore(1);
-			ThreadPoolUtil.setExceptionHandler(new ThreadPoolExecutor.CallerRunsPolicy());
+			ThreadPoolUtil.REJECT_POLICY = new ThreadPoolExecutor.CallerRunsPolicy();
 			ThreadPoolUtil.execute(new Runnable() {
 				public void run() {
 					try {
