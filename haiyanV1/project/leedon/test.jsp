@@ -94,29 +94,25 @@ out.println("明细:"+pg2.toJSon());
 			<td class="td1" rowspan=3>订单数</td>
 			<td class="td1" rowspan=3>分配数</td>
 			<td class="td1" rowspan=3>实出数</td>
-			<%for(int i=0;i<CKLIST.size();i++){%>
+			<%int CKSIZE = CKLIST.size();
+			for(int i=0;i<CKSIZE;i++){%>
 				<td class="td2" colspan=3 >子订单 <%=(i+1)%></td>
 			<%}%>
 		</tr>
 		<tr>
-			<%for(int i=0;i<CKLIST.size();i++){Qbq3Form frm=CKLIST.get(i);%>
+			<%for(int i=0;i<CKSIZE;i++){
+			Qbq3Form frm=CKLIST.get(i);%>
 				<td class="td2" colspan=3 >仓库:<%=frm.get("NAME")%></td>
 			<%}%>
 		</tr>
 		<tr>
-			<%for(int i=0;i<CKLIST.size();i++){%>
+			<%for(int i=0;i<CKSIZE;i++){%>
 				<td class="td1">库存</td><td class="td1">分配</td><td class="td1">实出</td>
 			<%}%>
 		</tr>
 	</table>
 	<div id="WHOWNER_Fld" style="display:none;"></div>
 	<script>
-	(function(){
-		Ext.BLANK_IMAGE_URL=(Ext.isIE6 || Ext.isIE7 || Ext.isAir)?'comResource/js/ext/resources/images/default/s.gif':'data:image/gif;base64,R0lGODlhAQABAID/AMDAwAAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==',Hy.upload_service='/haiyan',Hy.language='lang-zh_CN_GB2312',Hy.helper='crm',Hy.skin='xtheme-gray', __currDateTime='2013-07-27 22:41:55';
-	})();
-	function getStore() {
-		alert('getStore');
-	}
 	/*var GRIDDATA0 = new Ext.data.JsonStore({
 		data: <%=pg2.toJSon()%>,
 		fields:
@@ -158,6 +154,13 @@ out.println("明细:"+pg2.toJSon());
 		]
 	});*/
 	//new Ext.data.ArrayStore(DATA0, {idProperty:'ITEM_ID'});
+	(function(){
+		Ext.BLANK_IMAGE_URL=(Ext.isIE6 || Ext.isIE7 || Ext.isAir)?'comResource/js/ext/resources/images/default/s.gif':'data:image/gif;base64,R0lGODlhAQABAID/AMDAwAAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==',Hy.upload_service='/haiyan',Hy.language='lang-zh_CN_GB2312',Hy.helper='crm',Hy.skin='xtheme-gray', __currDateTime='2013-07-27 22:41:55';
+	})();
+	function getStore() {
+		//alert('getStore');
+		return GRID0.rm;
+	}
 	var GRID0 = {
 		FIXROW:3 // 固定行
 		,FIXCOL:5 // 固定列
@@ -173,11 +176,12 @@ out.println("明细:"+pg2.toJSon());
 			if (t=this.mapRow[PID]) {
 				if (t[WID] && t[WID]['ROW']>=0) {
 					var ROW = t[WID]['ROW'];
+					this.rm[ROW]['__flag']='update';
 					this.rm[ROW]['OUT_PCOUNT']=val;
 					this.mapRow[PID]={};
-					this.sumRow[PID]['OUT_PCOUNT']=0;
+					this.sumCol[PID]['OUT_PCOUNT']=0;
 					this.calModel(PID);
-					this.getDataCellEl(ROW, 3).innerHTML=this.sumRow[PID]['OUT_PCOUNT'];
+					this.getDataCellEl(ROW, 3).innerHTML=this.sumCol[PID]['OUT_PCOUNT'];
 				}
 			}
 		}
@@ -189,6 +193,17 @@ out.println("明细:"+pg2.toJSon());
 		}
 		,getRowCount:function() {
 			return this.getGridEl().dom.children[0].children.length-this.FIXROW;
+		}
+		,initTemplate:function(){
+			var h;
+			h='<tr rowIndex={0} rowID={1} >';
+			h+='<td nowrap>{2}</td><td>{3}</td><td>{4}</td><td>{5}</td><td>{6}</td>';
+			for (var i=0;i<this.cm.length*4;i+=4) { // colID={'+(7+i)+'}
+				h+='<td>{'+(8+i)+'}</td><td>{'+(9+i)+'}</td><td>{'+(10+i)+'}</td>';
+			}
+			h+='</tr>';
+			this.template = new Ext.Template(h);
+			this.template.compile();
 		}
 		,calModel:function(prodID){
 			this.rm.each(function(row, index) { // PRO_COUNT:库存数 OUT_COUNT:订单数(应出库) OUT_PCOUNT:分配数 OUT_RCOUNT:实出库
@@ -205,28 +220,27 @@ out.println("明细:"+pg2.toJSon());
 					this.mapCol[WID]={};
 				this.mapCol[WID][row['ITEM_ID']]={PNAME:row['NAME'], PRO_COUNT:row['PRO_COUNT']||0, OUT_PCOUNT:row['OUT_PCOUNT']||0, OUT_COUNT:row['OUT_COUNT']||0, OUT_RCOUNT:row['OUT_RCOUNT']||0, ROW:index};
 				
-				if (!this.sumRow[PID])
-					this.sumRow[PID]={};
-				this.sumRow[PID]['PRO_COUNT']=(this.sumRow[PID]['PRO_COUNT']||0)*1+(row['PRO_COUNT']||0)*1;
-				this.sumRow[PID]['OUT_COUNT']=(this.sumRow[PID]['OUT_COUNT']||0)*1+(row['OUT_COUNT']||0)*1;
-				this.sumRow[PID]['OUT_PCOUNT']=(this.sumRow[PID]['OUT_PCOUNT']||0)*1+(row['OUT_PCOUNT']||0)*1;
-				this.sumRow[PID]['OUT_RCOUNT']=(this.sumRow[PID]['OUT_RCOUNT']||0)*1+(row['OUT_RCOUNT']||0)*1;
+				if (!this.sumCol[PID])
+					this.sumCol[PID]={};
+				this.sumCol[PID]['PRO_COUNT']=(this.sumCol[PID]['PRO_COUNT']||0)*1+(row['PRO_COUNT']||0)*1;
+				this.sumCol[PID]['OUT_COUNT']=(this.sumCol[PID]['OUT_COUNT']||0)*1+(row['OUT_COUNT']||0)*1;
+				this.sumCol[PID]['OUT_PCOUNT']=(this.sumCol[PID]['OUT_PCOUNT']||0)*1+(row['OUT_PCOUNT']||0)*1;
+				this.sumCol[PID]['OUT_RCOUNT']=(this.sumCol[PID]['OUT_RCOUNT']||0)*1+(row['OUT_RCOUNT']||0)*1;
 			}, this);
 		}
-		,render:function(){
-			this.calModel();
+		,onRender:function(){
 			this.rm.each(function(row, index) {
 				var PID = row['ITEM_ID'];
 				if (this.mapRow[PID]) {
 					var args = [
-						this.getRowCount() // 行号
-						, row['ITEM_ID'] // 产品ID
+						this.getRowCount() // 行号 attri
+						, row['ITEM_ID'] // 产品ID attri
 						
 						, row['NAME'] // 产品名称
-						, this.sumRow[PID]['PRO_COUNT'] // 库存
-						, this.sumRow[PID]['OUT_COUNT'] // 订单数（应出库）
-						, this.sumRow[PID]['OUT_PCOUNT'] // 分配数
-						, this.sumRow[PID]['OUT_RCOUNT'] // 实际出库
+						, this.sumCol[PID]['PRO_COUNT'] // 库存
+						, this.sumCol[PID]['OUT_COUNT'] // 订单数（应出库）
+						, this.sumCol[PID]['OUT_PCOUNT'] // 分配数
+						, this.sumCol[PID]['OUT_RCOUNT'] // 实际出库
 					];
 					for (var i=0;i<this.cm.length;i++) {
 						var WID = this.cm[i]['ID'];
@@ -240,23 +254,16 @@ out.println("明细:"+pg2.toJSon());
 				}
 			}, this);
 		}
-		,init:function(){
-			var h;
-			h='<tr rowIndex={0} rowID={1} >';
-			h+='<td nowrap>{2}</td><td>{3}</td><td>{4}</td><td>{5}</td><td>{6}</td>';
-			for (var i=0;i<this.cm.length*4;i+=4) { // colID={'+(7+i)+'}
-				h+='<td>{'+(8+i)+'}</td><td>{'+(9+i)+'}</td><td>{'+(10+i)+'}</td>';
-			}
-			h+='</tr>';
-			this.template = new Ext.Template(h);
-			this.template.compile();
+		,render:function(){
+			this.initTemplate();
+			this.calModel();
+			this.onRender();
 		}
 		,addRow:function(){
 			var args = [this.getRowCount()];
 			this.template.append(this.getGridEl(), args, true);
 		}
 	};
-	GRID0.init();
 	GRID0.render();
 	/*var WHOWNER_Fld = new Ext.ux.form.PagingComboBox({
 	   id: '__WHOWNER__NAME',
