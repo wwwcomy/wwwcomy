@@ -101,8 +101,7 @@
 			If(IsEmpty(GetPara(HEADID)),Warning({参数错误}),true)
 			" pluginName="query" type="after"/>
 		<pluginInterceptor methodName="exp" parameter="Save()" pluginName="saveView" />
-		<!-- +bsh(T_WM_STOCKDETAIL_OUT.bsh) 
+		<!-- -->
 		<pluginInterceptor methodName="exp" parameter="Set(BILL_STATUS,{audit})+Save()" pluginName="auditOut" type="after"/>
-		-->
 	</table>
 </Haiyan>
