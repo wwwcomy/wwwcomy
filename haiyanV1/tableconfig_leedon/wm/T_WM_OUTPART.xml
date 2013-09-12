@@ -2,11 +2,11 @@
 <Haiyan xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../haiyan.xsd">
 	<table name="T_WM_OUTPART" description="出库单(HY)" colspan="6">
 		<id name="ID" javaType="string"/>
-		<field name="ORDER_ID" description="HY出库单号" displayOnly="false" javaType="string" lazyLoad="false">
+		<field name="ORDER_ID" description="HY出库单号" javaType="string" lazyLoad="false">
 			<component type="text" readOnly="true" colspan="1"/>
 			<listColumn noedit="false" noquery="false" width="130"/>
 		</field>
-		<field name="ORDER_ID_INT" description="订单号(连接用)" displayOnly="false" javaType="bigDecimal" lazyLoad="false">
+		<field name="ORDER_ID_INT" description="订单号(连接用)" javaType="bigDecimal" lazyLoad="false">
 			<component type="hidden" readOnly="true"/>
 			<listColumn noedit="true" noquery="true"/>
 		</field>
@@ -17,43 +17,43 @@
 				<option displayName="损耗" value="loss"/>
 			</component>
 		</field>
-		<field name="MEMBER_ID" description="收货客户ID" displayOnly="false" javaType="string" lazyLoad="false">
+		<field name="MEMBER_ID" description="收货客户ID" javaType="string" lazyLoad="false">
 			<component type="text" readOnly="true" colspan="1"/>
 			<listColumn noedit="false" noquery="false"/>
 		</field>
-		<field name="SHIP_NAME" description="收货客户名" displayOnly="false" javaType="string" lazyLoad="false">
+		<field name="SHIP_NAME" description="收货客户名" javaType="string" lazyLoad="false">
 			<component type="text" readOnly="false" colspan="1"/>
 			<listColumn noedit="false" noquery="false"/>
 		</field>
-		<field name="SHIP_ADDR" description="收货客户地址" displayOnly="false" javaType="string" lazyLoad="false">
+		<field name="SHIP_ADDR" description="收货客户地址" javaType="string" lazyLoad="false">
 			<component type="text" readOnly="false" colspan="6" style="width:525px;"/>
 			<listColumn noedit="false" noquery="false"/>
 		</field>
-		<field name="SHIP_TEL" description="收货客户固话" displayOnly="false" javaType="string" lazyLoad="false">
+		<field name="SHIP_TEL" description="收货客户固话" javaType="string" lazyLoad="false">
 			<component type="text" readOnly="false" colspan="6" style="width:510px;"/>
 			<listColumn noedit="false" noquery="false"/>
 		</field>
-		<field name="SHIP_MOBILE" description="收货客户手机" displayOnly="false" javaType="string" lazyLoad="false">
+		<field name="SHIP_MOBILE" description="收货客户手机" javaType="string" lazyLoad="false">
 			<component type="text" readOnly="false" colspan="6" style="width:510px;"/>
 			<listColumn noedit="false" noquery="false"/>
 		</field>
-		<field name="FINAL_AMOUNT" description="订单总金额" displayOnly="false" javaType="bigDecimal" lazyLoad="false">
+		<field name="FINAL_AMOUNT" description="订单总金额" javaType="bigDecimal" lazyLoad="false">
 			<component type="text" readOnly="false"/>
 			<listColumn noedit="false" noquery="false"/>
 		</field>
-		<field name="PMT_AMOUNT" description="订单优惠金额" displayOnly="false" javaType="bigDecimal" lazyLoad="false">
+		<field name="PMT_AMOUNT" description="订单优惠金额" javaType="bigDecimal" lazyLoad="false">
 			<component type="text" readOnly="false"/>
 			<listColumn noedit="false" noquery="false"/>
 		</field>
-		<field name="COST_FREIGHT" description="订单运费" displayOnly="false" javaType="bigDecimal" lazyLoad="false">
+		<field name="COST_FREIGHT" description="订单运费" javaType="bigDecimal" lazyLoad="false">
 			<component type="text" readOnly="false"/>
 			<listColumn noedit="false" noquery="false"/>
 		</field>
-		<field name="SHIPPING" description="选择发货物流" displayOnly="false" javaType="string" lazyLoad="false">
+		<field name="SHIPPING" description="选择发货物流" javaType="string" lazyLoad="false">
 			<component type="text" readOnly="false" colspan="6"/>
 			<listColumn noedit="false" noquery="false"/>
 		</field>
-		<field name="ORDER_MEMO" description="订单备注" displayOnly="false" javaType="string" lazyLoad="false">
+		<field name="ORDER_MEMO" description="订单备注" javaType="string" lazyLoad="false">
 			<component type="text" readOnly="false" colspan="6"/>
 			<listColumn noedit="false" noquery="false"/>
 		</field>
@@ -81,23 +81,23 @@
 			<queryCondition type="none"/>
 			<listColumn noquery="true"/>
 		</field>
-		<field name="LOGISTICS_NAME" description="发货物流名称" displayOnly="false" javaType="string" lazyLoad="false">
+		<field name="LOGISTICS_NAME" description="发货物流名称" javaType="string" lazyLoad="false">
 			<component type="text" readOnly="true"/>
 			<listColumn noedit="false" noquery="false"/>
 		</field>
-		<field name="LOGISTICS_CODE" description="发货物流单号" displayOnly="false" javaType="string" lazyLoad="false">
+		<field name="LOGISTICS_CODE" description="发货物流单号" javaType="string" lazyLoad="false">
 			<component type="text" readOnly="true"/>
 			<listColumn noedit="false" noquery="false"/>
 		</field>
-		<field name="LOGISTICS_MEMO" description="发货情况简述" displayOnly="false" javaType="string" lazyLoad="false">
+		<field name="LOGISTICS_MEMO" description="发货情况简述" javaType="string" lazyLoad="false">
 			<component type="text" readOnly="true"/>
 			<listColumn noedit="false" noquery="false"/>
 		</field>
 		<field name="WAREHOUSE" description="当前仓库" displayOnly="true" javaType="string" lazyLoad="false" nullAllowed="false">
-			<component type="richSelect" readOnly="true" colspan="1" displayReferenceField="NAME" referenceField="ID" referenceTable="T_DIC_WAREHOUSE_COMBO"/>
+			<component type="combo" readOnly="true" colspan="1" displayReferenceField="NAME" referenceField="ID" referenceTable="T_DIC_WAREHOUSE_COMBO"/>
 			<listColumn noedit="false" noquery="false"/>
 		</field>
-		<field name="WHOWNER" description="库主" displayOnly="false" javaType="string" lazyLoad="false">
+		<field name="WHOWNER" description="库主" javaType="string" lazyLoad="false">
 			<component type="combo" readOnly="false" colspan="6" displayReferenceField="NAME" referenceField="ID" referenceTable="T_WM_OPERATOR"/>
 			<listColumn noedit="false" noquery="false"/>
 		</field>

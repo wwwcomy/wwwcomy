@@ -17,7 +17,7 @@
 			</component>
 			<listColumn noquery="true"/>
 		</field>
-		<field name="SHIP_SUPPLIER" description="供应商" displayOnly="false" javaType="string" lazyLoad="false">
+		<field name="SHIP_SUPPLIER" description="供应商" javaType="string" lazyLoad="false">
 			<component type="combo" readOnly="false" displayReferenceField="CODE" associatedFields="SHIP_SUPPLIERID,FREE_INSPACTION" referenceField="ID" referenceTable="T_DIC_SUPPLIER" parameter="{&amp;__filter=filter}"/>
 			<!--style="tpl:&lt;tpl for=&quot;.&quot;&gt;&lt;div  class=&quot;x-combo-list-item&quot;&gt;{Get(__SHIP_SUPPLIER__NAME)}_ 测试&lt;/div&gt;&lt;/tpl&gt;" -->
 			<listColumn noedit="false" noquery="false"/>
@@ -29,22 +29,22 @@
 			<component type="text" readOnly="true" displayReferenceField="SUPP_CODE"/>
 			<listColumn noedit="false" noquery="false"/>
 		</field>
-		<field name="WAREHOUSE" description="收货仓库" displayOnly="false" javaType="string" lazyLoad="true" loadType="cache" nullAllowed="false">
+		<field name="WAREHOUSE" description="收货仓库" javaType="string" lazyLoad="true" loadType="cache" nullAllowed="false">
 			<component type="richSelect" readOnly="false" colspan="1" displayReferenceField="NAME" referenceField="ID" referenceTable="T_DIC_WAREHOUSE_COMBO" parameter="If(Get(FREE_INSPACTION)=1,{&amp;__filter=filter1},{&amp;__filter=filter})"/>
 			<listColumn noedit="false" noquery="false"/>
 		</field>
-		<field name="WHOWNER" description="库主" displayOnly="false" javaType="string" lazyLoad="true" loadType="cache" nullAllowed="true">
+		<field name="WHOWNER" description="库主" javaType="string" lazyLoad="true" loadType="cache" nullAllowed="true">
 			<component type="richSelect" readOnly="false" colspan="1" displayReferenceField="NAME" referenceField="ID" referenceTable="T_WM_OPERATOR"/>
 			<listColumn noedit="false" noquery="false"/>
 		</field>
-		<field name="STATUS" description="状态" displayOnly="false" defaultValue="0" javaType="string" lazyLoad="false" nullAllowed="false">
+		<field name="STATUS" description="状态" defaultValue="0" javaType="string" lazyLoad="false" nullAllowed="false">
 			<component type="dropdown" readOnly="true" colspan="6">
 				<option displayName="操作中" value="0"/>
 				<option displayName="已完成" value="1"/>
 			</component>
 			<listColumn noedit="false" noquery="false"/>
 		</field>
-		<field name="IMAGE" description="扫描附件" displayOnly="false" javaType="string" length="255" lazyLoad="false">
+		<field name="IMAGE" description="扫描附件" javaType="string" length="255" lazyLoad="false">
 			<component type="file" readOnly="false" renderer="renderIMAGE" multipleSelect="true" action="if(isEmpty(Get(IMAGE)),Set(STATUS,{0}),Set(STATUS,{1}))"/>
 			<listColumn noedit="false" noquery="false" nowrap="true"/>
 		</field>

@@ -2,50 +2,50 @@
 <Haiyan xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../haiyan.xsd">
 	<table name="T_WM_SDBIN" description="入库单" colspan="6">
 		<id name="ID" javaType="string"/>
-		<field name="IN_NO" description="入库单号" displayOnly="false" javaType="string" lazyLoad="false">
+		<field name="IN_NO" description="入库单号" javaType="string" lazyLoad="false">
 			<component type="text" readOnly="true" colspan="1"/>
 			<listColumn noedit="false" noquery="false" width="150"/>
 		</field>
 		<!-- -->
-		<field name="IN_PRE_DATE" description="预入库时间" displayOnly="false" javaType="date" lazyLoad="false">
+		<field name="IN_PRE_DATE" description="预入库时间" javaType="date" lazyLoad="false">
 			<component type="date" readOnly="false" colspan="1"/>
 			<queryCondition type="region"/>
 			<listColumn noedit="false" noquery="false"/>
 		</field>
-		<field name="IN_DATE" description="实际入库时间" displayOnly="false" javaType="date" lazyLoad="false">
+		<field name="IN_DATE" description="实际入库时间" javaType="date" lazyLoad="false">
 			<component type="date" readOnly="false" colspan="1"/>
 			<queryCondition type="region"/>
 			<listColumn noedit="false" noquery="false"/>
 		</field>
-		<field name="SHIP_ORGA" description="物流单位" displayOnly="false" javaType="string" lazyLoad="false" nullAllowed="false">
+		<field name="SHIP_ORGA" description="物流单位" javaType="string" lazyLoad="false" nullAllowed="false">
 			<component type="text" readOnly="false" colspan="1"/>
 			<listColumn noedit="false" noquery="false"/>
 		</field>
-		<field name="SHIP_NO" description="物流单号" displayOnly="false" javaType="string" lazyLoad="false" nullAllowed="false">
+		<field name="SHIP_NO" description="物流单号" javaType="string" lazyLoad="false" nullAllowed="false">
 			<component type="text" readOnly="false" colspan="1"/>
 			<listColumn noedit="false" noquery="false"/>
 		</field>
-		<field name="SHIP_CON" description="物流联系方式" displayOnly="false" javaType="string" lazyLoad="false" nullAllowed="false">
+		<field name="SHIP_CON" description="物流联系方式" javaType="string" lazyLoad="false" nullAllowed="false">
 			<component type="text" readOnly="false" colspan="1"/>
 			<listColumn noedit="false" noquery="false"/>
 		</field>
-		<field name="SHIP_SUPPLIER" description="供应商" displayOnly="false" javaType="string" lazyLoad="false">
+		<field name="SHIP_SUPPLIER" description="供应商" javaType="string" lazyLoad="false">
 			<component type="combo" readOnly="false" colspan="1" displayReferenceField="NAME" referenceField="ID" referenceTable="T_DIC_SUPPLIER"/>
 			<listColumn noedit="false" noquery="false"/>
 		</field>
-		<field name="WAREHOUSE" description="收货仓库" displayOnly="false" javaType="string" lazyLoad="false" nullAllowed="false">
+		<field name="WAREHOUSE" description="收货仓库" javaType="string" lazyLoad="false" nullAllowed="false">
 			<component type="combo" readOnly="true" colspan="1" displayReferenceField="NAME" referenceField="ID" referenceTable="T_DIC_WAREHOUSE_COMBO"/>
 			<listColumn noedit="false" noquery="false"/>
 		</field>
-		<field name="WHOWNER" description="库主" displayOnly="false" javaType="string" lazyLoad="false" nullAllowed="true">
+		<field name="WHOWNER" description="库主" javaType="string" lazyLoad="false" nullAllowed="true">
 			<component type="combo" readOnly="false" colspan="6" displayReferenceField="NAME" referenceField="ID" referenceTable="T_WM_OPERATOR"/>
 			<listColumn noedit="false" noquery="false"/>
 		</field>
-		<field name="IMAGE" description="货物质检报告" displayOnly="false" javaType="string" length="255" lazyLoad="false">
+		<field name="IMAGE" description="货物质检报告" javaType="string" length="255" lazyLoad="false">
 			<component type="file" readOnly="false" multipleSelect="true" colspan="1"/>
 			<listColumn noedit="false" noquery="false" nowrap="true" width="165"/>
 		</field>
-		<field name="ALL_IN_COST" description="应入库总金额" displayOnly="false" javaType="bigDecimal" lazyLoad="false">
+		<field name="ALL_IN_COST" description="应入库总金额" javaType="bigDecimal" lazyLoad="false">
 			<component type="text" readOnly="true" maxFractionDigit="3" minFractionDigit="3" colspan="6"/>
 			<listColumn noedit="false" noquery="false" width="78"/>
 		</field>
@@ -94,11 +94,11 @@
 			<queryCondition type="none"/>
 			<listColumn noquery="true"/>
 		</field>
-		<field name="COST_YF" description="应付" displayOnly="false" javaType="bigDecimal" lazyLoad="false">
+		<field name="COST_YF" description="应付" javaType="bigDecimal" lazyLoad="false">
 			<component type="hidden" readOnly="true" colspan="1" subQuerySQL="(select sum(All_COST) from T_WM_SDBINPRE t_2 where t_2.HEADID=t_1.ID)"/>
 			<listColumn noedit="false" noquery="false"/>
 		</field>
-		<field name="COST_SF" description="实付" displayOnly="false" javaType="bigDecimal" lazyLoad="false">
+		<field name="COST_SF" description="实付" javaType="bigDecimal" lazyLoad="false">
 			<component type="hidden" readOnly="false" colspan="1"/>
 			<listColumn noedit="false" noquery="false"/>
 		</field>

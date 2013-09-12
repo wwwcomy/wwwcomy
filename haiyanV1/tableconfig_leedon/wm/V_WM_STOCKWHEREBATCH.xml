@@ -5,7 +5,7 @@
 		<field name="HEADID" description="单头" javaType="string">
 			<component type="hidden"/>
 		</field>
-		<field name="PRODUCTID" description="EDP商品编号" displayOnly="false" javaType="string" lazyLoad="false">
+		<field name="PRODUCTID" description="EDP商品编号" javaType="string" lazyLoad="false">
 			<component type="combo" readOnly="true" displayReferenceField="CODE" referenceField="ID" referenceTable="T_WM_SDBPRODUCT" associatedFields="PRO_WMCODE,PRO_NAME,PRO_CAPACITYNUM,PRO_WEIGHTNUM,SUPP_CODE"/>
 			<queryCondition type="equal"/>
 			<listColumn noedit="false" noquery="false" width="170"/>
@@ -22,7 +22,7 @@
 			<component type="text" readOnly="true" displayReferenceField="SUPP_CODE"/>
 			<listColumn noedit="false" noquery="false"/>
 		</field>
-		<field name="BATCH" description="批次" displayOnly="false" javaType="bigDecimal">
+		<field name="BATCH" description="批次" javaType="bigDecimal">
 			<component type="text" readOnly="true"/>
 			<listColumn noedit="false" noquery="false" width="70"/>
 		</field>
@@ -34,12 +34,12 @@
 			<component type="text" readOnly="true" displayReferenceField="WEIGHTNUM" maxFractionDigit="3" minFractionDigit="3"/>
 			<listColumn noedit="false" noquery="true"/>
 		</field>
-		<field name="WAREWHERE" description="仓位" displayOnly="false" javaType="string" lazyLoad="false">
-			<component type="richSelect" readOnly="true" colspan="1" displayReferenceField="CODE" referenceField="ID" referenceTable="T_DIC_WAREWHERE"/>
+		<field name="WAREWHERE" description="仓位" javaType="string" lazyLoad="false">
+			<component type="combo" readOnly="true" colspan="1" displayReferenceField="CODE" referenceField="ID" referenceTable="T_DIC_WAREWHERE"/>
 			<listColumn noedit="false" noquery="false"/>
 		</field>
-		<field name="WAREHOUSE" description="仓库" displayOnly="false" javaType="string" lazyLoad="false" nullAllowed="false">
-			<component type="richSelect" readOnly="true" colspan="5" displayReferenceField="NAME" referenceField="ID" referenceTable="T_DIC_WAREHOUSE_COMBO"/>
+		<field name="WAREHOUSE" description="仓库" javaType="string" lazyLoad="false" nullAllowed="false">
+			<component type="combo" readOnly="true" colspan="5" displayReferenceField="NAME" referenceField="ID" referenceTable="T_DIC_WAREHOUSE_COMBO"/>
 			<listColumn noedit="false" noquery="false"/>
 		</field>
 		<field name="PRO_COUNT" description="库存数" javaType="bigDecimal">
@@ -50,11 +50,11 @@
 			<component type="text" readOnly="false" numberGrouping="true"/>
 			<listColumn noedit="false" noquery="false"/>
 		</field>
-		<field name="PRO_IN_PRICE" description="参考进价" displayOnly="false" javaType="bigDecimal" lazyLoad="false">
+		<field name="PRO_IN_PRICE" description="参考进价" javaType="bigDecimal" lazyLoad="false">
 			<component type="text" readOnly="true" maxFractionDigit="3" minFractionDigit="3"/>
 			<listColumn noedit="false" noquery="true"/>
 		</field>
-		<field name="PRO_OUT_PRICE" description="销售单价" displayOnly="false" javaType="bigDecimal" lazyLoad="false">
+		<field name="PRO_OUT_PRICE" description="销售单价" javaType="bigDecimal" lazyLoad="false">
 			<component type="text" readOnly="true" maxFractionDigit="3" minFractionDigit="3"/>
 			<listColumn noedit="false" noquery="true"/>
 		</field>
@@ -62,19 +62,19 @@
 			<component type="combo" readOnly="true" displayReferenceField="NAME" referenceField="ID" referenceTable="T_DIC_SUPPLIER"/>
 		</field>
 		<!-- 
-		<field name="PRO_IN_PRICE" description="参考进价" displayOnly="false" javaType="bigDecimal" lazyLoad="false">
+		<field name="PRO_IN_PRICE" description="参考进价" javaType="bigDecimal" lazyLoad="false">
 			<component type="text" readOnly="true" displayReferenceField="IN_PRICE" maxFractionDigit="3" minFractionDigit="3"/>
 			<listColumn noedit="false" noquery="false" width="78"/>
 		</field>
-		<field name="ALL_IN_COST" description="总进货金额" displayOnly="false" javaType="bigDecimal" lazyLoad="false">
+		<field name="ALL_IN_COST" description="总进货金额" javaType="bigDecimal" lazyLoad="false">
 			<component type="text" readOnly="true" summaryType="sum" maxFractionDigit="3" minFractionDigit="3" />
 			<listColumn noedit="false" noquery="false" width="78"/>
 		</field>
-		<field name="PRO_OUT_PRICE" description="销售价" displayOnly="false" javaType="bigDecimal" lazyLoad="false">
+		<field name="PRO_OUT_PRICE" description="销售价" javaType="bigDecimal" lazyLoad="false">
 			<component type="text" readOnly="true" displayReferenceField="OUT_PRICE" maxFractionDigit="3" minFractionDigit="3"/>
 			<listColumn noedit="false" noquery="false" width="78"/>
 		</field>
-		<field name="ALL_OUT_COST" description="总销售金额" displayOnly="false" javaType="bigDecimal" lazyLoad="false">
+		<field name="ALL_OUT_COST" description="总销售金额" javaType="bigDecimal" lazyLoad="false">
 			<component type="text" readOnly="true" summaryType="sum" maxFractionDigit="3" minFractionDigit="3"/>
 			<listColumn noedit="false" noquery="false" width="78"/>
 		</field>

@@ -4,51 +4,51 @@
 		<id name="ID" description="ID" javaType="string">
 			<component type="hidden"/>
 		</id>
-		<field name="NAME" description="名称" displayOnly="false" javaType="string" lazyLoad="false">
+		<field name="NAME" description="名称" javaType="string" lazyLoad="false">
 			<component type="text" readOnly="false"/>
 			<listColumn noedit="false" noquery="false"/>
 		</field>
-		<field name="CODE" description="货号" displayOnly="false" javaType="string" lazyLoad="false">
+		<field name="CODE" description="货号" javaType="string" lazyLoad="false">
 			<component type="text" readOnly="false"/>
 			<listColumn noedit="false" noquery="false"/>
 		</field>
-		<field name="SUPP_CODE" description="供应商自有货号" displayOnly="false" javaType="string" lazyLoad="false">
+		<field name="SUPP_CODE" description="供应商自有货号" javaType="string" lazyLoad="false">
 			<component type="text" readOnly="false"/>
 			<listColumn noedit="false" noquery="false"/>
 		</field>
-		<field name="WAREHOUSE" description="产品所属仓库" displayOnly="false" javaType="string" lazyLoad="false" nullAllowed="false">
+		<field name="WAREHOUSE" description="产品所属仓库" javaType="string" lazyLoad="false" nullAllowed="false" displayOnly="true" mappingTable="M_PRODUCT_WAREHOUSE">
 			<component type="combo" readOnly="false" colspan="1" displayReferenceField="NAME" referenceField="ID" referenceTable="T_DIC_WAREHOUSE_COMBO"/>
 			<listColumn noedit="false" noquery="false"/>
 		</field>
-		<field name="SUPPLIER" description="供应商" displayOnly="false" javaType="string" lazyLoad="false">
+		<field name="SUPPLIER" description="供应商" javaType="string" lazyLoad="false">
 			<component type="combo" readOnly="false" colspan="1" displayReferenceField="NAME" referenceField="ID" referenceTable="T_DIC_SUPPLIER"/>
 			<listColumn noedit="false" noquery="false"/>
 		</field>
-		<field name="CONTRACT" description="产品合同" displayOnly="false" javaType="string" lazyLoad="false">
+		<field name="CONTRACT" description="产品合同" javaType="string" lazyLoad="false">
 			<component type="text"/>
 			<listColumn noedit="false" noquery="false"/>
 		</field>
-		<field name="WHOWNER" description="库主" displayOnly="false" javaType="string" lazyLoad="false" >
+		<field name="WHOWNER" description="库主" javaType="string" lazyLoad="false" >
 			<component type="combo" colspan="3" displayReferenceField="NAME" referenceField="ID" referenceTable="T_WM_OPERATOR"/>
 			<listColumn noedit="false" noquery="false"/>
 		</field>
-		<field name="SDB_PRODUCT_ID" description="SDB_PRODUCT_ID" displayOnly="false" javaType="bigDecimal" lazyLoad="false" nullAllowed="false">
+		<field name="SDB_PRODUCT_ID" description="SDB_PRODUCT_ID" javaType="bigDecimal" lazyLoad="false" nullAllowed="false">
 			<component type="text"/>
 			<listColumn noedit="false" noquery="false"/>
 		</field>
-		<field name="COLOR" description="颜色" displayOnly="false" javaType="string" lazyLoad="false">
+		<field name="COLOR" description="颜色" javaType="string" lazyLoad="false">
 			<component type="text" readOnly="true"/>
 			<listColumn noedit="false" noquery="false"/>
 		</field>
-		<field name="ZDKC" description="最低库存" displayOnly="false" javaType="bigDecimal" lazyLoad="false">
+		<field name="ZDKC" description="最低库存" javaType="bigDecimal" lazyLoad="false">
 			<component type="text" readOnly="true"/>
 			<listColumn noedit="false" noquery="false"/>
 		</field>
-		<field name="LATEST_BATCH" description="最新批次" displayOnly="false" javaType="bigDecimal">
+		<field name="LATEST_BATCH" description="最新批次" javaType="bigDecimal">
 			<component type="text" readOnly="true"/>
 			<listColumn noedit="true" noquery="true"/>
 		</field>
-		<field name="EDPMODEL" description="材质" displayOnly="false" javaType="string" lazyLoad="false">
+		<field name="EDPMODEL" description="材质" javaType="string" lazyLoad="false">
 			<component type="text" readOnly="true"/>
 			<listColumn noedit="false" noquery="false"/>
 		</field>
