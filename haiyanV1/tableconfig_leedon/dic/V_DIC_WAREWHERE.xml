@@ -8,11 +8,11 @@
 			<component type="text"/>
 		</field>
 		<field name="HEADID" description="所属仓库" javaType="string" nullAllowed="false">
-			<component type="richSelect" referenceTable="T_DIC_WAREHOUSE" referenceField="ID" displayReferenceField="NAME" quickQueryConditionField="CODE"/>
+			<component type="combo" referenceTable="T_DIC_WAREHOUSE" referenceField="ID" displayReferenceField="NAME" quickQueryConditionField="CODE"/>
 			<queryCondition type="in"/>
 		</field>
 		<field name="PARENTID" description="上级仓位" javaType="string" defaultValue="-1">
-			<component type="richSelect" referenceTable="V_DIC_WAREWHERE" referenceField="ID" displayReferenceField="CODE" quickQueryConditionField="CODE"/>
+			<component type="combo" referenceTable="V_DIC_WAREWHERE" referenceField="ID" displayReferenceField="CODE" quickQueryConditionField="CODE"/>
 			<queryCondition type="equal"/>
 		</field>
 		<field name="L1" description="货排" javaType="string">
