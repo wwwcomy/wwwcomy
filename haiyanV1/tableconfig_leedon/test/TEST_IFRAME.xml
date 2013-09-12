@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Haiyan xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../haiyan.xsd">
+	<table name="TEST_IFRAME" description="TEST_IFRAME" realTable="TEST_DBM" colspan="6">
+		<id name="ID" description="ID" javaType="string">
+			<component type="hidden" url="$"/>
+		</id>
+		<field name="NAME" description="名字" displayOnly="false" javaType="string" lazyLoad="false">
+			<component type="text" readOnly="false" />
+			<!-- validator="^-?\d+.\d{2}$" validatorText="必须为数字金额" -->
+			<queryCondition type="blurMatching"/>
+		</field>
+		<field name="CODE" description="编码" displayOnly="false" javaType="string" lazyLoad="false">
+			<component type="text" readOnly="true" colspan="5" />
+			<queryCondition type="equal"/>
+		</field>
+		<field name="SUBFRAME" description="SUBFRAME" displayOnly="true" javaType="string">
+			<component type="iframe" readOnly="false" colspan="6" style="height:460;width:100%;" 
+			displayReferenceField="ITEM_ID,ORDER_ID,PRODUCTID,PRO_CODE,PRE,AUDIT,OUT_RCOUNT,OUT_COUNT,NAME,WMCODE,PACKING_NUM,CAPACITYNUM,WEIGHTNUM,OUT_PRICE,PRO_COUNT,OUT_ALL_PRICE,All_CAPACITYNUM,All_WEIGHTNUM,LOGISTICS_NAME,LOGISTICS_CODE,LOGISTICS_MEMO,BILL_STATUS" 
+			referenceField="ORDER_ID" 
+			referenceTable="V_WM_OUTPRE" 
+			parameter="={project/leedon/test.jsp?TABLE=T_WM_OUTPART&amp;FIELD=SUBFRAME&amp;ID=}&amp;If(IsEmpty(Get({ID})),-1,Get({ID}))"/>
+			<queryCondition type="none"/>
+			<listColumn noedit="false" noquery="true"/>
+		</field>
+		<!-- src="test/TEST_DETAIL_EDIT.js" -->
+		<javascript hostPage="edit"><![CDATA[
+		]]></javascript>
+		<!-- mid interceptor -->
+		<pluginOperation name="saveView" oprName="保存(V)" hostPage="edit" tblevel="1" img="save" action="plugin({},{saveView},{SUBFRAME})+brk()"/>
+		
+		<Operation queryPageDelete="false" save="false" saveAndAdd="false" saveAndAddCopy="false"/>
+		<!-- 
+		<Order needOrder="true"/>
+		-->
+	</table>
+</Haiyan>
