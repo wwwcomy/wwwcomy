@@ -22,7 +22,7 @@
 			<component type="text" readOnly="false" displayReferenceField="SUPP_CODE"/>
 			<listColumn noedit="false" noquery="false" width="90"/>
 		</field>
-		<field name="PRO_CODE" description="商品编号" displayOnly="false" javaType="string" lazyLoad="false">
+		<field name="PRO_CODE" description="商品编号" javaType="string" lazyLoad="false">
 			<component type="hidden" readOnly="true" colspan="1" displayReferenceField="CODE" />
 			<listColumn noedit="false" noquery="false" width="95"/>
 		</field>
@@ -43,19 +43,19 @@
 			<queryCondition type="equal"/>
 			<listColumn noedit="false" noquery="false" width="65"/>
 		</field>
-		<field name="ZDKC" description="商品警戒库存" displayOnly="false" javaType="bigDecimal" defaultValue="0">
+		<field name="ZDKC" description="商品警戒库存" javaType="bigDecimal" defaultValue="0">
 			<component type="text" readOnly="false" displayReferenceField="ZDKC"/>
 			<listColumn noedit="false" noquery="false"/>
 		</field>
-		<field name="PRO_CAPACITYNUM" description="单位体积(m3)" displayOnly="false" javaType="bigDecimal" lazyLoad="false">
+		<field name="PRO_CAPACITYNUM" description="单位体积(m3)" javaType="bigDecimal" lazyLoad="false">
 			<component type="text" readOnly="true" displayReferenceField="CAPACITYNUM" maxFractionDigit="3" minFractionDigit="3"/>
 			<listColumn noedit="false" noquery="false"/>
 		</field>
-		<field name="PRO_WEIGHTNUM" description="运费重量(g)" displayOnly="false" javaType="bigDecimal" lazyLoad="false">
+		<field name="PRO_WEIGHTNUM" description="运费重量(g)" javaType="bigDecimal" lazyLoad="false">
 			<component type="text" readOnly="true" displayReferenceField="WEIGHTNUM" maxFractionDigit="3" minFractionDigit="3"/>
 			<listColumn noedit="false" noquery="false"/>
 		</field>
-		<field name="P_24" description="实际重量(g)" displayOnly="false" javaType="bigDecimal" lazyLoad="false">
+		<field name="P_24" description="实际重量(g)" javaType="bigDecimal" lazyLoad="false">
 			<component type="text" readOnly="true" displayReferenceField="P_24" maxFractionDigit="3" minFractionDigit="3"/>
 			<listColumn noedit="false" noquery="false"/>
 		</field>
@@ -63,40 +63,22 @@
 			<component type="text" readOnly="false" colspan="1" displayReferenceField="EDPMODEL"/>
 			<listColumn noedit="false" noquery="false"/>
 		</field>
-		<field name="SPEC" description="包装规格" displayOnly="false" javaType="string" lazyLoad="false">
+		<field name="SPEC" description="包装规格" javaType="string" lazyLoad="false">
 			<component type="text" readOnly="true" colspan="1" displayReferenceField="SPEC"/>
 			<listColumn noedit="false" noquery="false" width="75"/>
 		</field>
-		<field name="PRO_PACKINGNUM" description="每箱个数" displayOnly="false" javaType="bigDecimal" lazyLoad="false">
+		<field name="PRO_PACKINGNUM" description="每箱个数" javaType="bigDecimal" lazyLoad="false">
 			<component type="hidden" readOnly="true" displayReferenceField="PACKING_NUM"/>
 			<listColumn noedit="false" noquery="false"/>
 		</field>
-		<field name="All_WEIGHTNUM" description="总重量(Kg)" displayOnly="false" javaType="bigDecimal" lazyLoad="false">
+		<field name="All_WEIGHTNUM" description="总重量(Kg)" javaType="bigDecimal" lazyLoad="false">
 			<component type="text" readOnly="true" maxFractionDigit="2" minFractionDigit="2"/>
 			<listColumn noedit="false" noquery="false"/>
 		</field>
-		<field name="All_CAPACITYNUM" description="总体积(m3)" displayOnly="false" javaType="bigDecimal" lazyLoad="false">
+		<field name="All_CAPACITYNUM" description="总体积(m3)" javaType="bigDecimal" lazyLoad="false">
 			<component type="text" readOnly="true" maxFractionDigit="3" minFractionDigit="3"/>
 			<listColumn noedit="false" noquery="false"/>
 		</field>
-		<!--
-		<field name="PRO_SPEC" description="商品规格" displayOnly="false" javaType="string" lazyLoad="false">
-			<component type="text" readOnly="false" colspan="1" displayReferenceField="SPEC"/>
-			<listColumn noedit="false" noquery="false"/>
-		</field>
-		-->
-		<!--
-		<field name="PRO_WH" description="仓库" javaType="string" defaultValue="=Get(WAREHOUSE)">
-			<component type="richSelect" readOnly="false" colspan="1" displayReferenceField="NAME" referenceField="ID" referenceTable="T_DIC_WAREHOUSE_COMBO"/>
-			<queryCondition type="blurMatching"/>
-			<listColumn noedit="false" noquery="false"/>
-		</field>
-		<field name="IN_TIME" description="入库时间" javaType="date" dataStyle="yyyy-MM-dd HH:mm:ss">
-			<component type="dateTime" readOnly="false"/>
-			<queryCondition type="blurMatching"/>
-			<listColumn noedit="false" noquery="false"/>
-		</field>
-		-->
 		<field name="VALIDATE_DAY" description="合同起始日期" javaType="date" dataStyle="yyyy-MM-dd HH:mm:ss">
 			<component type="dateTime" readOnly="false"/>
 			<listColumn noedit="false" noquery="false"/>
@@ -105,36 +87,36 @@
 			<component type="dateTime" readOnly="false"/>
 			<listColumn noedit="false" noquery="false"/>
 		</field>
-		<field name="PRO_IN_PRICE" description="进货单价" displayOnly="false" javaType="bigDecimal" lazyLoad="false">
+		<field name="PRO_IN_PRICE" description="进货单价" javaType="bigDecimal" lazyLoad="false">
 			<component type="text" readOnly="false" displayReferenceField="IN_PRICE" maxFractionDigit="3" minFractionDigit="3" action="Set(PRO_IN_COST,Get(PRO_COUNT)*Get(PRO_IN_PRICE))"/>
 			<listColumn noedit="false" noquery="false"/>
 		</field>
-		<field name="PRO_IN_COST" description="进货总价" displayOnly="false" javaType="bigDecimal" lazyLoad="false">
+		<field name="PRO_IN_COST" description="进货总价" javaType="bigDecimal" lazyLoad="false">
 			<component type="text" readOnly="false" summaryType="sum" maxFractionDigit="3" minFractionDigit="3" summaryRenderer="sumPRO_COST"/>
 			<!-- subQuerySQL="(select t_1.PRO_COUNT*t_2.IN_PRICE from T_DIC_PRODUCT t_2 where t_1.PRODUCTID=t_2.ID)" -->
 			<listColumn noedit="false" noquery="false"/>
 		</field>
-		<field name="PRO_OUT_PRICE" description="出货单价" displayOnly="false" javaType="bigDecimal" lazyLoad="false">
+		<field name="PRO_OUT_PRICE" description="出货单价" javaType="bigDecimal" lazyLoad="false">
 			<component type="text" readOnly="false" displayReferenceField="OUT_PRICE" maxFractionDigit="3" minFractionDigit="3" action="Set(PRO_OUT_COST,Get(PRO_COUNT)*Get(PRO_OUT_PRICE))"/>
 			<listColumn noedit="false" noquery="false"/>
 		</field>
-		<field name="PRO_OUT_COST" description="出货总价" displayOnly="false" javaType="bigDecimal" lazyLoad="false">
+		<field name="PRO_OUT_COST" description="出货总价" javaType="bigDecimal" lazyLoad="false">
 			<component type="text" readOnly="false" summaryType="sum" maxFractionDigit="3" minFractionDigit="3" summaryRenderer="sumPRO_COST"/>
 			<!-- subQuerySQL="(select t_1.PRO_COUNT*t_2.OUT_PRICE from T_DIC_PRODUCT t_2 where t_1.PRODUCTID=t_2.ID)" -->
 			<listColumn noedit="false" noquery="false"/>
 		</field>
 		<!--
-		<field name="CONTRACT_ID" description="HIDDEN合同ID" displayOnly="false" javaType="string" lazyLoad="false">
+		<field name="CONTRACT_ID" description="HIDDEN合同ID" javaType="string" lazyLoad="false">
 			<component type="hidden" readOnly="true"/>
 			<listColumn noedit="false" noquery="false" width="60"/>
 		</field>
 		-->
-		<field name="CONTRACT_CODE" description="HIDDEN合同-商品号" displayOnly="false" javaType="string" lazyLoad="false">
+		<field name="CONTRACT_CODE" description="HIDDEN合同-商品号" javaType="string" lazyLoad="false">
 			<component type="hidden" readOnly="true"/>
 			<queryCondition type="blurMatching"/>
 			<listColumn noedit="false" noquery="false" width="150"/>
 		</field>
-		<field name="MARKETABLE" description="是否上架" displayOnly="false" javaType="string" lazyLoad="false">
+		<field name="MARKETABLE" description="是否上架" javaType="string" lazyLoad="false">
 			<component type="hidden" readOnly="true" displayReferenceField="MARKETABLE"/>
 			<listColumn noedit="false" noquery="false"/>
 		</field>
@@ -156,7 +138,7 @@
 			<pluggedFilter methodName="exp" parameter="if(IsEmpty(GetPara(GRID)),{},{ and t_3.WAREHOUSE='}&amp;GetUser(WAREHOUSEID)&amp;{'})"><![CDATA[
 			]]></pluggedFilter>
 			-->
-			<pluggedFilter methodName="exp" parameter="{ and t_3.WAREHOUSE='}&amp;GetUser(WAREHOUSEID)&amp;{' }"/>
+			<pluggedFilter methodName="exp" parameter="{ and t_3.ID in (select PRODUCT from M_PRODUCT_WAREHOUSE where WAREHOUSE='}&amp;GetUser(WAREHOUSEID)&amp;{') }"/>
 			<!-- 如果是供应商则必须是所属供应商的商品 -->
 			<pluggedFilter methodName="exp" parameter="If(InRole(sp,wm),{ and t_3.SUPPLIER='}&amp;GetUser(SUPPLIER)&amp;{'},{})"/>
 		</queryFilter>

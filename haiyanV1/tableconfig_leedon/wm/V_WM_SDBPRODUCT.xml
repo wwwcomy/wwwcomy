@@ -117,7 +117,7 @@
 			<component type="combo" readOnly="false" displayReferenceField="NAME" referenceField="ID" referenceTable="T_DIC_SUPPLIER" parameter="{&amp;__filter=filter}"/>
 			<listColumn noedit="false" noquery="false"/>
 		</field>
-		<field name="WAREHOUSE" description="所属仓库" displayOnly="false" javaType="string" lazyLoad="false" nullAllowed="false">
+		<field name="WAREHOUSE" description="所属仓库" javaType="string" lazyLoad="false" nullAllowed="false" displayOnly="true" mappingTable="M_PRODUCT_WAREHOUSE">
 			<component type="combo" readOnly="true" displayReferenceField="NAME" referenceField="ID" referenceTable="T_DIC_WAREHOUSE_COMBO"/>
 			<listColumn noedit="false" noquery="false"/>
 		</field>
@@ -170,7 +170,7 @@
 		<!-- -->
 		<queryFilter>
 			<!-- 当前仓库 -->
-			<pluggedFilter methodName="exp" parameter="If(IsEmpty(GetUser(WAREHOUSEID)),Warning({没有选择当前仓库或者当前账号已经在其他地方登录.}),{ and t_1.WAREHOUSE='}&amp;GetUser(WAREHOUSEID)&amp;{' })"/>
+			<pluggedFilter methodName="exp" parameter="If(IsEmpty(GetUser(WAREHOUSEID)),Warning({没有选择当前仓库或者当前账号已经在其他地方登录.}),{ and t_1.ID in ( select PRODUCT from M_PRODUCT_WAREHOUSE where WAREHOUSE='}&amp;GetUser(WAREHOUSEID)&amp;{') })"/>
 			<!-- -->
 			<pluggedFilter methodName="exp" parameter="If(InRole(wm,sp),{ and t_1.SUPPLIER='}&amp;GetUser(SUPPLIER)&amp;{' },If(IsEmpty(GetPara(__SUPPLIER)),{},{ and t_1.SUPPLIER='}&amp;SQLSafe(GetPara(__SUPPLIER))&amp;{' }))"/>
 			
@@ -248,22 +248,24 @@
 		<pluginInterceptor methodName="initDB" pluginName="initDB" type="before"><![CDATA[
 create or replace view V_WM_SDBPRODUCT as 
 	(
-		select t_1.ID_INT as ID_INT,t_1.SDB_PRODUCT_ID,t_1.HYVERSION,t_1.ID,t_1.NAME,t_1.CODE,t_1.WAREHOUSE,t_1.SUPPLIER,t_1.STATUS,t_1.WHOWNER,t_1.C1,t_1.C2,t_1.C3,t_2.COLOR,t_1.ZDKC,t_1.CAPACITYNUM,t_1.EDPMODEL,t_1.P_27 as P_27_LAST,
+		select t_1.ID_INT as ID_INT,t_1.SDB_PRODUCT_ID,t_1.HYVERSION,t_1.ID,t_1.NAME,t_1.CODE,t_1.SUPPLIER,t_1.STATUS,t_1.WHOWNER,t_1.C1,t_1.C2,t_1.C3,t_2.COLOR,t_1.ZDKC,t_1.CAPACITYNUM,t_1.EDPMODEL,t_1.P_27 as P_27_LAST,
 		t_2.P_27,t_2.P_21,t_2.PRODUCT_ID,t_2.NAME as SDB_NAME,t_2.WMCODE,t_2.PACKING_NUM,t_2.WEIGHTNUM, t_2.P_24,t_2.SPEC,t_2.BHZQ,t_2.BIG_PIC,t_2.IN_PRICE,t_2.OUT_PRICE,t_2.TYPE_0,t_2.MEMO,t_2.MARKETABLE,t_2.MODEL,t_2.TYPE_ID,
 		t_1.SUPP_CODE,t_1.LATEST_BATCH,
 		t_1.CONTRA_INPRICE
 		
 		from T_WM_PRO t_1 left join T_DIC_SDBPROGOODS t_2 on t_1.SDB_PRODUCT_ID=t_2.PRODUCT_ID
-		and t_2.MARKETABLE='true'
+		and t_2.MARKETABLE=true
 	)
 		]]></pluginInterceptor>
 		<!--材质本来有两个双引号 substring_index(substring_index(EDPMODEL,'"',-2),'"',1) -->
 		<pluginInterceptor methodName="exp" pluginName="new" parameter="
 			SetCreate(ID,GetNewID(T_WM_PRO))
 			" type="after"/>
+		<!--SetCreate(WAREHOUSE,GetUser(WAREHOUSEID),__WAREHOUSE__NAME,GetUser(WAREHOUSENAME))
+			+-->
 		<pluginInterceptor methodName="exp" pluginName="edit" parameter="
-			SetCreate(WAREHOUSE,GetUser(WAREHOUSEID),__WAREHOUSE__NAME,GetUser(WAREHOUSENAME))
-			+If(InRole(sp,wm),DisFlds(SUPPLIER)+Set(SUPPLIER,GetUser(SUPPLIER),__SUPPLIER__NAME,GetUser(__SUPPLIER__NAME)),true)
+			If(InRole(sp,wm),DisFlds(SUPPLIER)+Set(SUPPLIER,GetUser(SUPPLIER),__SUPPLIER__NAME,GetUser(__SUPPLIER__NAME)),true)
+			+DisBtns(syncView)
 			" type="after"/>
 		<pluginInterceptor methodName="exp" pluginName="saveView" parameter="
 			If(InRole(sp,wm),If(Int(DBFindValue({select count(ID) from T_WM_AGREEMENT where STATUS='1' and SUPPLIER='}&amp;Get(SUPPLIER)&amp;{'}))=0,Warning({未能有一份完成的协议，无法新建产品 }),true),true)

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Haiyan xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../haiyan.xsd">
+	<table name="M_PRODUCT_WAREHOUSE" description="产品-仓库">
+		<id name="ID" javaType="string" length="100"/>
+		<field name="PRODUCT" description="产品" javaType="string" length="50">
+			<component type="combo" referenceTable="T_WM_SDBPRODUCT" displayReferenceField="SDB_NAME"/>
+			<queryCondition type="equal"/>
+			<listColumn noquery="false" width="400"/>
+		</field>
+		<field name="WAREHOUSE" description="仓库" javaType="string" length="50">
+			<component type="combo" referenceTable="T_DIC_WAREHOUSE" displayReferenceField="NAME"/>
+			<queryCondition type="equal"/>
+			<listColumn noquery="false" width="400"/>
+		</field>
+		<Operation selectedHidden="true"/>
+	</table>
+	<pluginInterceptor methodName="bsh" pluginName="refreshDB" type="after"><![CDATA[
+		void refreshDB() throws Throwable {
+			//String sql1 = "delete from M_PRODUCT_WAREHOUSE";
+			String sql2 = "insert into M_PRODUCT_WAREHOUSE(ID,PRODUCT,WAREHOUSE) (select concat(ID,'_',WAREHOUSE),ID,WAREHOUSE from T_WM_SDBPRODUCT where WAREHOUSE is not null)";
+			final DBManager dbm = context.getDBM();
+			//dbm.executeUpdate(sql1, null);
+			dbm.executeUpdate(sql2, null);
+		}
+		refreshDB();
+	]]></pluginInterceptor>
+	<pluginOperation name="refreshDB" oprName="重建产品仓库关系" hostPage="query" tblevel="1" img="refresh" action="plugin({},{refreshDB})+brk()"/>
+</Haiyan>

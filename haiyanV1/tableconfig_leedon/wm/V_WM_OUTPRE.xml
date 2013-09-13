@@ -47,7 +47,11 @@
 			<listColumn noedit="true" noquery="true" width="70"/>
 		</field>
 		<field name="OUT_COUNT" description="应出库数量" javaType="bigDecimal">
-			<component type="text" readOnly="false"/>
+			<component type="text" readOnly="true"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="OUT_PCOUNT" description="分配数量" javaType="bigDecimal">
+			<component type="text" readOnly="true"/>
 			<listColumn noedit="false" noquery="false"/>
 		</field>
 		<field name="OUT_RCOUNT" description="实际出库数量" javaType="bigDecimal" defaultValue="0">
@@ -156,7 +160,7 @@ create or replace view V_SDB_ORDER_ITEMS_ALL as
 		);
 create or replace view V_WM_OUTPRE as 
 	(
-		select t_1.HYVERSION,t_1.OUT_COUNT,t_1.OUT_RCOUNT,t_1.ITEM_ID_PK,
+		select t_1.HYVERSION,t_1.OUT_COUNT,t_1.OUT_PCOUNT,t_1.OUT_RCOUNT,t_1.ITEM_ID_PK,
 		t_1.All_CAPACITYNUM,t_1.All_WEIGHTNUM,t_1.BILL_STATUS,t_1.REMAINDER_NUM,
 		t_1.LOGISTICS_NAME,t_1.LOGISTICS_CODE,t_1.LOGISTICS_MEMO,
 		
@@ -170,7 +174,7 @@ create or replace view V_WM_OUTPRE as
 	)
 	union all
 	(
-		select t_2.HYVERSION,t_2.OUT_COUNT,t_2.OUT_RCOUNT,0 as ITEM_ID_PK,
+		select t_2.HYVERSION,t_2.OUT_COUNT,t_2.OUT_PCOUNT,t_2.OUT_RCOUNT,0 as ITEM_ID_PK,
 		t_2.All_CAPACITYNUM,t_2.All_WEIGHTNUM,t_2.BILL_STATUS,t_2.REMAINDER_NUM,
 		t_2.LOGISTICS_NAME,t_2.LOGISTICS_CODE,t_2.LOGISTICS_MEMO,
 		
@@ -222,6 +226,7 @@ create or replace view V_WM_OUTPRE as
 		</field>
 		<field name="PRODUCT_ID" description="SDB商品ID" javaType="string" >
 			<component type="hidden" readOnly="false" />
+			<queryCondition type="equal"/>
 			<listColumn noedit="false" noquery="false"/>
 		</field>
 		<field name="NAME" description="产品名称" displayOnly="false" javaType="string" lazyLoad="false">
@@ -249,7 +254,11 @@ create or replace view V_WM_OUTPRE as
 			<listColumn noedit="true" noquery="true" width="70"/>
 		</field>
 		<field name="OUT_COUNT" description="应出库数量" javaType="bigDecimal">
-			<component type="text" readOnly="false"/>
+			<component type="text" readOnly="true"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="OUT_PCOUNT" description="分配数量" javaType="bigDecimal">
+			<component type="text" readOnly="true"/>
 			<listColumn noedit="false" noquery="false"/>
 		</field>
 		<field name="OUT_RCOUNT" description="实际出库数量" javaType="bigDecimal" defaultValue="0">
@@ -349,7 +358,7 @@ create or replace view V_WM_OUTPRE as
 		<pluginInterceptor methodName="bsh" pluginName="saveView" type="after"><![CDATA[
 			void refreshDB() throws Throwable {
 				String sql1 = "delete from T_WM_OUTPRE where ITEM_ID=?";
-				String sql2 = "insert into  T_WM_OUTPRE(NAME,ITEM_ID,ORDER_ID,OUT_CODE,ITEM_ID_PK,PRODUCTID,PRODUCT_ID,WMCODE,SUPP_CODE,OUT_COUNT,OUT_RCOUNT,IN_PRICE,OUT_PRICE,PRO_COUNT,OUT_ALL_PRICE,PACKING_NUM,CAPACITYNUM,WEIGHTNUM,SUPPLIER,WAREHOUSE,All_CAPACITYNUM,All_WEIGHTNUM,REMAINDER_NUM,LOGISTICS_NAME,LOGISTICS_CODE,LOGISTICS_MEMO,HYVERSION,BILL_STATUS) (select NAME,ITEM_ID,ORDER_ID,OUT_CODE,ITEM_ID_PK,PRODUCTID,PRODUCT_ID,WMCODE,SUPP_CODE,OUT_COUNT,OUT_RCOUNT,IN_PRICE,OUT_PRICE,PRO_COUNT,OUT_ALL_PRICE,PACKING_NUM,CAPACITYNUM,WEIGHTNUM,SUPPLIER,WAREHOUSE,All_CAPACITYNUM,All_WEIGHTNUM,REMAINDER_NUM,LOGISTICS_NAME,LOGISTICS_CODE,LOGISTICS_MEMO,HYVERSION,BILL_STATUS from V_WM_OUTPRE where ITEM_ID=?)";
+				String sql2 = "insert into  T_WM_OUTPRE(NAME,ITEM_ID,ORDER_ID,OUT_CODE,ITEM_ID_PK,PRODUCTID,PRODUCT_ID,WMCODE,SUPP_CODE,OUT_COUNT,OUT_PCOUNT,OUT_RCOUNT,IN_PRICE,OUT_PRICE,PRO_COUNT,OUT_ALL_PRICE,PACKING_NUM,CAPACITYNUM,WEIGHTNUM,SUPPLIER,WAREHOUSE,All_CAPACITYNUM,All_WEIGHTNUM,REMAINDER_NUM,LOGISTICS_NAME,LOGISTICS_CODE,LOGISTICS_MEMO,HYVERSION,BILL_STATUS) (select NAME,ITEM_ID,ORDER_ID,OUT_CODE,ITEM_ID_PK,PRODUCTID,PRODUCT_ID,WMCODE,SUPP_CODE,OUT_COUNT,OUT_PCOUNT,OUT_RCOUNT,IN_PRICE,OUT_PRICE,PRO_COUNT,OUT_ALL_PRICE,PACKING_NUM,CAPACITYNUM,WEIGHTNUM,SUPPLIER,WAREHOUSE,All_CAPACITYNUM,All_WEIGHTNUM,REMAINDER_NUM,LOGISTICS_NAME,LOGISTICS_CODE,LOGISTICS_MEMO,HYVERSION,BILL_STATUS from V_WM_OUTPRE where ITEM_ID=?)";
 				final DBManager dbm = context.getDBM();
 				dbm.executeUpdatePre(sql1, new Object[]{form.get("ITEM_ID")}, null);
 				dbm.executeUpdatePre(sql2, new Object[]{form.get("ITEM_ID")}, null);
@@ -360,7 +369,7 @@ create or replace view V_WM_OUTPRE as
 		<pluginInterceptor methodName="bsh" pluginName="refreshDB" type="after"><![CDATA[
 			void refreshDB() throws Throwable {
 				String sql1 = "delete from T_WM_OUTPRE";
-				String sql2 = "insert into  T_WM_OUTPRE(NAME,ITEM_ID,ORDER_ID,OUT_CODE,ITEM_ID_PK,PRODUCTID,PRODUCT_ID,WMCODE,SUPP_CODE,OUT_COUNT,OUT_RCOUNT,IN_PRICE,OUT_PRICE,PRO_COUNT,OUT_ALL_PRICE,PACKING_NUM,CAPACITYNUM,WEIGHTNUM,SUPPLIER,WAREHOUSE,All_CAPACITYNUM,All_WEIGHTNUM,REMAINDER_NUM,LOGISTICS_NAME,LOGISTICS_CODE,LOGISTICS_MEMO,HYVERSION,BILL_STATUS) (select NAME,ITEM_ID,ORDER_ID,OUT_CODE,ITEM_ID_PK,PRODUCTID,PRODUCT_ID,WMCODE,SUPP_CODE,OUT_COUNT,OUT_RCOUNT,IN_PRICE,OUT_PRICE,PRO_COUNT,OUT_ALL_PRICE,PACKING_NUM,CAPACITYNUM,WEIGHTNUM,SUPPLIER,WAREHOUSE,All_CAPACITYNUM,All_WEIGHTNUM,REMAINDER_NUM,LOGISTICS_NAME,LOGISTICS_CODE,LOGISTICS_MEMO,HYVERSION,BILL_STATUS from V_WM_OUTPRE)";
+				String sql2 = "insert into  T_WM_OUTPRE(NAME,ITEM_ID,ORDER_ID,OUT_CODE,ITEM_ID_PK,PRODUCTID,PRODUCT_ID,WMCODE,SUPP_CODE,OUT_COUNT,OUT_PCOUNT,OUT_RCOUNT,IN_PRICE,OUT_PRICE,PRO_COUNT,OUT_ALL_PRICE,PACKING_NUM,CAPACITYNUM,WEIGHTNUM,SUPPLIER,WAREHOUSE,All_CAPACITYNUM,All_WEIGHTNUM,REMAINDER_NUM,LOGISTICS_NAME,LOGISTICS_CODE,LOGISTICS_MEMO,HYVERSION,BILL_STATUS) (select NAME,ITEM_ID,ORDER_ID,OUT_CODE,ITEM_ID_PK,PRODUCTID,PRODUCT_ID,WMCODE,SUPP_CODE,OUT_COUNT,OUT_PCOUNT,OUT_RCOUNT,IN_PRICE,OUT_PRICE,PRO_COUNT,OUT_ALL_PRICE,PACKING_NUM,CAPACITYNUM,WEIGHTNUM,SUPPLIER,WAREHOUSE,All_CAPACITYNUM,All_WEIGHTNUM,REMAINDER_NUM,LOGISTICS_NAME,LOGISTICS_CODE,LOGISTICS_MEMO,HYVERSION,BILL_STATUS from V_WM_OUTPRE)";
 				final DBManager dbm = context.getDBM();
 				dbm.executeUpdate(sql1, null);
 				dbm.executeUpdate(sql2, null);

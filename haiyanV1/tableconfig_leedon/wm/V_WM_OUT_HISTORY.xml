@@ -60,22 +60,6 @@
 			<component type="text" readOnly="false" colspan="6"/>
 			<listColumn noedit="false" noquery="false"/>
 		</field>
-		<!-- 
-		<field name="WAREHOUSE" description="出货仓库" displayOnly="false" javaType="string" lazyLoad="false" nullAllowed="false">
-			<component type="richSelect" readOnly="true" colspan="1" displayReferenceField="NAME" referenceField="ID" referenceTable="T_DIC_WAREHOUSE_COMBO"/>
-			<listColumn noedit="false" noquery="false"/>
-		</field>
-		<field name="WHOWNER" description="库主" displayOnly="false" javaType="string" lazyLoad="false" nullAllowed="false">
-			<component type="richSelect" readOnly="true" colspan="1" displayReferenceField="NAME" referenceField="ID" referenceTable="T_WM_OPERATOR"/>
-			<listColumn noedit="false" noquery="false"/>
-		</field>
-		<field name="OUT_STATUS" javaType="string" description="出库性质" defaultValue="consign">
-			<component type="dropdown" readOnly="false" colspan="6">
-				<option displayName="出库" value="consign"/>
-				<option displayName="返厂" value="reject"/>
-			</component>
-		</field>
-		-->
 		<field name="SUBGRID" javaType="string" description="----------------------------------------------------------------应出库明细----------------------------------------------------------------" displayOnly="true">
 			<component type="grid" readOnly="false" colspan="6" style="width:950;height:260;grouping:false;toolbar:no;" displayReferenceField="ITEM_ID,ORDER_ID,PRODUCTID,PRO_CODE,SUPP_CODE,PRE,AUDIT,UNAUDIT,OUT_RCOUNT,OUT_COUNT,NAME,WMCODE,PACKING_NUM,CAPACITYNUM,WEIGHTNUM,IN_PRICE,OUT_PRICE,PRO_COUNT,OUT_ALL_PRICE,All_CAPACITYNUM,All_WEIGHTNUM,LOGISTICS_NAME,LOGISTICS_CODE,LOGISTICS_MEMO,BILL_STATUS" referenceField="ORDER_ID" referenceTable="T_WM_OUTPRE" parameter="{&amp;ORDER_ID=}&amp;If(IsEmpty(Get({ID})),-1,Get({ID}))"/>
 			<queryCondition type="none"/>

@@ -24,7 +24,11 @@
 			<listColumn noedit="false" noquery="false"/>
 		</field>
 		<field name="OUT_COUNT" description="应出库数量" javaType="bigDecimal">
-			<component type="text" readOnly="false"/>
+			<component type="text" readOnly="true"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="OUT_PCOUNT" description="分配数量" javaType="bigDecimal">
+			<component type="text" readOnly="true"/>
 			<listColumn noedit="false" noquery="false"/>
 		</field>
 		<field name="OUT_RCOUNT" description="实际出库数量" javaType="bigDecimal" defaultValue="0">
