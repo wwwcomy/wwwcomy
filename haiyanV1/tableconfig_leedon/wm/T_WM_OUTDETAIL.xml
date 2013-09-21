@@ -11,6 +11,10 @@
 			<listColumn noedit="false" noquery="false" width="170"/>
 			<!-- ,PRO_PACKING,PRO_PACKING_NAME -->
 		</field>
+		<field name="WAREHOUSE" description="仓库" javaType="string" lazyLoad="true" loadType="cache" nullAllowed="false">
+			<component type="combo" readOnly="false" colspan="1" displayReferenceField="NAME" referenceField="ID" referenceTable="T_DIC_WAREHOUSE_COMBO" parameter="If(Get(FREE_INSPACTION)=1,{&amp;__filter=filter1},{&amp;__filter=filter})"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
 		<field name="PRO_NAME" description="商品名称" displayOnly="true" javaType="string" lazyLoad="false">
 			<component type="text" readOnly="true" displayReferenceField="NAME"/>
 			<listColumn noedit="false" noquery="false"/>

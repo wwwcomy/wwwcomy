@@ -14,6 +14,10 @@
 			<!-- <component type="text" readOnly="false" /> -->
 			<!-- colspan="1" displayReferenceField="NAME" referenceField="ID" referenceTable="T_DIC_PRODUCT" associatedFields="PRO_CODE,PRO_SPEC,PRO_MODEL,PRO_IN_PRICE,PRO_OUT_PRICE"-->
 		</field>
+		<field name="WAREHOUSE" description="仓库" javaType="string" lazyLoad="true" loadType="cache" nullAllowed="false">
+			<component type="combo" readOnly="false" displayReferenceField="NAME" referenceField="ID" referenceTable="T_DIC_WAREHOUSE_COMBO"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
 		<field name="PRO_NAME" description="商品名称" javaType="string">
 			<component type="text" readOnly="true" displayReferenceField="NAME"/>
 			<listColumn noedit="false" noquery="false" width="95"/>
