@@ -36,3 +36,5 @@ create or replace view V_WM_OUT as
 20130820修改：
 1. 所有商品的SDB_PRODUCT_ID还是修改为mediumint并添加索引，包括T_WM_PRO,T_WM_SDBPRODUCT,V_DIC_SDBPROGOODS,T_DIC_SDBPROGOODS
 
+20130921
+1. 商品仓库关系建立：insert into M_PRODUCT_WAREHOUSE(ID,PRODUCT,WAREHOUSE) (select concat(ID,'_',WAREHOUSE),ID,WAREHOUSE from T_WM_SDBPRODUCT where WAREHOUSE is not null)

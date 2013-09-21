@@ -118,7 +118,7 @@
 			<listColumn noedit="false" noquery="false"/>
 		</field>
 		<field name="WAREHOUSE" description="所属仓库" javaType="string" lazyLoad="false" nullAllowed="false" displayOnly="true" mappingTable="M_PRODUCT_WAREHOUSE">
-			<component type="combo" readOnly="true" displayReferenceField="NAME" referenceField="ID" referenceTable="T_DIC_WAREHOUSE_COMBO"/>
+			<component type="combo" readOnly="false" displayReferenceField="NAME" referenceField="ID" referenceTable="T_DIC_WAREHOUSE_COMBO" multipleSelect="true"/>
 			<listColumn noedit="false" noquery="false"/>
 		</field>
 		<field name="WHOWNER" description="库主" displayOnly="false" javaType="string" lazyLoad="true" loadType="cache">
