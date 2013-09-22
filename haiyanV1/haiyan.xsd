@@ -1094,6 +1094,11 @@
 					<xs:documentation>reference table</xs:documentation>
 				</xs:annotation>
 			</xs:attribute>
+			<xs:attribute name="visualTable" type="xs:string" use="optional">
+				<xs:annotation>
+					<xs:documentation>visual table</xs:documentation>
+				</xs:annotation>
+			</xs:attribute>
 			<xs:attribute name="className" type="xs:string" use="optional">
 				<xs:annotation>
 					<xs:documentation>classname of component</xs:documentation>
@@ -1276,6 +1281,16 @@
 								<xs:enumeration value="after">
 									<xs:annotation>
 										<xs:documentation>after tx commit</xs:documentation>
+									</xs:annotation>
+								</xs:enumeration>
+								<xs:enumeration value="beforeAll">
+									<xs:annotation>
+										<xs:documentation>before all tx commit</xs:documentation>
+									</xs:annotation>
+								</xs:enumeration>
+								<xs:enumeration value="afterAll">
+									<xs:annotation>
+										<xs:documentation>after all tx commit</xs:documentation>
 									</xs:annotation>
 								</xs:enumeration>
 							</xs:restriction>
