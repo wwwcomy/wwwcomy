@@ -3,7 +3,7 @@
 	<table name="M_PRODUCT_WAREHOUSE" description="产品-仓库">
 		<id name="ID" javaType="string" length="100"/>
 		<field name="PRODUCT" description="产品" javaType="string" length="50">
-			<component type="combo" referenceTable="T_WM_SDBPRODUCT" displayReferenceField="SDB_NAME"/>
+			<component type="combo" referenceTable="T_WM_SDBPRODUCT" visualTable="T_WM_PRO" displayReferenceField="SDB_NAME"/>
 			<queryCondition type="equal"/>
 			<listColumn noquery="false" width="400"/>
 		</field>
