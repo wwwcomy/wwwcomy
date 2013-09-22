@@ -2,7 +2,7 @@
 <Haiyan xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../haiyan.xsd">
 	<table name="V_WM_MONTHDTL" description="财务统计月度对账表">
 		<id name="ID" javaType="string"/>
-		<field name="SUPP_MONTH" description="供应商月度对账表(单头)" javaType="string">
+		<field name="SUPP_MONTH_HEAD" description="供应商月度对账表(单头)" javaType="string">
 			<component type="text" readOnly="true"/>
 			<listColumn noedit="false" noquery="true"/>
 		</field>
@@ -78,7 +78,7 @@
 		<pluginInterceptor methodName="initDB" pluginName="initDB" type="before"><![CDATA[
 create or replace view V_WM_MONTHDTL as 
 	(
-		select t_1.ID as ID,t_1.HEADID,t_1.WM_MONTH,
+		select t_1.ID as ID,t_1.HEADID as SUPP_MONTH_HEAD,t_1.WM_MONTH,
 		t_1.PRODUCTID,t_1.WMCODE,t_1.SUPP_CODE,
 		t_1.SALE_COUNT as PRO_COUNT,
 		'' as IN_PRICE,'' as OUT_PRICE,

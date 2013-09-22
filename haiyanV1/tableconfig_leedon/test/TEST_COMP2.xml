@@ -163,7 +163,7 @@
 			Exif(ExePath()&SubStr(Get(IMAGE2),7),{NAME},{Make:Model:Date/Time})
 		]]></pluginOperation>
 		<!-- -->
-		<Operation save="true" queryPageAdd="true" queryPageDelete="true" queryPageQueryEdit="true" customizeColumns="false" selectedHidden="true"/>
+		<Operation save="true" queryPageAdd="true" queryPageDelete="true" customizeColumns="false" selectedHidden="true"/>
 		<doc>
 			<help><![CDATA[啦啦啦 帮助说明]]></help>
 		</doc>

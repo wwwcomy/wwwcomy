@@ -24,6 +24,6 @@
 		</field>
 		<pluginInterceptor methodName="complete" pluginName="save" type="after"/>
 		<pluginInterceptor methodName="complete" pluginName="delete" type="after"/>
-		<Operation queryPageQueryEdit="true"/>
+		<Operation />
 	</table>
 </Haiyan>

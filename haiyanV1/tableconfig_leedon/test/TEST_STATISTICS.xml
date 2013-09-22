@@ -27,7 +27,7 @@
 		<StatisticsView levelCodeField="LEVELCODE" canWrittenField="CANEDIT" sumDetailField="MONEY" retractField="NAME"/>
 		-->
 		<pluginOperation name="statistics" oprName="编辑预算" accessKey="B" className="com.haiyan.genmis.statistics.StatisticsPlugin" hostPage="query"/>
-		<Operation queryPageQueryEdit="false" queryPageAdd="false" queryPageDelete="false" customizeColumns="false"/>
+		<Operation queryPageAdd="false" queryPageDelete="false" customizeColumns="false"/>
 	</table>
 	<table description="预算项目" name="TEST_STATISTICS_EDIT" realTable="TEST_STATISTICS">
 		<id name="ID" javaType="string"/>

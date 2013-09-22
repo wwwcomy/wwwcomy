@@ -12,17 +12,18 @@
 			<queryCondition type="equal"/>
 			<listColumn noquery="false" width="400"/>
 		</field>
+		
+		<pluginInterceptor methodName="bsh" pluginName="refreshDB" type="after"><![CDATA[
+			void refreshDB() throws Throwable {
+				//String sql1 = "delete from M_PRODUCT_WAREHOUSE";
+				String sql2 = "insert into M_PRODUCT_WAREHOUSE(ID,PRODUCT,WAREHOUSE) (select concat(ID,'_',WAREHOUSE),ID,WAREHOUSE from T_WM_SDBPRODUCT where WAREHOUSE is not null)";
+				final DBManager dbm = context.getDBM();
+				//dbm.executeUpdate(sql1, null);
+				dbm.executeUpdate(sql2, null);
+			}
+			refreshDB();
+		]]></pluginInterceptor>
+		<pluginOperation name="refreshDB" oprName="重建产品仓库关系" hostPage="query" tblevel="1" img="refresh" action="plugin({},{refreshDB})+brk()"/>
 		<Operation selectedHidden="true"/>
 	</table>
-	<pluginInterceptor methodName="bsh" pluginName="refreshDB" type="after"><![CDATA[
-		void refreshDB() throws Throwable {
-			//String sql1 = "delete from M_PRODUCT_WAREHOUSE";
-			String sql2 = "insert into M_PRODUCT_WAREHOUSE(ID,PRODUCT,WAREHOUSE) (select concat(ID,'_',WAREHOUSE),ID,WAREHOUSE from T_WM_SDBPRODUCT where WAREHOUSE is not null)";
-			final DBManager dbm = context.getDBM();
-			//dbm.executeUpdate(sql1, null);
-			dbm.executeUpdate(sql2, null);
-		}
-		refreshDB();
-	]]></pluginInterceptor>
-	<pluginOperation name="refreshDB" oprName="重建产品仓库关系" hostPage="query" tblevel="1" img="refresh" action="plugin({},{refreshDB})+brk()"/>
 </Haiyan>
