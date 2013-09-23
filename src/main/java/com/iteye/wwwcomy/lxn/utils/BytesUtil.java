@@ -47,6 +47,7 @@ import sun.misc.Unsafe;
  * comparisons, hash code generation, manufacturing keys for HashMaps or
  * HashSets, etc.
  */
+@SuppressWarnings("restriction")
 public class BytesUtil {
 
 //	private static final Log LOG = LogFactory.getLog(BytesUtil.class);
