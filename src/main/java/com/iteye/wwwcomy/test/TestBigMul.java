@@ -1,4 +1,4 @@
-package wwwcomy.iteye.com.test;
+package com.iteye.wwwcomy.test;
 
 import java.math.BigDecimal;
 
