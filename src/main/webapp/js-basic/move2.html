@@ -1,0 +1,84 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" 
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head>
+<title>move</title>
+<style>
+* {
+	margin: 0;
+	padding: 0;
+}
+
+#div1 {
+	left: 1200px;
+	top: 50px;
+	width: 100px;
+	height: 100px;
+	background: red;
+	position: absolute;
+	top: 50px;
+}
+
+#div2 {
+	width: 1px;
+	height: 300px;
+	background: black;
+	position: absolute;
+	left: 300px;
+}
+
+#div3 {
+	width: 1px;
+	height: 300px;
+	background: black;
+	position: absolute;
+	left: 700px;
+}
+
+#div4 {
+	width: 1px;
+	height: 300px;
+	background: black;
+	position: absolute;
+	left: 800px;
+}
+
+#bt1 {
+	top: 20px;
+	width: 70px;
+	position: absolute;
+}
+</style>
+<script type="text/javascript">
+	window.onload = function() {
+		var oBt1 = document.getElementById("bt1");
+		var oDiv1 = document.getElementById("div1");
+		var timer = null;
+		oBt1.onclick = function() {
+			clearInterval(timer);
+			timer = setInterval(function() {
+				var target = 700;
+				var speed = parseInt((target - oDiv1.offsetLeft) / 5);
+				if (Math.abs(speed) < 1) {
+					oDiv1.style.left = target + "px";
+				}
+				if (oDiv1.offsetLeft <= target) {
+					clearInterval(move);
+				} else {
+					oDiv1.style.left = oDiv1.offsetLeft + speed + "px";
+				}
+				document.title = oDiv1.offsetLeft;
+			}, 30);
+			setInterval(timer, 30);
+		};
+	}
+</script>
+</head>
+<body>
+	<div id="div1"></div>
+	<div id="div2"></div>
+	<div id="div3"></div>
+	<div id="div4"></div>
+	<input type="button" id="bt1" value="test"></input>
+</body>
+</html>

@@ -9,6 +9,7 @@ package com.iteye.wwwcomy;
 public class TestStatic {
 	static int x, y;
 	static {
+		@SuppressWarnings("unused")
 		int x = 5;
 	}
 
