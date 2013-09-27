@@ -9,8 +9,8 @@ import java.util.Arrays;
  * 
  */
 public class TestKmp {
-	public static String s1 = "bbc abcdab abcdabcdabde";
-	public static String s2 = "abcdabd";
+	public static String s1 = "aaaabaa";
+	public static String s2 = "aaab";
 
 	public static void main(String[] args) {
 		// index(s1, s2);
@@ -24,12 +24,25 @@ public class TestKmp {
 		System.out.println(Arrays.toString(a1));
 		System.out.println(Arrays.toString(aEye));
 
+		System.out.println(":::::::::::");
+		// 这种情况在计算倒数第二位"t"时，需要特殊处理
+		String test = "abctagcabctagctg";
+		System.out.println(Arrays.toString(getNextArray(test)));
+		System.out.println(Arrays.toString(getNextArrayEye(test)));
+		System.out.println(Arrays.toString(getNextArrayReal(test)));
+
+		System.out.println(":::::::::::");
+		test = "agctagcagctagctg";
+		System.out.println(Arrays.toString(getNextArray(test)));
+		System.out.println(Arrays.toString(getNextArrayEye(test)));
+		System.out.println(Arrays.toString(getNextArrayReal(test)));
+
 		indexByKmp(s1, s2);
-		indexByKmp(s1, s2);
+		indexByKmpJuly(s1, s2);
 	}
 
 	/**
-	 * 最原始的在s1中查找s2的方法，循环很多，不推荐。 一旦匹配失败，就回退到初始位置的下一个位置。
+	 * 最原始的在s1中查找s2的方法，与JDK原始实现类似。 一旦匹配失败，就回退到初始位置的下一个位置。
 	 * 
 	 * @param s1
 	 * @param s2
@@ -56,6 +69,8 @@ public class TestKmp {
 	/**
 	 * 在这种next数组的情况下，使用如下公式：移动位数 = 已匹配的字符数 - 对应的部分匹配值
 	 * 
+	 * 这种方法当失配时，仅仅对比了第一个字符，没有循环向后，
+	 * 
 	 * @param pattern
 	 * @return
 	 */
@@ -78,6 +93,40 @@ public class TestKmp {
 		return next;
 	}
 
+	/**
+	 * 考虑了循环，但是有问题
+	 * 
+	 * @deprecated 这里在循环的处理上有问题，注意上面的"abctagcabctagctg"和"agctagcagctagctg"例子
+	 * @param pattern
+	 * @return
+	 */
+	public static int[] getNextArrayReal(String pattern) {
+		int len = pattern.length();
+		int[] next = new int[len];
+		next[0] = 0;
+		int i = 1;
+		while (i < len) {
+			if (pattern.charAt(i) == pattern.charAt(next[i - 1])) {
+				next[i] = next[i - 1] + 1;
+			} else {
+				int j = next[i - 1];
+				// TODO wrong Code!!!!!!!!!!!!!!!!
+				while (j >= 0 && pattern.charAt(i) != pattern.charAt(j)) {
+					j--;
+				}
+				next[i] = ++j;
+			}
+			i++;
+		}
+		return next;
+	}
+
+	/**
+	 * JavaEye上的另外一种写法，只是下标略有不同
+	 * 
+	 * @param pattern
+	 * @return
+	 */
 	public static int[] getNextArrayEye(String pattern) {
 		int len = pattern.length();
 		int[] next = new int[len];
@@ -96,7 +145,6 @@ public class TestKmp {
 			if (j == 1) {
 				next[i] = 1;
 			}
-			// System.out.println(Arrays.toString(next));
 		}
 		return next;
 	}
@@ -164,7 +212,6 @@ public class TestKmp {
 		int i = 0;
 		int j = 0;
 		int[] next = getNextArrayJuly(s2);
-		System.out.println(Arrays.toString(next));
 		while (i < s1Len && j < s2Len) {
 			if (j == -1 || s1.charAt(i) == s2.charAt(j)) {
 				i++;
