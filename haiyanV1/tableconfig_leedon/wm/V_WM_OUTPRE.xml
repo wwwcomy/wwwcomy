@@ -91,7 +91,7 @@
 			<component type="text" readOnly="true" colspan="1"/>
 			<listColumn noedit="false" noquery="false"/>
 		</field>
-		<field name="WAREHOUSE" description="出库仓库" displayOnly="true" javaType="string" lazyLoad="false" nullAllowed="false" >
+		<field name="WAREHOUSE" description="出库仓库" displayOnly="true" javaType="string" lazyLoad="false" nullAllowed="false" ><!-- 分配后保存 -->
 			<component type="text" readOnly="true" colspan="1" /><!-- displayReferenceField="WAREHOUSE" -->
 			<listColumn noedit="false" noquery="false"/>
 		</field>
