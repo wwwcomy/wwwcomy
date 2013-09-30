@@ -176,20 +176,21 @@
 			
 			<!-- 入库预处理的第二种选择 在应入库中选择产品 -->
 			<pluggedFilter methodName="exp" parameter="If(IsEmpty(GetPara(WMINID)),{},{ and t_1.ID in (select distinct(PRODUCTID) from T_WM_SDBINPRE where HEADID='}&amp;SQLSafe(GetPara(WMINID))&amp;{') })"/>
+			<!-- 入库时必须是当前仓库 
+			<pluggedFilter methodName="exp" parameter="if(IsEmpty(GetPara(WMINID)),{},{ and t_1.WAREHOUSE='}&amp;GetUser(WAREHOUSEID)&amp;{' })"><![CDATA[
+			]]></pluggedFilter>-->
+			
+			<!-- 出库预处理的第二种选择 在应出库中选择产品 -->
+			<pluggedFilter methodName="exp" parameter="If(IsEmpty(GetPara(WMOUTID)),{},{ and t_1.ID in (select distinct(PRODUCTID) from T_WM_OUTPRE where ORDER_ID='}&amp;SQLSafe(GetPara(WMOUTID))&amp;{') })"/>
+			<!-- 出库时必须是当前仓库 
+			<pluggedFilter methodName="exp" parameter="if(IsEmpty(GetPara(WMOUTID)),{},{ and t_1.WAREHOUSE='}&amp;GetUser(WAREHOUSEID)&amp;{' })"><![CDATA[
+			]]></pluggedFilter>-->
 			
 			<!-- 退货预处理的第二种选择 在应退货中选择产品 -->
 			<pluggedFilter methodName="exp" parameter="If(IsEmpty(GetPara(RETURNID)),{},{ and t_1.ID in (select distinct(PRODUCTID) from T_WM_SDBRETURNPRE where HEADID='}&amp;SQLSafe(GetPara(RETURNID))&amp;{') })"/>
 			
 			<!-- 移库时，商品应当在库存明细中有记录 -->
 			<pluggedFilter methodName="exp" parameter="If(IsEmpty(GetPara(__WHID)),{},{ and t_1.ID in (select distinct(PRODUCTID) from V_WM_STOCKWHERE where WAREWHERE='}&amp;SQLSafe(GetPara(__WHID))&amp;{') })"/>
-			<!-- 入库时必须是当前仓库 
-			<pluggedFilter methodName="exp" parameter="if(IsEmpty(GetPara(WMINID)),{},{ and t_1.WAREHOUSE='}&amp;GetUser(WAREHOUSEID)&amp;{' })"><![CDATA[
-			]]></pluggedFilter>-->
-			<!-- 出库预处理的第二种选择 在应出库中选择产品 -->
-			<pluggedFilter methodName="exp" parameter="If(IsEmpty(GetPara(WMOUTID)),{},{ and t_1.ID in (select distinct(PRODUCTID) from T_WM_OUTPREPART where ORDER_ID='}&amp;SQLSafe(GetPara(WMOUTID))&amp;{') })"/>
-			<!-- 出库时必须是当前仓库 
-			<pluggedFilter methodName="exp" parameter="if(IsEmpty(GetPara(WMOUTID)),{},{ and t_1.WAREHOUSE='}&amp;GetUser(WAREHOUSEID)&amp;{' })"><![CDATA[
-			]]></pluggedFilter>-->
 		</queryFilter>
 		<!-- 如果供应商未能有一份完成的协议，则无法新建产品 
 		<role name="sp">
@@ -301,6 +302,10 @@
 			refreshDB();
 		]]></pluginInterceptor>
 		<pluginInterceptor methodName="bsh" pluginName="refreshDB" type="after"><![CDATA[
+			com.haiyan.genmis.core.right.User user = context.getUser();
+			boolean admin = com.haiyan.genmis.core.right.RightUtil.isUserInRole(user, "admin");
+			if (!admin)
+				throw new Warning("没有权限");
 			void refreshDB1() throws Throwable {
 				String sql1 = "delete from T_DIC_SDBPROGOODS";
 				String sql2 = "insert into  T_DIC_SDBPROGOODS(PRODUCT_ID,GOODS_ID,WMCODE,STORE1,STORE2,IN_PRICE,OUT_PRICE,P_21,PACKING_NUM,P_27,NAME,WEIGHTNUM,P_24,SPEC,MODEL,BHZQ,BIG_PIC,TYPE_0,TYPE_ID,COLOR,MARKETABLE,MEMO) (select PRODUCT_ID,GOODS_ID,WMCODE,STORE1,STORE2,IN_PRICE,OUT_PRICE,P_21,PACKING_NUM,P_27,NAME,WEIGHTNUM,P_24,SPEC,MODEL, BHZQ,BIG_PIC,TYPE_0,TYPE_ID,COLOR,MARKETABLE,MEMO from V_DIC_SDBPROGOODS)";
@@ -319,9 +324,11 @@
 			refreshDB2();
 		]]></pluginInterceptor>
 		<!-- -->
-		<pluginOperation name="saveView" oprName="保存" hostPage="edit" tblevel="1" img="save" action="if(checkcap()=1,plugin({},{saveView})+brk(),alert('确认体积是否正确')+brk())"/>
 		<pluginOperation name="refreshDB" oprName="重载SDB商品" hostPage="query" tblevel="1" img="refresh" action="plugin({},{refreshDB})+brk()"/>
+		<!--
 		<pluginOperation name="syncView" oprName="同步当前SDB商品" hostPage="edit" tblevel="1" img="refresh" action="alert('无效')+brk()"/>
+		-->
+		<pluginOperation name="saveView" oprName="保存" hostPage="edit" tblevel="1" img="save" action="if(checkcap()=1,plugin({},{saveView})+brk(),alert('确认体积是否正确')+brk())"/>
 		<!-- -->
 		<Operation queryPageDelete="false" save="false" saveAndAdd="false" saveAndAddCopy="false"/>
 	</table>

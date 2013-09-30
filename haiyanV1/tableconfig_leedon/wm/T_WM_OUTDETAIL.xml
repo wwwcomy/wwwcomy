@@ -2,7 +2,7 @@
 <Haiyan xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../haiyan.xsd">
 	<table name="T_WM_OUTDETAIL" description="实际出库明细(HY)" colspan="6">
 		<id name="ID" javaType="string"/>
-		<field name="HEADID" description="单头" javaType="string">
+		<field name="HEADID" description="单头" javaType="string"><!-- HEADID==V_WM_OUT.ID==V_WM_OUT.ORDER_ID -->
 			<component type="readOnlyText"/>
 			<queryCondition type="equal"/>
 		</field>

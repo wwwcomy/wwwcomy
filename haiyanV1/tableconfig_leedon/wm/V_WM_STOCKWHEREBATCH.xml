@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Haiyan xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../haiyan.xsd">
-	<table name="V_WM_STOCKWHEREBATCH" description="库存汇总(按仓位,包括批次)">
+	<table name="V_WM_STOCKWHEREBATCH" description="库存汇总(按仓位,包括批次查询结构)">
 		<id name="ID" javaType="string"/>
 		<field name="HEADID" description="单头" javaType="string">
 			<component type="hidden"/>

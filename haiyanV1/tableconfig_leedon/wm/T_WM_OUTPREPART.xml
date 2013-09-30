@@ -7,7 +7,7 @@
 		<field name="ITEM_ID_PK" description="增加索引字段" javaType="bigDecimal">
 			<component type="readOnlyText"/>
 		</field>
-		<field name="ORDER_ID" description="HY出库单号" javaType="string">
+		<field name="ORDER_ID" description="HY出库单号" javaType="string"><!-- ORDER_ID==V_WM_OUT.ID==V_WM_OUT.ORDER_ID -->
 			<component type="readOnlyText"/>
 			<queryCondition type="equal"/>
 		</field>
@@ -39,7 +39,7 @@
 			<component type="text" readOnly="true" colspan="1"/>
 			<listColumn noedit="false" noquery="false"/>
 		</field>
-		<field name="WAREHOUSE" description="产品所属仓库" displayOnly="false" javaType="string" lazyLoad="false" nullAllowed="false">
+		<field name="WAREHOUSE" description="出库仓库" displayOnly="false" javaType="string" lazyLoad="false" nullAllowed="false">
 			<component type="text" readOnly="true" colspan="1"/>
 			<listColumn noedit="false" noquery="false"/>
 		</field>
@@ -75,8 +75,14 @@
 		</field>
 		<!-- -->
 		<queryFilter>
+			<pluggedFilter methodName="exp" parameter="{ and t_1.PRODUCTID in (select distinct(PRODUCT) from M_PRODUCT_WAREHOUSE where WAREHOUSE='}&amp;GetUser(WAREHOUSEID)&amp;{') }"/>
+			<!--
 			<pluggedFilter methodName="exp" parameter="{ and t_1.WAREHOUSE='}&amp;GetUser(WAREHOUSEID)&amp;{' }"/>
+			-->
 			<pluggedFilter methodName="exp" parameter="If(InRole(sp,wm),{ and t_1.SUPPLIER='}&amp;GetUser(SUPPLIER)&amp;{' },{})"/>
+			<!-- 退货时 实际出库数量应当大于0  and t_1.OUT_COUNT>0 这里有问题，EDP很多没有预出库数量 -->
+			<pluggedFilter methodName="exp" parameter="If(IsEmpty(GetPara(RETURNPRE)),{},{and t_1.ORDER_ID in (select ORDER_ID_INT from T_WM_OUTPART where (OUT_TYPE='consign' or OUT_TYPE='loss') and BILL_STATUS='audit')})"/>
+			
 		</queryFilter>
 		<!--
 		<javascript hostPage="edit"><![CDATA[

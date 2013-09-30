@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Haiyan xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../haiyan.xsd">
-	<table name="T_WM_SDBWAREWHERE" description="入库预处理" colspan="6" realTable="T_DIC_WAREWHERE">
+	<table name="T_WM_SDBWAREWHERE" description="入库预处理(查询仓位结构)" colspan="6" realTable="T_DIC_WAREWHERE">
 		<id name="ID" javaType="string"/>
 		<field name="HEADID" description="所属仓库" javaType="string">
 			<component type="readOnlyText"/>

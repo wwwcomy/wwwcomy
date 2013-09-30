@@ -226,6 +226,10 @@ create or replace view V_DIC_SDBPROGOODS as
 			]]></pluggedFilter>
 		</queryFilter>
 		<pluginInterceptor methodName="bsh" pluginName="refreshDB" type="after"><![CDATA[
+			com.haiyan.genmis.core.right.User user = context.getUser();
+			boolean admin = com.haiyan.genmis.core.right.RightUtil.isUserInRole(user, "admin");
+			if (!admin)
+				throw new Warning("没有权限");
 			void refreshDB() throws Throwable {
 				String sql1 = "delete from T_DIC_SDBPROGOODS";
 				String sql2 = "insert into  T_DIC_SDBPROGOODS(PRODUCT_ID,GOODS_ID,WMCODE,STORE1,STORE2,IN_PRICE,OUT_PRICE,P_21,PACKING_NUM,P_27,NAME,WEIGHTNUM,P_24,SPEC,MODEL,BHZQ,BIG_PIC,TYPE_0,TYPE_ID,COLOR,MARKETABLE,MEMO) (select PRODUCT_ID,GOODS_ID,WMCODE,STORE1,STORE2,IN_PRICE,OUT_PRICE,P_21,PACKING_NUM,P_27,NAME,WEIGHTNUM,P_24,SPEC,MODEL, BHZQ,BIG_PIC,TYPE_0,TYPE_ID,COLOR,MARKETABLE,MEMO from V_DIC_SDBPROGOODS)";
