@@ -38,3 +38,6 @@ create or replace view V_WM_OUT as
 
 20130921
 1. 商品仓库关系建立：insert into M_PRODUCT_WAREHOUSE(ID,PRODUCT,WAREHOUSE) (select concat(ID,'_',WAREHOUSE),ID,WAREHOUSE from T_WM_SDBPRODUCT where WAREHOUSE is not null)
+
+20131007
+1. query_js.jsp在__pagingBar的定义中可以加入每页1000条的选项
