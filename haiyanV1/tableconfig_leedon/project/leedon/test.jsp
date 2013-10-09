@@ -20,11 +20,12 @@ ArrayList<Qbq3Form> CKLIST = null;
 ArrayList<Qbq3Form> OUTPRELIST = null;
 Page pg1 = null;
 Page pg2 = null;
-SrvContext srvContext = new SrvContext(request, response);
+SrvContext srvContext = null;
 try {
+	srvContext = new SrvContext(request, response);
 	User user = srvContext.getUser();
 	if (user==null) {
-	    throw new Warning(srvContext.trans(100032, "session_overtime"));
+	    throw new Warning("session_overtime");
 	}
 	//Qbq3Form frm = srvContext.getDBM().findByPK("SDB_GOODS_TYPE", typeid, srvContext);
 	pg1 = srvContext.getDBM().findByForm("T_DIC_WAREHOUSE", null, 100, 1, srvContext);
@@ -32,25 +33,20 @@ try {
 	
 	Qbq3Form qfrm = new MapForm();
 	qfrm.set("ORDER_ID", ORDER_ID);
-	pg2 = srvContext.getDBM().findByForm("T_WM_OUTPRE", qfrm, 100, 1, srvContext);
+	pg2 = srvContext.getDBM().findByForm("T_WM_OUTPRE2", qfrm, 100, 1, srvContext);
 	OUTPRELIST = pg2.getData(); // PRODUCTID NAME
 	
+	// TODO 从V_WM_STOCK3查库存
+	
 	out.clear();
-} catch(Throwable ex) {
-	DebugUtil.error(ex);
-	out.clear();
-    out.println(Warning.getClientErr(ex.getMessage()));
-} finally {
-	srvContext.close();
-}
 /*
-out.println("------------------");
-out.println("\n");
-out.println("明细:"+pg1.toJSon());
-out.println("\n");
-out.println("------------------");
-out.println("\n");
-out.println("明细:"+pg2.toJSon());
+	out.println("------------------");
+	out.println("\n");
+	out.println("明细:"+pg1.toJSon());
+	out.println("\n");
+	out.println("------------------");
+	out.println("\n");
+	out.println("明细:"+pg2.toJSon());
 */
 %>
 <html>
@@ -78,6 +74,10 @@ out.println("明细:"+pg2.toJSon());
 			margin:0px;
 			padding:0px;
 		}
+		.td0 {
+			width:150px;
+			font-weight:bold;
+		}
 		.td1 {
 			width:50px;
 			font-weight:bold;
@@ -86,12 +86,15 @@ out.println("明细:"+pg2.toJSon());
 			width:150px;
 			font-weight:bold;
 		}
+		.tdl {
+			color:green;
+		}
 	</style>
 </head>
 <body>
 	<table id="grid0">
 		<tr rowspan=3>
-			<td class="td1" rowspan=3><!--<button onclick="GRID0.addRow()">+</button>-->产品名</td>
+			<td class="td0" rowspan=3><!--<button onclick="GRID0.addRow()">+</button>-->产品名</td>
 			<td class="td1" rowspan=3>库存数</td>
 			<td class="td1" rowspan=3>订单数</td>
 			<td class="td1" rowspan=3>分配数</td>
@@ -208,24 +211,26 @@ out.println("明细:"+pg2.toJSon());
 			this.template.compile();
 		}
 		,calModel:function(prodID){
-			this.rm.each(function(row, index) { // PRO_COUNT:库存数 OUT_COUNT:订单数(应出库) OUT_PCOUNT:分配数 OUT_RCOUNT:实出库
+			this.rm.each(function(row, index) { // PRO_COUNT:数量 PRO_KCCOUNT:库存数 OUT_COUNT:订单数(应出库) OUT_PCOUNT:分配数 OUT_RCOUNT:实出库
 				if (prodID && prodID!=row['ITEM_ID'])
 					return;
 
+				//row['PRO_KCCOUNT'] = row['PRO_KCCOUNT']=='-1'?0:row['PRO_KCCOUNT']*1; // TODO 库存V_WM_STOCK3数量没有查出来
 				row['OUT_PCOUNT'] = row['OUT_PCOUNT']=='-1'?0:row['OUT_PCOUNT']*1;
+				
 				var PID = row['ITEM_ID'];
 				if (!this.mapRow[PID])
 					this.mapRow[PID]={};
-				this.mapRow[PID][row['WAREHOUSE']]={PNAME:row['NAME'], PRO_COUNT:row['PRO_COUNT']||0, OUT_PCOUNT:row['OUT_PCOUNT']||0, OUT_COUNT:row['OUT_COUNT']||0, OUT_RCOUNT:row['OUT_RCOUNT']||0, ROW:index};
+				this.mapRow[PID][row['WAREHOUSE']]={PNAME:row['NAME'], PRO_KCCOUNT:row['PRO_KCCOUNT']||0, OUT_PCOUNT:row['OUT_PCOUNT']||0, OUT_COUNT:row['OUT_COUNT']||0, OUT_RCOUNT:row['OUT_RCOUNT']||0, ROW:index};
 				
 				var WID = row['WAREHOUSE'];
 				if (!this.mapCol[WID])
 					this.mapCol[WID]={};
-				this.mapCol[WID][row['ITEM_ID']]={PNAME:row['NAME'], PRO_COUNT:row['PRO_COUNT']||0, OUT_PCOUNT:row['OUT_PCOUNT']||0, OUT_COUNT:row['OUT_COUNT']||0, OUT_RCOUNT:row['OUT_RCOUNT']||0, ROW:index};
+				this.mapCol[WID][row['ITEM_ID']]={PNAME:row['NAME'], PRO_KCCOUNT:row['PRO_KCCOUNT']||0, OUT_PCOUNT:row['OUT_PCOUNT']||0, OUT_COUNT:row['OUT_COUNT']||0, OUT_RCOUNT:row['OUT_RCOUNT']||0, ROW:index};
 				
 				if (!this.sumCol[PID])
 					this.sumCol[PID]={};
-				this.sumCol[PID]['PRO_COUNT']=(this.sumCol[PID]['PRO_COUNT']||0)*1+(row['PRO_COUNT']||0)*1;
+				this.sumCol[PID]['PRO_KCCOUNT']=(this.sumCol[PID]['PRO_KCCOUNT']||0)*1+(row['PRO_KCCOUNT']||0)*1;
 				this.sumCol[PID]['OUT_COUNT']=(this.sumCol[PID]['OUT_COUNT']||0)*1+(row['OUT_COUNT']||0)*1;
 				this.sumCol[PID]['OUT_PCOUNT']=(this.sumCol[PID]['OUT_PCOUNT']||0)*1+(row['OUT_PCOUNT']||0)*1;
 				this.sumCol[PID]['OUT_RCOUNT']=(this.sumCol[PID]['OUT_RCOUNT']||0)*1+(row['OUT_RCOUNT']||0)*1;
@@ -238,18 +243,17 @@ out.println("明细:"+pg2.toJSon());
 					var args = [
 						this.getRowCount() // 行号 attri
 						, row['ITEM_ID'] // 产品ID attri
-						
 						, row['NAME'] // 产品名称
-						, this.sumCol[PID]['PRO_COUNT'] // 库存
+						, this.sumCol[PID]['PRO_KCCOUNT'] // 库存数
 						, this.sumCol[PID]['OUT_COUNT'] // 订单数（应出库）
 						, this.sumCol[PID]['OUT_PCOUNT'] // 分配数
-						, this.sumCol[PID]['OUT_RCOUNT'] // 实际出库
+						, this.sumCol[PID]['OUT_RCOUNT'] // 实际出库数
 					];
-					for (var i=0;i<this.cm.length;i++) {
-						var WID = this.cm[i]['ID'];
-						var T = this.mapRow[PID][WID];
+					for (var i=0;i<this.cm.length;i++) { // 遍历仓库（列维度）
+						var WID = this.cm[i]['ID']; // 仓库ID
+						var T = this.mapRow[PID][WID]; // 查库存
 						if (T) 
-							args.push(WID, T['PRO_COUNT'], '<input class="td1" onchange="GRID0.change(\''+PID+'\',\''+WID+'\','+i+',this.value)" value="'+T['OUT_PCOUNT']+'"></input>', T['OUT_RCOUNT']);
+							args.push(WID, T['PRO_KCCOUNT'], '<input class="td1" onchange="GRID0.change(\''+PID+'\',\''+WID+'\','+i+',this.value)" value="'+T['OUT_PCOUNT']+'"></input>', T['OUT_RCOUNT']);
 						else
 							args.push(WID, 0, 0, 0);
 					}
@@ -307,3 +311,13 @@ out.println("明细:"+pg2.toJSon());
 	</script>
 </body>
 </html>
+<%
+} catch(Throwable ex) {
+	DebugUtil.error(ex);
+	out.clear();
+    out.println(Warning.getClientErr(ex.getMessage()));
+} finally {
+	if (srvContext!=null)
+		srvContext.close();
+}
+%>
