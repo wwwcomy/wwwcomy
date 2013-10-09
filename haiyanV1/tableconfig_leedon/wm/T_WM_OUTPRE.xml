@@ -47,11 +47,11 @@
 			<component type="button" readOnly="true"/><!--renderer="renderUnAudit" -->
 			<listColumn noedit="true" noquery="true" width="70"/>
 		</field>
-		<field name="OUT_COUNT" description="应出库数量" javaType="bigDecimal">
+		<field name="OUT_COUNT" description="(订单)数量" javaType="bigDecimal" defaultValue="0">
 			<component type="text" readOnly="true"/>
 			<listColumn noedit="false" noquery="false"/>
 		</field>
-		<field name="OUT_PCOUNT" description="分配数量" javaType="bigDecimal">
+		<field name="OUT_PCOUNT" description="分配数量" javaType="bigDecimal" defaultValue="0">
 			<component type="text" readOnly="true"/>
 			<listColumn noedit="false" noquery="false"/>
 		</field>
@@ -67,7 +67,7 @@
 			<component type="text" readOnly="true"/>
 			<listColumn noedit="false" noquery="false"/>
 		</field>
-		<field name="PRO_COUNT" description="数量" javaType="bigDecimal">
+		<field name="PRO_COUNT" description="数量" javaType="bigDecimal" defaultValue="0">
 			<component type="text" readOnly="false"/>
 			<listColumn noedit="false" noquery="false"/>
 		</field>

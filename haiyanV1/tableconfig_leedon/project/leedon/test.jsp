@@ -210,6 +210,7 @@ out.println("明细:"+pg2.toJSon());
 				if (prodID && prodID!=row['ITEM_ID'])
 					return;
 
+				row['OUT_PCOUNT'] = row['OUT_PCOUNT']=='-1'?0:row['OUT_PCOUNT']*1;
 				var PID = row['ITEM_ID'];
 				if (!this.mapRow[PID])
 					this.mapRow[PID]={};
