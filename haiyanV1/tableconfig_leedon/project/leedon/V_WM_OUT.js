@@ -27,7 +27,9 @@ function testAudit(rowIndex, p) {
 		}
 	});
 }
-
+/*Hy.UIFunction.fenpei = function() {
+	window.open('/project/leedon/test.jsp?TABLE=T_WM_OUTPART&FIELD=SUBFRAME&ID=201');
+}*/
 //明细出库按钮
 Hy.UIFunction.testout = function() {
 	var g = Ext.getCmp('SUBGRID1');
@@ -70,7 +72,4 @@ Hy.UIFunction.testout = function() {
 	Ext.getCmp('SUBGRID2').getSelectionModel().clearSelections();
 	Ext.getCmp('SUBGRID1').getSelectionModel().clearSelections();
 	
-	
 }
-Ext.onReady(function(){
-});

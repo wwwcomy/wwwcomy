@@ -43,6 +43,7 @@ try {
 } finally {
 	srvContext.close();
 }
+/*
 out.println("------------------");
 out.println("\n");
 out.println("明细:"+pg1.toJSon());
@@ -50,6 +51,7 @@ out.println("\n");
 out.println("------------------");
 out.println("\n");
 out.println("明细:"+pg2.toJSon());
+*/
 %>
 <html>
 <head>
