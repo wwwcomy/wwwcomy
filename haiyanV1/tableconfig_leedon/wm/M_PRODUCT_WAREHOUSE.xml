@@ -2,8 +2,9 @@
 <Haiyan xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../haiyan.xsd">
 	<table name="M_PRODUCT_WAREHOUSE" description="产品-仓库">
 		<id name="ID" javaType="string" length="100"/>
+		<!-- -->
 		<field name="PRODUCT" description="产品" javaType="string" length="50">
-			<component type="combo" referenceTable="T_WM_SDBPRODUCT" visualTable="T_WM_PRO" displayReferenceField="SDB_NAME"/>
+			<component type="combo" referenceTable="T_WM_SDBPRODUCT" visualTable="T_WM_PRO V_WM_SDBPRODUCT" displayReferenceField="SDB_NAME"/>
 			<queryCondition type="equal"/>
 			<listColumn noquery="false" width="400"/>
 		</field>
@@ -12,7 +13,7 @@
 			<queryCondition type="equal"/>
 			<listColumn noquery="false" width="400"/>
 		</field>
-		
+		<!-- -->
 		<pluginInterceptor methodName="bsh" pluginName="refreshDB" type="after"><![CDATA[
 			void refreshDB() throws Throwable {
 				//String sql1 = "delete from M_PRODUCT_WAREHOUSE";
@@ -23,7 +24,9 @@
 			}
 			refreshDB();
 		]]></pluginInterceptor>
+		<!-- -->
 		<pluginOperation name="refreshDB" oprName="重建产品仓库关系" hostPage="query" tblevel="1" img="refresh" action="plugin({},{refreshDB})+brk()"/>
+		<!-- -->
 		<Operation selectedHidden="true"/>
 	</table>
 </Haiyan>

@@ -27,9 +27,11 @@
 			<pen lineWidth="0.5" lineColor="#000000"/>
 		</box>
 	</style>
+	<!--
 	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
-		<defaultValueExpression><![CDATA["D:\\worke332\\test\\tableconfig_leedon"]]></defaultValueExpression>
+		<defaultValueExpression><![CDATA[$P{HAIYAN_CONFIGPATH}]]></defaultValueExpression>
 	</parameter>
+	-->
 	<parameter name="TITLE" class="java.lang.String"/>
 	<parameter name="T_WM_SDBCONPRODUCT_DS" class="haiyan.report.jasper.ReportBean"/>
 	<parameter name="HAIYAN_CONFIGPATH" class="java.lang.String"/>
@@ -135,7 +137,7 @@
 			<subreport>
 				<reportElement x="0" y="0" width="802" height="77"/>
 				<dataSourceExpression><![CDATA[$P{T_WM_SDBCONPRODUCT_DS}]]></dataSourceExpression>
-				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "\\report\\T_WM_SDBCONPRODUCT_GRID.jasper"]]></subreportExpression>
+				<subreportExpression><![CDATA[$P{HAIYAN_CONFIGPATH} + "\\report\\T_WM_SDBCONPRODUCT_GRID.jasper"]]></subreportExpression>
 			</subreport>
 		</band>
 		<band height="366" splitType="Stretch">
