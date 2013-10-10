@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="T_WM_SDBCONPRODUCT_GRID" language="groovy" pageWidth="802" pageHeight="555" orientation="Landscape" whenNoDataType="AllSectionsNoDetail" columnWidth="802" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0">
 	<property name="ireport.zoom" value="1.0"/>
-	<property name="ireport.x" value="39"/>
+	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
 	<style name="table">
 		<box>
@@ -452,8 +452,8 @@
 	</columnHeader>
 	<detail>
 		<band height="20" splitType="Stretch">
-			<textField>
-				<reportElement x="0" y="0" width="70" height="20"/>
+			<textField isStretchWithOverflow="true">
+				<reportElement stretchType="RelativeToBandHeight" x="0" y="0" width="70" height="20"/>
 				<box>
 					<topPen lineWidth="1.0"/>
 					<leftPen lineWidth="1.0"/>
@@ -466,7 +466,7 @@
 				<textFieldExpression><![CDATA[$F{PRO_NAME}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="300" y="0" width="40" height="20"/>
+				<reportElement stretchType="RelativeToBandHeight" x="300" y="0" width="40" height="20"/>
 				<box>
 					<topPen lineWidth="1.0"/>
 					<leftPen lineWidth="1.0"/>
@@ -479,7 +479,7 @@
 				<textFieldExpression><![CDATA[$F{__PRODUCTID__CODE}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="70" y="0" width="70" height="20"/>
+				<reportElement stretchType="RelativeToBandHeight" x="70" y="0" width="70" height="20"/>
 				<box>
 					<topPen lineWidth="1.0"/>
 					<leftPen lineWidth="1.0"/>
@@ -492,7 +492,7 @@
 				<textFieldExpression><![CDATA[$F{PRO_CODE}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="485" y="0" width="21" height="20"/>
+				<reportElement stretchType="RelativeToBandHeight" x="485" y="0" width="21" height="20"/>
 				<box>
 					<topPen lineWidth="1.0"/>
 					<leftPen lineWidth="1.0"/>
@@ -505,7 +505,7 @@
 				<textFieldExpression><![CDATA[$F{PRO_WEIGHTNUM}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="548" y="0" width="42" height="20"/>
+				<reportElement stretchType="RelativeToBandHeight" x="548" y="0" width="42" height="20"/>
 				<box>
 					<topPen lineWidth="1.0"/>
 					<leftPen lineWidth="1.0"/>
@@ -518,7 +518,7 @@
 				<textFieldExpression><![CDATA[$F{ZDKC}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="260" y="0" width="20" height="20"/>
+				<reportElement stretchType="RelativeToBandHeight" x="260" y="0" width="20" height="20"/>
 				<box>
 					<topPen lineWidth="1.0"/>
 					<leftPen lineWidth="1.0"/>
@@ -531,7 +531,7 @@
 				<textFieldExpression><![CDATA[$F{MODEL}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="506" y="0" width="42" height="20"/>
+				<reportElement stretchType="RelativeToBandHeight" x="506" y="0" width="42" height="20"/>
 				<box>
 					<topPen lineWidth="1.0"/>
 					<leftPen lineWidth="1.0"/>
@@ -544,7 +544,7 @@
 				<textFieldExpression><![CDATA[$F{PRO_COUNT}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="400" y="0" width="40" height="20"/>
+				<reportElement stretchType="RelativeToBandHeight" x="400" y="0" width="40" height="20"/>
 				<box>
 					<topPen lineWidth="1.0"/>
 					<leftPen lineWidth="1.0"/>
@@ -557,7 +557,7 @@
 				<textFieldExpression><![CDATA[$F{PRO_PACKINGNUM}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="340" y="0" width="40" height="20"/>
+				<reportElement stretchType="RelativeToBandHeight" x="340" y="0" width="40" height="20"/>
 				<box>
 					<topPen lineWidth="1.0"/>
 					<leftPen lineWidth="1.0"/>
@@ -570,7 +570,7 @@
 				<textFieldExpression><![CDATA[$F{PRO_WEIGHTNUM}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="140" y="0" width="40" height="20"/>
+				<reportElement stretchType="RelativeToBandHeight" x="140" y="0" width="40" height="20"/>
 				<box>
 					<topPen lineWidth="1.0"/>
 					<leftPen lineWidth="1.0"/>

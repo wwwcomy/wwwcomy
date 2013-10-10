@@ -3,7 +3,7 @@
 	<property name="ireport.scriptlethandling" value="0"/>
 	<property name="ireport.zoom" value="1.1"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="240"/>
+	<property name="ireport.y" value="516"/>
 	<import value="net.sf.jasperreports.engine.*"/>
 	<import value="java.util.*"/>
 	<import value="net.sf.jasperreports.engine.data.*"/>
@@ -27,11 +27,6 @@
 			<pen lineWidth="0.5" lineColor="#000000"/>
 		</box>
 	</style>
-	<!--
-	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
-		<defaultValueExpression><![CDATA[$P{HAIYAN_CONFIGPATH}]]></defaultValueExpression>
-	</parameter>
-	-->
 	<parameter name="TITLE" class="java.lang.String"/>
 	<parameter name="T_WM_SDBCONPRODUCT_DS" class="haiyan.report.jasper.ReportBean"/>
 	<parameter name="HAIYAN_CONFIGPATH" class="java.lang.String"/>
@@ -335,7 +330,7 @@ B、拒收该批货物。
 5、本合同书生效后，任何一方擅自解除合同的，应向对方支付本合同价款总额的20%作为违约金。]]></text>
 			</staticText>
 		</band>
-		<band height="555" splitType="Stretch">
+		<band height="555">
 			<staticText>
 				<reportElement x="0" y="0" width="802" height="20"/>
 				<box>
