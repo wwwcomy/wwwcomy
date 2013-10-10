@@ -202,7 +202,7 @@ create or replace view V_WM_OUTPRE as
 	)
 		]]></pluginInterceptor>
 		<pluginInterceptor methodName="exp" parameter="
-			Set(ITEM_ID,{CKItem_}&amp;GetNewID())
+			Set(ITEM_ID,{CKItem_}&amp;GetNewID(V_WM_OUTPRE))
 			" pluginName="edit" type="after"/>
 		<pluginInterceptor methodName="exp" parameter="
 			If(Get(BILL_STATUS)={audit},HidFlds(PRE,AUDIT,UNAUDIT)+DisFlds(OUT_COUNT,OUT_RCOUNT),true)
