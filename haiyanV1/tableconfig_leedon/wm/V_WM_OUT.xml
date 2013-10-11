@@ -205,13 +205,14 @@ create or replace view V_WM_OUT as
 			where (t_2.BILL_STATUS='init' or t_2.BILL_STATUS is null)
 			and ((t_1.STATUS='active' and t_1.PAY_STATUS='1' and t_1.DISABLED='false') or (t_1.STATUS='finish' and t_1.DISABLED='false'))
 			and t_1.ORDER_ID not like '2011%'
+			and (t_2.ORDER_MEMO not like '作废%' or t_2.ORDER_MEMO is null)
 		)
 		union all
 		(
 			select t_1.ID,t_1.ORDER_ID,0 as ORDER_ID_INT,t_1.MEMBER_ID,t_1.SHIP_NAME,t_1.SHIP_ADDR,t_1.SHIP_TEL,t_1.SHIP_MOBILE,t_1.FINAL_AMOUNT ,t_1.PMT_AMOUNT,t_1.COST_FREIGHT,t_1.SHIPPING,t_1.ORDER_MEMO,
 			t_1.AUDIT_TIME,t_1.OUT_TYPE,t_1.AUDIT_USER_ID,t_1.BILL_STATUS,t_1.WHOWNER,t_1.LOGISTICS_NAME,t_1.LOGISTICS_CODE,t_1.LOGISTICS_MEMO,t_1.HYVERSION
 			from V_WM_OUTPART_INIT t_1 
-			where t_1.ORDER_ID like 'CK%' 
+			where t_1.ORDER_ID like 'CK%' and (t_2.ORDER_MEMO not like '作废%' or t_2.ORDER_MEMO is null)
 		)
 		]]></pluginInterceptor>
 		<!-- -->
