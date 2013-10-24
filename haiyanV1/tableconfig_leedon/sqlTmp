@@ -41,3 +41,6 @@ create or replace view V_WM_OUT as
 
 20131007
 1. query_js.jsp在__pagingBar的定义中可以加入每页1000条的选项
+
+20131017
+1. haiyan-debug.js中 line6932 value.truncate()方法会报错 在haiyan.js中查询truncate方法删除即可。
