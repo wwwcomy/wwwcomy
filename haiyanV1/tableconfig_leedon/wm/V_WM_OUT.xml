@@ -264,6 +264,10 @@ create or replace view V_WM_OUT as
 		<pluginInterceptor methodName="exp" parameter="
 			WriteJS({Hy.showBill('http://www.yidepin.com/tools/out_print.php?order_id=}&amp;Get(ORDER_ID)&amp;{','装箱单打印','test')})" 
 			pluginName="printPacking" type="after"/>
+			
+		<pluginInterceptor methodName="exp" parameter="
+			WriteJS({Hy.showBill('http://www.yidepin.com/tools/print/waybill.php?syso_id=}&amp;GetUser(ID)&amp;{&amp;wh_id=}&amp;Get(WAREHOUSE)&amp;{&amp;order_id=}&amp;Get(ORDER_ID)&amp;{','快递单打印','test')})" 
+			pluginName="printExpress" type="after"/>
 		<!-- 
 		<pluginInterceptor methodName="exp" parameter="
 			Set(BILL_STATUS,{init},AUDIT_USER_ID,{})
@@ -279,6 +283,7 @@ create or replace view V_WM_OUT as
 		<pluginOperation name="printInvoice" oprName="配货单打印" hostPage="edit" tblevel="1" action="
 			Plugin({},{printInvoice})+brk()"/>
 		<pluginOperation name="printPacking" oprName="装箱单打印" hostPage="edit" tblevel="1" action="Plugin({},{printPacking})+brk()"/>
+		<pluginOperation name="printExpress" oprName="快递单打印" hostPage="edit" tblevel="1" action="Plugin({},{printExpress})+brk()"/>
 		<!--
 		<pluginOperation name="unaudit" oprName="取消审核" hostPage="edit" action="If(Confirm({请确认是否要取消审核?}),Save({},{unaudit}),true)+brk()"/>
 		 -->
