@@ -50,8 +50,12 @@
 			<component type="text" readOnly="true"/>
 			<listColumn noedit="false" noquery="false"/>
 		</field>
-		<field name="OUT_PCOUNT" description="分配数量" javaType="bigDecimal">
+		<field name="OUT_PCOUNT" description="(额度)分配数量" javaType="bigDecimal" defaultValue="0">
 			<component type="text" readOnly="true"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="PRO_COUNT" description="数量" javaType="bigDecimal">
+			<component type="text" readOnly="false"/>
 			<listColumn noedit="false" noquery="false"/>
 		</field>
 		<field name="OUT_RCOUNT" description="实际出库数量" javaType="bigDecimal" defaultValue="0">
@@ -64,10 +68,6 @@
 		</field>
 		<field name="OUT_PRICE" description="EDP销售单价" displayOnly="false" javaType="string" lazyLoad="false">
 			<component type="text" readOnly="true"/>
-			<listColumn noedit="false" noquery="false"/>
-		</field>
-		<field name="PRO_COUNT" description="数量" javaType="bigDecimal">
-			<component type="text" readOnly="false"/>
 			<listColumn noedit="false" noquery="false"/>
 		</field>
 		<field name="OUT_ALL_PRICE" description="EDP销售总价" displayOnly="false" javaType="string" lazyLoad="false">
@@ -173,7 +173,7 @@ create or replace view V_SDB_ORDER_ITEMS_ALL as
 		);
 create or replace view V_WM_OUTPRE as 
 	(
-		select t_1.HYVERSION,t_1.OUT_COUNT,t_1.OUT_PCOUNT,t_1.OUT_RCOUNT,t_1.ITEM_ID_PK,
+		select t_1.WAREHOUSE,t_1.HYVERSION,t_1.OUT_COUNT,t_1.OUT_PCOUNT,t_1.OUT_RCOUNT,t_1.ITEM_ID_PK,
 		t_1.All_CAPACITYNUM,t_1.All_WEIGHTNUM,t_1.BILL_STATUS,t_1.REMAINDER_NUM,
 		t_1.LOGISTICS_NAME,t_1.LOGISTICS_CODE,t_1.LOGISTICS_MEMO,
 		
@@ -187,7 +187,7 @@ create or replace view V_WM_OUTPRE as
 	)
 	union all
 	(
-		select t_2.HYVERSION,t_2.OUT_COUNT,t_2.OUT_PCOUNT,t_2.OUT_RCOUNT,0 as ITEM_ID_PK,
+		select t_2.WAREHOUSE,t_2.HYVERSION,t_2.OUT_COUNT,t_2.OUT_PCOUNT,t_2.OUT_RCOUNT,0 as ITEM_ID_PK,
 		t_2.All_CAPACITYNUM,t_2.All_WEIGHTNUM,t_2.BILL_STATUS,t_2.REMAINDER_NUM,
 		t_2.LOGISTICS_NAME,t_2.LOGISTICS_CODE,t_2.LOGISTICS_MEMO,
 		
@@ -202,7 +202,7 @@ create or replace view V_WM_OUTPRE as
 	)
 		]]></pluginInterceptor>
 		<pluginInterceptor methodName="exp" parameter="
-			Set(ITEM_ID,{CKItem_}&amp;GetNewID(V_WM_OUTPRE))
+			Set(ITEM_ID,{CKItem_}&amp;GetNewID())
 			" pluginName="edit" type="after"/>
 		<pluginInterceptor methodName="exp" parameter="
 			If(Get(BILL_STATUS)={audit},HidFlds(PRE,AUDIT,UNAUDIT)+DisFlds(OUT_COUNT,OUT_RCOUNT),true)

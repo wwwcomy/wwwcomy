@@ -332,4 +332,164 @@
 		<!-- -->
 		<Operation queryPageDelete="false" save="false" saveAndAdd="false" saveAndAddCopy="false"/>
 	</table>
+	
+	<!-- -->
+	<table name="T_WM_SDBPRODUCT_COMBO" realTable="T_WM_SDBPRODUCT" description="商品选择">
+		<id name="ID" description="ID" javaType="string">
+			<component type="hidden" url=""/>
+		</id>
+		<!-- SDB数据库中的内容 SDB_PRODUCT_ID==PRODUCT_ID action="Set(SDB_PRODUCT_ID,Get(PRODUCT_ID))" -->
+		<field name="PRODUCT_ID" description="SDB订单商品" javaType="string" nullAllowed="false">
+			<component type="text" readOnly="true" colspan="7"/>
+			<listColumn noedit="false" noquery="false" width="170"/>
+		</field>
+		<field name="SDB_PRODUCT_ID" description="SDB_PRODUCT_ID" javaType="bigDecimal">
+			<component type="text" readOnly="true" colspan="7"/>
+			<listColumn noedit="false" noquery="true"/>
+		</field>
+		<field name="SDB_NAME" description="商品名称" displayOnly="false" javaType="string" lazyLoad="false">
+			<component type="text" readOnly="true" />
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="WMCODE" description="货号" displayOnly="false" javaType="string" lazyLoad="false">
+			<component type="text" readOnly="true" />
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="SUPP_CODE" description="供应商自有货号" displayOnly="false" javaType="string" lazyLoad="false">
+			<component type="text" readOnly="false"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="P_21" description="尺寸" displayOnly="false" javaType="string" lazyLoad="false">
+			<component type="text" readOnly="true" />
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="PACKING_NUM" description="每箱个数" displayOnly="false" javaType="string" lazyLoad="false" nullAllowed="false" >
+			<component type="text" readOnly="true" />
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="P_27" description="外箱尺寸规格" displayOnly="false" javaType="string" lazyLoad="false">
+			<component type="text" readOnly="true" />
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="P_27_LAST" description="原外箱尺寸规格" displayOnly="false" javaType="string" lazyLoad="false">
+			<component type="hidden" readOnly="true"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="WEIGHTNUM" description="运费重量(g)" displayOnly="false" javaType="string" lazyLoad="false">
+			<component type="text" readOnly="true" />
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="P_24" description="实际重量(g)" displayOnly="false" javaType="string" lazyLoad="false">
+			<component type="text" readOnly="true" />
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<!-- 数据库中无对应字段-->
+		<field name="COLOR" description="颜色" displayOnly="false" javaType="string" lazyLoad="false">
+			<component type="text" readOnly="true" />
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="ZDKC" description="最低库存" displayOnly="false" javaType="bigDecimal" lazyLoad="false">
+			<component type="text" readOnly="false"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="LATEST_BATCH" description="最新批次" displayOnly="false" javaType="bigDecimal">
+			<component type="text" readOnly="true"/>
+			<listColumn noedit="true" noquery="true"/>
+		</field>
+		<field name="SPEC" description="包装规格" displayOnly="false" javaType="string" lazyLoad="false">
+			<component type="text" readOnly="true" />
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="TYPE_ID" description="TYPE_ID" displayOnly="false" javaType="string" lazyLoad="false">
+			<component type="hidden" readOnly="true" />
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="MODEL" description="SDB材质" displayOnly="false" javaType="string" lazyLoad="false">
+			<component type="hidden" readOnly="true" />
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="EDPMODEL" description="材质" displayOnly="false" javaType="string" lazyLoad="false">
+			<component type="text" readOnly="true"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="BHZQ" description="补货周期" displayOnly="false" javaType="string" lazyLoad="false">
+			<component type="text" readOnly="true" />
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="BIG_PIC" description="图片" displayOnly="false" javaType="string" lazyLoad="false" length="500">
+			<component type="text" readOnly="true" />
+			<listColumn noedit="false" noquery="true"/>
+		</field>
+		<field name="IN_PRICE" description="参考进价" displayOnly="false" javaType="string" lazyLoad="false" nullAllowed="false">
+			<component type="text" readOnly="true" />
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="OUT_PRICE" description="参考售价" displayOnly="false" javaType="string" lazyLoad="false" nullAllowed="false">
+			<component type="text" readOnly="true" />
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="TYPE_0" description="产品分类" displayOnly="false" javaType="string" lazyLoad="false">
+			<component type="text" readOnly="true"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="MARKETABLE" description="是否上架" displayOnly="false" javaType="string" lazyLoad="false" style="color:#0000FF;">
+			<component type="text" readOnly="true"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<!--T_WM_PRO中对应字段 -->
+		<field name="NAME" description="名称" displayOnly="false" javaType="string" lazyLoad="false">
+			<component type="hidden" readOnly="true"/>
+			<queryCondition type="blurMatching"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="CODE" description="货号" displayOnly="false" javaType="string" lazyLoad="false">
+			<component type="hidden" readOnly="true"/>
+			<queryCondition type="blurMatching"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="SUPPLIER" description="供应商" displayOnly="false" javaType="string"  nullAllowed="false">
+			<component type="hidden" readOnly="true"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="WHOWNER" description="库主" displayOnly="false" javaType="string" >
+			<component type="hidden" readOnly="true"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="CAPACITYNUM" description="外箱体积(m3)" javaType="bigDecimal">
+			<component type="text" readOnly="true" maxFractionDigit="3" minFractionDigit="3"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="C1" description="外箱长(cm)" javaType="bigDecimal" nullAllowed="true" displayOnly="false">
+			<component type="text" readOnly="false" maxFractionDigit="2" minFractionDigit="2"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="C2" description="外箱宽(cm)" javaType="bigDecimal" nullAllowed="true" displayOnly="false">
+			<component type="text" readOnly="false" maxFractionDigit="2" minFractionDigit="2"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="C3" description="外箱高(cm)" javaType="bigDecimal" nullAllowed="true" displayOnly="false">
+			<component type="text" readOnly="false" maxFractionDigit="2" minFractionDigit="2"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="CONTRA_INPRICE" description="合同有效进价" displayOnly="false" javaType="bigDecimal">
+			<component type="text" readOnly="true" maxFractionDigit="3" minFractionDigit="3" colspan="8"/>
+			<listColumn noedit="false" noquery="true"/>
+		</field>
+		<!-- -->
+		<queryFilter>
+			<!-- 当前仓库 -->
+			<!--
+			<pluggedFilter methodName="exp" parameter="If(IsEmpty(GetUser(WAREHOUSEID)),Warning({没有选择当前仓库或者当前账号已经在其他地方登录.}),{ and t_1.ID in ( select PRODUCT from M_PRODUCT_WAREHOUSE where WAREHOUSE='}&amp;GetUser(WAREHOUSEID)&amp;{') })"/>
+			 
+			<pluggedFilter methodName="exp" parameter="If(InRole(wm,sp),{ and t_1.SUPPLIER='}&amp;GetUser(SUPPLIER)&amp;{' },If(IsEmpty(GetPara(__SUPPLIER)),{},{ and t_1.SUPPLIER='}&amp;SQLSafe(GetPara(__SUPPLIER))&amp;{' }))"/>
+			-->
+		</queryFilter>
+		<!-- 如果供应商未能有一份完成的协议，则无法新建产品 
+		<role name="sp">
+			<disOperation name="add"/>
+		</role>
+		<role name="admin manager wm pe ac">
+		</role>
+		-->
+	</table>
 </Haiyan>

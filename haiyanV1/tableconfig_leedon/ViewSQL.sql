@@ -302,4 +302,43 @@ create or replace view V_WM_MONTHDTL as
 		from V_WM_STORESALE t_1 
 		left join V_WM_STOCKRETURN t_2 on t_1.SUPP_PRO_MONTH=t_2.SUPP_PRO_MONTH
 		group by t_1.SUPP_PRO_MONTH
+	);
+
+	
+create or replace view V_SDB_ORDERS_ALL as 
+		(
+			select * from SDB_ORDERS where (STATUS='active' and PAY_STATUS='1' and DISABLED='false') or (STATUS='finish' and DISABLED='false')
+		);
+create or replace view V_SDB_ORDER_ITEMS_ALL as 
+		(
+			select * from SDB_ORDER_ITEMS where ORDER_ID in (select ORDER_ID from V_SDB_ORDERS_ALL)
+		);
+create or replace view V_WM_OUTPRE as 
+	(
+		select t_1.WAREHOUSE,t_1.HYVERSION,t_1.OUT_COUNT,t_1.OUT_PCOUNT,t_1.OUT_RCOUNT,t_1.ITEM_ID_PK,
+		t_1.All_CAPACITYNUM,t_1.All_WEIGHTNUM,t_1.BILL_STATUS,t_1.REMAINDER_NUM,
+		t_1.LOGISTICS_NAME,t_1.LOGISTICS_CODE,t_1.LOGISTICS_MEMO,
+		
+		t_3.PACKING_NUM,t_3.CAPACITYNUM,t_3.WEIGHTNUM,t_3.SUPPLIER,t_3.WMCODE,t_3.IN_PRICE as IN_PRICE,t_3.ID as PRODUCTID,t_3.PRODUCT_ID as PRODUCT_ID,
+		t_3.SUPP_CODE,
+		
+		t_2.ITEM_ID,t_2.ORDER_ID,t_2.NAME,t_2.PRICE as OUT_PRICE,t_2.NUMS as PRO_COUNT,t_2.AMOUNT as OUT_ALL_PRICE,
+		concat(CONVERT(t_2.ORDER_ID,char),':',t_3.WMCODE,'(' ,t_2.NAME,')') as OUT_CODE
+		
+		from (V_SDB_ORDER_ITEMS_ALL t_2 left join T_WM_SDBPRODUCT t_3 on t_2.PRODUCT_ID=t_3.SDB_PRODUCT_ID) left join T_WM_OUTPREPART t_1 on t_1.ITEM_ID_PK=t_2.ITEM_ID
+	)
+	union all
+	(
+		select t_2.WAREHOUSE,t_2.HYVERSION,t_2.OUT_COUNT,t_2.OUT_PCOUNT,t_2.OUT_RCOUNT,0 as ITEM_ID_PK,
+		t_2.All_CAPACITYNUM,t_2.All_WEIGHTNUM,t_2.BILL_STATUS,t_2.REMAINDER_NUM,
+		t_2.LOGISTICS_NAME,t_2.LOGISTICS_CODE,t_2.LOGISTICS_MEMO,
+		
+		t_3.PACKING_NUM,t_3.CAPACITYNUM,t_3.WEIGHTNUM,t_3.SUPPLIER,t_3.WMCODE,t_3.IN_PRICE as IN_PRICE,t_3.ID as PRODUCTID,t_3.PRODUCT_ID as PRODUCT_ID,
+		t_3.SUPP_CODE,
+		
+		t_2.ITEM_ID,t_2.ORDER_ID,'' as NAME,0 as OUT_PRICE,0 as PRO_COUNT,0 as OUT_ALL_PRICE,
+		concat(CONVERT(t_2.ORDER_ID,char),':',t_3.WMCODE,'(' ,t_3.NAME,')') as OUT_CODE
+		
+		from T_WM_OUTPREPART t_2 left join T_WM_SDBPRODUCT t_3 on t_2.PRODUCTID=t_3.ID 
+		where t_2.ITEM_ID like "CKItem%"
 	)

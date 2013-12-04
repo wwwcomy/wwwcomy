@@ -3,7 +3,6 @@
 <%@ page import="com.haiyan.genmis.core.exception.*"%>
 <%@ page import="com.haiyan.genmis.core.db.*"%>
 <%@ page import="com.haiyan.genmis.core.right.*"%>
-<%@ page import="com.haiyan.genmis.core.struts.*"%>
 <%@ page import="com.haiyan.genmis.core.paging.*"%>
 <%@ page import="com.haiyan.genmis.castorgen.Table"%>
 <%@ page import="com.haiyan.genmis.castorgen.types.*"%>

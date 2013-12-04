@@ -4,14 +4,14 @@
 		<id name="ITEM_ID" description="ITEM_ID" javaType="string">
 			<component type="hidden" url=""/>
 		</id>
-		<field name="ORDER_ID" description="ORDER_ID出库单号" javaType="string"><!-- ORDER_ID==V_WM_OUT.ID==V_WM_OUT.ORDER_ID -->
+		<field name="ITEM_ID_PK" description="增加索引字段" javaType="bigDecimal">
+			<component type="readOnlyText"/>
+		</field>
+		<field name="ORDER_ID" description="出库单号" javaType="string"><!-- ORDER_ID==V_WM_OUT.ID==V_WM_OUT.ORDER_ID -->
 			<component type="readOnlyText"/>
 			<queryCondition type="equal"/>
 		</field>
 		<field name="OUT_CODE" description="出库:商品号" javaType="string" length="500">
-			<component type="readOnlyText"/>
-		</field>
-		<field name="ITEM_ID_PK" description="增加索引字段" javaType="bigDecimal">
 			<component type="readOnlyText"/>
 		</field>
 		<field name="PRODUCTID" description="EDP商品" javaType="string" >
@@ -51,8 +51,12 @@
 			<component type="text" readOnly="true"/>
 			<listColumn noedit="false" noquery="false"/>
 		</field>
-		<field name="OUT_PCOUNT" description="分配数量" javaType="bigDecimal" defaultValue="0">
+		<field name="OUT_PCOUNT" description="(额度)分配数量" javaType="bigDecimal" defaultValue="0">
 			<component type="text" readOnly="true"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="PRO_COUNT" description="数量" javaType="bigDecimal" defaultValue="0">
+			<component type="text" readOnly="false"/>
 			<listColumn noedit="false" noquery="false"/>
 		</field>
 		<field name="OUT_RCOUNT" description="实际出库数量" javaType="bigDecimal" defaultValue="0">
@@ -65,10 +69,6 @@
 		</field>
 		<field name="OUT_PRICE" description="EDP销售单价" displayOnly="false" javaType="string" lazyLoad="false">
 			<component type="text" readOnly="true"/>
-			<listColumn noedit="false" noquery="false"/>
-		</field>
-		<field name="PRO_COUNT" description="数量" javaType="bigDecimal" defaultValue="0">
-			<component type="text" readOnly="false"/>
 			<listColumn noedit="false" noquery="false"/>
 		</field>
 		<field name="OUT_ALL_PRICE" description="EDP销售总价" displayOnly="false" javaType="string" lazyLoad="false">
@@ -163,6 +163,16 @@
 			refreshDB();
 		]]></pluginInterceptor>
 		-->
+		<pluginInterceptor methodName="bsh" pluginName="refreshOne" type="after"><![CDATA[
+			void refreshDB() throws Throwable {
+				String sql1 = "delete from T_WM_OUTPRE where ITEM_ID=?";
+				String sql2 = "insert into  T_WM_OUTPRE(WAREHOUSE,NAME,ITEM_ID,ORDER_ID,OUT_CODE,ITEM_ID_PK,PRODUCTID,PRODUCT_ID,WMCODE,SUPP_CODE,OUT_COUNT,OUT_PCOUNT,OUT_RCOUNT,IN_PRICE,OUT_PRICE,PRO_COUNT,OUT_ALL_PRICE,PACKING_NUM,CAPACITYNUM,WEIGHTNUM,SUPPLIER,All_CAPACITYNUM,All_WEIGHTNUM,REMAINDER_NUM,LOGISTICS_NAME,LOGISTICS_CODE,LOGISTICS_MEMO,HYVERSION,BILL_STATUS) (select WAREHOUSE,NAME,ITEM_ID,ORDER_ID,OUT_CODE,ITEM_ID_PK,PRODUCTID,PRODUCT_ID,WMCODE,SUPP_CODE,OUT_COUNT,OUT_PCOUNT,OUT_RCOUNT,IN_PRICE,OUT_PRICE,PRO_COUNT,OUT_ALL_PRICE,PACKING_NUM,CAPACITYNUM,WEIGHTNUM,SUPPLIER,All_CAPACITYNUM,All_WEIGHTNUM,REMAINDER_NUM,LOGISTICS_NAME,LOGISTICS_CODE,LOGISTICS_MEMO,HYVERSION,BILL_STATUS from V_WM_OUTPRE where ITEM_ID=?)";
+				final DBManager dbm = context.getDBM();
+				dbm.executeUpdatePre(sql1, new Object[]{form.get("ITEM_ID")}, null);
+				dbm.executeUpdatePre(sql2, new Object[]{form.get("ITEM_ID")}, null);
+			}
+			refreshDB();
+		]]></pluginInterceptor>
 		<pluginInterceptor methodName="bsh" pluginName="refreshDB" type="after"><![CDATA[
 			com.haiyan.genmis.core.right.User user = context.getUser();
 			boolean admin = com.haiyan.genmis.core.right.RightUtil.isUserInRole(user, "admin");
@@ -179,7 +189,7 @@
 		]]></pluginInterceptor>
 		
 		<pluginInterceptor methodName="exp" parameter="
-			Set(ITEM_ID,{CKItem_}&amp;GetNewID(V_WM_OUTPRE))
+			Set(ITEM_ID,{CKItem_}&amp;GetNewID())
 			" pluginName="edit" type="after"/>
 		<pluginInterceptor methodName="exp" parameter="
 			If(Get(BILL_STATUS)={audit},HidFlds(PRE,AUDIT,UNAUDIT)+DisFlds(OUT_COUNT,OUT_RCOUNT),true)
@@ -188,7 +198,9 @@
 	
 		<pluginInterceptor methodName="exp" parameter="
 			if(SubStr(Get(ORDER_ID),0,2)={CK},Set(ITEM_ID_PK,0),Set(ITEM_ID_PK,get(ITEM_ID)))
-			+Save({T_WM_OUTPREPART},GetForm())" pluginName="saveView" />
+			+If(IsEmpty(Get(ITEM_ID_PK)),Set(ITEM_ID_PK,Get(ITEM_ID)),true)
+			+NoCheck()+Save({T_WM_OUTPREPART},GetForm())+RunInterceptor(refreshOne)" pluginName="saveView" />
+
 		<pluginInterceptor methodName="exp" parameter="DBSQL({update T_WM_OUTDETAIL set BILL_STATUS='audit' where HEADID='}&amp;Get(ORDER_ID)&amp;{' and PRODUCTID='}&amp;Get(PRODUCTID)&amp;{'})" pluginName="audit" />
 		<pluginInterceptor methodName="exp" parameter="DBSQL({update T_WM_OUTDETAIL set BILL_STATUS='init' where HEADID='}&amp;Get(ORDER_ID)&amp;{' and PRODUCTID='}&amp;Get(PRODUCTID)&amp;{'})" pluginName="unaudit" />
 		<!-- -->

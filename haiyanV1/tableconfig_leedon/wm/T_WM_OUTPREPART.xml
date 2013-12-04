@@ -1,34 +1,53 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Haiyan xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../haiyan.xsd">
-	<table name="T_WM_OUTPREPART" description="应出库明细(HY)" colspan="6">
+	<table name="T_WM_OUTPREPART" description="应出库明细(PART)" colspan="6">
 		<id name="ITEM_ID" description="ITEM_ID" javaType="string">
 			<component type="hidden" url=""/>
 		</id>
 		<field name="ITEM_ID_PK" description="增加索引字段" javaType="bigDecimal">
 			<component type="readOnlyText"/>
 		</field>
-		<field name="ORDER_ID" description="HY出库单号" javaType="string"><!-- ORDER_ID==V_WM_OUT.ID==V_WM_OUT.ORDER_ID -->
+		<field name="ORDER_ID" description="出库单号" javaType="string"><!-- ORDER_ID==V_WM_OUT.ID==V_WM_OUT.ORDER_ID -->
 			<component type="readOnlyText"/>
 			<queryCondition type="equal"/>
 		</field>
+		<field name="OUT_CODE" description="出库:商品号" javaType="string" length="500">
+			<component type="readOnlyText"/>
+		</field>
 		<field name="PRODUCTID" description="EDP商品" javaType="string" >
-			<component type="combo" readOnly="true" colspan="1" displayReferenceField="CODE" referenceField="ID" referenceTable="T_WM_SDBPRODUCT"/>
+			<component type="combo" readOnly="false" displayReferenceField="WMCODE,NAME" referenceField="ID" referenceTable="T_WM_SDBPRODUCT" associatedFields="WMCODE,NAME,PACKING_NUM,SUPP_CODE" />
 			<listColumn noedit="false" noquery="false"/>
 		</field>
 		<field name="PRODUCT_ID" description="SDB商品ID" javaType="string" >
 			<component type="hidden" readOnly="false" />
 			<listColumn noedit="false" noquery="false"/>
 		</field>
+		<field name="NAME" description="产品名称" displayOnly="false" javaType="string" lazyLoad="false">
+			<component type="text" readOnly="true" displayReferenceField="NAME"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="WMCODE" description="货号" displayOnly="false" javaType="string" lazyLoad="false">
+			<component type="text" readOnly="true" displayReferenceField="WMCODE"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="SUPP_CODE" description="供应商自有货号" javaType="string">
+			<component type="text" readOnly="true" displayReferenceField="SUPP_CODE"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
 		<field name="OUT_ALL_PRICE" description="销售总价" displayOnly="false" javaType="string" lazyLoad="false">
 			<component type="text" readOnly="true" displayReferenceField="OUT_PRICE"/>
 			<listColumn noedit="false" noquery="false"/>
 		</field>
-		<field name="OUT_COUNT" description="应出库数量" javaType="bigDecimal">
+		<field name="OUT_COUNT" description="(订单)数量" javaType="bigDecimal">
 			<component type="text" readOnly="true"/>
 			<listColumn noedit="false" noquery="false"/>
 		</field>
-		<field name="OUT_PCOUNT" description="分配数量" javaType="bigDecimal">
+		<field name="OUT_PCOUNT" description="(额度)分配数量" javaType="bigDecimal">
 			<component type="text" readOnly="true"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="PRO_COUNT" description="分配数量" javaType="bigDecimal" defaultValue="0">
+			<component type="text" readOnly="false"/>
 			<listColumn noedit="false" noquery="false"/>
 		</field>
 		<field name="OUT_RCOUNT" description="实际出库数量" javaType="bigDecimal" defaultValue="0">
@@ -51,6 +70,18 @@
 			<component type="text" readOnly="true"  maxFractionDigit="2" minFractionDigit="2"/>
 			<listColumn noedit="false" noquery="false" width="95"/>
 		</field>
+		<field name="PACKING_NUM" description="每箱个数" displayOnly="false" javaType="string" lazyLoad="false">
+			<component type="text" readOnly="true" colspan="1" displayReferenceField="PACKING_NUM"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="CAPACITYNUM" description="每箱体积(m3)" displayOnly="false" javaType="bigDecimal">
+			<component type="text" readOnly="true" maxFractionDigit="3" minFractionDigit="3"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="WEIGHTNUM" description="每箱重量(g)" displayOnly="false" javaType="string" lazyLoad="false">
+			<component type="text" readOnly="true" />
+			<listColumn noedit="false" noquery="false"/>
+		</field>
 		<field name="REMAINDER_NUM" description="尾箱数量" javaType="bigDecimal" defaultValue="0">
 			<component type="text" readOnly="true"/>
 			<listColumn noedit="false" noquery="false" width="65"/>
@@ -65,6 +96,11 @@
 		</field>
 		<field name="LOGISTICS_MEMO" description="发货情况简述" displayOnly="false" javaType="string" lazyLoad="false">
 			<component type="text" readOnly="true"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		
+		<field name="HYVERSION" description="HYVERSION" javaType="string">
+			<component type="hidden" readOnly="false" />
 			<listColumn noedit="false" noquery="false"/>
 		</field>
 		<field name="BILL_STATUS" javaType="string" description="单据明细状态">
@@ -82,20 +118,42 @@
 			<pluggedFilter methodName="exp" parameter="If(InRole(sp,wm),{ and t_1.SUPPLIER='}&amp;GetUser(SUPPLIER)&amp;{' },{})"/>
 			<!-- 退货时 实际出库数量应当大于0  and t_1.OUT_COUNT>0 这里有问题，EDP很多没有预出库数量 -->
 			<pluggedFilter methodName="exp" parameter="If(IsEmpty(GetPara(RETURNPRE)),{},{and t_1.ORDER_ID in (select ORDER_ID_INT from T_WM_OUTPART where (OUT_TYPE='consign' or OUT_TYPE='loss') and BILL_STATUS='audit')})"/>
-			
 		</queryFilter>
 		<!--
 		<javascript hostPage="edit"><![CDATA[
 		]]></javascript>
 		-->
+		<pluginInterceptor methodName="bsh" pluginName="refreshOne" type="after"><![CDATA[
+			void refreshDB() throws Throwable {
+				String sql1 = "delete from T_WM_OUTPRE where ITEM_ID=?";
+				String sql2 = "insert into  T_WM_OUTPRE(WAREHOUSE,NAME,ITEM_ID,ORDER_ID,OUT_CODE,ITEM_ID_PK,PRODUCTID,PRODUCT_ID,WMCODE,SUPP_CODE,OUT_COUNT,OUT_PCOUNT,OUT_RCOUNT,IN_PRICE,OUT_PRICE,PRO_COUNT,OUT_ALL_PRICE,PACKING_NUM,CAPACITYNUM,WEIGHTNUM,SUPPLIER,All_CAPACITYNUM,All_WEIGHTNUM,REMAINDER_NUM,LOGISTICS_NAME,LOGISTICS_CODE,LOGISTICS_MEMO,HYVERSION,BILL_STATUS) (select WAREHOUSE,NAME,ITEM_ID,ORDER_ID,OUT_CODE,ITEM_ID_PK,PRODUCTID,PRODUCT_ID,WMCODE,SUPP_CODE,OUT_COUNT,OUT_PCOUNT,OUT_RCOUNT,IN_PRICE,OUT_PRICE,PRO_COUNT,OUT_ALL_PRICE,PACKING_NUM,CAPACITYNUM,WEIGHTNUM,SUPPLIER,All_CAPACITYNUM,All_WEIGHTNUM,REMAINDER_NUM,LOGISTICS_NAME,LOGISTICS_CODE,LOGISTICS_MEMO,HYVERSION,BILL_STATUS from V_WM_OUTPRE where ITEM_ID=?)";
+				final DBManager dbm = context.getDBM();
+				dbm.executeUpdatePre(sql1, new Object[]{form.get("ITEM_ID")}, null);
+				dbm.executeUpdatePre(sql2, new Object[]{form.get("ITEM_ID")}, null);
+			}
+			refreshDB();
+		]]></pluginInterceptor>
+		<pluginInterceptor methodName="bsh" pluginName="refreshDB" type="after"><![CDATA[
+			com.haiyan.genmis.core.right.User user = context.getUser();
+			boolean admin = com.haiyan.genmis.core.right.RightUtil.isUserInRole(user, "admin");
+			if (!admin)
+				throw new Warning("没有权限");
+			void refreshDB() throws Throwable {
+				String sql1 = "delete from T_WM_OUTPRE";
+				String sql2 = "insert into  T_WM_OUTPRE(WAREHOUSE,NAME,ITEM_ID,ORDER_ID,OUT_CODE,ITEM_ID_PK,PRODUCTID,PRODUCT_ID,WMCODE,SUPP_CODE,OUT_COUNT,OUT_PCOUNT,OUT_RCOUNT,IN_PRICE,OUT_PRICE,PRO_COUNT,OUT_ALL_PRICE,PACKING_NUM,CAPACITYNUM,WEIGHTNUM,SUPPLIER,All_CAPACITYNUM,All_WEIGHTNUM,REMAINDER_NUM,LOGISTICS_NAME,LOGISTICS_CODE,LOGISTICS_MEMO,HYVERSION,BILL_STATUS) (select WAREHOUSE,NAME,ITEM_ID,ORDER_ID,OUT_CODE,ITEM_ID_PK,PRODUCTID,PRODUCT_ID,WMCODE,SUPP_CODE,OUT_COUNT,OUT_PCOUNT,OUT_RCOUNT,IN_PRICE,OUT_PRICE,PRO_COUNT,OUT_ALL_PRICE,PACKING_NUM,CAPACITYNUM,WEIGHTNUM,SUPPLIER,All_CAPACITYNUM,All_WEIGHTNUM,REMAINDER_NUM,LOGISTICS_NAME,LOGISTICS_CODE,LOGISTICS_MEMO,HYVERSION,BILL_STATUS from V_WM_OUTPRE)";
+				final DBManager dbm = context.getDBM();
+				dbm.executeUpdate(sql1, null);
+				dbm.executeUpdate(sql2, null);
+			}
+			refreshDB();
+		]]></pluginInterceptor>
 		<pluginInterceptor methodName="exp" parameter="
 			If(Get(BILL_STATUS)={audit},HidFlds(PRE,AUDIT)+DisFlds(OUT_COUNT,OUT_RCOUNT),true)
 			" pluginName="grid" />
 		<pluginInterceptor methodName="exp" parameter="
-			Save()" pluginName="saveView" />
+			NoCheck()+Save()" pluginName="saveView" />
 		<!-- -->
 		<pluginOperation name="saveView" oprName="保存" hostPage="edit" tblevel="1" img="save" action="plugin({},{saveView})+brk()"/>	
-		
 		<Operation queryPageDelete="false" save="false" saveAndAdd="false" saveAndAddCopy="false" />
 	</table>
 </Haiyan>

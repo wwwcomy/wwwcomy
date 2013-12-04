@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Haiyan xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../haiyan.xsd">
+	<table name="V_WM_OUT2" realTable="V_WM_OUT" description="出库单(库存分配)" colspan="6">
+		<id name="ID" javaType="string"/><!-- 值和ORDER_ID一样 -->
+		<field name="ORDER_ID" description="SDB订单号" displayOnly="false" javaType="string" lazyLoad="false">
+			<component type="text" readOnly="true" colspan="1"/>
+			<listColumn noedit="false" noquery="false" width="130"/>
+		</field>
+		<field name="ORDER_ID_INT" description="订单号(连接用)" displayOnly="false" javaType="bigDecimal" lazyLoad="false" defaultValue="0">
+			<component type="hidden" readOnly="true" colspan="6"/>
+			<listColumn noedit="false" noquery="true"/>
+		</field>
+		<field name="OUT_TYPE" javaType="string" description="出库类别" defaultValue="consign">
+			<component type="dropdown" readOnly="false">
+				<option displayName="出库" value="consign"/>
+				<option displayName="返厂" value="reject"/>
+				<option displayName="损耗" value="loss"/>
+			</component>
+		</field>
+		<field name="MEMBER_ID" description="收货客户ID" displayOnly="false" javaType="string" lazyLoad="false">
+			<component type="text" readOnly="true" colspan="1"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="SHIP_NAME" description="收货客户名" displayOnly="false" javaType="string" lazyLoad="false">
+			<component type="text" readOnly="false" colspan="1"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="SHIP_ADDR" description="收货客户地址" displayOnly="false" javaType="string" lazyLoad="false">
+			<component type="text" readOnly="false" colspan="6" style="width:525px;"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="SHIP_TEL" description="收货客户固话" displayOnly="false" javaType="string" lazyLoad="false">
+			<component type="text" readOnly="false" />
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="SHIP_MOBILE" description="收货客户手机" displayOnly="false" javaType="string" lazyLoad="false">
+			<component type="text" readOnly="false" />
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="PMT_AMOUNT" description="订单优惠金额" displayOnly="false" javaType="bigDecimal" lazyLoad="false">
+			<component type="text" readOnly="false"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="FINAL_AMOUNT" description="订单总金额" displayOnly="false" javaType="bigDecimal" lazyLoad="false">
+			<component type="text" readOnly="false"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="COST_FREIGHT" description="订单运费" displayOnly="false" javaType="bigDecimal" lazyLoad="false">
+			<component type="text" readOnly="false"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="SHIPPING" description="选择发货物流" displayOnly="false" javaType="string" lazyLoad="false">
+			<component type="text" readOnly="false" colspan="6"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="ORDER_MEMO" description="订单备注" displayOnly="false" javaType="string" lazyLoad="false">
+			<component type="text" readOnly="false" colspan="6"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<!-- 只有admin可分配 
+		<field name="SUBFRAME" description="SUBFRAME" displayOnly="true" javaType="string" lazyLoad="false">
+			<component type="iframe" readOnly="false" colspan="6" style="height:460;width:100%;" 
+			displayReferenceField="ITEM_ID,ORDER_ID,PRODUCTID,PRO_CODE,PRE,AUDIT,OUT_RCOUNT,OUT_COUNT,NAME,WMCODE,PACKING_NUM,CAPACITYNUM,WEIGHTNUM,OUT_PRICE,PRO_COUNT,OUT_PCOUNT,OUT_ALL_PRICE,All_CAPACITYNUM,All_WEIGHTNUM,LOGISTICS_NAME,LOGISTICS_CODE,LOGISTICS_MEMO,BILL_STATUS" 
+			referenceField="ORDER_ID" 
+			referenceTable="T_WM_OUTPRE" 
+			parameter="={project/leedon/test.jsp?TABLE=V_WM_OUT&amp;FIELD=SUBFRAME&amp;ORDER_ID=}&amp;If(IsEmpty(Get({ORDER_ID})),-1,Get({ORDER_ID}))"/>
+			<queryCondition type="none"/>
+			<listColumn noedit="false" noquery="true"/>
+		</field>
+		-->
+		<field name="SUBFRAME" description="分配表" displayOnly="true" javaType="string" lazyLoad="false">
+			<component type="iframe" readOnly="false" colspan="6" style="height:460;width:100%;" 
+			displayReferenceField="" 
+			referenceField="ORDER_ID" 
+			referenceTable="T_WM_OUTPRE" 
+			parameter="={project/leedon/test.jsp?TABLE=V_WM_OUT&amp;FIELD=SUBFRAME&amp;ORDER_ID=}&amp;If(IsEmpty(Get({ORDER_ID})),-1,Get({ORDER_ID}))"/>
+			<queryCondition type="none"/>
+			<listColumn noedit="false" noquery="true"/>
+		</field>
+		<!-- -->
+		<field name="LOGISTICS_NAME" description="发货物流名称" displayOnly="false" javaType="string" lazyLoad="false">
+			<component type="text" readOnly="false"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="LOGISTICS_CODE" description="发货物流单号" displayOnly="false" javaType="string" lazyLoad="false">
+			<component type="text" readOnly="false"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="LOGISTICS_MEMO" description="发货情况简述" displayOnly="false" javaType="string" lazyLoad="false">
+			<component type="text" readOnly="false"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="WAREHOUSE" description="当前仓库" displayOnly="true" javaType="string" lazyLoad="false" nullAllowed="false">
+			<component type="richSelect" readOnly="true" colspan="1" displayReferenceField="NAME" referenceField="ID" referenceTable="T_DIC_WAREHOUSE_COMBO"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="WHOWNER" description="库主" displayOnly="false" javaType="string" lazyLoad="false">
+			<component type="combo" readOnly="false" colspan="6" displayReferenceField="NAME" referenceField="ID" referenceTable="T_WM_OPERATOR"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="AUDIT_USER_ID" javaType="string" description="审批人">
+			<component type="combo" quickQueryConditionField="NAME" referenceTable="SYSOPERATOR_VIEW" referenceField="ID" displayReferenceField="NAME" readOnly="true"/>
+			<listColumn noquery="false" nowrap="true"/>
+		</field>
+		<field name="BILL_STATUS" javaType="string" description="单据状态" defaultValue="init">
+			<component type="dropdown" readOnly="true">
+				<option displayName="待批" value="init"/>
+				<option displayName="审批确认" value="audit"/>
+				<option displayName="作废" value="reject"/>
+			</component>
+		</field>
+		<field name="AUDIT_TIME" javaType="date" dataStyle="yyyy-MM-dd HH:mm:ss" description="审批时间">
+			<component type="date" readOnly="true"/>
+			<queryCondition type="region"/>
+			<listColumn noquery="true" nowrap="true"/>
+		</field>
+		<field name="HYVERSION" description="HYVERSION" javaType="string">
+			<component type="hidden" readOnly="false" />
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<!--No filter for admin { and t_1.ID in (select ORDER_ID from T_WM_OUTPRE t_2 left join T_WM_SDBPRODUCT t_3 on t_2.PRODUCTID=t_3.ID where t_3.WAREHOUSE='}&amp;GetUser(WAREHOUSEID)&amp;{') }-->
+		<queryFilter>
+			<!--
+			<pluggedFilter methodName="exp" parameter="
+			If(InRole(sp,wm),
+				{ and t_1.ID in (select distinct(ORDER_ID) from T_WM_OUTPRE t_2 left join T_WM_SDBPRODUCT t_3 on t_2.PRODUCTID=t_3.ID where t_3.SUPPLIER='}&amp;GetUser(SUPPLIER)&amp;{' and t_3.WAREHOUSE='}&amp;GetUser(WAREHOUSEID)&amp;{') },
+				true
+			)"/>
+			-->
+			<pluggedFilter methodName="exp" parameter="
+			If(InRole(sp,wm),
+				{ and t_1.ID in (select distinct(ORDER_ID) from T_WM_OUTPRE t_2 where t_2.SUPPLIER='}&amp;GetUser(SUPPLIER)&amp;{' and t_2.WAREHOUSE='}&amp;GetUser(WAREHOUSEID)&amp;{') },
+				true
+			)"/>
+		</queryFilter>
+		<!-- -->
+		<role name="user wm sp pe ac">
+			<disComponent name="SUBFRAME"/>
+			<disOperation name="add"/>
+		</role>
+		<role name="admin boss manager">
+		</role>
+		<!-- -->
+		<pluginInterceptor methodName="exp" parameter="
+			If(Get(BILL_STATUS)={audit},DisBtns(select,saveView,auditOut)+DisFlds(SUBGRID1)+HidFlds(SUBGRID2,TEST2),true)
+			+SetCreate(WAREHOUSE,GetUser(WAREHOUSEID),__WAREHOUSE__NAME,GetUser(WAREHOUSENAME))
+			+if(SubStr(Get(ORDER_ID),0,2)={CK},SetCreate(ORDER_ID_INT,0),SetCreate(ORDER_ID_INT,get(ORDER_ID)))
+			" pluginName="edit" type="after"/>
+		<pluginInterceptor methodName="exp" parameter="
+			if(SubStr(Get(ORDER_ID),0,2)={CK},Set(ORDER_ID_INT,0),Set(ORDER_ID_INT,get(ORDER_ID)))
+			+Save({T_WM_OUTPART},GetForm())
+			" pluginName="saveView" />
+		<!--
+		<pluginInterceptor methodName="bsh" parameter="V_WM_OUT.bsh" pluginName="saveViewBatch" type="after" />
+		-->
+		<pluginOperation name="saveView" oprName="保存(V)" hostPage="edit" tblevel="1" img="save" action="Plugin({},{saveView},{SUBFRAME})+brk()"/>
+		<!--
+		<pluginOperation name="unaudit" oprName="取消审核" hostPage="edit" action="If(Confirm({请确认是否要取消审核?}),Save({},{unaudit}),true)+brk()"/>
+		 -->
+		<Operation queryPageDelete="false" queryPageAdd="false" save="false" saveAndAdd="false" saveAndAddCopy="false"/>
+	</table>
+</Haiyan>

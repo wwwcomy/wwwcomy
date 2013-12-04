@@ -117,6 +117,21 @@ create or replace view V_DIC_SDBPROGOODS as
 		where t_2.goods_type='normal' and t_2.disabled='false'
 	)
 		]]></pluginInterceptor>
+		<pluginInterceptor methodName="bsh" pluginName="refreshDB" type="after"><![CDATA[
+			com.haiyan.genmis.core.right.User user = context.getUser();
+			boolean admin = com.haiyan.genmis.core.right.RightUtil.isUserInRole(user, "admin");
+			if (!admin)
+				throw new Warning("没有权限");
+			void refreshDB() throws Throwable {
+				String sql1 = "delete from T_DIC_SDBPROGOODS";
+				String sql2 = "insert into  T_DIC_SDBPROGOODS(PRODUCT_ID,GOODS_ID,WMCODE,STORE1,STORE2,IN_PRICE,OUT_PRICE,P_21,PACKING_NUM,P_27,NAME,WEIGHTNUM,P_24,SPEC,MODEL,BHZQ,BIG_PIC,TYPE_0,TYPE_ID,COLOR,MARKETABLE,MEMO) (select PRODUCT_ID,GOODS_ID,WMCODE,STORE1,STORE2,IN_PRICE,OUT_PRICE,P_21,PACKING_NUM,P_27,NAME,WEIGHTNUM,P_24,SPEC,MODEL, BHZQ,BIG_PIC,TYPE_0,TYPE_ID,COLOR,MARKETABLE,MEMO from V_DIC_SDBPROGOODS)";
+				final DBManager dbm = context.getDBM();
+				dbm.executeUpdate(sql1, null);
+				dbm.executeUpdate(sql2, null);
+			}
+			refreshDB();
+		]]></pluginInterceptor>
+		<pluginOperation name="refreshDB" oprName="重载SDB订单商品" hostPage="query" tblevel="1" img="refresh" action="plugin({},{refreshDB})+brk()"/>
 		<Operation queryPageDelete="false" queryPageAdd="false" save="false" saveAndAdd="false" saveAndAddCopy="false"/>
 	</table>
 	
