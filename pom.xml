@@ -150,7 +150,36 @@
 			<artifactId>barcode4j</artifactId>
 			<version>2.1</version>
 		</dependency>
-
+		
+		<!--  jetty  -->
+		<dependency>
+			<groupId>org.eclipse.jetty</groupId>
+			<artifactId>jetty-server</artifactId>
+			<version>7.6.0.v20120127</version>
+		</dependency>
+		<dependency>
+			<groupId>org.eclipse.jetty</groupId>
+			<artifactId>jetty-servlets</artifactId>
+			<version>7.6.0.v20120127</version>
+		</dependency>
+		<dependency>
+			<groupId>org.eclipse.jetty</groupId>
+			<artifactId>jetty-xml</artifactId>
+			<version>7.6.0.v20120127</version>
+		</dependency>
+		<dependency>
+			<groupId>org.eclipse.jetty</groupId>
+			<artifactId>jetty-webapp</artifactId>
+			<version>7.6.0.v20120127</version>
+		</dependency>
+		
+		<!--  tomcat  
+		<dependency>
+			<groupId>org.apache.tomcat</groupId>
+			<artifactId>catalina</artifactId>
+			<version>6.0.37</version>
+		</dependency>
+		       -->     
 	</dependencies>
 	<repositories>
 		<repository>

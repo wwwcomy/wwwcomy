@@ -1827,4 +1827,8 @@ public final class StringUtil {
 		// // }
 	}
 
+	public static boolean isEmpty(String str) {
+		return isBlankOrNull(str);
+	}
+
 }
