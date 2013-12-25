@@ -63,17 +63,23 @@
 			displayReferenceField="ITEM_ID,ORDER_ID,PRODUCTID,PRO_CODE,PRE,AUDIT,OUT_RCOUNT,OUT_COUNT,NAME,WMCODE,PACKING_NUM,CAPACITYNUM,WEIGHTNUM,OUT_PRICE,PRO_COUNT,OUT_PCOUNT,OUT_ALL_PRICE,All_CAPACITYNUM,All_WEIGHTNUM,LOGISTICS_NAME,LOGISTICS_CODE,LOGISTICS_MEMO,BILL_STATUS" 
 			referenceField="ORDER_ID" 
 			referenceTable="T_WM_OUTPRE" 
-			parameter="={project/leedon/test.jsp?TABLE=V_WM_OUT&amp;FIELD=SUBFRAME&amp;ORDER_ID=}&amp;If(IsEmpty(Get({ORDER_ID})),-1,Get({ORDER_ID}))"/>
+			parameter="={project/leedon/test_new.jsp?TABLE=V_WM_OUT&amp;FIELD=SUBFRAME&amp;ORDER_ID=}&amp;If(IsEmpty(Get({ORDER_ID})),-1,Get({ORDER_ID}))"/>
 			<queryCondition type="none"/>
 			<listColumn noedit="false" noquery="true"/>
 		</field>
 		-->
+		<field name="SUBGRID" javaType="string" description="----------------------------------------------------------------应出库明细----------------------------------------------------------------" displayOnly="true">
+			<component type="grid" readOnly="false" colspan="6" style="width:950;height:260;grouping:false;" displayReferenceField="ITEM_ID,ORDER_ID,PRODUCTID,PRO_CODE,SUPP_CODE,PRE,AUDIT,UNAUDIT,OUT_PCOUNT,OUT_RCOUNT,OUT_COUNT,NAME,WMCODE,PACKING_NUM,CAPACITYNUM,WEIGHTNUM,IN_PRICE,OUT_PRICE,PRO_COUNT,OUT_ALL_PRICE,All_CAPACITYNUM,All_WEIGHTNUM,LOGISTICS_NAME,LOGISTICS_CODE,LOGISTICS_MEMO,BILL_STATUS" referenceField="ORDER_ID" referenceTable="T_WM_OUTPRE" parameter="{&amp;ORDER_ID=}&amp;If(IsEmpty(Get({ORDER_ID})),-1,Get({ORDER_ID}))"/>
+			<queryCondition type="none"/>
+			<listColumn noquery="true"/>
+		</field>
+		
 		<field name="SUBFRAME" description="分配表" displayOnly="true" javaType="string" lazyLoad="false">
 			<component type="iframe" readOnly="false" colspan="6" style="height:460;width:100%;" 
 			displayReferenceField="" 
 			referenceField="ORDER_ID" 
-			referenceTable="T_WM_OUTPRE" 
-			parameter="={project/leedon/test.jsp?TABLE=V_WM_OUT&amp;FIELD=SUBFRAME&amp;ORDER_ID=}&amp;If(IsEmpty(Get({ORDER_ID})),-1,Get({ORDER_ID}))"/>
+			referenceTable="T_WM_OUTPREDTL" 
+			parameter="={project/leedon/test_new.jsp?TABLE=V_WM_OUT2&amp;FIELD=SUBFRAME&amp;ORDER_ID=}&amp;If(IsEmpty(Get({ORDER_ID})),-1,Get({ORDER_ID}))"/>
 			<queryCondition type="none"/>
 			<listColumn noedit="false" noquery="true"/>
 		</field>
@@ -150,10 +156,14 @@
 			if(SubStr(Get(ORDER_ID),0,2)={CK},Set(ORDER_ID_INT,0),Set(ORDER_ID_INT,get(ORDER_ID)))
 			+Save({T_WM_OUTPART},GetForm())
 			" pluginName="saveView" />
+		<pluginInterceptor methodName="exp" parameter="
+			if(SubStr(Get(ORDER_ID),0,2)={CK},Set(ORDER_ID_INT,0),Set(ORDER_ID_INT,get(ORDER_ID)))
+			+Save({T_WM_OUTPART},GetForm())
+			" pluginName="saveView1" />
 		<!--
 		<pluginInterceptor methodName="bsh" parameter="V_WM_OUT.bsh" pluginName="saveViewBatch" type="after" />
 		-->
-		<pluginOperation name="saveView" oprName="保存(V)" hostPage="edit" tblevel="1" img="save" action="Plugin({},{saveView},{SUBFRAME})+brk()"/>
+		<pluginOperation name="saveView1" oprName="保存(V)" hostPage="edit" tblevel="1" img="save" action="Plugin({},{saveView1},{SUBFRAME})+brk()"/>
 		<!--
 		<pluginOperation name="unaudit" oprName="取消审核" hostPage="edit" action="If(Confirm({请确认是否要取消审核?}),Save({},{unaudit}),true)+brk()"/>
 		 -->

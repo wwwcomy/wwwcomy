@@ -34,10 +34,13 @@ try {
 	
 	qfrm = new MapForm();
 	qfrm.set("ORDER_ID", ORDER_ID);
-	Page SUBORDERS_DTLS = srvContext.getDBM().findByForm("T_WM_OUTPRE2", qfrm, 5000, 1, srvContext); // 编辑模型：子订单明细
+	Page SUBORDERS_DTLS = srvContext.getDBM().findByForm("T_WM_OUTPREDTL", qfrm, 5000, 1, srvContext); // 编辑模型：子订单明细
 	
+	qfrm = new MapForm();
+	qfrm.set("ORDER_ID", ORDER_ID);
+	Page SUBORDERS_PRE = srvContext.getDBM().findByForm("T_WM_OUTPRE2", qfrm, 5000, 1, srvContext); // 编辑模型：应出库明细
 	ArrayList PRODUCTID = new ArrayList();
-	ArrayList<Qbq3Form> list = SUBORDERS_DTLS.getData();
+	ArrayList<Qbq3Form> list = SUBORDERS_PRE.getData();
 	for (int i=0;i<list.size();i++) {
 		Qbq3Form bean = (Qbq3Form)list.get(i);
 		if (!PRODUCTID.contains(bean.get("PRODUCTID"))) {
@@ -69,7 +72,24 @@ try {
 		}
 	});
 	// -------------------------------- NOTICE 测试数据 -------------------------------- // 
+	Qbq3Form dfrm = null;
 	
+	ArrayList<Qbq3Form> SUBORDERS=new ArrayList<Qbq3Form>();
+	SUBORDERS_COLS.setData(SUBORDERS);
+	dfrm = new MapForm();
+	dfrm.set("ORDER_ID",ORDER_ID);
+	dfrm.set("SUBORDERID","001");
+	dfrm.set("WAREHOUSE", "201");
+	dfrm.set("__WAREHOUSE_NAME", "金桥");
+	SUBORDERS.add(dfrm);
+	dfrm = new MapForm();
+	dfrm.set("ORDER_ID",ORDER_ID);
+	dfrm.set("SUBORDERID","002");
+	dfrm.set("WAREHOUSE", "405");
+	dfrm.set("__WAREHOUSE_NAME", "浦东");
+	SUBORDERS.add(dfrm);
+	
+	/*
 	KUCUN_JARRAY = new JSONArray(); 
 	JSONObject json = new JSONObject();
 	json.put("WAREHOUSE", "201");
@@ -85,27 +105,10 @@ try {
 	json.put("PRO_KCCOUNT", "100"); // 库存
 	KUCUN_JARRAY.add(json);
 	
-	Qbq3Form dfrm = null;
-	
-	ArrayList<Qbq3Form> SUBORDERS=new ArrayList<Qbq3Form>();
-	SUBORDERS_COLS.setData(SUBORDERS);
-	dfrm = new MapForm();
-	dfrm.set("ORDERID",ORDER_ID);
-	dfrm.set("SUBORDERID","001");
-	dfrm.set("WAREHOUSE", "201");
-	dfrm.set("__WAREHOUSE_NAME", "金桥");
-	SUBORDERS.add(dfrm);
-	dfrm = new MapForm();
-	dfrm.set("ORDERID",ORDER_ID);
-	dfrm.set("SUBORDERID","002");
-	dfrm.set("WAREHOUSE", "405");
-	dfrm.set("__WAREHOUSE_NAME", "浦东");
-	SUBORDERS.add(dfrm);
-	
 	ArrayList<Qbq3Form> SUBORDER_DATAS=new ArrayList<Qbq3Form>();
 	SUBORDERS_DTLS.setData(SUBORDER_DATAS);
 	dfrm = new MapForm();
-	dfrm.set("ORDERID",ORDER_ID);
+	dfrm.set("ORDER_ID",ORDER_ID);
 	dfrm.set("SUBORDERID","001");
 	dfrm.set("WAREHOUSE", "201");
 	dfrm.set("PRODUCTID", "1660");
@@ -114,7 +117,7 @@ try {
 	dfrm.set("OUT_RCOUNT", "0"); // 实际
 	SUBORDER_DATAS.add(dfrm);
 	dfrm = new MapForm();
-	dfrm.set("ORDERID",ORDER_ID);
+	dfrm.set("ORDER_ID",ORDER_ID);
 	dfrm.set("SUBORDERID","002");
 	dfrm.set("WAREHOUSE", "405");
 	dfrm.set("PRODUCTID", "1660");
@@ -123,7 +126,7 @@ try {
 	dfrm.set("OUT_RCOUNT", "0"); // 实际
 	SUBORDER_DATAS.add(dfrm);
 	dfrm = new MapForm();
-	dfrm.set("ORDERID",ORDER_ID);
+	dfrm.set("ORDER_ID",ORDER_ID);
 	dfrm.set("SUBORDERID","002");
 	dfrm.set("WAREHOUSE", "405");
 	dfrm.set("PRODUCTID", "3806");
@@ -131,7 +134,7 @@ try {
 	dfrm.set("OUT_PCOUNT", "0"); // 分配
 	dfrm.set("OUT_RCOUNT", "0"); // 实际
 	SUBORDER_DATAS.add(dfrm);
-	
+	*/
 	//out.clear();
 	//out.println("子订单明细："+SUBORDERS_DTLS.getSize());
 %>
@@ -179,7 +182,7 @@ try {
 	<div id="WHOWNER_Fld" style="display:none;"></div>
 	<table id="grid0">
 		<tr rowspan=3>
-			<td class="td0" rowspan=3>产品名<button onclick="javascript:GRID0.addColumn('201','金桥');GRID0.refresh();" >+</button></td>
+			<td class="td0" rowspan=3>产品名<button onclick="javascript:GRID0.addColumn('ce3458ed-7a0a-489a-9a94-0f0ad9d5144e','金桥');GRID0.refresh();" >+</button></td>
 			<td class="td1" rowspan=3>库存数</td>
 			<td class="td1" rowspan=3>应出数</td>
 			<td class="td1" rowspan=3>分配数</td>
@@ -208,8 +211,8 @@ try {
 	})();
 	var STORE = new Ext.data.JsonStore({
 		autoDestroy: true,
-		tableName: 'T_WM_OUTPRE2',
-		getId:function() {return 'T_WM_OUTPRE2';},
+		tableName: 'T_WM_OUTPREDTL',
+		getId:function() {return 'T_WM_OUTPREDTL';},
 		fields:[ 
 		   '__operation' 
 		  ,'__flag' 
@@ -240,9 +243,11 @@ try {
 		,rm:<%=PRODUCT_ROWS.toJSon()%> // 行模型 T_WM_SDBPRODUCT(效率处理，仅限当前出库单的产品)
 		,cm:<%=SUBORDERS_COLS.toJSon()%> // 列模型 T_DIC_WAREHOUSE(仓库)
 		,dm:<%=SUBORDERS_DTLS.toJSon()%> // 编辑值模型 T_WM_OUTPRE2(子订单明细)
+		,ym:<%=SUBORDERS_PRE.toJSon()%> // 应出库模型
 		,hasData:{} // 判断出库明细是否存在，如果存在在判断是否已经做过出库分配
 		,mapData:{} // 数据索引
 		,mapDataKC:{} // 库存索引
+		,mapDataYC:{} // 应出索引
 		//,mapRow:{} // 行索引
 		//,mapCol:{} // 列索引
 		,sumRow:{} // 行汇总
@@ -251,14 +256,14 @@ try {
 		,addColumn:function(WID, WNAME){
 			var rm=this.rm, cm=this.cm, dm=this.dm, vm=this.vm, bm=this.bm;
 			var OID='00'+(cm.length+1);
-			//dfrm.set("ORDERID","20130104178141").set("SUBORDERID","1001").set("WAREHOUSE", "201").set("__WAREHOUSE_NAME", "金桥");
+			//dfrm.set("ORDER_ID","20130104178141").set("SUBORDERID","1001").set("WAREHOUSE", "201").set("__WAREHOUSE_NAME", "金桥");
 			cm.push({
-				ORDERID:this.ORDER_ID
+				ORDER_ID:this.ORDER_ID
 				,SUBORDERID:OID
 				,WAREHOUSE:WID
 				,__WAREHOUSE_NAME:WNAME
 			});
-			//dfrm.set("ORDERID",ORDER_ID);
+			//dfrm.set("ORDER_ID",ORDER_ID);
 			//dfrm.set("SUBORDERID","1001");
 			//dfrm.set("WAREHOUSE", "201");
 			//dfrm.set("PRODUCTID", "1886");
@@ -268,10 +273,10 @@ try {
 			rm.each(function(row, index) { // 行维度 T_WM_SDBPRODUCT
 				var YCK=this.getDataCellEl(index, 2).innerHTML*1;
 				//var PID = row['ID'], YCK=this.getDataCellEl(index, 2).innerHTML*1; // 不管有没有应出库都要生成否则表格乱了
-				if (YCK==0) // 没有应出库
-					return;
+				//if (YCK==0) // 没有应出库
+				//	return;
 				dm.push({
-					ORDERID:this.ORDER_ID
+					ORDER_ID:this.ORDER_ID
 					,SUBORDERID:OID
 					,WAREHOUSE:WID
 					,PRODUCTID:row['ID']
@@ -333,7 +338,11 @@ try {
 			}
 		}
 		,calModel:function(){ // 产品遍历
-			var rm=this.rm, cm=this.cm, dm=this.dm, vm=this.vm;
+			var rm=this.rm, cm=this.cm, dm=this.dm, vm=this.vm, ym=this.ym;
+			ym.each(function(yc, index){
+				var PID = yc.PRODUCTID, COUNT = yc.OUT_COUNT;
+				this.mapDataYC[PID]=COUNT;
+			}, this);
 			vm.each(function(kuc, index) { // 库存遍历 V_WM_STOCK3
 				var PID = kuc.PRODUCTID, WID = kuc.WAREHOUSE;
 				this.initMapKC(PID, WID);
@@ -344,7 +353,7 @@ try {
 				if (WID) { // 已经分配过仓库（子订单）(NOTICE 每次新增子订单必须选择仓库)
 					this.initMapKC(PID, WID);
 					this.initMap(PID, OID);
-					this.mapData[PID]['OUT_COUNT']=sub.OUT_COUNT||0; // 应出数
+					this.mapData[PID]['OUT_COUNT']=this.mapDataYC[PID]||0; // 应出数
 					this.mapData[PID][OID]['OUT_PCOUNT']=sub.OUT_PCOUNT||0; // 分配数
 					this.mapData[PID][OID]['OUT_RCOUNT']=sub.OUT_RCOUNT||0; // 实出数
 					this.mapData[PID][OID]['ROWINDEX']=index; // dm行索引
@@ -365,7 +374,7 @@ try {
 				}
 				if (!this.mapData[PID])
 					this.mapData[PID]={};
-				this.sumRow[index]['OUT_COUNT']=(this.mapData[PID]['OUT_COUNT']||0)*1; // 应出数
+				//this.sumRow[index]['OUT_COUNT']=(this.mapData[PID]['OUT_COUNT']||0)*1; // 应出数
 				this.calRowModel(index);
 			}, this);
 		}
@@ -378,14 +387,14 @@ try {
 					, PID // 产品ID attri //, row['__PRODUCTID__NAME']+'--'+row['PRODUCTID']+'--'+row['ORDER_ID'] // 产品名称
 					, PNAME+':'+PID // 出库产品编号
 					, this.sumRow[rowIndex]['PRO_KCCOUNT'] // 库存数
-					, this.sumRow[rowIndex]['OUT_COUNT'] // 应出数
+					, this.mapDataYC[PID]||0//this.sumRow[rowIndex]['OUT_COUNT'] // 应出数
 					, this.sumRow[rowIndex]['OUT_PCOUNT'] // 分配数
 					, this.sumRow[rowIndex]['OUT_RCOUNT'] // 实际出库数
 				];
 				for (var colIndex=0;colIndex<cm.length;colIndex++) { // 遍历子订单（列维度）
 					var OID = cm[colIndex]['SUBORDERID'], t = this.mapData[PID][OID]; // 查应出库信息 某子订单中的某产品
 					//if (t && t['PRO_KCCOUNT']*1>0 && t['OUT_RCOUNT']*1<t['OUT_COUNT']*1) { // 有库存 并且 应出>实出 才能出库
-					if (t && t['WAREHOUSE'] && this.mapDataKC[PID][t['WAREHOUSE']]*1>0) { // NOTICE 测试 
+					if (t && t['WAREHOUSE'] && this.mapDataKC[PID][t['WAREHOUSE']]*1>0 && this.mapData[PID]['OUT_COUNT']*1>0) { // NOTICE 测试 
 						args.push(
 							OID
 							, (this.mapDataKC[PID][t['WAREHOUSE']]||0) // 库存
@@ -393,7 +402,12 @@ try {
 							, (t['OUT_RCOUNT']||0) // 实出
 						);
 					} else
-						args.push(OID, 0, 0, 0);
+						args.push(
+							OID
+							, (this.mapDataKC[PID][t['WAREHOUSE']]||0) // 库存
+							, t['OUT_PCOUNT']||0 // 分配
+							, 0 // 实出
+						);
 				}
 				this.template.append(this.getGridEl(), args, true);
 			}, this);
@@ -430,7 +444,7 @@ try {
 </html>
 <%
 } catch(Throwable ex) {
-	DebugUtil.error("test.jsp", ex);
+	DebugUtil.error("test_new.jsp", ex);
 	out.clear();
     out.println(Warning.getClientErr(ex.getMessage()));
 } finally {

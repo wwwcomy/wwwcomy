@@ -15,7 +15,7 @@
 			<listColumn noedit="false" noquery="false" width="140"/>
 			<!-- ,PRO_OUT_PRICE,PRO_PACKING,PRO_PACKING_NAME -->
 		</field>
-		<field name="WAREHOUSE" description="仓库" javaType="string" lazyLoad="true" loadType="cache" nullAllowed="false">
+		<field name="WAREHOUSE" description="仓库" javaType="string" lazyLoad="true" loadType="cache" nullAllowed="true">
 			<component type="combo" readOnly="false" colspan="1" displayReferenceField="NAME" referenceField="ID" referenceTable="T_DIC_WAREHOUSE_COMBO" parameter="If(Get(FREE_INSPACTION)=1,{&amp;__filter=filter1},{&amp;__filter=filter})"/>
 			<listColumn noedit="false" noquery="false"/>
 		</field>
