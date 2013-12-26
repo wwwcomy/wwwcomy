@@ -31,11 +31,9 @@ try {
 	qfrm = new MapForm();
 	qfrm.set("USEDSTATUS", "1"); // 列模型：一共有多少子订单(distinct)
 	Page SUBORDERS_COLS = srvContext.getDBM().findByForm("T_DIC_WAREHOUSE_COMBO", qfrm, 100, 1, srvContext); // 列模型：子订单-仓库
-	
 	qfrm = new MapForm();
 	qfrm.set("ORDER_ID", ORDER_ID);
 	Page SUBORDERS_DTLS = srvContext.getDBM().findByForm("T_WM_OUTPREDTL", qfrm, 5000, 1, srvContext); // 编辑模型：子订单明细
-	
 	qfrm = new MapForm();
 	qfrm.set("ORDER_ID", ORDER_ID);
 	Page SUBORDERS_PRE = srvContext.getDBM().findByForm("T_WM_OUTPRE2", qfrm, 5000, 1, srvContext); // 编辑模型：应出库明细
@@ -73,70 +71,32 @@ try {
 	});
 	// -------------------------------- NOTICE 测试数据 -------------------------------- // 
 	Qbq3Form dfrm = null;
-	
 	ArrayList<Qbq3Form> SUBORDERS=new ArrayList<Qbq3Form>();
-	SUBORDERS_COLS.setData(SUBORDERS);
-	dfrm = new MapForm();
-	dfrm.set("ORDER_ID",ORDER_ID);
-	dfrm.set("SUBORDERID","001");
-	dfrm.set("WAREHOUSE", "201");
-	dfrm.set("__WAREHOUSE_NAME", "金桥");
-	SUBORDERS.add(dfrm);
-	dfrm = new MapForm();
-	dfrm.set("ORDER_ID",ORDER_ID);
-	dfrm.set("SUBORDERID","002");
-	dfrm.set("WAREHOUSE", "405");
-	dfrm.set("__WAREHOUSE_NAME", "浦东");
-	SUBORDERS.add(dfrm);
 	
-	/*
-	KUCUN_JARRAY = new JSONArray(); 
-	JSONObject json = new JSONObject();
-	json.put("WAREHOUSE", "201");
-	json.put("PRODUCTID", "1660");
-	json.put("PRO_KCCOUNT", "500"); // 库存
-	KUCUN_JARRAY.add(json);
-	json.put("WAREHOUSE", "405");
-	json.put("PRODUCTID", "1660");
-	json.put("PRO_KCCOUNT", "300"); // 库存
-	KUCUN_JARRAY.add(json);
-	json.put("WAREHOUSE", "405");
-	json.put("PRODUCTID", "3806");
-	json.put("PRO_KCCOUNT", "100"); // 库存
-	KUCUN_JARRAY.add(json);
+	qfrm = new MapForm();
+	qfrm.set("ORDER_ID", ORDER_ID);
+	Page SUBORDERS_SAVED = srvContext.getDBM().findByForm("T_WM_OUTPREDTL", qfrm, 5000, 1, srvContext); 
+	int savedSize = SUBORDERS_SAVED.size();
+	HashMap map = new HashMap();
+	for(int i=0;i<savedSize;i++){
+		Qbq3Form frm=(Qbq3Form)SUBORDERS_SAVED.get(i);
+		String key = frm.get("WAREHOUSE")+"|"+frm.get("SUBORDERID");
+		dfrm = new MapForm();
+		dfrm.set("ORDER_ID",ORDER_ID);
+		dfrm.set("SUBORDERID",frm.get("SUBORDERID"));
+		dfrm.set("WAREHOUSE", frm.get("WAREHOUSE"));
+
+		Qbq3Form warehouseForm=srvContext.getDBM().findByPK("T_DIC_WAREHOUSE", frm.get("WAREHOUSE"),srvContext);
+		dfrm.set("NAME", warehouseForm.get("NAME"));
+		
+		System.out.println("******"+ warehouseForm.get("NAME"));
+		map.put(key, dfrm);
+	}
+
+	SUBORDERS_COLS.setData(new ArrayList<Qbq3Form>(map.values()));
 	
-	ArrayList<Qbq3Form> SUBORDER_DATAS=new ArrayList<Qbq3Form>();
-	SUBORDERS_DTLS.setData(SUBORDER_DATAS);
-	dfrm = new MapForm();
-	dfrm.set("ORDER_ID",ORDER_ID);
-	dfrm.set("SUBORDERID","001");
-	dfrm.set("WAREHOUSE", "201");
-	dfrm.set("PRODUCTID", "1660");
-	dfrm.set("OUT_COUNT", "100"); // 应出
-	dfrm.set("OUT_PCOUNT", "0"); // 分配
-	dfrm.set("OUT_RCOUNT", "0"); // 实际
-	SUBORDER_DATAS.add(dfrm);
-	dfrm = new MapForm();
-	dfrm.set("ORDER_ID",ORDER_ID);
-	dfrm.set("SUBORDERID","002");
-	dfrm.set("WAREHOUSE", "405");
-	dfrm.set("PRODUCTID", "1660");
-	dfrm.set("OUT_COUNT", "100"); // 应出
-	dfrm.set("OUT_PCOUNT", "0"); // 分配
-	dfrm.set("OUT_RCOUNT", "0"); // 实际
-	SUBORDER_DATAS.add(dfrm);
-	dfrm = new MapForm();
-	dfrm.set("ORDER_ID",ORDER_ID);
-	dfrm.set("SUBORDERID","002");
-	dfrm.set("WAREHOUSE", "405");
-	dfrm.set("PRODUCTID", "3806");
-	dfrm.set("OUT_COUNT", "120"); // 应出
-	dfrm.set("OUT_PCOUNT", "0"); // 分配
-	dfrm.set("OUT_RCOUNT", "0"); // 实际
-	SUBORDER_DATAS.add(dfrm);
-	*/
-	//out.clear();
-	//out.println("子订单明细："+SUBORDERS_DTLS.getSize());
+	
+	
 %>
 <html>
 <head>
@@ -153,26 +113,26 @@ try {
  	
  	<script src="../../comResource/js/haiyan-debug.js"></script>
 	<style>
-		td {
+		#grid0 td {
 			border:1px solid #000000;
 			text-align:center;
 			height:30px;
 			margin:0px;
 			padding:0px;
 		}
-		.td0 {
+		#grid0 .td0 {
 			width:150px;
 			font-weight:bold;
 		}
-		.td1 {
+		#grid0 .td1 {
 			width:50px;
 			font-weight:bold;
 		}
-		.td2 {
+		#grid0 .td2 {
 			width:150px;
 			font-weight:bold;
 		}
-		.tdl {
+		#grid0 .tdl {
 			color:green;
 		}
 	</style>
@@ -182,7 +142,7 @@ try {
 	<div id="WHOWNER_Fld" style="display:none;"></div>
 	<table id="grid0">
 		<tr rowspan=3>
-			<td class="td0" rowspan=3>产品名<button onclick="javascript:GRID0.addColumn('ce3458ed-7a0a-489a-9a94-0f0ad9d5144e','金桥');GRID0.refresh();" >+</button></td>
+			<td class="td0" rowspan=3>产品名<button onclick="javascript:GRID0.btnClick();" >+</button></td>
 			<td class="td1" rowspan=3>库存数</td>
 			<td class="td1" rowspan=3>应出数</td>
 			<td class="td1" rowspan=3>分配数</td>
@@ -190,13 +150,13 @@ try {
 			<%int size = SUBORDERS_COLS.size();%>
 			<%for(int i=0;i<size;i++){
 				Qbq3Form frm=(Qbq3Form)SUBORDERS_COLS.get(i);%>
-				<td class="td2" colspan=3 >子订单:<%=(i+1)%>(<%=frm.get("SUBORDERID")%>)</td>
+				<td class="td2" colspan=3 >子订单:<%=(i+1)%>(<%=StringUtil.isEmpty(frm.get("SUBORDERID"))?("00"+(i+1)):frm.get("SUBORDERID")%>)</td>
 			<%}%>
 		</tr>
 		<tr>
 			<%for(int i=0;i<size;i++){
 				Qbq3Form frm=(Qbq3Form)SUBORDERS_COLS.get(i);%>
-				<td class="td2" colspan=3 >仓库:<%=frm.get("__WAREHOUSE_NAME")%>(<%=frm.get("WAREHOUSE")%>)</td>
+				<td class="td2" colspan=3 >仓库:<%=frm.get("NAME")%>(<%=frm.get("WAREHOUSE")%>)</td>
 			<%}%>
 		</tr>
 		<tr>
@@ -219,6 +179,7 @@ try {
 		  ,'BILL_STATUS' 
 		  ,'HYVERSION' 
 		  ,'HYFORMKEY' 
+		  ,'ITEM_ID' // 子订单主键
 		  ,'ORDER_ID' // 订单号
 		  ,'SUBORDERID' // 子订单号
 		  ,'PRODUCTID' // 产品ID
@@ -256,30 +217,20 @@ try {
 		,addColumn:function(WID, WNAME){
 			var rm=this.rm, cm=this.cm, dm=this.dm, vm=this.vm, bm=this.bm;
 			var OID='00'+(cm.length+1);
-			//dfrm.set("ORDER_ID","20130104178141").set("SUBORDERID","1001").set("WAREHOUSE", "201").set("__WAREHOUSE_NAME", "金桥");
 			cm.push({
 				ORDER_ID:this.ORDER_ID
 				,SUBORDERID:OID
 				,WAREHOUSE:WID
 				,__WAREHOUSE_NAME:WNAME
 			});
-			//dfrm.set("ORDER_ID",ORDER_ID);
-			//dfrm.set("SUBORDERID","1001");
-			//dfrm.set("WAREHOUSE", "201");
-			//dfrm.set("PRODUCTID", "1886");
-			//dfrm.set("OUT_PCOUNT", "0"); // 分配
-			//dfrm.set("OUT_RCOUNT", "0"); // 实际
-			//dfrm.set("OUT_COUNT", "100"); // 应出
 			rm.each(function(row, index) { // 行维度 T_WM_SDBPRODUCT
-				var YCK=this.getDataCellEl(index, 2).innerHTML*1;
-				//var PID = row['ID'], YCK=this.getDataCellEl(index, 2).innerHTML*1; // 不管有没有应出库都要生成否则表格乱了
-				//if (YCK==0) // 没有应出库
-				//	return;
+				var YCK=this.getDataCellEl(index, 2).innerHTML*1,PID=row['ID'];
 				dm.push({
-					ORDER_ID:this.ORDER_ID
+					ITEM_ID:''
+					,ORDER_ID:this.ORDER_ID
 					,SUBORDERID:OID
 					,WAREHOUSE:WID
-					,PRODUCTID:row['ID']
+					,PRODUCTID:PID
 					,OUT_PCOUNT:0
 			        ,OUT_RCOUNT:0
 			        ,OUT_COUNT:YCK
@@ -290,9 +241,21 @@ try {
 			dom.children[0].children[1].innerHTML+='<td class="td2" colspan=3>仓库:'+WNAME+'('+WID+')</td>';
 			dom.children[0].children[2].innerHTML+='<td class="td1">库存</td><td class="td1">分配</td><td class="td1">实出</td>';
 		}
-		,change:function(PID,OID,rowIndex,colIndex,val) {
-			var rm=this.rm, cm=this.cm, dm=this.dm, vm=this.vm, dataIndex=this.mapData[PID][OID]['ROWINDEX'];
-			
+		,change:function(PID,OID,WID,rowIndex,colIndex,val) {
+			var rm=this.rm, cm=this.cm, dm=this.dm, vm=this.vm, dataIndex=this.mapData[PID][OID]['ROWINDEX']>=0?this.mapData[PID][OID]['ROWINDEX']:rowIndex;
+			if(dm[dataIndex]){
+			} else{
+				dm.push({
+					ITEM_ID:''
+					,ORDER_ID:this.ORDER_ID
+					,SUBORDERID:OID
+					,WAREHOUSE:WID
+					,PRODUCTID:PID
+					,OUT_PCOUNT:0
+			        ,OUT_RCOUNT:0
+			        ,OUT_COUNT:0
+				});
+			}
 			dm[dataIndex]['OUT_PCOUNT']=val; // 设置数据行的分配数
 			this.mapData[PID][OID]['OUT_PCOUNT']=val; // 设置映射数据
 			
@@ -331,7 +294,7 @@ try {
 			var rm=this.rm, cm=this.cm, row=this.rm[rowIndex], dm=this.dm, vm=this.vm;
 			//row['PRO_KCCOUNT'] = row['PRO_KCCOUNT']=='-1'?0:row['PRO_KCCOUNT']*1; // TODO 库存V_WM_STOCK3数量没有查出来
 			for (var colIndex=0;colIndex<cm.length;colIndex++) {
-				var PID = rm[rowIndex]['ID'], OID = cm[colIndex]['SUBORDERID'];
+				var PID = rm[rowIndex]['ID'], OID = cm[colIndex]['SUBORDERID']||('00'+(colIndex+1));
 				this.initMap(PID, OID);
 				this.sumRow[rowIndex]['OUT_PCOUNT']+=(this.mapData[PID][OID]['OUT_PCOUNT']||0)*1; // 分配数
 				this.sumRow[rowIndex]['OUT_RCOUNT']+=(this.mapData[PID][OID]['OUT_RCOUNT']||0)*1; // 实出数
@@ -348,6 +311,7 @@ try {
 				this.initMapKC(PID, WID);
 				this.mapDataKC[PID][WID]=kuc.PRO_KCCOUNT;
 			}, this);
+			// 第一次打开时,dm为空
 			dm.each(function(sub, index) { // 子出库单遍历 SUBORDERS_DTLS
 				var PID = sub.PRODUCTID, WID = sub.WAREHOUSE, OID = sub.SUBORDERID;
 				if (WID) { // 已经分配过仓库（子订单）(NOTICE 每次新增子订单必须选择仓库)
@@ -392,16 +356,25 @@ try {
 					, this.sumRow[rowIndex]['OUT_RCOUNT'] // 实际出库数
 				];
 				for (var colIndex=0;colIndex<cm.length;colIndex++) { // 遍历子订单（列维度）
-					var OID = cm[colIndex]['SUBORDERID'], t = this.mapData[PID][OID]; // 查应出库信息 某子订单中的某产品
+					var OID = cm[colIndex]['SUBORDERID']||('00'+(colIndex+1)), t = this.mapData[PID][OID]; // 查应出库信息 某子订单中的某产品
 					//if (t && t['PRO_KCCOUNT']*1>0 && t['OUT_RCOUNT']*1<t['OUT_COUNT']*1) { // 有库存 并且 应出>实出 才能出库
 					if (t && t['WAREHOUSE'] && this.mapDataKC[PID][t['WAREHOUSE']]*1>0 && this.mapData[PID]['OUT_COUNT']*1>0) { // NOTICE 测试 
 						args.push(
 							OID
 							, (this.mapDataKC[PID][t['WAREHOUSE']]||0) // 库存
-							, '<input class="td1" onchange="GRID0.change(\''+PID+'\',\''+OID+'\','+rowIndex+','+colIndex+',this.value)" value="'+(t['OUT_PCOUNT']||0)+'"></input>' // 分配
+							, '<input class="td1" onchange="GRID0.change(\''+PID+'\',\''+OID+'\',\''+t['WAREHOUSE']+'\','+rowIndex+','+colIndex+',this.value)" value="'+(t['OUT_PCOUNT']||0)+'"></input>' // 分配
 							, (t['OUT_RCOUNT']||0) // 实出
 						);
-					} else
+					} else if(this.mapDataKC[PID][cm[colIndex]['ID']]*1>0 ){
+						// TODO 这里处理第一次时候,dm还没值的情况,条件需要测试
+						args.push(
+								OID
+								, (this.mapDataKC[PID][cm[colIndex]['ID']]||0) // 库存
+								, '<input class="td1" onchange="GRID0.change(\''+PID+'\',\''+OID+'\',\''+cm[colIndex]['ID']+'\','+rowIndex+','+colIndex+',this.value)" value="'+(t['OUT_PCOUNT']||0)+'"></input>' // 分配
+								, (t['OUT_RCOUNT']||0) // 实出
+							);
+					}
+					else
 						args.push(
 							OID
 							, (this.mapDataKC[PID][t['WAREHOUSE']]||0) // 库存
@@ -436,6 +409,46 @@ try {
 		,addRow:function(){
 			var args = [this.getRowCount()];
 			this.template.append(this.getGridEl(), args, true);
+		}
+		,btnClick:function(){
+			// 新增仓库
+			var scope = new Ext.Window({
+				id:'affirmForm-win', name:'affirmForm-win', title:'选择仓库', layout:'fit', selectedids:'',
+				plain:true, resizable:true, maximizable:false, animCollapse:false, collapsible:false, closable:false, modal:true,
+				width:380, height:120,
+				items:[
+					new Ext.FormPanel({
+						id:'affirmForm', defaultType:'textfield', defaults:{ bodyStyle:'padding:1px' },
+						layout:'column', layoutConfig:{ columns:3, msgTarget:'side' },
+						items:[{
+							xtype:'label', text:'  选择需要分库的仓库', colspan:1, column:1, width:'30%'
+						}, {
+							xtype:'uxpagingcombo', fieldLabel:'仓库', labelStyle:'color:#990000;size:12;font-weight:bold;',
+							id:'__WAREHOUSE__NAME', query_field:'NAME', valueField:'ID', displayField:'NAME', hidden_field:'WAREHOUSE_ID',
+							pageSize:20, url:'ext_jsonlist.do?__opr_data=T_DIC_WAREHOUSE_COMBO&__maxNumPerPage=20',
+							store_id:'ID', store_root:'T_DIC_WAREHOUSE_COMBO',
+							store_fields:[{ name:'ID' }, { name:'CODE' }, { name:'NAME' }],
+							colspan:1, column:2, width:'70%', emptyText:'', renderIt:false, disabled:false, allowBlank:false
+						}, {
+							xtype:'hidden', id:'WAREHOUSE_ID', allowBlank:false
+						}]
+					})
+				],
+				buttons:[{
+					xtype:'button', text:'确认', colspan:1, column:3, width:'100%',
+					handler:function() {
+						var v = Ext.getCmp('WAREHOUSE_ID').getValue();
+						var vName = Ext.getCmp("__WAREHOUSE__NAME").getValue();
+						if (Ext.isEmpty(v)||Ext.isEmpty(vName)) {
+							alert('先选择仓库');
+							return;
+						}
+						this.ownerCt.ownerCt.close()
+						GRID0.addColumn(v,vName);
+						GRID0.refresh();
+					}
+				}]
+			}).show();
 		}
 	};
 	GRID0.render();

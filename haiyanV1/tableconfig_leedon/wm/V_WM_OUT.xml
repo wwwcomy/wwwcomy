@@ -116,7 +116,7 @@
 			<listColumn noedit="false" noquery="false"/>
 		</field>
 		<field name="WAREHOUSE" description="当前仓库" displayOnly="true" javaType="string" lazyLoad="false" nullAllowed="false">
-			<component type="richSelect" readOnly="true" colspan="1" displayReferenceField="NAME" referenceField="ID" referenceTable="T_DIC_WAREHOUSE_COMBO"/>
+			<component type="combo" readOnly="true" colspan="1" displayReferenceField="NAME" referenceField="ID" referenceTable="T_DIC_WAREHOUSE_COMBO"/>
 			<listColumn noedit="false" noquery="false"/>
 		</field>
 		<field name="WHOWNER" description="库主" displayOnly="false" javaType="string" lazyLoad="false">
