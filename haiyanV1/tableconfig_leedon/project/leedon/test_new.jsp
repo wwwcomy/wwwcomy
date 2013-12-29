@@ -243,7 +243,7 @@ try {
 		}
 		,change:function(PID,OID,WID,rowIndex,colIndex,val) {
 			var rm=this.rm, cm=this.cm, dm=this.dm, vm=this.vm, dataIndex=this.mapData[PID][OID]['ROWINDEX']>=0?this.mapData[PID][OID]['ROWINDEX']:rowIndex;
-			if(dm[dataIndex]){
+			/* if(dm[dataIndex]){
 			} else{
 				dm.push({
 					ITEM_ID:''
@@ -255,7 +255,7 @@ try {
 			        ,OUT_RCOUNT:0
 			        ,OUT_COUNT:0
 				});
-			}
+			} */
 			dm[dataIndex]['OUT_PCOUNT']=val; // 设置数据行的分配数
 			this.mapData[PID][OID]['OUT_PCOUNT']=val; // 设置映射数据
 			
