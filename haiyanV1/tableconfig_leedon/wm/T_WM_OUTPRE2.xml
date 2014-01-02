@@ -47,7 +47,7 @@
 			<component type="button" readOnly="true"/><!--renderer="renderUnAudit" -->
 			<listColumn noedit="true" noquery="true" width="70"/>
 		</field>
-		<field name="OUT_COUNT" description="(订单)数量" javaType="bigDecimal" defaultValue="0">
+		<field name="OUT_COUNT" description="(订单)数量" javaType="bigDecimal" defaultValue="0"><!--貌似这个字段没用到 -->
 			<component type="text" readOnly="true"/>
 			<listColumn noedit="false" noquery="false"/>
 		</field>
