@@ -53,6 +53,14 @@
 			<component type="text" readOnly="false" colspan="6"/>
 			<listColumn noedit="false" noquery="false"/>
 		</field>
+		<field name="BILL_STATUS1" javaType="string" description="单据状态" defaultValue="init">
+			<component type="dropdown" readOnly="true">
+				<option displayName="初始" value="init"/>
+				<option displayName="下发" value="send"/>
+				<option displayName="待审批" value="foraudit"/>
+				<option displayName="审批" value="audit"/>
+			</component>
+		</field>
 		<field name="ORDER_MEMO" description="订单备注" displayOnly="false" javaType="string" lazyLoad="false">
 			<component type="text" readOnly="false" colspan="6"/>
 			<listColumn noedit="false" noquery="false"/>
@@ -108,14 +116,6 @@
 			<component type="combo" quickQueryConditionField="NAME" referenceTable="SYSOPERATOR_VIEW" referenceField="ID" displayReferenceField="NAME" readOnly="true"/>
 			<listColumn noquery="false" nowrap="true"/>
 		</field>
-		<field name="BILL_STATUS" javaType="string" description="单据状态" defaultValue="init">
-			<component type="dropdown" readOnly="true">
-				<option displayName="初始" value="init"/>
-				<option displayName="下发" value="send"/>
-				<option displayName="待审批" value="foraudit"/>
-				<option displayName="审批" value="audit"/>
-			</component>
-		</field>
 		<field name="AUDIT_TIME" javaType="date" dataStyle="yyyy-MM-dd HH:mm:ss" description="审批时间">
 			<component type="date" readOnly="true"/>
 			<queryCondition type="region"/>
@@ -159,7 +159,7 @@
 			" pluginName="saveView1" />
 		<pluginInterceptor methodName="exp" parameter="
 			if(SubStr(Get(ORDER_ID),0,2)={CK},Set(ORDER_ID_INT,0),Set(ORDER_ID_INT,get(ORDER_ID)))
-			+Set(BILL_STATUS,{send})
+			+Set(BILL_STATUS1,{send})
 			+SetCreateTime(AUDIT_TIME,{yyyy-MM-dd HH:mm:ss})
 			+Save({T_WM_OUTPART},GetForm())
 			" pluginName="auditSend" type="before"/>

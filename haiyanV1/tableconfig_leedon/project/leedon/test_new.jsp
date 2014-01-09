@@ -365,11 +365,11 @@ try {
 							, '<input class="td1" onchange="GRID0.change(\''+PID+'\',\''+OID+'\',\''+t['WAREHOUSE']+'\','+rowIndex+','+colIndex+',this.value)" value="'+(t['OUT_PCOUNT']||0)+'"></input>' // 分配
 							, (t['OUT_RCOUNT']||0) // 实出
 						);
-					} else if(this.mapDataKC[PID][cm[colIndex]['ID']]*1>0 ){
+					} else if(t && t['WAREHOUSE'] && this.mapDataKC[PID][t['WAREHOUSE']]*1>0){//this.mapDataKC[PID][cm[colIndex]['ID']]*1>0 
 						// TODO 这里处理第一次时候,dm还没值的情况,条件需要测试
 						args.push(
 								OID
-								, (this.mapDataKC[PID][cm[colIndex]['ID']]||0) // 库存
+								, (this.mapDataKC[PID][t['WAREHOUSE']]||0) // 库存
 								, '<input class="td1" onchange="GRID0.change(\''+PID+'\',\''+OID+'\',\''+cm[colIndex]['ID']+'\','+rowIndex+','+colIndex+',this.value)" value="'+(t['OUT_PCOUNT']||0)+'"></input>' // 分配
 								, (t['OUT_RCOUNT']||0) // 实出
 							);

@@ -53,6 +53,14 @@
 			<component type="text" readOnly="false" colspan="6"/>
 			<listColumn noedit="false" noquery="false"/>
 		</field>
+		<field name="BILL_STATUS1" javaType="string" description="单据状态" defaultValue="init">
+			<component type="dropdown" readOnly="true">
+				<option displayName="初始" value="init"/>
+				<option displayName="下发" value="send"/>
+				<option displayName="待审批" value="foraudit"/>
+				<option displayName="审批" value="audit"/>
+			</component>
+		</field>
 		<field name="ORDER_MEMO" description="订单备注" displayOnly="false" javaType="string" lazyLoad="false">
 			<component type="text" readOnly="false" colspan="6"/>
 			<listColumn noedit="false" noquery="false"/>
@@ -145,17 +153,10 @@
 		</field>
 		<!--No filter for admin { and t_1.ID in (select ORDER_ID from T_WM_OUTPRE t_2 left join T_WM_SDBPRODUCT t_3 on t_2.PRODUCTID=t_3.ID where t_3.WAREHOUSE='}&amp;GetUser(WAREHOUSEID)&amp;{') }-->
 		<queryFilter>
-			<!--
 			<pluggedFilter methodName="exp" parameter="
 			If(InRole(sp,wm),
-				{ and t_1.ID in (select distinct(ORDER_ID) from T_WM_OUTPRE t_2 left join T_WM_SDBPRODUCT t_3 on t_2.PRODUCTID=t_3.ID where t_3.SUPPLIER='}&amp;GetUser(SUPPLIER)&amp;{' and t_3.WAREHOUSE='}&amp;GetUser(WAREHOUSEID)&amp;{') },
-				true
-			)"/>
-			-->
-			<pluggedFilter methodName="exp" parameter="
-			If(InRole(sp,wm),
-				{ and t_1.ID in (select distinct(ORDER_ID) from T_WM_OUTPRE t_2 where t_2.SUPPLIER='}&amp;GetUser(SUPPLIER)&amp;{' and t_2.WAREHOUSE='}&amp;GetUser(WAREHOUSEID)&amp;{') },
-				true
+				{ and t_1.ID in (select distinct(ORDER_ID) from T_WM_OUTPREDTL where OUT_PCOUNT>0) and BILL_STATUS1='send'},
+				{ and t_1.ID in (select distinct(ORDER_ID) from T_WM_OUTPREDTL where OUT_PCOUNT>0) and BILL_STATUS1='send'}
 			)"/>
 		</queryFilter>
 		<!-- -->
@@ -167,55 +168,10 @@
 		</role>
 		<!-- -->
 		<javascript hostPage="edit" src="project/leedon/V_WM_OUT.js"><![CDATA[
-			function renderAudit(value, metaData, record, rowIndex, colIndex, store, disVal, colVal, fieldName) {
-				return "<button onclick=\"testAudit('"+rowIndex+"','audit');\" type=\"button\" class=\"zbutton1\" >确认</button>";
-			}
-			function renderUnAudit(value, metaData, record, rowIndex, colIndex, store, disVal, colVal, fieldName) {
-				return "<button onclick=\"testAudit('"+rowIndex+"','unaudit');\" type=\"button\" class=\"zbutton1\" >取消确认</button>";
-			}
 			function renderPre(value, metaData, record, rowIndex, colIndex, store, disVal, colVal, fieldName) {
 				return "<button onclick=\"testPre('"+rowIndex+"');\" type=\"button\" class=\"zbutton1\" >预处理</button>";
 			}
 		]]></javascript>
-		<!--where t_1.STATUS='active' and t_1.PAY_STATUS='1' and t_1.SHIP_STATUS='0' -->
-		<!--where ((t_1.STATUS='active' and t_1.SHIP_STATUS='0') or (t_1.ORDER_ID<20120618000000) and t_1.PAY_STATUS='1') or t_2.ID>0 -->
-		<!--ORDER_MEMO not like '%作废%' or  ( ORDER_MEMO is null)-->
-		<pluginInterceptor methodName="initDB" pluginName="initDB" type="before" ><![CDATA[
-create or replace view V_WM_OUTPART_INIT as 
-		(
-			select * from T_WM_OUTPART where (BILL_STATUS='init' or BILL_STATUS is null)
-		);
-create or replace view V_WM_OUTPART_HISTORY as 
-		(
-			select * from T_WM_OUTPART where BILL_STATUS='audit' 
-		);
-create or replace view V_SDB_ORDERS_INIT as 
-		(
-			select * from SDB_ORDERS where ((STATUS='active' and PAY_STATUS='1' and DISABLED='false') or (STATUS='finish' and DISABLED='false'))
-				and ORDER_ID not in (select ORDER_ID from V_WM_OUTPART_HISTORY)
-				and ORDER_ID not like '2011%'
-		);
-create or replace view V_WM_OUT as 
-		(
-			select t_1.ORDER_ID as ID,t_1.ORDER_ID,t_2.ORDER_ID_INT,t_1.MEMBER_ID,t_1.SHIP_NAME,t_1.SHIP_ADDR,t_1.SHIP_TEL,t_1.SHIP_MOBILE,t_1.FINAL_AMOUNT ,t_1.PMT_AMOUNT,t_1.COST_FREIGHT,t_1.SHIPPING,
-			t_2.ORDER_MEMO,t_2.AUDIT_TIME,t_2.OUT_TYPE,t_2.AUDIT_USER_ID,t_2.BILL_STATUS,t_2.WHOWNER,t_2.LOGISTICS_NAME,t_2.LOGISTICS_CODE,t_2.LOGISTICS_MEMO,t_2.HYVERSION
-			from SDB_ORDERS t_1 
-			left join T_WM_OUTPART t_2 
-			on t_1.ORDER_ID=t_2.ORDER_ID_INT
-			where (t_2.BILL_STATUS='init' or t_2.BILL_STATUS is null)
-			and ((t_1.STATUS='active' and t_1.PAY_STATUS='1' and t_1.DISABLED='false') or (t_1.STATUS='finish' and t_1.DISABLED='false'))
-			and t_1.ORDER_ID not like '2011%'
-			and (t_2.ORDER_MEMO not like '作废%' or t_2.ORDER_MEMO is null)
-		)
-		union all
-		(
-			select t_1.ID,t_1.ORDER_ID,0 as ORDER_ID_INT,t_1.MEMBER_ID,t_1.SHIP_NAME,t_1.SHIP_ADDR,t_1.SHIP_TEL,t_1.SHIP_MOBILE,t_1.FINAL_AMOUNT ,t_1.PMT_AMOUNT,t_1.COST_FREIGHT,t_1.SHIPPING,t_1.ORDER_MEMO,
-			t_1.AUDIT_TIME,t_1.OUT_TYPE,t_1.AUDIT_USER_ID,t_1.BILL_STATUS,t_1.WHOWNER,t_1.LOGISTICS_NAME,t_1.LOGISTICS_CODE,t_1.LOGISTICS_MEMO,t_1.HYVERSION
-			from V_WM_OUTPART_INIT t_1 
-			where t_1.ORDER_ID like 'CK%' and (t_1.ORDER_MEMO not like '作废%' or t_1.ORDER_MEMO is null)
-		)
-		]]></pluginInterceptor>
-		<!-- -->
 		<pluginInterceptor methodName="exp" parameter="
 			If(Get(BILL_STATUS)={audit},DisBtns(select,saveView,auditOut)+DisFlds(SUBGRID1)+HidFlds(SUBGRID2,TEST2),true)
 			+SetCreate(WAREHOUSE,GetUser(WAREHOUSEID),__WAREHOUSE__NAME,GetUser(WAREHOUSENAME))
@@ -245,17 +201,6 @@ create or replace view V_WM_OUT as
 				如有任何问题，请和仓库管理员联系
 				})
 			" pluginName="auditOut" type="before"/>
-		<pluginInterceptor methodName="bsh" parameter="V_WM_OUT_CALCPRICE.bsh" pluginName="auditOutBatch" type="after" />
-		<pluginInterceptor methodName="bsh" pluginName="refreshDB" type="after"><![CDATA[
-			void refreshDB() throws Throwable {
-				String sql1 = "delete from T_WM_OUTPRE";
-				String sql2 = "insert into  T_WM_OUTPRE(NAME,ITEM_ID,ORDER_ID,OUT_CODE,ITEM_ID_PK,PRODUCTID,PRODUCT_ID,WMCODE,SUPP_CODE,OUT_COUNT,OUT_RCOUNT,IN_PRICE,OUT_PRICE,PRO_COUNT,OUT_ALL_PRICE,PACKING_NUM,CAPACITYNUM,WEIGHTNUM,SUPPLIER,WAREHOUSE,All_CAPACITYNUM,All_WEIGHTNUM,REMAINDER_NUM,LOGISTICS_NAME,LOGISTICS_CODE,LOGISTICS_MEMO,HYVERSION,BILL_STATUS) (select NAME,ITEM_ID,ORDER_ID,OUT_CODE,ITEM_ID_PK,PRODUCTID,PRODUCT_ID,WMCODE,SUPP_CODE,OUT_COUNT,OUT_RCOUNT,IN_PRICE,OUT_PRICE,PRO_COUNT,OUT_ALL_PRICE,PACKING_NUM,CAPACITYNUM,WEIGHTNUM,SUPPLIER,WAREHOUSE,All_CAPACITYNUM,All_WEIGHTNUM,REMAINDER_NUM,LOGISTICS_NAME,LOGISTICS_CODE,LOGISTICS_MEMO,HYVERSION,BILL_STATUS from V_WM_OUTPRE)";
-				final DBManager dbm = context.getDBM();
-				dbm.executeUpdate(sql1, null);
-				dbm.executeUpdate(sql2, null);
-			}
-			refreshDB();
-		]]></pluginInterceptor>
 		
 		<pluginInterceptor methodName="exp" parameter="
 			WriteJS({Hy.showBill('http://www.yidepin.com/tools/order_print.php?order_id=','配货单打印','test')})" 

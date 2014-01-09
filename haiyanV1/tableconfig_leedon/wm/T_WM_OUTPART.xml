@@ -108,6 +108,14 @@
 				<option displayName="作废" value="reject"/>
 			</component>
 		</field>
+		<field name="BILL_STATUS1" javaType="string" description="单据状态" defaultValue="init">
+			<component type="dropdown" readOnly="true">
+				<option displayName="初始" value="init"/>
+				<option displayName="下发" value="send"/>
+				<option displayName="待审批" value="foraudit"/>
+				<option displayName="审批" value="audit"/>
+			</component>
+		</field>
 		<field name="AUDIT_USER_ID" javaType="string" description="审批人">
 			<component type="combo" quickQueryConditionField="NAME" referenceTable="SYSOPERATOR_VIEW" referenceField="ID" displayReferenceField="NAME" readOnly="true"/>
 			<listColumn noquery="true" nowrap="true"/>
