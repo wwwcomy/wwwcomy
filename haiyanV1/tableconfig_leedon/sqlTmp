@@ -37,7 +37,9 @@ create or replace view V_WM_OUT as
 1. 所有商品的SDB_PRODUCT_ID还是修改为mediumint并添加索引，包括T_WM_PRO,T_WM_SDBPRODUCT,V_DIC_SDBPROGOODS,T_DIC_SDBPROGOODS
 
 20130921
-1. 商品仓库关系建立：insert into M_PRODUCT_WAREHOUSE(ID,PRODUCT,WAREHOUSE) (select concat(ID,'_',WAREHOUSE),ID,WAREHOUSE from T_WM_SDBPRODUCT where WAREHOUSE is not null)
+1. 商品仓库关系建立：
+insert into M_PRODUCT_WAREHOUSE(ID,PRODUCT,WAREHOUSE) (select concat(t_1.ID,'_',t_2.WAREHOUSE),t_1.ID,t_2.WAREHOUSE from T_WM_SDBPRODUCT t_1 left join t_wm_pro t_2 on t_1.ID=t_2.id where t_2.WAREHOUSE is not null)
+注意： 后来V_WM_SDBPRODUCT表中的仓库字段被删掉了 所以和原有的T_WM_PRO表联立了一下
 
 20131007
 1. query_js.jsp在__pagingBar的定义中可以加入每页1000条的选项
