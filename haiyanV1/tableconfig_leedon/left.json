@@ -99,4 +99,12 @@
 	text : 'WM_EDP库存销售',
 	cataUrl : 'view.do?__opr_data=V_WM_STORESALE',
 	leaf : true
+}, {
+	text : 'WM_EDP分库(测试!)',
+	cataUrl : 'query.do?__opr_data=V_WM_OUT2',
+	leaf : true
+}, {
+	text : 'WM_EDP出库(测试!)',
+	cataUrl : 'query.do?__opr_data=V_WM_OUT3',
+	leaf : true
 }]
