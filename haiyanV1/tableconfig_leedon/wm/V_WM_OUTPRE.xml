@@ -55,7 +55,7 @@
 			<listColumn noedit="false" noquery="false"/>
 		</field>
 		<field name="PRO_COUNT" description="Haiyan应出库数量" javaType="bigDecimal">
-			<component type="text" readOnly="false"/>
+			<component type="text" readOnly="true"/><!--(SDB表)应出库数量 -->
 			<listColumn noedit="false" noquery="false"/>
 		</field>
 		<field name="OUT_RCOUNT" description="Haiyan实际出库数量" javaType="bigDecimal" defaultValue="0">

@@ -143,6 +143,8 @@ try {
 	<table id="grid0">
 		<tr rowspan=3>
 			<td class="td0" rowspan=3>产品名<button onclick="javascript:GRID0.btnClick();" >+</button></td>
+			<td class="td1" rowspan=3>货号</td>
+			<td class="td1" rowspan=3>自有货号</td>
 			<td class="td1" rowspan=3>库存数</td>
 			<td class="td1" rowspan=3>应出数</td>
 			<td class="td1" rowspan=3>分配数</td>
@@ -260,14 +262,14 @@ try {
 			this.mapData[PID][OID]['OUT_PCOUNT']=val; // 设置映射数据
 			
 			this.calRowModel(rowIndex); // 物理行
-			this.getDataCellEl(rowIndex, 3).innerHTML=this.sumRow[rowIndex]['OUT_PCOUNT']; // 分配数合计
+			this.getDataCellEl(rowIndex, 5).innerHTML=this.sumRow[rowIndex]['OUT_PCOUNT']; // 分配数合计
 		}
 		,initTemplate:function(){
 			var h;
 			h='<tr rowIndex={0} rowID={1} >';
-			h+='<td nowrap><font color="blue">{2}</font></td><td>{3}</td><td>{4}</td><td>{5}</td><td>{6}</td>';
+			h+='<td nowrap><font color="blue">{2}</font></td><td>{3}</td><td>{4}</td><td>{5}</td><td>{6}</td><td>{7}</td><td>{8}</td>';
 			for (var i=0;i<this.cm.length*4;i+=4) { // colID={'+(7+i)+'}
-				h+='<td>{'+(8+i)+'}</td><td>{'+(9+i)+'}</td><td>{'+(10+i)+'}</td>';
+				h+='<td>{'+(10+i)+'}</td><td>{'+(11+i)+'}</td><td>{'+(12+i)+'}</td>';
 			}
 			h+='</tr>';
 			this.template = new Ext.Template(h);
@@ -350,6 +352,8 @@ try {
 					this.getRowCount() // 行号 attri
 					, PID // 产品ID attri //, row['__PRODUCTID__NAME']+'--'+row['PRODUCTID']+'--'+row['ORDER_ID'] // 产品名称
 					, PNAME+':'+PID // 出库产品编号
+					, row['WMCODE'] // 货号
+					, row['SUPP_CODE'] // 自有货号
 					, this.sumRow[rowIndex]['PRO_KCCOUNT'] // 库存数
 					, this.mapDataYC[PID]||0//this.sumRow[rowIndex]['OUT_COUNT'] // 应出数
 					, this.sumRow[rowIndex]['OUT_PCOUNT'] // 分配数
