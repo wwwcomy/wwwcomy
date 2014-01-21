@@ -205,7 +205,7 @@ try {
 		,vm:<%=KUCUN_JARRAY.toString()%> // 固定值模型 V_WM_STOCK3(库存)
 		,rm:<%=PRODUCT_ROWS.toJSon()%> // 行模型 T_WM_SDBPRODUCT(效率处理，仅限当前出库单的产品)
 		,cm:<%=SUBORDERS_COLS.toJSon()%> // 列模型 T_DIC_WAREHOUSE(仓库)
-		,dm:<%=SUBORDERS_DTLS.toJSon()%> // 编辑值模型 T_WM_OUTPRE2(子订单明细)
+		,dm:<%=SUBORDERS_DTLS.toJSon()%> // 编辑值模型 T_WM_OUTPREDTL(子订单明细)
 		,ym:<%=SUBORDERS_PRE.toJSon()%> // 应出库模型
 		,hasData:{} // 判断出库明细是否存在，如果存在在判断是否已经做过出库分配
 		,mapData:{} // 数据索引
@@ -226,7 +226,7 @@ try {
 				,__WAREHOUSE_NAME:WNAME
 			});
 			rm.each(function(row, index) { // 行维度 T_WM_SDBPRODUCT
-				var YCK=this.getDataCellEl(index, 2).innerHTML*1,PID=row['ID'];
+				var YCK=this.getYCK(index).innerHTML*1,PID=row['ID'];
 				dm.push({
 					ITEM_ID:''
 					,ORDER_ID:this.ORDER_ID
@@ -243,8 +243,20 @@ try {
 			dom.children[0].children[1].innerHTML+='<td class="td2" colspan=3>仓库:'+WNAME+'('+WID+')</td>';
 			dom.children[0].children[2].innerHTML+='<td class="td1">库存</td><td class="td1">分配</td><td class="td1">实出</td>';
 		}
-		,change:function(PID,OID,WID,rowIndex,colIndex,val) {
+		,change:function(PID,OID,WID,rowIndex,colIndex,that) {
 			var rm=this.rm, cm=this.cm, dm=this.dm, vm=this.vm, dataIndex=this.mapData[PID][OID]['ROWINDEX']>=0?this.mapData[PID][OID]['ROWINDEX']:rowIndex;
+			var val = that.value;
+			// 增加实出库不超过应出库的判断
+			var YCK = parseInt(this.getYCK(rowIndex).innerHTML);
+			var SCK = parseInt(this.getSCK(rowIndex).innerHTML);
+			var increasement = val - this.mapData[PID][OID]['OUT_PCOUNT'];
+			if((YCK-SCK)<increasement){
+				Ext.Msg.alert("警告","应出库数量已经超出预期,请重新输入!");
+				that.value = this.mapData[PID][OID]['OUT_PCOUNT'];
+				that.focus();
+				return;
+			}
+				
 			/* if(dm[dataIndex]){
 			} else{
 				dm.push({
@@ -262,7 +274,7 @@ try {
 			this.mapData[PID][OID]['OUT_PCOUNT']=val; // 设置映射数据
 			
 			this.calRowModel(rowIndex); // 物理行
-			this.getDataCellEl(rowIndex, 5).innerHTML=this.sumRow[rowIndex]['OUT_PCOUNT']; // 分配数合计
+			this.getSCK(rowIndex).innerHTML=this.sumRow[rowIndex]['OUT_PCOUNT']; // 分配数合计
 		}
 		,initTemplate:function(){
 			var h;
@@ -305,7 +317,7 @@ try {
 		,calModel:function(){ // 产品遍历
 			var rm=this.rm, cm=this.cm, dm=this.dm, vm=this.vm, ym=this.ym;
 			ym.each(function(yc, index){
-				var PID = yc.PRODUCTID, COUNT = yc.OUT_COUNT;
+				var PID = yc.PRODUCTID, COUNT = yc.PRO_COUNT;// 使用T_WM_OUTPRE中的PRO_COUNT(源于SDB表) 作为应出库数量
 				this.mapDataYC[PID]=COUNT;
 			}, this);
 			vm.each(function(kuc, index) { // 库存遍历 V_WM_STOCK3
@@ -366,7 +378,7 @@ try {
 						args.push(
 							OID
 							, (this.mapDataKC[PID][t['WAREHOUSE']]||0) // 库存
-							, '<input class="td1" onchange="GRID0.change(\''+PID+'\',\''+OID+'\',\''+t['WAREHOUSE']+'\','+rowIndex+','+colIndex+',this.value)" value="'+(t['OUT_PCOUNT']||0)+'"></input>' // 分配
+							, '<input class="td1" onchange="GRID0.change(\''+PID+'\',\''+OID+'\',\''+t['WAREHOUSE']+'\','+rowIndex+','+colIndex+',this)" value="'+(t['OUT_PCOUNT']||0)+'"></input>' // 分配
 							, (t['OUT_RCOUNT']||0) // 实出
 						);
 					} else if(t && t['WAREHOUSE'] && this.mapDataKC[PID][t['WAREHOUSE']]*1>0){//this.mapDataKC[PID][cm[colIndex]['ID']]*1>0 
@@ -374,7 +386,7 @@ try {
 						args.push(
 								OID
 								, (this.mapDataKC[PID][t['WAREHOUSE']]||0) // 库存
-								, '<input class="td1" onchange="GRID0.change(\''+PID+'\',\''+OID+'\',\''+cm[colIndex]['ID']+'\','+rowIndex+','+colIndex+',this.value)" value="'+(t['OUT_PCOUNT']||0)+'"></input>' // 分配
+								, '<input class="td1" onchange="GRID0.change(\''+PID+'\',\''+OID+'\',\''+cm[colIndex]['ID']+'\','+rowIndex+','+colIndex+',this)" value="'+(t['OUT_PCOUNT']||0)+'"></input>' // 分配
 								, (t['OUT_RCOUNT']||0) // 实出
 							);
 					}
@@ -406,6 +418,12 @@ try {
 		}
 		,getDataCellEl:function(r, c) {
 			return this.getGridEl().dom.children[r+1].children[0].children[c];
+		}
+		,getYCK:function(index){
+			return this.getDataCellEl(index, 4);
+		}
+		,getSCK:function(index){
+			return this.getDataCellEl(index, 5);
 		}
 		,getRowCount:function() {
 			return this.getGridEl().dom.children[0].children.length-this.FIXROW;
