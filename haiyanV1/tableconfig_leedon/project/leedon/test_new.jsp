@@ -135,6 +135,9 @@ try {
 		#grid0 .tdl {
 			color:green;
 		}
+		.red {
+			color : red;
+		}
 	</style>
 </head>
 <body>
@@ -251,10 +254,14 @@ try {
 			var SCK = parseInt(this.getSCK(rowIndex).innerHTML);
 			var increasement = val - this.mapData[PID][OID]['OUT_PCOUNT'];
 			if((YCK-SCK)<increasement){
-				Ext.Msg.alert("警告","应出库数量已经超出预期,请重新输入!");
-				that.value = this.mapData[PID][OID]['OUT_PCOUNT'];
-				that.focus();
-				return;
+				// Ext.Msg.alert("警告","应出库数量已经超出预期,请重新输入!");
+				Ext.Msg.alert("警告","分配数量已经超出应出库数量");
+				Ext.get(this.getSCK(rowIndex)).addClass("red");
+				//that.value = this.mapData[PID][OID]['OUT_PCOUNT'];
+				//that.focus();
+				//return;
+			} else {
+				Ext.get(this.getSCK(rowIndex)).removeClass("red");
 			}
 				
 			/* if(dm[dataIndex]){
@@ -465,7 +472,7 @@ try {
 							alert('先选择仓库');
 							return;
 						}
-						this.ownerCt.ownerCt.close()
+						this.ownerCt.ownerCt.close();
 						GRID0.addColumn(v,vName);
 						GRID0.refresh();
 					}
