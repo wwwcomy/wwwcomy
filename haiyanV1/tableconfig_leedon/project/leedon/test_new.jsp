@@ -283,7 +283,12 @@ try {
 			this.mapData[PID][OID]['OUT_PCOUNT']=val; // 设置映射数据
 			
 			this.calRowModel(rowIndex); // 物理行
-			this.getSCK(rowIndex).innerHTML=this.sumRow[rowIndex]['OUT_PCOUNT']; // 分配数合计
+			var totalFPS = this.sumRow[rowIndex]['OUT_PCOUNT'];
+			this.getSCK(rowIndex).innerHTML = totalFPS;// 分配数合计
+			
+			// 修改父窗口SUBGRID中的分配数
+			window.parent.changeFPS(PID,totalFPS);
+			
 		}
 		,initTemplate:function(){
 			var h;
