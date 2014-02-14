@@ -58,7 +58,7 @@
 			<component type="text" readOnly="true" colspan="1"/>
 			<listColumn noedit="false" noquery="false"/>
 		</field>
-		<field name="WAREHOUSE" description="出库仓库" displayOnly="false" javaType="string" lazyLoad="false" nullAllowed="false">
+		<field name="WAREHOUSE" description="出库仓库" displayOnly="false" javaType="string" lazyLoad="false">
 			<component type="text" readOnly="true" colspan="1"/>
 			<listColumn noedit="false" noquery="false"/>
 		</field>

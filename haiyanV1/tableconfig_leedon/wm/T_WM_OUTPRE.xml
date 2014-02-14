@@ -48,7 +48,7 @@
 			<listColumn noedit="true" noquery="true" width="70"/>
 		</field>
 		<field name="OUT_COUNT" description="(订单)数量" javaType="bigDecimal" defaultValue="0">
-			<component type="text" readOnly="true"/>
+			<component type="text" readOnly="false"/>
 			<listColumn noedit="false" noquery="false"/>
 		</field>
 		<field name="OUT_PCOUNT" description="(额度)分配数量" javaType="bigDecimal" defaultValue="0">
@@ -92,7 +92,7 @@
 			<component type="text" readOnly="true" colspan="1"/>
 			<listColumn noedit="false" noquery="false"/>
 		</field>
-		<field name="WAREHOUSE" description="出库仓库" displayOnly="false" javaType="string" lazyLoad="false" nullAllowed="false" ><!-- 分配后保存 -->
+		<field name="WAREHOUSE" description="出库仓库" displayOnly="false" javaType="string" lazyLoad="false" ><!-- 分配后保存 -->
 			<component type="text" readOnly="true" colspan="1" /><!-- displayReferenceField="WAREHOUSE" -->
 			<listColumn noedit="false" noquery="false"/>
 		</field>
@@ -200,6 +200,11 @@
 			if(SubStr(Get(ORDER_ID),0,2)={CK},Set(ITEM_ID_PK,0),Set(ITEM_ID_PK,get(ITEM_ID)))
 			+If(IsEmpty(Get(ITEM_ID_PK)),Set(ITEM_ID_PK,Get(ITEM_ID)),true)
 			+NoCheck()+Save({T_WM_OUTPREPART},GetForm())+RunInterceptor(refreshOne)" pluginName="saveView" />
+			
+		<pluginInterceptor methodName="exp" parameter="
+			if(SubStr(Get(ORDER_ID),0,2)={CK},Set(ITEM_ID_PK,0),Set(ITEM_ID_PK,get(ITEM_ID)))
+			+If(IsEmpty(Get(ITEM_ID_PK)),Set(ITEM_ID_PK,Get(ITEM_ID)),true)
+			+NoCheck()+Save({T_WM_OUTPREPART},GetForm())+RunInterceptor(refreshOne)" pluginName="saveView1" />
 
 		<pluginInterceptor methodName="exp" parameter="DBSQL({update T_WM_OUTDETAIL set BILL_STATUS='audit' where HEADID='}&amp;Get(ORDER_ID)&amp;{' and PRODUCTID='}&amp;Get(PRODUCTID)&amp;{'})" pluginName="audit" />
 		<pluginInterceptor methodName="exp" parameter="DBSQL({update T_WM_OUTDETAIL set BILL_STATUS='init' where HEADID='}&amp;Get(ORDER_ID)&amp;{' and PRODUCTID='}&amp;Get(PRODUCTID)&amp;{'})" pluginName="unaudit" />
