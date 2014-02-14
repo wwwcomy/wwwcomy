@@ -215,8 +215,6 @@ try {
 		,mapData:{} // 数据索引
 		,mapDataKC:{} // 库存索引
 		,mapDataYC:{} // 应出索引
-		//,mapRow:{} // 行索引
-		//,mapCol:{} // 列索引
 		,sumRow:{} // 行汇总
 		,sumCol:{} // 列汇总
 		//,store:STORE
@@ -229,6 +227,7 @@ try {
 				,SUBORDERID:OID
 				,WAREHOUSE:WID
 				,__WAREHOUSE_NAME:WNAME
+				,BILL_STATUS1:BillStatus1
 			});
 			rm.each(function(row, index) { // 行维度 T_WM_SDBPRODUCT
 				var YCK=this.getYCK(index).innerHTML*1,PID=row['ID'];
@@ -411,6 +410,13 @@ try {
 						);
 				}
 				this.template.append(this.getGridEl(), args, true);
+				var YCK = parseInt(this.getYCK(rowIndex).innerHTML);
+				var SCK = parseInt(this.getSCK(rowIndex).innerHTML);
+				if(YCK<SCK){
+					Ext.get(this.getSCK(rowIndex)).addClass("red");
+				} else {
+					Ext.get(this.getSCK(rowIndex)).removeClass("red");
+				}
 			}, this);
 		}
 		,render:function() {
@@ -431,10 +437,10 @@ try {
 		,getDataCellEl:function(r, c) {
 			return this.getGridEl().dom.children[r+1].children[0].children[c];
 		}
-		,getYCK:function(index){
+		,getYCK:function(index){//应出库
 			return this.getDataCellEl(index, 4);
 		}
-		,getSCK:function(index){
+		,getSCK:function(index){//分配数
 			return this.getDataCellEl(index, 5);
 		}
 		,getRowCount:function() {
