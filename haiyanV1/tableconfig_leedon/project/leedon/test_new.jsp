@@ -84,6 +84,7 @@ try {
 		dfrm = new MapForm();
 		dfrm.set("ORDER_ID",ORDER_ID);
 		dfrm.set("SUBORDERID",frm.get("SUBORDERID"));
+		dfrm.set("BILL_STATUS1",frm.get("BILL_STATUS1"));
 		dfrm.set("WAREHOUSE", frm.get("WAREHOUSE"));
 
 		Qbq3Form warehouseForm=srvContext.getDBM().findByPK("T_DIC_WAREHOUSE", frm.get("WAREHOUSE"),srvContext);
@@ -94,8 +95,6 @@ try {
 	}
 
 	SUBORDERS_COLS.setData(new ArrayList<Qbq3Form>(map.values()));
-	
-	
 	
 %>
 <html>
@@ -155,7 +154,8 @@ try {
 			<%int size = SUBORDERS_COLS.size();%>
 			<%for(int i=0;i<size;i++){
 				Qbq3Form frm=(Qbq3Form)SUBORDERS_COLS.get(i);%>
-				<td class="td2" colspan=3 >子订单:<%=(i+1)%>(<%=StringUtil.isEmpty(frm.get("SUBORDERID"))?("00"+(i+1)):frm.get("SUBORDERID")%>)</td>
+				<td class="td2" colspan=3 >子订单:<%=(i+1)%>(<%=StringUtil.isEmpty(frm.get("SUBORDERID"))?("00"+(i+1)):frm.get("SUBORDERID")%>,
+				<%=StringUtil.isEmpty(frm.get("BILL_STATUS1"))?"init":frm.get("BILL_STATUS1")%>)</td>
 			<%}%>
 		</tr>
 		<tr>
@@ -194,6 +194,7 @@ try {
 		  ,'OUT_PCOUNT' // 分配数
 		  ,'PRO_COUNT' // 数量(预出库数)
 		  ,'WAREHOUSE' // 仓库ID
+		  ,'BILL_STATUS1' // 子订单状态
 		]
 	});
 	function getStore() {
@@ -222,6 +223,7 @@ try {
 		,addColumn:function(WID, WNAME){
 			var rm=this.rm, cm=this.cm, dm=this.dm, vm=this.vm, bm=this.bm;
 			var OID='00'+(cm.length+1);
+			var BillStatus1 = 'init';
 			cm.push({
 				ORDER_ID:this.ORDER_ID
 				,SUBORDERID:OID
@@ -239,10 +241,11 @@ try {
 					,OUT_PCOUNT:0
 			        ,OUT_RCOUNT:0
 			        ,OUT_COUNT:YCK
+					,BILL_STATUS1:'init'
 				});
 			}, this);
 			var dom=this.getGridEl().dom;
-			dom.children[0].children[0].innerHTML+='<td class="td2" colspan=3>子订单:'+cm.length+'('+OID+')</td>';
+			dom.children[0].children[0].innerHTML+='<td class="td2" colspan=3>子订单:'+cm.length+'('+OID+','+BillStatus1+')</td>';
 			dom.children[0].children[1].innerHTML+='<td class="td2" colspan=3>仓库:'+WNAME+'('+WID+')</td>';
 			dom.children[0].children[2].innerHTML+='<td class="td1">库存</td><td class="td1">分配</td><td class="td1">实出</td>';
 		}
@@ -380,12 +383,14 @@ try {
 				];
 				for (var colIndex=0;colIndex<cm.length;colIndex++) { // 遍历子订单（列维度）
 					var OID = cm[colIndex]['SUBORDERID']||('00'+(colIndex+1)), t = this.mapData[PID][OID]; // 查应出库信息 某子订单中的某产品
+					var billStatus1 = cm[colIndex]['BILL_STATUS1'];
+					var readOnly = billStatus1=='init'?false:true;
 					//if (t && t['PRO_KCCOUNT']*1>0 && t['OUT_RCOUNT']*1<t['OUT_COUNT']*1) { // 有库存 并且 应出>实出 才能出库
 					if (t && t['WAREHOUSE'] && this.mapDataKC[PID][t['WAREHOUSE']]*1>0 && this.mapData[PID]['OUT_COUNT']*1>0) { // NOTICE 测试 
 						args.push(
 							OID
 							, (this.mapDataKC[PID][t['WAREHOUSE']]||0) // 库存
-							, '<input class="td1" onchange="GRID0.change(\''+PID+'\',\''+OID+'\',\''+t['WAREHOUSE']+'\','+rowIndex+','+colIndex+',this)" value="'+(t['OUT_PCOUNT']||0)+'"></input>' // 分配
+							, '<input class="td1" onchange="GRID0.change(\''+PID+'\',\''+OID+'\',\''+t['WAREHOUSE']+'\','+rowIndex+','+colIndex+',this)" value="'+(t['OUT_PCOUNT']||0)+'" '+(readOnly?'readonly':'')+'></input>' // 分配
 							, (t['OUT_RCOUNT']||0) // 实出
 						);
 					} else if(t && t['WAREHOUSE'] && this.mapDataKC[PID][t['WAREHOUSE']]*1>0){//this.mapDataKC[PID][cm[colIndex]['ID']]*1>0 
@@ -393,7 +398,7 @@ try {
 						args.push(
 								OID
 								, (this.mapDataKC[PID][t['WAREHOUSE']]||0) // 库存
-								, '<input class="td1" onchange="GRID0.change(\''+PID+'\',\''+OID+'\',\''+cm[colIndex]['ID']+'\','+rowIndex+','+colIndex+',this)" value="'+(t['OUT_PCOUNT']||0)+'"></input>' // 分配
+								, '<input class="td1" onchange="GRID0.change(\''+PID+'\',\''+OID+'\',\''+cm[colIndex]['ID']+'\','+rowIndex+','+colIndex+',this)" value="'+(t['OUT_PCOUNT']||0)+'" '+(readOnly?'readonly':'')+'></input>' // 分配
 								, (t['OUT_RCOUNT']||0) // 实出
 							);
 					}

@@ -135,16 +135,30 @@
 				<option displayName="审批确认" value="audit"/>
 			</component>
 		</field>
+		<field name="BILL_STATUS1" javaType="string" description="单据状态" defaultValue="init">
+			<component type="dropdown" readOnly="true">
+				<option displayName="初始" value="init"/>
+				<option displayName="下发" value="send"/>
+				<option displayName="待审批" value="foraudit"/>
+				<option displayName="审批" value="audit"/>
+			</component>
+		</field>
 		<!--
 		<querySQL methodName="exp"><![CDATA[
 			{(select distinct(PRODUCTID)
 				from T_WM_OUTPRE)}
 		]]></querySQL>
 		-->
-		<!-- -->
+		<!-- 
 		<queryFilter>
+			<pluggedFilter methodName="exp" parameter="
+			If(InRole(sp,wm),
+				{ and t_1.ORDER_ID in (select distinct(ORDER_ID) from T_WM_OUTPREDTL where OUT_PCOUNT>0) and t_1.BILL_STATUS1='send'},
+				{ and t_1.ORDER_ID in (select distinct(ORDER_ID) from T_WM_OUTPREDTL where OUT_PCOUNT>0) and t_1.BILL_STATUS1='send'}
+			)"/>
 			<pluggedFilter methodName="exp" parameter="{ and OUT_PCOUNT>0}"/>
 		</queryFilter>
+		-->
 		<!-- -->
 		<role name="user sp">
 			<disComponent name="PRE AUDIT UNAUDIT"/>
