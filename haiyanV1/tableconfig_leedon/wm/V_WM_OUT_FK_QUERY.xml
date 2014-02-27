@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Haiyan xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../haiyan.xsd">
+	<table name="V_WM_OUT_FK_QUERY" realTable="V_WM_OUT_FK_QUERY" description="出库单(查询界面显示用)" colspan="6">
+		<id name="ID" javaType="string"/>
+		<field name="SUBORDERID" description="子订单ID" javaType="string">
+			<component type="readOnlyText"/>
+		</field>
+		<field name="ORDER_ID" description="SDB订单号" javaType="string" lazyLoad="false">
+			<component type="text" readOnly="true" colspan="1"/>
+			<listColumn noedit="false" noquery="false" width="130"/>
+		</field>
+		<field name="OUT_TYPE" javaType="string" description="出库类别" defaultValue="consign">
+			<component type="dropdown" readOnly="false">
+				<option displayName="出库" value="consign"/>
+				<option displayName="返厂" value="reject"/>
+				<option displayName="损耗" value="loss"/>
+			</component>
+		</field>
+		<field name="SHIP_NAME" description="收货客户名" displayOnly="false" javaType="string" lazyLoad="false">
+			<component type="text" readOnly="false" colspan="1"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="SHIP_ADDR" description="收货客户地址" displayOnly="false" javaType="string" lazyLoad="false">
+			<component type="text" readOnly="false" colspan="6" style="width:525px;"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="SHIP_TEL" description="收货客户固话" displayOnly="false" javaType="string" lazyLoad="false">
+			<component type="text" readOnly="false" />
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="SHIP_MOBILE" description="收货客户手机" displayOnly="false" javaType="string" lazyLoad="false">
+			<component type="text" readOnly="false" />
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<!-- 
+		<field name="PMT_AMOUNT" description="订单优惠金额" displayOnly="false" javaType="bigDecimal" lazyLoad="false">
+			<component type="text" readOnly="false"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="FINAL_AMOUNT" description="订单总金额" displayOnly="false" javaType="bigDecimal" lazyLoad="false">
+			<component type="text" readOnly="false"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="COST_FREIGHT" description="订单运费" displayOnly="false" javaType="bigDecimal" lazyLoad="false">
+			<component type="text" readOnly="false"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		 -->
+		<field name="SHIPPING" description="选择发货物流" displayOnly="false" javaType="string" lazyLoad="false">
+			<component type="text" readOnly="false" colspan="6"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="BILL_STATUS1" javaType="string" description="单据状态" defaultValue="init">
+			<component type="dropdown" readOnly="true">
+				<option displayName="初始" value="init"/>
+				<option displayName="下发" value="send"/>
+				<option displayName="待审批" value="foraudit"/>
+				<option displayName="审批" value="audit"/>
+			</component>
+		</field>
+		<field name="ORDER_MEMO" description="订单备注" displayOnly="false" javaType="string" lazyLoad="false">
+			<component type="text" readOnly="false" colspan="6"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<!-- -->
+		<!--No filter for admin { and t_1.ID in (select ORDER_ID from T_WM_OUTPRE t_2 left join T_WM_SDBPRODUCT t_3 on t_2.PRODUCTID=t_3.ID where t_3.WAREHOUSE='}&amp;GetUser(WAREHOUSEID)&amp;{') }-->
+		<!-- 
+		<queryFilter>
+			<pluggedFilter methodName="exp" parameter="
+			If(InRole(sp,wm),
+				{ and t_1.ID in (select distinct(ORDER_ID) from T_WM_OUTPRE t_2 where t_2.SUPPLIER='}&amp;GetUser(SUPPLIER)&amp;{' and t_2.WAREHOUSE='}&amp;GetUser(WAREHOUSEID)&amp;{') },
+				true
+			)"/>
+		</queryFilter>
+		-->
+		<pluginInterceptor methodName="initDB" pluginName="initDB" type="before" ><![CDATA[
+create or replace view V_WM_OUT_FK_QUERY as 
+		(
+			select concat(t_1.SUBORDERID,t_1.ORDER_ID) as ID,t_1.SUBORDERID,t_1.ORDER_ID,t_2.OUT_TYPE,t_2.MEMBER_ID,t_2.SHIP_NAME,t_2.SHIP_ADDR,t_2.SHIP_TEL,t_2.SHIP_MOBILE,
+			t_2.FINAL_AMOUNT,t_2.SHIPPING,t_2.ORDER_MEMO,t_2.BILL_STATUS1 from t_wm_outpredtl t_1 
+			LEFT JOIN t_wm_outpart t_2 on t_1.ORDER_ID=t_2.ORDER_ID GROUP BY t_1.SUBORDERID,t_1.ORDER_ID
+		)
+		]]></pluginInterceptor>
+	</table>
+</Haiyan>

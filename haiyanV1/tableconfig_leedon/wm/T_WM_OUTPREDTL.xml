@@ -6,6 +6,7 @@
 		</id>
 		<field name="ITEM_ID_PK" description="增加索引字段" javaType="bigDecimal">
 			<component type="readOnlyText"/>
+			<listColumn noquery="true"/>
 		</field>
 		<field name="SUBORDERID" description="子订单ID" javaType="string">
 			<component type="readOnlyText"/>

@@ -104,7 +104,11 @@
 	cataUrl : 'query.do?__opr_data=V_WM_OUT2',
 	leaf : true
 }, {
-	text : 'WM_EDP出库(测试!)',
+	text : 'WM_EDP按照订单出库(测试!)',
 	cataUrl : 'query.do?__opr_data=V_WM_OUT3',
+	leaf : true
+}, {
+	text : 'WM_EDP子订单出库(测试!)',
+	cataUrl : 'query.do?__opr_data=V_WM_OUT_FK_QUERY',
 	leaf : true
 }]
