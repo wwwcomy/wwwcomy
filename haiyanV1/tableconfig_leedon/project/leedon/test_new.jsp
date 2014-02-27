@@ -497,6 +497,11 @@ try {
 		}
 	};
 	GRID0.render();
+
+	function changeStatus(){
+		var a=1;
+		
+	};
 	</script>
 </body>
 </html>

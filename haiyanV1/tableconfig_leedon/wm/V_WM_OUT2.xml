@@ -174,7 +174,7 @@
 		<pluginOperation name="unaudit" oprName="取消审核" hostPage="edit" action="If(Confirm({请确认是否要取消审核?}),Save({},{unaudit}),true)+brk()"/>
 		 -->
 		 <pluginOperation name="auditSend" oprName="下发" hostPage="edit" tblevel="1" img="settings" action="
-			If(Confirm({确认下发?}),plugin({},{auditSend},{SUBFRAME})+brk(),brk())"/>
+			If(Confirm({确认下发?}),changestatus()+plugin({},{auditSend},{SUBGRID},{SUBFRAME})+brk(),brk())"/>
 		<Operation queryPageDelete="false" queryPageAdd="false" save="false" saveAndAdd="false" saveAndAddCopy="false"/>
 	</table>
 </Haiyan>

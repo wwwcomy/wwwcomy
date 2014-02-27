@@ -81,7 +81,7 @@ function testRem(rowIndex) {
 	//item.set('__PRODUCTID__NAME', $('__PRODUCTID__NAME').value);
 	item.set('__PRODUCTID__NAME', $('__PRODUCTID__CODE').value);
 	item.set('PRO_COUNT', remNum);
-	item.set('INPACK_NUM',1)
+	item.set('INPACK_NUM',1);
 	item.set('PRO_WMCODE', $('HIDDEN_WMCODE').value);
 	item.set('PRO_CAPACITYNUM', $('PRO_CAPACITYNUM').value);
 	item.set('PRO_WEIGHTNUM', $('PRO_WEIGHTNUM').value);
@@ -119,7 +119,7 @@ function testPre(rowIndex) {
 			item.set('SUPP_CODE', "");
 			item.set('BATCH', "");
 			item.set('PRO_COUNT', "");
-			item.set('INPACK_NUM',"")
+			item.set('INPACK_NUM',"");
 			item.set('PRO_WMCODE', "");
 			item.set('PRO_CAPACITYNUM', "");
 			item.set('PRO_WEIGHTNUM', "");
@@ -158,7 +158,7 @@ function testPre(rowIndex) {
 			item.set('SUPP_CODE', suppCode);
 			item.set('BATCH', batch);
 			item.set('PRO_COUNT', a);
-			item.set('INPACK_NUM',a/numPerBox)
+			item.set('INPACK_NUM',a/numPerBox);
 			item.set('PRO_WMCODE', $('HIDDEN_WMCODE').value);
 			item.set('PRO_CAPACITYNUM', $('PRO_CAPACITYNUM').value);
 			item.set('PRO_WEIGHTNUM', $('PRO_WEIGHTNUM').value);
@@ -258,7 +258,7 @@ Hy.UIFunction.testprebtn=function() {
 		}
 //		Hy.msg(null, '<font color="red">此按钮不会自动填写入库明细的价格，请手动填写或使用应入库明细中的按钮进行操作。</font>');
 	});
-}
+};
 //明细入库
 Hy.UIFunction.test2=function(rowIndex) {
 	if (Hy.UICache['WMLIST']) {
@@ -307,7 +307,7 @@ Hy.UIFunction.test2=function(rowIndex) {
 				item.set('SUPP_CODE', "");
 				item.set('BATCH', "");
 				item.set('PRO_COUNT', "");
-				item.set('INPACK_NUM',"")
+				item.set('INPACK_NUM',"");
 				item.set('PRO_WMCODE', "");
 				item.set('PRO_CAPACITYNUM', "");
 				item.set('PRO_WEIGHTNUM', "");
@@ -318,7 +318,7 @@ Hy.UIFunction.test2=function(rowIndex) {
 		Ext.getCmp('SUBGRID2').getSelectionModel().clearSelections();
 		Ext.getCmp('SUBGRID1').getSelectionModel().clearSelections();
 	}
-}
+};
 function renderTreeCol(value, metaData, record, rowIndex, colIndex, store, disVal, colVal, fieldName) {
 	var parentID=record.get('PARENTID'), isLeaf=record.get('ISLEAF')*1==1, treeCol=record.get(fieldName)  
 		,isExpand=false, bufLevel=[]; // special level
