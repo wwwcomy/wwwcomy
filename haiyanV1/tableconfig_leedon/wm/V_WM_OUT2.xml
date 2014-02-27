@@ -161,10 +161,8 @@
 			+Save({T_WM_OUTPART},GetForm())
 			" pluginName="saveView1" />
 		<pluginInterceptor methodName="exp" parameter="
-			if(SubStr(Get(ORDER_ID),0,2)={CK},Set(ORDER_ID_INT,0),Set(ORDER_ID_INT,get(ORDER_ID)))
-			+Set(BILL_STATUS1,{send})
+			Set(BILL_STATUS1,{send})
 			+SetCreateTime(AUDIT_TIME,{yyyy-MM-dd HH:mm:ss})
-			+Save({T_WM_OUTPART},GetForm())
 			" pluginName="auditSend" type="before"/>
 		<!--
 		<pluginInterceptor methodName="bsh" parameter="V_WM_OUT.bsh" pluginName="saveViewBatch" type="after" />
@@ -174,7 +172,7 @@
 		<pluginOperation name="unaudit" oprName="取消审核" hostPage="edit" action="If(Confirm({请确认是否要取消审核?}),Save({},{unaudit}),true)+brk()"/>
 		 -->
 		 <pluginOperation name="auditSend" oprName="下发" hostPage="edit" tblevel="1" img="settings" action="
-			If(Confirm({确认下发?}),changestatus()+plugin({},{auditSend},{SUBGRID},{SUBFRAME})+brk(),brk())"/>
+			If(Confirm({确认下发?}),changestatus()+Plugin({},{saveView1},{SUBGRID},{SUBFRAME})+plugin({},{auditSend})+brk(),brk())"/>
 		<Operation queryPageDelete="false" queryPageAdd="false" save="false" saveAndAdd="false" saveAndAddCopy="false"/>
 	</table>
 </Haiyan>

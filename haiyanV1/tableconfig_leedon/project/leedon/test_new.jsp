@@ -497,10 +497,11 @@ try {
 		}
 	};
 	GRID0.render();
-
+	//修改单据状态为下发
 	function changeStatus(){
-		var a=1;
-		
+		GRID0.dm.each(function(data,index){
+			data.BILL_STATUS1='send';
+		},GRID0);
 	};
 	</script>
 </body>
