@@ -65,29 +65,9 @@
 			<component type="text" readOnly="false" colspan="6"/>
 			<listColumn noedit="false" noquery="false"/>
 		</field>
-		<!-- 只有admin可分配 
-		<field name="SUBFRAME" description="SUBFRAME" displayOnly="true" javaType="string" lazyLoad="false">
-			<component type="iframe" readOnly="false" colspan="6" style="height:460;width:100%;" 
-			displayReferenceField="ITEM_ID,ORDER_ID,PRODUCTID,PRO_CODE,PRE,AUDIT,OUT_RCOUNT,OUT_COUNT,NAME,WMCODE,PACKING_NUM,CAPACITYNUM,WEIGHTNUM,OUT_PRICE,PRO_COUNT,OUT_PCOUNT,OUT_ALL_PRICE,All_CAPACITYNUM,All_WEIGHTNUM,LOGISTICS_NAME,LOGISTICS_CODE,LOGISTICS_MEMO,BILL_STATUS" 
-			referenceField="ORDER_ID" 
-			referenceTable="T_WM_OUTPRE" 
-			parameter="={project/leedon/test.jsp?TABLE=V_WM_OUT&amp;FIELD=SUBFRAME&amp;ORDER_ID=}&amp;If(IsEmpty(Get({ORDER_ID})),-1,Get({ORDER_ID}))"/>
-			<queryCondition type="none"/>
-			<listColumn noedit="false" noquery="true"/>
-		</field>
-		<field name="SUBFRAME" description="SUBFRAME" displayOnly="true" javaType="string" lazyLoad="false">
-			<component type="iframe" readOnly="false" colspan="6" style="height:460;width:100%;" 
-			displayReferenceField="" 
-			referenceField="ORDER_ID" 
-			referenceTable="T_WM_OUTPRE" 
-			parameter="={project/leedon/test.jsp?TABLE=V_WM_OUT&amp;FIELD=SUBFRAME&amp;ORDER_ID=}&amp;If(IsEmpty(Get({ORDER_ID})),-1,Get({ORDER_ID}))"/>
-			<queryCondition type="none"/>
-			<listColumn noedit="false" noquery="true"/>
-		</field>
-		-->
 		<!-- -->
 		<field name="SUBGRID" javaType="string" description="----------------------------------------------------------------应出库明细----------------------------------------------------------------" displayOnly="true">
-			<component type="grid" readOnly="false" colspan="6" style="width:950;height:260;grouping:false;" displayReferenceField="ITEM_ID,ORDER_ID,PRODUCTID,PRO_CODE,SUPP_CODE,PRE,AUDIT,UNAUDIT,SUBORDERID,OUT_PCOUNT,OUT_RCOUNT,OUT_COUNT,NAME,WMCODE,PACKING_NUM,CAPACITYNUM,WEIGHTNUM,IN_PRICE,OUT_PRICE,PRO_COUNT,OUT_ALL_PRICE,All_CAPACITYNUM,All_WEIGHTNUM,LOGISTICS_NAME,LOGISTICS_CODE,LOGISTICS_MEMO,BILL_STATUS" referenceField="ORDER_ID" referenceTable="T_WM_OUTPREDTL" parameter="{&amp;ORDER_ID=}&amp;If(IsEmpty(Get({ORDER_ID})),-1,Get({ORDER_ID}))"/>
+			<component type="grid" readOnly="false" colspan="6" style="width:950;height:260;grouping:false;" displayReferenceField="ITEM_ID,ORDER_ID,PRODUCTID,PRO_CODE,SUPP_CODE,PRE,AUDIT,UNAUDIT,SUBORDERID,OUT_PCOUNT,OUT_RCOUNT,OUT_COUNT,NAME,WMCODE,PACKING_NUM,CAPACITYNUM,WEIGHTNUM,IN_PRICE,OUT_PRICE,PRO_COUNT,OUT_ALL_PRICE,All_CAPACITYNUM,All_WEIGHTNUM,LOGISTICS_NAME,LOGISTICS_CODE,LOGISTICS_MEMO,BILL_STATUS" referenceField="ORDER_ID" referenceTable="T_WM_OUTPREDTL" parameter="{&amp;ORDER_ID=}&amp;If(IsEmpty(Get({ORDER_ID})),-1,Get({ORDER_ID}))&amp;If(IsEmpty(getsuborderid()),{},{&amp;SUBORDER_ID=}&amp;getsuborderid())"/>
 			<queryCondition type="none"/>
 			<listColumn noquery="true"/>
 		</field>
@@ -167,7 +147,7 @@
 		<role name="admin boss manager">
 		</role>
 		<!-- -->
-		<javascript hostPage="edit" src="project/leedon/V_WM_OUT.js"><![CDATA[
+		<javascript hostPage="edit" src="project/leedon/V_WM_OUT3.js"><![CDATA[
 			function renderPre(value, metaData, record, rowIndex, colIndex, store, disVal, colVal, fieldName) {
 				return "<button onclick=\"testPre('"+rowIndex+"');\" type=\"button\" class=\"zbutton1\" >预处理</button>";
 			}

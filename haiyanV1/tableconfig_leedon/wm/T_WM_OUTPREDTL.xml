@@ -150,16 +150,20 @@
 				from T_WM_OUTPRE)}
 		]]></querySQL>
 		-->
+		
 		<!-- 
-		<queryFilter>
 			<pluggedFilter methodName="exp" parameter="
 			If(InRole(sp,wm),
 				{ and t_1.ORDER_ID in (select distinct(ORDER_ID) from T_WM_OUTPREDTL where OUT_PCOUNT>0) and t_1.BILL_STATUS1='send'},
 				{ and t_1.ORDER_ID in (select distinct(ORDER_ID) from T_WM_OUTPREDTL where OUT_PCOUNT>0) and t_1.BILL_STATUS1='send'}
 			)"/>
 			<pluggedFilter methodName="exp" parameter="{ and OUT_PCOUNT>0}"/>
+			 -->
+		<queryFilter>
+			
+			<pluggedFilter methodName="exp" parameter="If(IsEmpty(GetPara(SUBORDER_ID)),{},{and t_1.SUBORDERID = }&amp;GetPara(SUBORDER_ID))"/>
 		</queryFilter>
-		-->
+	
 		<!-- -->
 		<role name="user sp">
 			<disComponent name="PRE AUDIT UNAUDIT"/>
