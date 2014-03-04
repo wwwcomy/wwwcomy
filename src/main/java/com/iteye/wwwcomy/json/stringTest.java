@@ -14,51 +14,26 @@ public class stringTest {
 	static {
 		// 静态块在静态变量初始化之后执行
 		// 静态块在其他任何类调用本类之前执行
-		System.out.println(234);
+//		System.out.println(234);
+	}
+
+	@Override
+	public Integer clone() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 	public static void main(String[] args) throws Exception {
-		// String a= new String("a");
-		// String c= new String("a");
-		// String b="a";
-		// System.out.println(a==b);
-		// System.out.println(a.equals(b));
-		// System.out.println(a=="a");
-		// System.out.println(a==c);
-		//
-		// System.out.println("---");
-		// bb b1= new bb();
-		// bb c1=new bb();
-		// System.out.println(b1==c1);
-
-		// String a,b,c;
-		// Pattern pattern =
-		// Pattern.compile("^(\\d+\\.?\\d?)\\*(\\d+\\.?\\d?)\\*(\\d+\\.?\\d?).*$");
-		// Matcher matcher = pattern.matcher("23*23.5*23.5cm");
-		// while(matcher.find()){
-		// a=matcher.group(1);
-		// b=matcher.group(2);
-		// c=matcher.group(3);
-		// System.out.println(a+","+b+","+c);
-		// System.out.println(Double.valueOf(a)*Double.valueOf(b)*Double.valueOf(c));
-		//
-		// }
-
-		// int i = Integer.MIN_VALUE;
-		// if (i < 0 && Math.abs(i) == i)
-		// System.out.println(Math.abs(i) + "It is " + i);
-		// Pattern pattern =
-		// Pattern.compile(".*#\\d{2}");
-		// System.out.println(("P_145#25").matches(".*#\\d{2}"));
-		// String a = "123,";
-		// System.out.println(a.substring(0, a.length() - 1));
-		// test2();
-
-		int a = -5;
-		System.out.println(Integer.toBinaryString(-a));
-		System.out.println(Integer.toBinaryString(a));
-		System.out.println(~a);
-		// System.out.println(Integer.toBinaryString(~a));
+		int i = 0;
+		while (true) {
+			int tmp = 11 * i;
+			if (tmp % 3 == 2 && tmp % 5 == 4 && tmp % 7 == 6 && tmp % 9 == 8) {
+				System.out.println(tmp);
+			}
+			if (i > 100000)
+				return;
+			i++;
+		}
 	}
 
 	private static void test2() {

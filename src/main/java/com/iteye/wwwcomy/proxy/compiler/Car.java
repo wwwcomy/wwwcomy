@@ -1,4 +1,4 @@
-package com.iteye.wwwcomy.compiler;
+package com.iteye.wwwcomy.proxy.compiler;
 
 public class Car implements Movable {
 

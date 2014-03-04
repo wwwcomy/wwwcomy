@@ -1,4 +1,4 @@
-package com.iteye.wwwcomy.compiler;
+package com.iteye.wwwcomy.proxy.compiler;
 
 import java.lang.reflect.Method;
 

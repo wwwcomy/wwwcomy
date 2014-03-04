@@ -10,6 +10,11 @@ public class TestSingleton {
 
 	private static TestSingleton instance = null;
 
+	/**
+	 * 原始的单例方法
+	 * 
+	 * @return
+	 */
 	public static TestSingleton getInstance() {
 		if (instance == null) {
 			return new TestSingleton();
@@ -19,6 +24,22 @@ public class TestSingleton {
 
 	private TestSingleton() {
 
+	}
+
+	public static TestSingleton getInstance2() {
+		if (instance == null) {
+			return syncGetInstance();
+		}
+		return instance;
+	}
+
+	private static TestSingleton syncGetInstance() {
+		synchronized (TestSingleton.class) {
+			if (instance == null) {
+				instance = new TestSingleton();
+			}
+		}
+		return instance;
 	}
 
 }

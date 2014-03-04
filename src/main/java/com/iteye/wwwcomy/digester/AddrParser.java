@@ -38,6 +38,6 @@ public class AddrParser {
 		digester.addSetNext("address-book/contact", "addAddr");
 
 		// now that rules and actions are configured, start the parsing process
-		AddrParser abp = (AddrParser) digester.parse(AddrParser.class.getClassLoader().getResourceAsStream("test/digester/address.xml"));
+		AddrParser abp = (AddrParser) digester.parse(AddrParser.class.getClassLoader().getResourceAsStream("com/iteye/wwwcomy/digester/address.xml"));
 	}
 }

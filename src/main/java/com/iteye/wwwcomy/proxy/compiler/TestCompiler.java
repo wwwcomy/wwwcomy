@@ -1,4 +1,4 @@
-package com.iteye.wwwcomy.compiler;
+package com.iteye.wwwcomy.proxy.compiler;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -25,7 +25,8 @@ public class TestCompiler {
 				+ "}"
 				+ "public void test(){System.out.println(\"HelloWorld1Test\");}}";
 		String fileName = System.getProperty("user.dir");
-		fileName += "/src/test/compiler/HelloWorld.java";
+		// fileName += "/src/test/compiler/HelloWorld.java";
+		fileName += "/src/main/java/com/iteye/wwwcomy/proxy/compiler/HelloWorld.java";
 		File f = new File(fileName);
 		FileWriter fw = new FileWriter(f);
 		fw.write(fileString);
