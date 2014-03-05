@@ -8,6 +8,7 @@ public class CglibProxyTest {
 	public static void main(String[] args) {
 		Base base = Factory.getInstance(new CglibProxy());
 		base.add();
+		base.add();
 		
 		Base base2 = Factory.getInstance(new CglibProxy(),1);
 		base2.add();

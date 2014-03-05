@@ -4,7 +4,7 @@ public class Base {
 	private int val;
 
 	public Base() {
-		
+
 	}
 
 	public Base(Integer val) {
@@ -12,9 +12,10 @@ public class Base {
 	}
 
 	public void add() {
+		val++;
 		System.out.println("add......" + val);
 	}
-	
+
 	@Override
 	public String toString() {
 		return "" + val;
