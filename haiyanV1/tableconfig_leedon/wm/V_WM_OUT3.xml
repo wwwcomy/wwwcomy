@@ -135,8 +135,8 @@
 		<queryFilter>
 			<pluggedFilter methodName="exp" parameter="
 			If(InRole(sp,wm),
-				{ and t_1.ID in (select distinct(ORDER_ID) from T_WM_OUTPREDTL where OUT_PCOUNT>0) and BILL_STATUS1='send'},
-				{ and t_1.ID in (select distinct(ORDER_ID) from T_WM_OUTPREDTL where OUT_PCOUNT>0) and BILL_STATUS1='send'}
+				{ and t_1.ID in (select distinct(ORDER_ID) from T_WM_OUTPREDTL t_2 where OUT_PCOUNT>0 and t_2.WAREHOUSE='}&amp;GetUser(WAREHOUSEID)&amp;{') and BILL_STATUS1='send'},
+				{ and t_1.ID in (select distinct(ORDER_ID) from T_WM_OUTPREDTL t_2 where OUT_PCOUNT>0 and t_2.WAREHOUSE='}&amp;GetUser(WAREHOUSEID)&amp;{') and BILL_STATUS1='send'}
 			)"/>
 		</queryFilter>
 		<!-- -->
@@ -147,6 +147,8 @@
 		<role name="admin boss manager">
 		</role>
 		<!-- -->
+		<javascript hostPage="edit" src="project/leedon/V_WM_OUT.js"><![CDATA[
+		]]></javascript>
 		<javascript hostPage="edit" src="project/leedon/V_WM_OUT3.js"><![CDATA[
 			function renderPre(value, metaData, record, rowIndex, colIndex, store, disVal, colVal, fieldName) {
 				return "<button onclick=\"testPre('"+rowIndex+"');\" type=\"button\" class=\"zbutton1\" >预处理</button>";

@@ -77,7 +77,7 @@
 		</field>
 		-->
 		<field name="SUBGRID" javaType="string" description="----------------------------------------------------------------应出库明细----------------------------------------------------------------" displayOnly="true">
-			<component type="grid" readOnly="false" colspan="6" style="width:950;height:260;grouping:false;" displayReferenceField="ITEM_ID,ORDER_ID,PRODUCTID,PRO_CODE,SUPP_CODE,OUT_PCOUNT,OUT_RCOUNT,OUT_COUNT,NAME,WMCODE,PACKING_NUM,CAPACITYNUM,WEIGHTNUM,IN_PRICE,OUT_PRICE,PRO_COUNT,OUT_ALL_PRICE,All_CAPACITYNUM,All_WEIGHTNUM,LOGISTICS_NAME,LOGISTICS_CODE,LOGISTICS_MEMO,BILL_STATUS" referenceField="ORDER_ID" referenceTable="T_WM_OUTPRE" parameter="{&amp;ORDER_ID=}&amp;If(IsEmpty(Get({ORDER_ID})),-1,Get({ORDER_ID}))"/>
+			<component type="grid" readOnly="false" colspan="6" style="width:950;height:260;grouping:false;" displayReferenceField="ITEM_ID,ORDER_ID,PRODUCTID,PRO_CODE,SUPP_CODE,OUT_PCOUNT,OUT_RCOUNT,OUT_COUNT,NAME,WMCODE,PACKING_NUM,CAPACITYNUM,WEIGHTNUM,IN_PRICE,OUT_PRICE,PRO_COUNT,OUT_ALL_PRICE,All_CAPACITYNUM,All_WEIGHTNUM,LOGISTICS_NAME,LOGISTICS_CODE,LOGISTICS_MEMO,BILL_STATUS" referenceField="ORDER_ID" referenceTable="T_WM_OUTPRE_NO_FILTER" parameter="{&amp;ORDER_ID=}&amp;If(IsEmpty(Get({ORDER_ID})),-1,Get({ORDER_ID}))"/>
 			<queryCondition type="none"/>
 			<listColumn noquery="true"/>
 		</field>
@@ -136,7 +136,7 @@
 			-->
 			<pluggedFilter methodName="exp" parameter="
 			If(InRole(sp,wm),
-				{ and t_1.ID in (select distinct(ORDER_ID) from T_WM_OUTPRE t_2 where t_2.SUPPLIER='}&amp;GetUser(SUPPLIER)&amp;{' and t_2.WAREHOUSE='}&amp;GetUser(WAREHOUSEID)&amp;{') },
+				{ and t_1.ID in (select distinct(ORDER_ID) from T_WM_OUTPRE t_2 where t_2.WAREHOUSE='}&amp;GetUser(WAREHOUSEID)&amp;{') },
 				true
 			)"/>
 		</queryFilter>
@@ -163,6 +163,7 @@
 		<pluginInterceptor methodName="exp" parameter="
 			Set(BILL_STATUS1,{send})
 			+SetCreateTime(AUDIT_TIME,{yyyy-MM-dd HH:mm:ss})
+			+Save({T_WM_OUTPART},GetForm())
 			" pluginName="auditSend" type="before"/>
 		<!--
 		<pluginInterceptor methodName="bsh" parameter="V_WM_OUT.bsh" pluginName="saveViewBatch" type="after" />
