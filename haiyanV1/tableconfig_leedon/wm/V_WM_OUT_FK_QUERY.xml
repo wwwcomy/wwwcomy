@@ -64,15 +64,12 @@
 		</field>
 		<!-- -->
 		<!--No filter for admin { and t_1.ID in (select ORDER_ID from T_WM_OUTPRE t_2 left join T_WM_SDBPRODUCT t_3 on t_2.PRODUCTID=t_3.ID where t_3.WAREHOUSE='}&amp;GetUser(WAREHOUSEID)&amp;{') }-->
-		<!-- 
+
 		<queryFilter>
 			<pluggedFilter methodName="exp" parameter="
-			If(InRole(sp,wm),
-				{ and t_1.ID in (select distinct(ORDER_ID) from T_WM_OUTPRE t_2 where t_2.SUPPLIER='}&amp;GetUser(SUPPLIER)&amp;{' and t_2.WAREHOUSE='}&amp;GetUser(WAREHOUSEID)&amp;{') },
-				true
-			)"/>
+				{ and t_1.BILL_STATUS1&lt;&gt;'init'}
+			"/>
 		</queryFilter>
-		-->
 		<javascript hostPage="query"><![CDATA[
 			function showNavDetailFrame(_operation, _ID, _tableName, _anchor) {
 				var url='';
