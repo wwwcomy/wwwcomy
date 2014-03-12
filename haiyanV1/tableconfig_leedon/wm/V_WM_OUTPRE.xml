@@ -15,7 +15,7 @@
 			<component type="readOnlyText"/>
 		</field>
 		<field name="PRODUCTID" description="EDP商品" javaType="string" >
-			<component type="combo" readOnly="false" displayReferenceField="WMCODE,NAME" referenceField="ID" referenceTable="T_WM_SDBPRODUCT" associatedFields="WMCODE,NAME,PACKING_NUM,SUPP_CODE,IN_PRICE" />
+			<component type="combo" readOnly="false" displayReferenceField="WMCODE,NAME" referenceField="ID" referenceTable="T_WM_SDBPRODUCT" associatedFields="WMCODE,NAME,PACKING_NUM,SUPP_CODE,IN_PRICE,CONTRA_INPRICE" />
 			<listColumn noedit="false" noquery="false"/>
 		</field>
 		<field name="PRODUCT_ID" description="SDB商品ID" javaType="string" >
@@ -60,6 +60,10 @@
 		</field>
 		<field name="OUT_RCOUNT" description="Haiyan实际出库数量" javaType="bigDecimal" defaultValue="0">
 			<component type="text" readOnly="false"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="CONTRA_INPRICE" description="合同进货单价" displayOnly="false" javaType="string" lazyLoad="false">
+			<component type="text" readOnly="false" displayReferenceField="CONTRA_INPRICE"/>
 			<listColumn noedit="false" noquery="false"/>
 		</field>
 		<field name="IN_PRICE" description="进货单价" displayOnly="true" javaType="string" lazyLoad="false">
@@ -154,7 +158,7 @@
 		<pluginInterceptor methodName="bsh" pluginName="saveView" type="after"><![CDATA[
 			void refreshDB() throws Throwable {
 				String sql1 = "delete from T_WM_OUTPRE where ITEM_ID=?";
-				String sql2 = "insert into  T_WM_OUTPRE(NAME,ITEM_ID,ORDER_ID,OUT_CODE,ITEM_ID_PK,PRODUCTID,PRODUCT_ID,WMCODE,SUPP_CODE,OUT_COUNT,OUT_PCOUNT,OUT_RCOUNT,IN_PRICE,OUT_PRICE,PRO_COUNT,OUT_ALL_PRICE,PACKING_NUM,CAPACITYNUM,WEIGHTNUM,SUPPLIER,All_CAPACITYNUM,All_WEIGHTNUM,REMAINDER_NUM,LOGISTICS_NAME,LOGISTICS_CODE,LOGISTICS_MEMO,HYVERSION,BILL_STATUS) (select NAME,ITEM_ID,ORDER_ID,OUT_CODE,ITEM_ID_PK,PRODUCTID,PRODUCT_ID,WMCODE,SUPP_CODE,OUT_COUNT,OUT_PCOUNT,OUT_RCOUNT,IN_PRICE,OUT_PRICE,PRO_COUNT,OUT_ALL_PRICE,PACKING_NUM,CAPACITYNUM,WEIGHTNUM,SUPPLIER,All_CAPACITYNUM,All_WEIGHTNUM,REMAINDER_NUM,LOGISTICS_NAME,LOGISTICS_CODE,LOGISTICS_MEMO,HYVERSION,BILL_STATUS from V_WM_OUTPRE where ITEM_ID=?)";
+				String sql2 = "insert into  T_WM_OUTPRE(NAME,ITEM_ID,ORDER_ID,OUT_CODE,ITEM_ID_PK,PRODUCTID,PRODUCT_ID,WMCODE,SUPP_CODE,OUT_COUNT,OUT_PCOUNT,OUT_RCOUNT,CONTRA_INPRICE,IN_PRICE,OUT_PRICE,PRO_COUNT,OUT_ALL_PRICE,PACKING_NUM,CAPACITYNUM,WEIGHTNUM,SUPPLIER,All_CAPACITYNUM,All_WEIGHTNUM,REMAINDER_NUM,LOGISTICS_NAME,LOGISTICS_CODE,LOGISTICS_MEMO,HYVERSION,BILL_STATUS) (select NAME,ITEM_ID,ORDER_ID,OUT_CODE,ITEM_ID_PK,PRODUCTID,PRODUCT_ID,WMCODE,SUPP_CODE,OUT_COUNT,OUT_PCOUNT,OUT_RCOUNT,CONTRA_INPRICE,IN_PRICE,OUT_PRICE,PRO_COUNT,OUT_ALL_PRICE,PACKING_NUM,CAPACITYNUM,WEIGHTNUM,SUPPLIER,All_CAPACITYNUM,All_WEIGHTNUM,REMAINDER_NUM,LOGISTICS_NAME,LOGISTICS_CODE,LOGISTICS_MEMO,HYVERSION,BILL_STATUS from V_WM_OUTPRE where ITEM_ID=?)";
 				final DBManager dbm = context.getDBM();
 				dbm.executeUpdatePre(sql1, new Object[]{form.get("ITEM_ID")}, null);
 				dbm.executeUpdatePre(sql2, new Object[]{form.get("ITEM_ID")}, null);
@@ -179,7 +183,7 @@ create or replace view V_WM_OUTPRE as
 		t_1.All_CAPACITYNUM,t_1.All_WEIGHTNUM,t_1.BILL_STATUS,t_1.REMAINDER_NUM,
 		t_1.LOGISTICS_NAME,t_1.LOGISTICS_CODE,t_1.LOGISTICS_MEMO,
 		
-		t_3.PACKING_NUM,t_3.CAPACITYNUM,t_3.WEIGHTNUM,t_3.SUPPLIER,t_3.WMCODE,t_3.IN_PRICE as IN_PRICE,t_3.ID as PRODUCTID,t_3.PRODUCT_ID as PRODUCT_ID,
+		t_3.PACKING_NUM,t_3.CAPACITYNUM,t_3.WEIGHTNUM,t_3.SUPPLIER,t_3.WMCODE,t_3.CONTRA_INPRICE,t_3.IN_PRICE as IN_PRICE,t_3.ID as PRODUCTID,t_3.PRODUCT_ID as PRODUCT_ID,
 		t_3.SUPP_CODE,
 		
 		t_2.ITEM_ID,t_2.ORDER_ID,t_2.NAME,t_2.PRICE as OUT_PRICE,t_2.NUMS as PRO_COUNT,t_2.AMOUNT as OUT_ALL_PRICE,
@@ -193,7 +197,7 @@ create or replace view V_WM_OUTPRE as
 		t_2.All_CAPACITYNUM,t_2.All_WEIGHTNUM,t_2.BILL_STATUS,t_2.REMAINDER_NUM,
 		t_2.LOGISTICS_NAME,t_2.LOGISTICS_CODE,t_2.LOGISTICS_MEMO,
 		
-		t_3.PACKING_NUM,t_3.CAPACITYNUM,t_3.WEIGHTNUM,t_3.SUPPLIER,t_3.WMCODE,t_3.IN_PRICE as IN_PRICE,t_3.ID as PRODUCTID,t_3.PRODUCT_ID as PRODUCT_ID,
+		t_3.PACKING_NUM,t_3.CAPACITYNUM,t_3.WEIGHTNUM,t_3.SUPPLIER,t_3.WMCODE,t_3.CONTRA_INPRICE,t_3.IN_PRICE as IN_PRICE,t_3.ID as PRODUCTID,t_3.PRODUCT_ID as PRODUCT_ID,
 		t_3.SUPP_CODE,
 		
 		t_2.ITEM_ID,t_2.ORDER_ID,'' as NAME,0 as OUT_PRICE,0 as PRO_COUNT,0 as OUT_ALL_PRICE,

@@ -67,6 +67,10 @@
 			<component type="text" readOnly="false"/>
 			<listColumn noedit="false" noquery="false"/>
 		</field>
+		<field name="CONTRA_INPRICE" description="合同进货单价" displayOnly="false" javaType="string" lazyLoad="false">
+			<component type="text" readOnly="false" displayReferenceField="CONTRA_INPRICE"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
 		<field name="IN_PRICE" description="进货单价" displayOnly="false" javaType="string" lazyLoad="false">
 			<component type="text" readOnly="false" displayReferenceField="IN_PRICE"/>
 			<listColumn noedit="false" noquery="false"/>

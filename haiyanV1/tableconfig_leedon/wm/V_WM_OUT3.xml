@@ -67,7 +67,7 @@
 		</field>
 		<!-- -->
 		<field name="SUBGRID" javaType="string" description="----------------------------------------------------------------应出库明细----------------------------------------------------------------" displayOnly="true">
-			<component type="grid" readOnly="false" colspan="6" style="width:950;height:260;grouping:false;" displayReferenceField="ITEM_ID,ORDER_ID,PRODUCTID,PRO_CODE,SUPP_CODE,PRE,AUDIT,UNAUDIT,SUBORDERID,OUT_PCOUNT,OUT_RCOUNT,OUT_COUNT,NAME,WMCODE,PACKING_NUM,CAPACITYNUM,WEIGHTNUM,IN_PRICE,OUT_PRICE,PRO_COUNT,OUT_ALL_PRICE,All_CAPACITYNUM,All_WEIGHTNUM,LOGISTICS_NAME,LOGISTICS_CODE,LOGISTICS_MEMO,BILL_STATUS" referenceField="ORDER_ID" referenceTable="T_WM_OUTPREDTL" parameter="{&amp;ORDER_ID=}&amp;If(IsEmpty(Get({ORDER_ID})),-1,Get({ORDER_ID}))&amp;If(IsEmpty(getsuborderid()),{},{&amp;SUBORDER_ID=}&amp;getsuborderid())"/>
+			<component type="grid" readOnly="false" colspan="6" style="width:950;height:260;grouping:false;" displayReferenceField="ITEM_ID,ORDER_ID,PRODUCTID,PRO_CODE,SUPP_CODE,PRE,AUDIT,UNAUDIT,SUBORDERID,OUT_PCOUNT,OUT_RCOUNT,OUT_COUNT,NAME,WMCODE,PACKING_NUM,CAPACITYNUM,WEIGHTNUM,CONTRA_INPRICE,IN_PRICE,OUT_PRICE,PRO_COUNT,OUT_ALL_PRICE,All_CAPACITYNUM,All_WEIGHTNUM,LOGISTICS_NAME,LOGISTICS_CODE,LOGISTICS_MEMO,BILL_STATUS" referenceField="ORDER_ID" referenceTable="T_WM_OUTPREDTL" parameter="{&amp;ORDER_ID=}&amp;If(IsEmpty(Get({ORDER_ID})),-1,Get({ORDER_ID}))&amp;If(IsEmpty(getsuborderid()),{},{&amp;SUBORDER_ID=}&amp;getsuborderid())"/>
 			<queryCondition type="none"/>
 			<listColumn noquery="true"/>
 		</field>
@@ -206,7 +206,9 @@
 		<!--审批发送E-Mail-->
 		<pluginOperation name="auditOut" oprName="出库审批" hostPage="edit" tblevel="1" img="settings" action="
 			If(Confirm({确认审批后,不可恢复,确认审批?}),plugin({},{auditOut},{SUBGRID1})+brk(),brk())"/>
+			<!--
 		<pluginOperation name="refreshDB" oprName="刷新应出库明细" hostPage="query" tblevel="1" img="refresh" action="plugin({},{refreshDB})+brk()"/>
+		-->
 		<pluginOperation name="printInvoice" oprName="配货单打印" hostPage="edit" tblevel="1" action="
 			Plugin({},{printInvoice})+brk()"/>
 		<pluginOperation name="printPacking" oprName="装箱单打印" hostPage="edit" tblevel="1" action="Plugin({},{printPacking})+brk()"/>
