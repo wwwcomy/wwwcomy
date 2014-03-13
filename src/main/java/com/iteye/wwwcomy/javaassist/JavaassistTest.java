@@ -13,10 +13,10 @@ public class JavaassistTest {
 	public static void main(String[] args) throws NotFoundException,
 			CannotCompileException, IOException {
 		ClassPool pool = ClassPool.getDefault();
-		CtClass cc = pool.get("test.javaassist.Base");
+		CtClass cc = pool.get("com.iteye.wwwcomy.javaassist.Base");
 		CtMethod cm = cc.getDeclaredMethod("add");
 		cm.insertBefore("{System.out.println(\"hello javaassist!\");}");
-		cc.writeFile("D:/Work/Java/Workspace130821/TESTWeb/WebContent/WEB-INF/classes");
+		cc.writeFile("D:/cloudrepository/wwwcomy/trunk/target/classes/");
 		
 		Base base = new Base(1);
 		base.add(2);

@@ -108,7 +108,6 @@
 			<artifactId>openjms-client</artifactId>
 			<version>0.7.6</version>
 		</dependency>
-
 		<!-- <dependency> <groupId>javax.jms</groupId> <artifactId>jms</artifactId> 
 			<version>1.1</version> </dependency> -->
 		<dependency>
@@ -179,7 +178,18 @@
 			<artifactId>catalina</artifactId>
 			<version>6.0.37</version>
 		</dependency>
-		       -->     
+		       -->
+		<dependency>
+			<groupId>javassist</groupId>
+			<artifactId>javassist</artifactId>
+			<version>3.12.1.GA</version>
+		</dependency>
+		<dependency>
+			<groupId>org.tmatesoft.svnkit</groupId>
+			<artifactId>svnkit</artifactId>
+			<version>1.7.8</version>
+		</dependency>
+		            
 	</dependencies>
 	<repositories>
 		<repository>
