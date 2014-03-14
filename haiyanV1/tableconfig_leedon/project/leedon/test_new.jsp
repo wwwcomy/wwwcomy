@@ -187,6 +187,7 @@ try {
 		  ,'ITEM_ID' // 子订单主键
 		  ,'ORDER_ID' // 订单号
 		  ,'SUBORDERID' // 子订单号
+		  ,'ORDER_ID_SUB' // 订单-子订单号
 		  ,'PRODUCTID' // 产品ID
 		  ,'PRODUCT_ID' // 产品ID2
 		  ,'OUT_COUNT' // 订单数
@@ -235,6 +236,7 @@ try {
 					ITEM_ID:''
 					,ORDER_ID:this.ORDER_ID
 					,SUBORDERID:OID
+					,ORDER_ID_SUB:""+this.ORDER_ID+OID
 					,WAREHOUSE:WID
 					,PRODUCTID:PID
 					,OUT_PCOUNT:0

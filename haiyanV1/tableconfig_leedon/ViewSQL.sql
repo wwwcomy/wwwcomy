@@ -350,7 +350,7 @@ create or replace view V_WM_OUTPRE as
 	);
 create or replace view V_WM_OUT_FK_QUERY as 
 		(
-			select concat(t_1.ORDER_ID,'_',t_1.SUBORDERID) as ID,t_1.SUBORDERID,t_1.ORDER_ID,t_2.OUT_TYPE,t_2.MEMBER_ID,t_2.SHIP_NAME,t_2.SHIP_ADDR,t_2.SHIP_TEL,t_2.SHIP_MOBILE,
+			select concat(t_1.ORDER_ID,'_',t_1.SUBORDERID) as ID,t_1.ORDER_ID_SUB,t_1.SUBORDERID,t_1.ORDER_ID,t_2.OUT_TYPE,t_2.MEMBER_ID,t_2.SHIP_NAME,t_2.SHIP_ADDR,t_2.SHIP_TEL,t_2.SHIP_MOBILE,
 			t_2.FINAL_AMOUNT,t_2.SHIPPING,t_2.ORDER_MEMO,t_2.BILL_STATUS1 from t_wm_outpredtl t_1 
 			LEFT JOIN t_wm_outpart t_2 on t_1.ORDER_ID=t_2.ORDER_ID GROUP BY t_1.SUBORDERID,t_1.ORDER_ID
 		);

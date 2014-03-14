@@ -4,6 +4,10 @@
 		<id name="ITEM_ID" description="ITEM_ID" javaType="string">
 			<component type="hidden" url=""/>
 		</id>
+		<field name="ORDER_ID_SUB" description="订单-子订单" javaType="string" lazyLoad="false">
+			<component type="text" readOnly="true" colspan="1"/>
+			<listColumn noedit="false" noquery="false" width="150"/>
+		</field>
 		<field name="ITEM_ID_PK" description="增加索引字段" javaType="bigDecimal">
 			<component type="readOnlyText"/>
 			<listColumn noquery="true"/>

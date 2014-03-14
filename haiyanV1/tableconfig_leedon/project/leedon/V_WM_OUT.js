@@ -72,4 +72,4 @@ Hy.UIFunction.testout = function() {
 	Ext.getCmp('SUBGRID2').getSelectionModel().clearSelections();
 	Ext.getCmp('SUBGRID1').getSelectionModel().clearSelections();
 	
-}
+};

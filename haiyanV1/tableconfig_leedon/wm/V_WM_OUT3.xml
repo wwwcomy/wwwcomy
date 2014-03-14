@@ -67,7 +67,7 @@
 		</field>
 		<!-- -->
 		<field name="SUBGRID" javaType="string" description="----------------------------------------------------------------应出库明细----------------------------------------------------------------" displayOnly="true">
-			<component type="grid" readOnly="false" colspan="6" style="width:950;height:260;grouping:false;" displayReferenceField="ITEM_ID,ORDER_ID,PRODUCTID,PRO_CODE,SUPP_CODE,PRE,AUDIT,UNAUDIT,SUBORDERID,OUT_PCOUNT,OUT_RCOUNT,OUT_COUNT,NAME,WMCODE,PACKING_NUM,CAPACITYNUM,WEIGHTNUM,CONTRA_INPRICE,IN_PRICE,OUT_PRICE,PRO_COUNT,OUT_ALL_PRICE,All_CAPACITYNUM,All_WEIGHTNUM,LOGISTICS_NAME,LOGISTICS_CODE,LOGISTICS_MEMO,BILL_STATUS" referenceField="ORDER_ID" referenceTable="T_WM_OUTPREDTL" parameter="{&amp;ORDER_ID=}&amp;If(IsEmpty(Get({ORDER_ID})),-1,Get({ORDER_ID}))&amp;If(IsEmpty(getsuborderid()),{},{&amp;SUBORDER_ID=}&amp;getsuborderid())"/>
+			<component type="grid" readOnly="false" colspan="6" style="width:950;height:260;grouping:false;" displayReferenceField="ITEM_ID,ORDER_ID,ORDER_ID_SUB,PRODUCTID,PRO_CODE,SUPP_CODE,PRE,AUDIT,UNAUDIT,SUBORDERID,OUT_PCOUNT,OUT_RCOUNT,OUT_COUNT,NAME,WMCODE,PACKING_NUM,CAPACITYNUM,WEIGHTNUM,CONTRA_INPRICE,IN_PRICE,OUT_PRICE,PRO_COUNT,OUT_ALL_PRICE,All_CAPACITYNUM,All_WEIGHTNUM,LOGISTICS_NAME,LOGISTICS_CODE,LOGISTICS_MEMO,BILL_STATUS" referenceField="ORDER_ID" referenceTable="T_WM_OUTPREDTL" parameter="{&amp;ORDER_ID=}&amp;If(IsEmpty(Get({ORDER_ID})),-1,Get({ORDER_ID}))&amp;If(IsEmpty(getsuborderid()),{SUBORDER_ID=-1},{&amp;SUBORDER_ID=}&amp;getsuborderid())"/>
 			<queryCondition type="none"/>
 			<listColumn noquery="true"/>
 		</field>
@@ -86,7 +86,7 @@
 			<listColumn noedit="false" noquery="true"/>
 		</field>
 		<field name="SUBGRID1" javaType="string" description="----------------------------------------------------------------实际出库明细-------------------------------------------" displayOnly="true">
-			<component type="grid" readOnly="false" colspan="6" style="width:950;height:320;grouping:false;" displayReferenceField="ID,HEADID,PRODUCTID,PRO_NAME,SUPP_CODE,BATCH,PRO_WMCODE,PRO_WH,PRO_COUNT,PRO_CAPACITYNUM,PRO_WEIGHTNUM,PRO_OUT_PRICE,BILL_STATUS" referenceField="HEADID" referenceTable="T_WM_OUTDETAIL" parameter="{&amp;HEADID=}&amp;If(IsEmpty(Get({ID})),-1,Get({ID}))"/>
+			<component type="grid" readOnly="false" colspan="6" style="width:950;height:320;grouping:false;" displayReferenceField="ID,HEADID,SUBORDERID,PRODUCTID,PRO_NAME,SUPP_CODE,BATCH,PRO_WMCODE,PRO_WH,PRO_COUNT,PRO_CAPACITYNUM,PRO_WEIGHTNUM,PRO_OUT_PRICE,BILL_STATUS" referenceField="HEADID" referenceTable="T_WM_OUTDETAIL" parameter="{&amp;HEADID=}&amp;If(IsEmpty(Get({ID})),-1,Get({ID}))&amp;If(IsEmpty(getsuborderid()),{SUBORDERID=-1},{&amp;SUBORDERID=}&amp;getsuborderid())"/>
 			<queryCondition type="none"/>
 			<listColumn noquery="true"/>
 		</field>
@@ -146,9 +146,10 @@
 		</role>
 		<role name="admin boss manager">
 		</role>
-		<!-- -->
+		<!-- 
 		<javascript hostPage="edit" src="project/leedon/V_WM_OUT.js"><![CDATA[
 		]]></javascript>
+		-->
 		<javascript hostPage="edit" src="project/leedon/V_WM_OUT3.js"><![CDATA[
 			function renderPre(value, metaData, record, rowIndex, colIndex, store, disVal, colVal, fieldName) {
 				return "<button onclick=\"testPre('"+rowIndex+"');\" type=\"button\" class=\"zbutton1\" >预处理</button>";
