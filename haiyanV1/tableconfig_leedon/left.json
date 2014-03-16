@@ -1,9 +1,5 @@
 [
-/*{
-	text : 'OLAP库存分析', // http for Outer
-	cataUrl : Hy.getHostName() + '/haiyan_olap/olap.jsp?query=wm_product',
-	leaf : true
-},*/ {
+{
 	text : '在线用户', id:'userlist',
 	cataUrl : 'showUserListPage.do?',
 	leaf : true
@@ -12,26 +8,14 @@
 	cataUrl : 'quick.do?__opr_data=T_WM_OUTPRE',
 	leaf : true
 }, {
-	text : 'T_SDBPROGOODS实体表',
+	text : 'T_DIC_SDBPROGOODS',
 	cataUrl : 'quick.do?__opr_data=T_DIC_SDBPROGOODS',
 	leaf : true
 }, {
-	text : 'T_SDBPRODUCT实体表',
+	text : 'T_WM_SDBPRODUCT',
 	cataUrl : 'query.do?__opr_data=T_WM_SDBPRODUCT',
 	leaf : true
-}, {
-	text : 'DBM测试',
-	cataUrl : 'quick.do?__opr_data=TEST_DBM',
-	leaf : true
-}, {
-	text : 'IFRAME测试',
-	cataUrl : 'quick.do?__opr_data=TEST_IFRAME',
-	leaf : true
-}, {
-	text : '报表测试',
-	cataUrl : 'quick.do?__opr_data=TEST_REPORT',
-	leaf : true
-}, {
+},{
 	text : '计划任务',
 	cataUrl : 'query.do?__opr_data=SYSTASK',
 	leaf : true
@@ -80,7 +64,7 @@
 	cataUrl : 'query.do?__opr_data=T_WM_SDBIN',
 	leaf : true
 }, {
-	text : 'WM_EDP出库',
+	text : 'WM_EDP出库待批',
 	cataUrl : 'query.do?__opr_data=V_WM_OUT',
 	leaf : true
 }, {
