@@ -34,15 +34,15 @@
 			<queryCondition type="equal"/>
 			<listColumn noedit="false" noquery="false"/>
 		</field>
-		<field name="NAME" description="产品名称" displayOnly="true" javaType="string" lazyLoad="false">
+		<field name="NAME" description="产品名称" displayOnly="false" javaType="string" lazyLoad="false">
 			<component type="text" readOnly="true" displayReferenceField="NAME"/>
 			<listColumn noedit="false" noquery="false"/>
 		</field>
-		<field name="WMCODE" description="货号" displayOnly="true" javaType="string" lazyLoad="false">
+		<field name="WMCODE" description="货号" displayOnly="false" javaType="string" lazyLoad="false">
 			<component type="text" readOnly="true" displayReferenceField="WMCODE"/>
 			<listColumn noedit="false" noquery="false"/>
 		</field>
-		<field name="SUPP_CODE" description="供应商自有货号" displayOnly="true" javaType="string">
+		<field name="SUPP_CODE" description="供应商自有货号" displayOnly="false" javaType="string">
 			<component type="text" readOnly="true" displayReferenceField="SUPP_CODE"/>
 			<listColumn noedit="false" noquery="false"/>
 		</field>
@@ -50,11 +50,11 @@
 			<component type="button" readOnly="true" renderer="renderPre" /><!-- -->
 			<listColumn noedit="false" noquery="false" width="70"/>
 		</field>
-		<field name="AUDIT" description=" " displayOnly="false" javaType="string" lazyLoad="false">
+		<field name="AUDIT" description=" " displayOnly="true" javaType="string" lazyLoad="false">
 			<component type="button" readOnly="true"/><!--renderer="renderAudit" -->
 			<listColumn noedit="true" noquery="true" width="70"/>
 		</field>
-		<field name="UNAUDIT" description=" " displayOnly="false" javaType="string" lazyLoad="false">
+		<field name="UNAUDIT" description=" " displayOnly="true" javaType="string" lazyLoad="false">
 			<component type="button" readOnly="true"/><!--renderer="renderUnAudit" -->
 			<listColumn noedit="true" noquery="true" width="70"/>
 		</field>
@@ -218,6 +218,7 @@
 		-->
 		<!-- -->
 		<pluginInterceptor methodName="exp" parameter="Save()" pluginName="saveView1" />
+		<pluginInterceptor methodName="exp" parameter="Set(BILL_STATUS,{audit})+Save()" pluginName="auditOut" type="after"/>
 		<pluginOperation name="refreshDB" oprName="重载应出库明细" hostPage="query" tblevel="1" img="refresh" action="plugin({},{refreshDB})+brk()"/>
 		
 		<!--

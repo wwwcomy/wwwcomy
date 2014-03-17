@@ -131,8 +131,8 @@
 		<queryFilter>
 			<pluggedFilter methodName="exp" parameter="
 			If(InRole(sp,wm),
-				{ and t_1.ID in (select distinct(ORDER_ID) from T_WM_OUTPREDTL t_2 where t_2.OUT_PCOUNT>0 and t_2.WAREHOUSE='}&amp;GetUser(WAREHOUSEID)&amp;{') and BILL_STATUS1&lt;&gt;'init'},
-				{ and t_1.ID in (select distinct(ORDER_ID) from T_WM_OUTPREDTL t_2 where t_2.OUT_PCOUNT>0 and t_2.WAREHOUSE='}&amp;GetUser(WAREHOUSEID)&amp;{') and BILL_STATUS1&lt;&gt;'init'}
+				{ and t_1.ID in (select distinct(ORDER_ID) from T_WM_OUTPREDTL t_2 where t_2.OUT_PCOUNT>0 and t_2.WAREHOUSE='}&amp;GetUser(WAREHOUSEID)&amp;{') and BILL_STATUS1&lt;&gt;'init' and BILL_STATUS='audit'},
+				{ and t_1.ID in (select distinct(ORDER_ID) from T_WM_OUTPREDTL t_2 where t_2.OUT_PCOUNT>0 and t_2.WAREHOUSE='}&amp;GetUser(WAREHOUSEID)&amp;{') and BILL_STATUS1&lt;&gt;'init' and BILL_STATUS='audit'}
 			)"/>
 		</queryFilter>
 		<!-- -->

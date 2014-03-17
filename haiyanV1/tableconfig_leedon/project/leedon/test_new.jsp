@@ -90,7 +90,7 @@ try {
 		Qbq3Form warehouseForm=srvContext.getDBM().findByPK("T_DIC_WAREHOUSE", frm.get("WAREHOUSE"),srvContext);
 		dfrm.set("NAME", warehouseForm.get("NAME"));
 		
-		System.out.println("******"+ warehouseForm.get("NAME"));
+		// System.out.println("******"+ warehouseForm.get("NAME"));
 		map.put(key, dfrm);
 	}
 
@@ -197,6 +197,14 @@ try {
 		  ,'PRO_COUNT' // 数量(预出库数)
 		  ,'WAREHOUSE' // 仓库ID
 		  ,'BILL_STATUS1' // 子订单状态
+		  
+		  ,'WMCODE' //货号
+		  ,'PRO_NAME' //名称
+		  ,'SUPP_CODE' //自有货号
+		  ,'SUPPLIER' //商品供应商
+		  ,'OUT_PRICE' //EDP销售单价
+		  ,'IN_PRICE' //进货单价
+		  ,'OUT_ALL_PRICE' //EDP销售总价
 		]
 	});
 	function getStore() {
@@ -232,7 +240,17 @@ try {
 				,BILL_STATUS1:BillStatus1
 			});
 			rm.each(function(row, index) { // 行维度 T_WM_SDBPRODUCT
-				var YCK=this.getYCK(index).innerHTML*1,PID=row['ID'];
+				var YCK=this.getYCK(index).innerHTML*1,PID=row['ID'],
+				supp = row['SUPPLIER'],inPrice=row['IN_PRICE'],outPrice,outAllPrice;
+				var i;
+				for(i=0;i<this.ym.length;i++){
+					var data=this.ym[i];
+					if(data['PRODUCTID']==row['ID']){
+						outPrice = data['OUT_PRICE'];
+						outAllPrice = data['OUT_ALL_PRICE'];
+						break;
+					}
+				}
 				dm.push({
 					ITEM_ID:''
 					,ORDER_ID:this.ORDER_ID
@@ -245,6 +263,13 @@ try {
 			        ,OUT_RCOUNT:0
 			        ,OUT_COUNT:YCK
 					,BILL_STATUS1:'init'
+					,WMCODE:row['CODE'] //货号
+					,PRO_NAME:row['NAME'] //名称
+					,SUPP_CODE:row['SUPP_CODE'] //自有货号
+					,SUPPLIER:supp //商品供应商
+					,OUT_PRICE:outPrice //EDP销售单价
+					,IN_PRICE:inPrice //进货单价
+					,OUT_ALL_PRICE:outAllPrice //EDP销售总价
 				});
 			}, this);
 			var dom=this.getGridEl().dom;

@@ -71,7 +71,7 @@
 
 		<queryFilter>
 			<pluggedFilter methodName="exp" parameter="
-				{ and t_1.BILL_STATUS1&lt;&gt;'init'}
+				{ and t_1.BILL_STATUS1&lt;&gt;'init' and t_1.BILL_STATUS='audit'}
 			"/>
 		</queryFilter>
 		<javascript hostPage="query"><![CDATA[
