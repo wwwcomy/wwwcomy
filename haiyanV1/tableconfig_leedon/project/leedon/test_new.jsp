@@ -188,6 +188,7 @@ try {
 		  ,'ORDER_ID' // 订单号
 		  ,'SUBORDERID' // 子订单号
 		  ,'ORDER_ID_SUB' // 订单-子订单号
+		  ,'OUT_SUB_CODE' //订单-子订单-商品号用于退货
 		  ,'PRODUCTID' // 产品ID
 		  ,'PRODUCT_ID' // 产品ID2
 		  ,'OUT_COUNT' // 订单数
@@ -237,6 +238,7 @@ try {
 					,ORDER_ID:this.ORDER_ID
 					,SUBORDERID:OID
 					,ORDER_ID_SUB:""+this.ORDER_ID+OID
+					,OUT_SUB_CODE:""+this.ORDER_ID+OID+PID
 					,WAREHOUSE:WID
 					,PRODUCTID:PID
 					,OUT_PCOUNT:0

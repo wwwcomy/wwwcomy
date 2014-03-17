@@ -15,6 +15,9 @@
 		<field name="SUBORDERID" description="子订单ID" javaType="string">
 			<component type="readOnlyText"/>
 		</field>
+		<field name="OUT_SUB_CODE" description="出库:子订单:商品号" javaType="string" length="500">
+			<component type="readOnlyText"/>
+		</field>
 		<field name="ORDER_ID" description="出库单号" javaType="string"><!-- ORDER_ID==V_WM_OUT.ID==V_WM_OUT.ORDER_ID -->
 			<component type="readOnlyText"/>
 			<queryCondition type="equal"/>
@@ -201,11 +204,11 @@
 			Set(ITEM_ID,{CKItem_}&amp;GetNewID())
 			" pluginName="edit" type="after"/>
 			-->
-		<!--
 		<pluginInterceptor methodName="exp" parameter="
 			If(Get(BILL_STATUS)={audit},HidFlds(PRE,AUDIT,UNAUDIT)+DisFlds(OUT_COUNT,OUT_RCOUNT),true)
 			+If(Or(isEmpty(Get(ORDER_ID)),SubStr(Get(ORDER_ID),0,2)={CK}),true,DisFlds(PRODUCTID,OUT_PRICE,OUT_ALL_PRICE))
 			" pluginName="grid" />
+		<!--
 		<pluginInterceptor methodName="exp" parameter="
 			If(SubStr(Get(ORDER_ID),0,2)={CK},Set(ITEM_ID_PK,0),Set(ITEM_ID_PK,Get(ITEM_ID)))
 			+If(IsEmpty(Get(ITEM_ID_PK)),Set(ITEM_ID_PK,Get(ITEM_ID)),true)

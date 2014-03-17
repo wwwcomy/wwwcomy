@@ -6,8 +6,8 @@
 			<component type="readOnlyText"/>
 		</field>
 		<field name="OUT_CODE" description="订单:商品号" displayOnly="false" javaType="string" lazyLoad="false">
-			<component type="combo" readOnly="false" displayReferenceField="OUT_CODE" referenceField="OUT_CODE" referenceTable="T_WM_OUTPRE" associatedFields="PRODUCTID,ORDER_ID,WMCODE,PRO_NAME,SUPP_CODE,SUPPLIER,OUT_COUNT,OUT_PRICE,IN_PRICE,OUT_ALL_PRICE" parameter="{&amp;RETURNPRE=1}" style="typeAhead:false"/>
-			<listColumn noedit="false" noquery="false" width="155" style="sortName:__OUT_CODE__OUT_CODE"/>
+			<component type="combo" readOnly="false" displayReferenceField="OUT_SUB_CODE" referenceField="OUT_SUB_CODE" referenceTable="T_WM_OUTPREDTL" associatedFields="PRODUCTID,ORDER_ID,WMCODE,PRO_NAME,SUPP_CODE,SUPPLIER,OUT_COUNT,OUT_PRICE,IN_PRICE,OUT_ALL_PRICE" parameter="{&amp;RETURNPRE=1}" style="typeAhead:false"/>
+			<listColumn noedit="false" noquery="false" width="155" style="sortName:__OUT_SUB_CODE__OUT_SUB_CODE"/>
 		</field>
 		<field name="SUPPLIER" description="供应商" displayOnly="false" javaType="string" lazyLoad="false">
 			<component type="text" readOnly="true" displayReferenceField="SUPPLIER"/>
