@@ -21,7 +21,7 @@ create or replace view V_WM_SDBPRODUCT as
 
 create or replace view V_WM_OUTPART_INIT as 
 		(
-			select * from T_WM_OUTPART where (BILL_STATUS='init' or BILL_STATUS is null)
+			select * from T_WM_OUTPART
 		);
 create or replace view V_WM_OUTPART_HISTORY as 
 		(
@@ -40,8 +40,7 @@ create or replace view V_WM_OUT as
 			from SDB_ORDERS t_1 
 			left join T_WM_OUTPART t_2 
 			on t_1.ORDER_ID=t_2.ORDER_ID_INT
-			where (t_2.BILL_STATUS='init' or t_2.BILL_STATUS is null)
-			and ((t_1.STATUS='active' and t_1.PAY_STATUS='1' and t_1.DISABLED='false') or (t_1.STATUS='finish' and t_1.DISABLED='false'))
+			where ((t_1.STATUS='active' and t_1.PAY_STATUS='1' and t_1.DISABLED='false') or (t_1.STATUS='finish' and t_1.DISABLED='false'))
 			and t_1.ORDER_ID not like '2011%'
 			and (t_2.ORDER_MEMO not like '作废%' or t_2.ORDER_MEMO is null)
 		)
