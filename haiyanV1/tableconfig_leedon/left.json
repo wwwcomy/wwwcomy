@@ -63,11 +63,11 @@
 	text : 'WM_EDP入库',
 	cataUrl : 'query.do?__opr_data=T_WM_SDBIN',
 	leaf : true
-}, {
+}, /*{
 	text : 'WM_EDP出库待批(V1)',
 	cataUrl : 'query.do?__opr_data=V_WM_OUT',
 	leaf : true
-}, {
+},*/ {
 	text : 'WM_EDP移库',
 	cataUrl : 'query.do?__opr_data=T_WM_STOCKTRANS',
 	leaf : true
@@ -82,6 +82,10 @@
 }, {
 	text : 'WM_EDP库存销售',
 	cataUrl : 'view.do?__opr_data=V_WM_STORESALE',
+	leaf : true
+}, {
+	text : 'WM_EDP月度对账单',
+	cataUrl : 'query.do?&__opr_data=T_WM_ACCOUNTSTATEMENT',
 	leaf : true
 }, {
 	text : 'WM_EDP分库',
