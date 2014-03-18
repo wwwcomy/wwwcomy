@@ -58,7 +58,7 @@
 			<listColumn noedit="false" noquery="false"/>
 		</field>
 		<field name="SUBGRID" javaType="string" description="----------------------------------------------------------------应出库明细----------------------------------------------------------------" displayOnly="true">
-			<component type="grid" readOnly="false" colspan="6" style="width:950;height:260;grouping:false;" displayReferenceField="ITEM_ID,ORDER_ID,PRODUCTID,PRO_CODE,SUPP_CODE,PRE,AUDIT,OUT_RCOUNT,OUT_COUNT,NAME,WMCODE,PACKING_NUM,CAPACITYNUM,WEIGHTNUM,OUT_PRICE,PRO_COUNT,OUT_ALL_PRICE,All_CAPACITYNUM,All_WEIGHTNUM,LOGISTICS_NAME,LOGISTICS_CODE,LOGISTICS_MEMO,BILL_STATUS" referenceField="ORDER_ID" referenceTable="T_WM_OUTPRE" parameter="{&amp;ORDER_ID=}&amp;If(IsEmpty(Get({ID})),-1,Get({ID}))"/>
+			<component type="grid" readOnly="false" colspan="6" style="width:950;height:260;grouping:false;" displayReferenceField="ITEM_ID,ORDER_ID,PRODUCTID,PRO_CODE,SUPP_CODE,PRE,AUDIT,OUT_RCOUNT,OUT_COUNT,NAME,WMCODE,PACKING_NUM,CAPACITYNUM,WEIGHTNUM,OUT_PRICE,PRO_COUNT,OUT_ALL_PRICE,All_CAPACITYNUM,All_WEIGHTNUM,LOGISTICS_NAME,LOGISTICS_CODE,LOGISTICS_MEMO,BILL_STATUS" referenceField="ORDER_ID" referenceTable="T_WM_OUTPREDTL" parameter="{&amp;ORDER_ID=}&amp;If(IsEmpty(Get({ID})),-1,Get({ID}))"/>
 			<queryCondition type="none"/>
 			<listColumn noquery="true"/>
 		</field>
@@ -145,7 +145,7 @@
 		<role name="admin boss manager">
 		</role>
 		<!-- -->
-		<javascript hostPage="edit" src="project/leedon/V_WM_OUT.js"><![CDATA[
+		<javascript hostPage="edit" src="project/leedon/V_WM_OUT3.js"><![CDATA[
 			function renderAudit(value, metaData, record, rowIndex, colIndex, store, disVal, colVal, fieldName) {
 				return "<button onclick=\"testAudit('"+rowIndex+"');\" type=\"button\" class=\"zbutton1\" >Audit</button>";
 			}
@@ -166,21 +166,19 @@
 			+Save()
 			+If(Get(BILL_STATUS)={audit},DisBtns(select,saveView,auditOut)+DisFlds(SUBGRID1)+HidFlds(SUBGRID2,TEST2),true)
 			" pluginName="saveView" />
-		<!--
 		<pluginInterceptor methodName="exp" parameter="
 			Set(BILL_STATUS,{audit})
 			+Save()
 			+If(Get(BILL_STATUS)={audit},DisBtns(select,saveView,auditOut)+DisFlds(SUBGRID1)+HidFlds(SUBGRID2,TEST2),true)
 			+SendEmail(Page(SYSOPERATOR,{ and t_1.ID=1}),{smtp.126.com},{tjbio2008@126.com},{123456},{tjbio2008@126.com},{SendEmail测试},{txt},{www.google.com})
 			" pluginName="auditOut" type="before"/>
-		-->
 		<!-- -->
+		<pluginInterceptor methodName="bsh" parameter="V_WM_OUT_CALCPRICE.bsh" pluginName="auditOutBatch" type="after" />
 		<pluginOperation name="addView" oprName="新增(V)" hostPage="query" tblevel="1" img="add" action="showBill({new.do?__opr_data=T_WM_OUTPART},{新增出库单},{T_WM_OUTPART})+brk()"/>
 		<pluginOperation name="saveView" oprName="保存(V)" hostPage="edit" tblevel="1" img="save" action="plugin({},{saveView},{SUBGRID},{SUBGRID1})+brk()"/>
-		<!--审批发送E-Mail
+		
 		<pluginOperation name="auditOut" oprName="出库审批" hostPage="edit" tblevel="1" img="settings" action="
 			If(Confirm({确认审批后,不可恢复,确认审批?}),plugin({},{auditOut},{SUBGRID1})+brk()"/>
-		-->
 		<!-- -->
 		<Operation queryPageDelete="false" queryPageAdd="false" save="false" saveAndAdd="false" saveAndAddCopy="false"/>
 	</table>

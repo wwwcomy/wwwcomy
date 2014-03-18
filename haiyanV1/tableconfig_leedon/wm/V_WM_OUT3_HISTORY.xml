@@ -198,8 +198,6 @@
 			+Save({T_WM_OUTPART},GetForm())
 			" pluginName="unaudit"/>
 		-->
-		<pluginOperation name="addView" oprName="新增(V)" hostPage="query" tblevel="1" img="add" action="ShowBill({new.do?__opr_data=T_WM_OUTPART},{新增出库单},{T_WM_OUTPART})+brk()"/>
-		<pluginOperation name="saveView" oprName="保存(V)" hostPage="edit" tblevel="1" img="save" action="Plugin({},{saveView},{SUBGRID},{SUBGRID1})+brk()"/>
 		<!--审批发送E-Mail-->
 		<!--
 		<pluginOperation name="auditOut" oprName="出库审批" hostPage="edit" tblevel="1" img="settings" action="
@@ -207,6 +205,9 @@
 			
 		<pluginOperation name="refreshDB" oprName="刷新应出库明细" hostPage="query" tblevel="1" img="refresh" action="plugin({},{refreshDB})+brk()"/>
 		-->
+		<pluginOperation name="addView" oprName="新增" hostPage="edit" tblevel="1" img="add" action="ShowBill({new.do?__opr_data=T_WM_OUTPART},{新增出库单},{T_WM_OUTPART})+brk()"/>
+		<pluginOperation name="saveView" oprName="保存" hostPage="edit" tblevel="1" img="save" action="Plugin({},{saveView},{SUBGRID},{SUBGRID1})+brk()"/>
+		
 		<pluginOperation name="printInvoice" oprName="配货单打印" hostPage="edit" tblevel="1" action="
 			Plugin({},{printInvoice})+brk()"/>
 		<pluginOperation name="printPacking" oprName="装箱单打印" hostPage="edit" tblevel="1" action="Plugin({},{printPacking})+brk()"/>

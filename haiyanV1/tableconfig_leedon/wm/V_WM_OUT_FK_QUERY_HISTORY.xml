@@ -92,5 +92,8 @@
 					Hy.showBill(url, __description, _tableName||Hy.getTableName());
 			}
 		]]></javascript>
+		<pluginOperation name="addView" oprName="新增" hostPage="query" tblevel="1" img="add" action="ShowBill({new.do?__opr_data=T_WM_OUTPART},{新增出库单},{T_WM_OUTPART})+brk()"/>
+		
+		<Operation queryPageDelete="false" queryPageAdd="false" save="false" saveAndAdd="false" saveAndAddCopy="false"/>
 	</table>
 </Haiyan>
