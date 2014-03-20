@@ -100,11 +100,10 @@
 				<option displayName="审批" value="audit"/>
 			</component>
 		</field>
-		<!--
 		<queryFilter>
-			<pluggedFilter><![CDATA[]]></pluggedFilter>
-		</queryFilter> -->
-		<!-- 
+			<pluggedFilter methodName="exp" parameter="If(IsEmpty(GetPara(SUBORDER_ID)),{},{and t_1.SUBORDERID = }&amp;GetPara(SUBORDER_ID))"/>
+		</queryFilter> 
+		<!--
 		<javascript hostPage="edit"><![CDATA[
 		]]></javascript> 
 		-->

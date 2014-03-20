@@ -135,6 +135,9 @@
 			)"/>
 			-->
 			<pluggedFilter methodName="exp" parameter="
+				{ and t_1.BILL_STATUS &lt;&gt; 'audit' }
+			"/>
+			<pluggedFilter methodName="exp" parameter="
 			If(InRole(sp,wm),
 				{ and t_1.ID in (select distinct(ORDER_ID) from T_WM_OUTPRE t_2 where t_2.WAREHOUSE='}&amp;GetUser(WAREHOUSEID)&amp;{') },
 				true

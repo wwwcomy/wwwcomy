@@ -205,8 +205,7 @@
 			" pluginName="edit" type="after"/>
 			-->
 		<pluginInterceptor methodName="exp" parameter="
-			If(Get(BILL_STATUS)={audit},HidFlds(PRE,AUDIT,UNAUDIT)+DisFlds(OUT_COUNT,OUT_RCOUNT),true)
-			+If(Or(isEmpty(Get(ORDER_ID)),SubStr(Get(ORDER_ID),0,2)={CK}),true,DisFlds(PRODUCTID,OUT_PRICE,OUT_ALL_PRICE))
+			If(Or(isEmpty(Get(ORDER_ID)),SubStr(Get(ORDER_ID),0,2)={CK}),true,DisFlds(PRODUCTID,OUT_PRICE,OUT_ALL_PRICE))
 			" pluginName="grid" />
 		<!--
 		<pluginInterceptor methodName="exp" parameter="

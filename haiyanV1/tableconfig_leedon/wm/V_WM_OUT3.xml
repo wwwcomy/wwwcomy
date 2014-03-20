@@ -86,7 +86,7 @@
 			<listColumn noedit="false" noquery="true"/>
 		</field>
 		<field name="SUBGRID1" javaType="string" description="----------------------------------------------------------------实际出库明细-------------------------------------------" displayOnly="true">
-			<component type="grid" readOnly="false" colspan="6" style="width:950;height:320;grouping:false;" displayReferenceField="ID,HEADID,SUBORDERID,PRODUCTID,PRO_NAME,SUPP_CODE,BATCH,PRO_WMCODE,PRO_WH,PRO_COUNT,PRO_CAPACITYNUM,PRO_WEIGHTNUM,PRO_OUT_PRICE,BILL_STATUS" referenceField="HEADID" referenceTable="T_WM_OUTDETAIL" parameter="{&amp;HEADID=}&amp;If(IsEmpty(Get({ID})),-1,Get({ID}))&amp;If(IsEmpty(getsuborderid()),{SUBORDERID=-1},{&amp;SUBORDERID=}&amp;getsuborderid())"/>
+			<component type="grid" readOnly="false" colspan="6" style="width:950;height:320;grouping:false;" displayReferenceField="ID,HEADID,SUBORDERID,PRODUCTID,PRO_NAME,SUPP_CODE,BATCH,PRO_WMCODE,PRO_WH,PRO_COUNT,PRO_CAPACITYNUM,PRO_WEIGHTNUM,PRO_OUT_PRICE,BILL_STATUS" referenceField="HEADID" referenceTable="T_WM_OUTDETAIL" parameter="{&amp;HEADID=}&amp;If(IsEmpty(Get({ID})),-1,Get({ID}))&amp;If(IsEmpty(getsuborderid()),{SUBORDER_ID=-1},{&amp;SUBORDER_ID=}&amp;getsuborderid())"/>
 			<queryCondition type="none"/>
 			<listColumn noquery="true"/>
 		</field>
@@ -116,7 +116,7 @@
 			<listColumn noquery="false" nowrap="true"/>
 		</field>
 		<field name="BILL_STATUS" javaType="string" description="单据状态" defaultValue="init">
-			<component type="dropdown" readOnly="true">
+			<component type="hidden" readOnly="true">
 				<option displayName="待批" value="init"/>
 				<option displayName="审批确认" value="audit"/>
 				<option displayName="作废" value="reject"/>
@@ -139,13 +139,6 @@
 				{ and t_1.ID in (select distinct(ORDER_ID) from T_WM_OUTPREDTL t_2 where t_2.OUT_PCOUNT>0 and t_2.WAREHOUSE='}&amp;GetUser(WAREHOUSEID)&amp;{') and BILL_STATUS1&lt;&gt;'init'}
 			)"/>
 		</queryFilter>
-		<!-- -->
-		<role name="user wm sp pe ac">
-			<disComponent name="SUBFRAME"/>
-			<disOperation name="add auditOut"/>
-		</role>
-		<role name="admin boss manager">
-		</role>
 		<!-- 
 		<javascript hostPage="edit" src="project/leedon/V_WM_OUT.js"><![CDATA[
 		]]></javascript>
@@ -156,14 +149,12 @@
 			}
 		]]></javascript>
 		<pluginInterceptor methodName="exp" parameter="
-			If(Get(BILL_STATUS)={audit},DisBtns(select,saveView,auditOut)+DisFlds(SUBGRID1)+HidFlds(SUBGRID2,TEST2),true)
-			+SetCreate(WAREHOUSE,GetUser(WAREHOUSEID),__WAREHOUSE__NAME,GetUser(WAREHOUSENAME))
+			SetCreate(WAREHOUSE,GetUser(WAREHOUSEID),__WAREHOUSE__NAME,GetUser(WAREHOUSENAME))
 			+if(SubStr(Get(ORDER_ID),0,2)={CK},SetCreate(ORDER_ID_INT,0),SetCreate(ORDER_ID_INT,get(ORDER_ID)))
 			" pluginName="edit" type="after"/>
 		<pluginInterceptor methodName="exp" parameter="
 			if(SubStr(Get(ORDER_ID),0,2)={CK},Set(ORDER_ID_INT,0),Set(ORDER_ID_INT,get(ORDER_ID)))
 			+Save({T_WM_OUTPART},GetForm())
-			+If(Get(BILL_STATUS)={audit},DisBtns(select,saveView,auditOut)+DisFlds(SUBGRID1)+HidFlds(SUBGRID2,TEST2),true)
 			" pluginName="saveView" />
 		<pluginInterceptor methodName="bsh" parameter="V_WM_OUT.bsh" pluginName="saveViewBatch" type="after" />
 		<!-- -->
@@ -208,7 +199,7 @@
 		<!--审批发送E-Mail-->
 		<pluginOperation name="auditOut" oprName="出库审批" hostPage="edit" tblevel="1" img="settings" action="
 			If(Confirm({确认审批后,不可恢复,确认审批?}),plugin({},{auditOut},{SUBGRID},{SUBGRID1})+brk(),brk())"/>
-			<!--
+		<!--
 		<pluginOperation name="refreshDB" oprName="刷新应出库明细" hostPage="query" tblevel="1" img="refresh" action="plugin({},{refreshDB})+brk()"/>
 		-->
 		<pluginOperation name="printInvoice" oprName="配货单打印" hostPage="edit" tblevel="1" action="

@@ -155,8 +155,7 @@
 		]]></javascript>
 		<!-- -->
 		<pluginInterceptor methodName="exp" parameter="
-			If(Get(BILL_STATUS)={audit},DisBtns(select,saveView,auditOut)+DisFlds(SUBGRID1)+HidFlds(SUBGRID2,TEST2),true)
-			+SetCreate(WAREHOUSE,GetUser(WAREHOUSEID))
+			SetCreate(WAREHOUSE,GetUser(WAREHOUSEID))
 			+SetCreate(__WAREHOUSE__NAME,GetUser(WAREHOUSENAME))
 			+SetCreate(ID,{CK_}&amp;GetNewID())
 			" pluginName="edit" type="after"/>
@@ -164,7 +163,6 @@
 			SetCreate(ORDER_ID,Get(ID))
 			+if(SubStr(Get(ORDER_ID),0,2)={CK},Set(ORDER_ID_INT,0),Set(ORDER_ID_INT,get(ORDER_ID)))
 			+Save()
-			+If(Get(BILL_STATUS)={audit},DisBtns(select,saveView,auditOut)+DisFlds(SUBGRID1)+HidFlds(SUBGRID2,TEST2),true)
 			" pluginName="saveView" />
 		<pluginInterceptor methodName="exp" parameter="
 			Set(BILL_STATUS,{audit})
