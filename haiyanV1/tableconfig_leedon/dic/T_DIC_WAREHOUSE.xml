@@ -97,7 +97,7 @@
 			<pluggedFilter methodName="exp" parameter="If(InRole(wm),{ and t_1.USERID='}&amp;GetUser(ID)&amp;{'},{})"/>
 			<pluggedFilter methodName="exp" parameter="If(InRole(sp),{ and (t_1.USERID='}&amp;GetUser(ID)&amp;{' or t_1.CODE like 'EDP' or t_1.SUPPLIER in (select SUPPLIER from T_DIC_SUPP_USER where USERID='}&amp;GetUser(ID)&amp;{'))},{})"/>
 			
-			<pluggedFilter methodName="exp" parameter="If(IsEmpty(GetPara(__filter)),{},If(GetPara(__filter)={filter1},{ and IS_SUPP=0},{ and IS_SUPP=0 or t_1.ID=}&amp;GetUser(WAREHOUSEID)))"/>
+			<pluggedFilter methodName="exp" parameter="If(IsEmpty(GetPara(__filter)),{},If(GetPara(__filter)={filter1},{ and IS_SUPP=0},{ and IS_SUPP=0 or t_1.ID='}&amp;GetUser(WAREHOUSEID)&amp;{'}))"/>
 		</queryFilter>
 	</table>
 </Haiyan>

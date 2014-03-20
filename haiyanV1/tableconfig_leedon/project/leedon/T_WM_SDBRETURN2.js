@@ -159,6 +159,8 @@ Hy.UIFunction.test2=function(rowIndex) {
 				, OUT_TYPE: 'init' 
 				, PRO_MEMO: '' 
 				, USEDSTATUS: '0' 
+				, WAREHOUSE: Hy.UIExp.eval("Get(WAREHOUSE)")
+				, __WAREHOUSE__NAME: Hy.UIExp.eval("Get(__WAREHOUSE__NAME)") 
 			});
 			g.getStore().insert(g.getStore().getCount(), [record]); 
 		});

@@ -63,11 +63,19 @@
 	text : 'WM_EDP入库',
 	cataUrl : 'query.do?__opr_data=T_WM_SDBIN',
 	leaf : true
-}, /*{
-	text : 'WM_EDP出库待批(V1)',
+}, {
+	text : 'WM_EDP出库全部(V1)',
 	cataUrl : 'query.do?__opr_data=V_WM_OUT',
 	leaf : true
-},*/ {
+}, {	
+	text : 'WM_EDP退货(V1)',
+	cataUrl : 'query.do?__opr_data=T_WM_SDBRETURN',
+	leaf : true
+},{
+	text : 'WM_EDP出库已审批(V1)',
+	cataUrl : 'query.do?__opr_data=V_WM_OUT_HISTORY',
+	leaf : true
+}, {
 	text : 'WM_EDP移库',
 	cataUrl : 'query.do?__opr_data=T_WM_STOCKTRANS',
 	leaf : true
@@ -99,8 +107,8 @@
 	text : 'WM_EDP子订单出库(已审批)',
 	cataUrl : 'query.do?__opr_data=V_WM_OUT_FK_QUERY_HISTORY',
 	leaf : true
-}, {	
+},{	
 	text : 'WM_EDP退货',
-	cataUrl : 'query.do?__opr_data=T_WM_SDBRETURN',
+	cataUrl : 'query.do?__opr_data=T_WM_SDBRETURN2',
 	leaf : true
-},]
+}]

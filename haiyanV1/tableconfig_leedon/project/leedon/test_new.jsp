@@ -199,7 +199,7 @@ try {
 		  ,'BILL_STATUS1' // 子订单状态
 		  
 		  ,'WMCODE' //货号
-		  ,'PRO_NAME' //名称
+		  ,'NAME' //名称
 		  ,'SUPP_CODE' //自有货号
 		  ,'SUPPLIER' //商品供应商
 		  ,'OUT_PRICE' //EDP销售单价
@@ -264,7 +264,7 @@ try {
 			        ,OUT_COUNT:YCK
 					,BILL_STATUS1:'init'
 					,WMCODE:row['CODE'] //货号
-					,PRO_NAME:row['NAME'] //名称
+					,NAME:row['NAME'] //名称
 					,SUPP_CODE:row['SUPP_CODE'] //自有货号
 					,SUPPLIER:supp //商品供应商
 					,OUT_PRICE:outPrice //EDP销售单价
