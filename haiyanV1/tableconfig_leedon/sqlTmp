@@ -46,3 +46,25 @@ insert into M_PRODUCT_WAREHOUSE(ID,PRODUCT,WAREHOUSE) (select concat(t_1.ID,'_',
 
 20131017
 1. haiyan-debug.js中 line6932 value.truncate()方法会报错 在haiyan.js中查询truncate方法删除即可。
+
+20140321  版本升级 原有数据迁移
+1.haiyan-debug.js中加入getSuborderId方法 Line 9731
+	getsuborderid : function() {
+		var paras=Hy.getQueryParams().split('&');
+		var result;
+		paras.each(function(item,index){
+			var tmp = item.split("=");
+			if(tmp[0]=="SUBORDER_ID")
+				result=tmp[1];
+		});
+		if(!result){
+			result = '000';
+		}
+		return result;
+	}
+2. 商品相关，启动后自动创建表m_product_warehouse
+insert into M_PRODUCT_WAREHOUSE(ID,PRODUCT,WAREHOUSE) (select concat(t_1.ID,'_',t_2.WAREHOUSE),t_1.ID,t_2.WAREHOUSE from T_WM_SDBPRODUCT t_1 left join t_wm_pro t_2 on t_1.ID=t_2.id where t_2.WAREHOUSE is not null)
+3.打开入库
+4. 出库相关： 出库里面点一次新增，T_WM_OUTPART 表 WAREHOUSE字段设置为可空，添加BILL_STATUS1字段
+	访问一次http://localhost:8087/haiyan/query.do?__opr_data=T_WM_OUTPREPART用于生成T_WM_OUTPREPART的新表结构
+5.运行ViewSQL.sql生成所有视图

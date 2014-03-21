@@ -99,9 +99,9 @@
 				<option displayName="审批确认" value="audit"/>
 			</component>
 		</field>
-		<!-- -->
+		<!-- 
 		<pluginInterceptor methodName="exp" parameter="If(IsEmpty(GetPara(HEADID)),Warning({参数错误}),true)" pluginName="query" type="after"/>
-		
+		-->
 		<pluginInterceptor methodName="exp" parameter="If(InRole(sp),HidFlds(IN_COUNT,PRO_PRE),true)" pluginName="grid" type="after"/>
 		<pluginInterceptor methodName="exp" parameter="Set(BILL_STATUS,{audit})+Save()" pluginName="audit" type="before"/>
 		<pluginInterceptor methodName="exp" parameter="

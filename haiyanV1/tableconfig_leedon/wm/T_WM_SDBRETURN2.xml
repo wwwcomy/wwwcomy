@@ -159,7 +159,7 @@
 		</field>
 		<!-- -->
 		<queryFilter>
-			<pluggedFilter methodName="exp" parameter="{ and t_1.WAREHOUSE='}&amp;GetUser(WAREHOUSEID)&amp;{' }"/>
+			<pluggedFilter methodName="exp" parameter="{ and t_1.WAREHOUSE='}&amp;GetUser(WAREHOUSEID)&amp;{' and t_1.id in (select HEADID from T_WM_SDBRETURNPRE where  OUT_CODE not like '%:%')}"/>
 		</queryFilter>
 		<!-- -->
 		<role name="user sp">
