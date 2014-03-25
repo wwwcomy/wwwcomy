@@ -169,8 +169,10 @@
 		</field>
 		<!-- -->
 		<queryFilter>
-			<!-- 当前仓库 -->
+			<!-- 当前仓库 
 			<pluggedFilter methodName="exp" parameter="If(IsEmpty(GetUser(WAREHOUSEID)),Warning({没有选择当前仓库或者当前账号已经在其他地方登录.}),{ and t_1.ID in ( select PRODUCT from M_PRODUCT_WAREHOUSE where WAREHOUSE='}&amp;GetUser(WAREHOUSEID)&amp;{') })"/>
+			-->
+			<pluggedFilter methodName="exp" parameter="If(or(IsEmpty(GetUser(WAREHOUSEID)),not(IsEmpty(GetPara(outpre)))),{},{ and t_1.ID in ( select PRODUCT from M_PRODUCT_WAREHOUSE where WAREHOUSE='}&amp;GetUser(WAREHOUSEID)&amp;{') })"/>
 			<!-- -->
 			<pluggedFilter methodName="exp" parameter="If(InRole(wm,sp),{ and t_1.SUPPLIER='}&amp;GetUser(SUPPLIER)&amp;{' },If(IsEmpty(GetPara(__SUPPLIER)),{},{ and t_1.SUPPLIER='}&amp;SQLSafe(GetPara(__SUPPLIER))&amp;{' }))"/>
 			
@@ -191,6 +193,7 @@
 			
 			<!-- 移库时，商品应当在库存明细中有记录 -->
 			<pluggedFilter methodName="exp" parameter="If(IsEmpty(GetPara(__WHID)),{},{ and t_1.ID in (select distinct(PRODUCTID) from V_WM_STOCKWHERE where WAREWHERE='}&amp;SQLSafe(GetPara(__WHID))&amp;{') })"/>
+			
 		</queryFilter>
 		<!-- 如果供应商未能有一份完成的协议，则无法新建产品 
 		<role name="sp">
