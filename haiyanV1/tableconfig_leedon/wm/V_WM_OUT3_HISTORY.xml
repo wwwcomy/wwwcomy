@@ -205,7 +205,9 @@
 			
 		<pluginOperation name="refreshDB" oprName="刷新应出库明细" hostPage="query" tblevel="1" img="refresh" action="plugin({},{refreshDB})+brk()"/>
 		-->
+		<!-- 
 		<pluginOperation name="addView" oprName="新增" hostPage="edit" tblevel="1" img="add" action="ShowBill({new.do?__opr_data=T_WM_OUTPART},{新增出库单},{T_WM_OUTPART})+brk()"/>
+		 -->
 		<pluginOperation name="saveView" oprName="保存" hostPage="edit" tblevel="1" img="save" action="Plugin({},{saveView},{SUBGRID},{SUBGRID1})+brk()"/>
 		
 		<pluginOperation name="printInvoice" oprName="配货单打印" hostPage="edit" tblevel="1" action="

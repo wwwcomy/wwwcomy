@@ -100,8 +100,9 @@ create or replace view V_WM_OUT_FK_QUERY as
 			LEFT JOIN t_wm_outpart t_2 on t_1.ORDER_ID=t_2.ORDER_ID GROUP BY t_1.SUBORDERID,t_1.ORDER_ID
 		)
 		]]></pluginInterceptor>
+		<!-- 
 		<pluginOperation name="addView" oprName="新增" hostPage="query" tblevel="1" img="add" action="ShowBill({new.do?__opr_data=T_WM_OUTPART},{新增出库单},{T_WM_OUTPART})+brk()"/>
-		
+		 -->
 		<Operation queryPageDelete="false" queryPageAdd="false" save="false" saveAndAdd="false" saveAndAddCopy="false"/>
 	</table>
 </Haiyan>
