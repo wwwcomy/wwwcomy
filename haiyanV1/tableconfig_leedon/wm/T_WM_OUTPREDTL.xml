@@ -167,6 +167,10 @@
 		
 		<queryFilter>
 			<pluggedFilter methodName="exp" parameter="If(IsEmpty(GetPara(SUBORDER_ID)),{},{and t_1.SUBORDERID = }&amp;GetPara(SUBORDER_ID))"/>
+			
+			<!-- 退货的时候 仓库筛选 状态筛选  -->
+			<pluggedFilter methodName="exp" parameter="If(IsEmpty(GetPara(RETURNPRE)),{},{and t_1.ORDER_ID in (select ORDER_ID_INT from T_WM_OUTPART where (OUT_TYPE='consign' or OUT_TYPE='loss') and BILL_STATUS='audit') and t_1.PRODUCTID in (select distinct(PRODUCT) from M_PRODUCT_WAREHOUSE where WAREHOUSE='}&amp;GetUser(WAREHOUSEID)&amp;{') })"/>
+			
 		</queryFilter>
 	
 		<!-- -->
