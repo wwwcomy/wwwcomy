@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Haiyan xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../haiyan.xsd">
-	<table name="V_WM_OUT2" realTable="V_WM_OUT" description="出库单(库存分配)" colspan="6">
+	<table name="T_WM_OUTPART2" realTable="T_WM_OUTPART" description="出库单(库存分配)" colspan="6">
 		<id name="ID" javaType="string"/><!-- 值和ORDER_ID一样 -->
 		<field name="ORDER_ID" description="SDB订单号" javaType="string" lazyLoad="false">
 			<component type="text" readOnly="true" colspan="1"/>
@@ -65,19 +65,8 @@
 			<component type="text" readOnly="false" colspan="6"/>
 			<listColumn noedit="false" noquery="false"/>
 		</field>
-		<!-- 只有admin可分配 
-		<field name="SUBFRAME" description="SUBFRAME" displayOnly="true" javaType="string" lazyLoad="false">
-			<component type="iframe" readOnly="false" colspan="6" style="height:460;width:100%;" 
-			displayReferenceField="ITEM_ID,ORDER_ID,PRODUCTID,PRO_CODE,PRE,AUDIT,OUT_RCOUNT,OUT_COUNT,NAME,WMCODE,PACKING_NUM,CAPACITYNUM,WEIGHTNUM,OUT_PRICE,PRO_COUNT,OUT_PCOUNT,OUT_ALL_PRICE,All_CAPACITYNUM,All_WEIGHTNUM,LOGISTICS_NAME,LOGISTICS_CODE,LOGISTICS_MEMO,BILL_STATUS" 
-			referenceField="ORDER_ID" 
-			referenceTable="T_WM_OUTPRE" 
-			parameter="={project/leedon/test_new.jsp?TABLE=V_WM_OUT&amp;FIELD=SUBFRAME&amp;ORDER_ID=}&amp;If(IsEmpty(Get({ORDER_ID})),-1,Get({ORDER_ID}))"/>
-			<queryCondition type="none"/>
-			<listColumn noedit="false" noquery="true"/>
-		</field>
-		-->
 		<field name="SUBGRID" javaType="string" description="----------------------------------------------------------------应出库明细----------------------------------------------------------------" displayOnly="true">
-			<component type="grid" readOnly="false" colspan="6" style="width:950;height:260;grouping:false;" displayReferenceField="ITEM_ID,ORDER_ID,PRODUCTID,PRO_CODE,SUPP_CODE,OUT_PCOUNT,OUT_RCOUNT,OUT_COUNT,NAME,WMCODE,PACKING_NUM,CAPACITYNUM,WEIGHTNUM,CONTRA_INPRICE,IN_PRICE,OUT_PRICE,PRO_COUNT,OUT_ALL_PRICE,All_CAPACITYNUM,All_WEIGHTNUM,LOGISTICS_NAME,LOGISTICS_CODE,LOGISTICS_MEMO,BILL_STATUS" referenceField="ORDER_ID" referenceTable="T_WM_OUTPRE_NO_FILTER" parameter="{&amp;ORDER_ID=}&amp;If(IsEmpty(Get({ORDER_ID})),-1,Get({ORDER_ID}))"/>
+			<component type="grid" readOnly="false" colspan="6" style="width:950;height:260;grouping:false;" displayReferenceField="ITEM_ID,ORDER_ID,PRODUCTID,PRO_CODE,SUPP_CODE,OUT_PCOUNT,OUT_RCOUNT,OUT_COUNT,NAME,WMCODE,PACKING_NUM,CAPACITYNUM,WEIGHTNUM,CONTRA_INPRICE,IN_PRICE,OUT_PRICE,PRO_COUNT,OUT_ALL_PRICE,All_CAPACITYNUM,All_WEIGHTNUM,LOGISTICS_NAME,LOGISTICS_CODE,LOGISTICS_MEMO,BILL_STATUS" referenceField="ORDER_ID" referenceTable="T_WM_OUTPRE" parameter="{&amp;ORDER_ID=}&amp;If(IsEmpty(Get({ORDER_ID})),-1,Get({ORDER_ID}))"/>
 			<queryCondition type="none"/>
 			<listColumn noquery="true"/>
 		</field>
@@ -104,8 +93,8 @@
 			<component type="text" readOnly="false"/>
 			<listColumn noedit="false" noquery="false"/>
 		</field>
-		<field name="WAREHOUSE" description="当前仓库" displayOnly="true" javaType="string" lazyLoad="false" nullAllowed="false">
-			<component type="richSelect" readOnly="true" colspan="1" displayReferenceField="NAME" referenceField="ID" referenceTable="T_DIC_WAREHOUSE_COMBO"/>
+		<field name="WAREHOUSE" description="当前仓库" displayOnly="true" javaType="string" lazyLoad="false">
+			<component type="combo" readOnly="true" colspan="1" displayReferenceField="NAME" referenceField="ID" referenceTable="T_DIC_WAREHOUSE_COMBO"/>
 			<listColumn noedit="false" noquery="false"/>
 		</field>
 		<field name="WHOWNER" description="库主" javaType="string" lazyLoad="false">
@@ -155,12 +144,11 @@
 		]]></javascript>
 		<!-- -->
 		<pluginInterceptor methodName="exp" parameter="
-			If(Get(BILL_STATUS)={audit},DisBtns(select,saveView,auditOut)+DisFlds(SUBGRID1)+HidFlds(SUBGRID2,TEST2),true)
-			+SetCreate(WAREHOUSE,GetUser(WAREHOUSEID),__WAREHOUSE__NAME,GetUser(WAREHOUSENAME))
-			+if(SubStr(Get(ORDER_ID),0,2)={CK},SetCreate(ORDER_ID_INT,0),SetCreate(ORDER_ID_INT,get(ORDER_ID)))
+			SetCreate(ID,{CK_}&amp;GetNewID())
 			" pluginName="edit" type="after"/>
 		<pluginInterceptor methodName="exp" parameter="
-			if(SubStr(Get(ORDER_ID),0,2)={CK},Set(ORDER_ID_INT,0),Set(ORDER_ID_INT,get(ORDER_ID)))
+			SetCreate(ORDER_ID,Get(ID))
+			+if(SubStr(Get(ORDER_ID),0,2)={CK},Set(ORDER_ID_INT,0),Set(ORDER_ID_INT,get(ORDER_ID)))
 			+Save({T_WM_OUTPART},GetForm())
 			" pluginName="saveView1" />
 		<pluginInterceptor methodName="exp" parameter="
@@ -175,7 +163,6 @@
 		<!--
 		<pluginOperation name="unaudit" oprName="取消审核" hostPage="edit" action="If(Confirm({请确认是否要取消审核?}),Save({},{unaudit}),true)+brk()"/>
 		 -->
-		 <pluginOperation name="addView" oprName="新增" hostPage="query" tblevel="1" img="add" action="ShowBill({new.do?__opr_data=T_WM_OUTPART2},{新增出库单},{T_WM_OUTPART2})+brk()"/>
 		 <pluginOperation name="auditSend" oprName="下发" hostPage="edit" tblevel="1" img="settings" action="
 			If(Confirm({确认下发?}),changestatus()+Plugin({},{saveView1},{SUBGRID},{SUBFRAME})+plugin({},{auditSend})+brk(),brk())"/>
 		<Operation queryPageDelete="false" queryPageAdd="false" save="false" saveAndAdd="false" saveAndAddCopy="false"/>
