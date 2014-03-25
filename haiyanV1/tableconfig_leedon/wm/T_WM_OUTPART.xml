@@ -53,6 +53,10 @@
 			<component type="text" readOnly="false" colspan="6"/>
 			<listColumn noedit="false" noquery="false"/>
 		</field>
+		<field name="SHIP_AREA" description="SHIP_AREA" javaType="string" lazyLoad="false">
+			<component type="text" readOnly="false" colspan="6"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
 		<field name="ORDER_MEMO" description="订单备注" javaType="string" lazyLoad="false">
 			<component type="text" readOnly="false" colspan="6"/>
 			<listColumn noedit="false" noquery="false"/>

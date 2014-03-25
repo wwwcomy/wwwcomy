@@ -65,6 +65,10 @@
 			<component type="text" readOnly="false" colspan="6"/>
 			<listColumn noedit="false" noquery="false"/>
 		</field>
+		<field name="SHIP_AREA" description="SHIP_AREA" javaType="string" lazyLoad="false">
+			<component type="text" readOnly="false" colspan="6"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
 		<!-- 只有admin可分配 
 		<field name="SUBFRAME" description="SUBFRAME" displayOnly="true" javaType="string" lazyLoad="false">
 			<component type="iframe" readOnly="false" colspan="6" style="height:460;width:100%;" 
