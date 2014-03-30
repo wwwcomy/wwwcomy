@@ -7,7 +7,7 @@
 		</field>
 		<field name="WM_MONTH" description="所属月份" displayOnly="false" javaType="string" lazyLoad="false">
 			<component type="text" readOnly="true" renderer="renderID"/>
-			<listColumn noedit="false" noquery="false"/>
+			<listColumn noedit="false" noquery="false" style="remoteSort:true;sortName:WM_MONTH"/>
 		</field>
 		<!--
 		<field name="WM_DATE" description="发生时间" displayOnly="false" javaType="date" lazyLoad="false">

@@ -361,7 +361,9 @@ try {
 			var rm=this.rm, cm=this.cm, dm=this.dm, vm=this.vm, ym=this.ym;
 			ym.each(function(yc, index){
 				var PID = yc.PRODUCTID, COUNT = yc.PRO_COUNT;// 使用T_WM_OUTPRE中的PRO_COUNT(源于SDB表) 作为应出库数量
-				this.mapDataYC[PID]=COUNT;
+				var OUT_COUNT = yc.OUT_COUNT;
+				//this.mapDataYC[PID]=COUNT;
+				this.mapDataYC[PID]=OUT_COUNT;
 			}, this);
 			vm.each(function(kuc, index) { // 库存遍历 V_WM_STOCK3
 				var PID = kuc.PRODUCTID, WID = kuc.WAREHOUSE;

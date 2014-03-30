@@ -9,7 +9,7 @@
 		<field name="WM_DATE" description="发生时间" javaType="date" lazyLoad="false">
 			<component type="text" readOnly="true"/>
 			<queryCondition type="region"/>
-			<listColumn noedit="false" noquery="false"/>
+			<listColumn noedit="false" noquery="false" style="remoteSort:true;sortName:WM_DATE"/>
 		</field>
 		<field name="PRODUCTID" description="EDP商品名" javaType="string" lazyLoad="false">
 			<component type="combo" readOnly="true" colspan="1" displayReferenceField="NAME" referenceField="ID" referenceTable="T_WM_SDBPRODUCT" associatedFields="PRO_WMCODE,PRO_NAME,SUPP_CODE,PRO_CAPACITYNUM,PRO_WEIGHTNUM,PRO_IN_PRICE"/>
