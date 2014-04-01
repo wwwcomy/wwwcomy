@@ -96,8 +96,20 @@
 	cataUrl : 'query.do?&__opr_data=T_WM_ACCOUNTSTATEMENT',
 	leaf : true
 }, {
-	text : 'WM_EDP分库',
+	text : 'WM_EDP分库(测试用,无过滤)',
 	cataUrl : 'query.do?__opr_data=V_WM_OUT2',
+	leaf : true
+},{
+	text : 'WM_EDP分库(初始)',
+	cataUrl : 'query.do?__opr_data=V_WM_OUT2_INIT',
+	leaf : true
+},{
+	text : 'WM_EDP分库(下发)',
+	cataUrl : 'query.do?__opr_data=V_WM_OUT2_SEND',
+	leaf : true
+},{
+	text : 'WM_EDP分库(已审批)',
+	cataUrl : 'query.do?__opr_data=V_WM_OUT2_AUDIT',
 	leaf : true
 },{
 	text : 'WM_EDP子订单出库(待批)',

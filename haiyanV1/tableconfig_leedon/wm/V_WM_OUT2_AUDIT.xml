@@ -53,6 +53,12 @@
 			<component type="text" readOnly="false" colspan="6"/>
 			<listColumn noedit="false" noquery="false"/>
 		</field>
+		<field name="BILL_STATUS" javaType="string" description="单据明细状态" defaultValue="init">
+			<component type="hidden" readOnly="true">
+				<option displayName="待批" value="init"/>
+				<option displayName="审批确认" value="audit"/>
+			</component>
+		</field>
 		<field name="BILL_STATUS1" javaType="string" description="单据状态" defaultValue="init">
 			<component type="dropdown" readOnly="true">
 				<option displayName="初始" value="init"/>
@@ -139,7 +145,7 @@
 			)"/>
 			-->
 			<pluggedFilter methodName="exp" parameter="
-				{ and t_1.BILL_STATUS &lt;&gt; 'audit' }
+				{ and t_1.BILL_STATUS = 'audit' and t_1.order_id in (select order_id from t_wm_outpredtl  GROUP BY order_id having count(distinct BILL_STATUS) = 1)}
 			"/>
 			<pluggedFilter methodName="exp" parameter="
 			If(InRole(sp,wm),

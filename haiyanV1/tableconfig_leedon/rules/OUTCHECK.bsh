@@ -7,10 +7,13 @@ String getWarewhereCode(String WHID, DBManager dbm){
 void checkStock() {
 	String ID = form.get("ID");
 	String warehouseID = form.get("WAREHOUSE");
+	String subOrderID = form.get("SUBORDER_ID");
+	if(StringUtil.isBlankOrNull(subOrderID))
+		throw new Warning("子订单号不能为空");
 	DBManager dbm = context.getDBM();
 	// 取所有明细中 每个库位,某种商品的移库数量之和, 检查是否大于库存数量
 	// 201209加入批次维度
-	String sql = "select PRO_WH,PRODUCTID,BATCH,sum(PRO_COUNT) from T_WM_OUTDETAIL where HEADID='"+ID+"' group by PRO_WH, PRODUCTID, BATCH";
+	String sql = "select PRO_WH,PRODUCTID,BATCH,sum(PRO_COUNT) from T_WM_OUTDETAIL where HEADID='"+ID+"' and SUBORDERID='"+subOrderID+"' group by PRO_WH, PRODUCTID, BATCH";
 	String[][] rs = dbm.getResultStrArray(sql, 4, null);
 	int l = rs.length;
 	String checkSql = "select t_1.PRO_COUNT,t_2.CODE,t_1.WAREHOUSE,t_1.WAREWHERE,t_1.PRODUCTID,t_1.BATCH from V_WM_STOCKWHEREBATCH t_1,T_WM_PRO t_2 where 1=2 ";
@@ -46,7 +49,7 @@ void checkStock() {
 			if(transCount>kcCount){
 				String whCode = getWarewhereCode(WHID, dbm);
 				//System.out.println("审批失败,商品 '"+proWmcode+"' 库存不足, 仓位:"+whCode+",批次:"+batch+", 出库数量:"+transCount+", 现有仓位库存:"+t);
-				throw new Warning("审批失败,商品 '"+proWmcode+"' 库存不足, 仓位:"+whCode+",批次:"+batch+", 出库数量:"+transCount+", 现有仓位库存:"+t);
+				throw new Warning("审批失败,商品 '"+proWmcode+"' 库存不足, 仓位:"+whCode+",批次:"+batch+", 出库数量:"+transCount+", 现有仓位库存:"+kcCount);
 			}
 		}else{
 			String whCode = getWarewhereCode(WHID, dbm);

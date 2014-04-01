@@ -131,6 +131,9 @@
 			<queryCondition type="region"/>
 			<listColumn noquery="true" nowrap="true"/>
 		</field>
+		<field name="SUBORDER_ID" description="子订单ID" javaType="string" displayOnly="true" >
+			<component type="text" readOnly="true"/>
+		</field>
 		<field name="HYVERSION" description="HYVERSION" javaType="string">
 			<component type="hidden" readOnly="false" />
 			<listColumn noedit="false" noquery="false"/>
@@ -155,6 +158,7 @@
 		<pluginInterceptor methodName="exp" parameter="
 			SetCreate(WAREHOUSE,GetUser(WAREHOUSEID),__WAREHOUSE__NAME,GetUser(WAREHOUSENAME))
 			+if(SubStr(Get(ORDER_ID),0,2)={CK},SetCreate(ORDER_ID_INT,0),SetCreate(ORDER_ID_INT,get(ORDER_ID)))
+			+set(SUBORDER_ID,getpara({SUBORDER_ID}))
 			" pluginName="edit" type="after"/>
 		<pluginInterceptor methodName="exp" parameter="
 			if(SubStr(Get(ORDER_ID),0,2)={CK},Set(ORDER_ID_INT,0),Set(ORDER_ID_INT,get(ORDER_ID)))

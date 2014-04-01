@@ -2,6 +2,7 @@
 void stockWarning() throws Throwable {
 	final String DSN = context.getDSN();
 	final String ID = form.get("ID");
+	final String subOrderID = form.get("SUBORDER_ID");
 	final SrvContext ctx = new TempSrvContext(context.getUser().getID(), DSN) ;
 	Thread t = new Thread(new Runnable(){
 		public void run() {
@@ -9,7 +10,7 @@ void stockWarning() throws Throwable {
 				DBManager dbm = ctx.getDBM();
 				
 				//获取所有商品和商品出库数量
-				String sql = "select distinct(PRODUCTID),sum(PRO_COUNT) from T_WM_OUTDETAIL where HEADID='"+ID+"' group by PRODUCTID";
+				String sql = "select distinct(PRODUCTID),sum(PRO_COUNT) from T_WM_OUTDETAIL where HEADID='"+ID+"'  and SUBORDERID='"+subOrderID+"' group by PRODUCTID";
 				String[][] rs = dbm.getResultStrArray(sql,2,null);
 				
 				if(rs.length>0) {
