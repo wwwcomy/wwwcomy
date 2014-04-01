@@ -81,9 +81,15 @@
 				else url=_operation;
 				if (url.indexOf('?')<0) url+='?';
 				if (_ID){
-					var arr = _ID.split('_');
-					var orderId = arr[0];
-					url+=Hy.getIDName()+'='+orderId+'&SUBORDER_ID='+arr[1]+'&';
+					if(_ID.indexOf('CK')<0){
+						var arr = _ID.split('_');
+						var orderId = arr[0];
+						url+=Hy.getIDName()+'='+orderId+'&SUBORDER_ID='+arr[1]+'&';
+					} else {
+						var arr = _ID.split('_');
+						var orderId = arr[0]+'_'+arr[1];
+						url+=Hy.getIDName()+'='+orderId+'&SUBORDER_ID='+arr[2]+'&';
+					}
 				}
 				url+="__opr_data=V_WM_OUT3_HISTORY";
 				if (typeof(__quickEditType)!=='undefined' && __quickEditType ==-1)
