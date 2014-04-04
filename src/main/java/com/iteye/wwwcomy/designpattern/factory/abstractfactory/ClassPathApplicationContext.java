@@ -24,10 +24,8 @@ public class ClassPathApplicationContext implements BeanFactory {
 	private String className;
 
 	public static void main(String[] args) throws IOException {
-		ClassPathApplicationContext c = new ClassPathApplicationContext(
-				"applicationContext.xml");
-		BufferedReader br = new BufferedReader(new InputStreamReader(c
-				.getClass().getClassLoader()
+		ClassPathApplicationContext c = new ClassPathApplicationContext("applicationContext.xml");
+		BufferedReader br = new BufferedReader(new InputStreamReader(c.getClass().getClassLoader()
 				.getResourceAsStream("applicationContext.xml")));
 		String x;
 		while ((x = br.readLine()) != null)
@@ -40,11 +38,11 @@ public class ClassPathApplicationContext implements BeanFactory {
 		init();
 	}
 
+	@SuppressWarnings("rawtypes")
 	public void init() {
 		SAXReader sr = new SAXReader();
 		try {
-			Document document = sr.read(this.getClass().getClassLoader()
-					.getResourceAsStream(this.fileName));
+			Document document = sr.read(this.getClass().getClassLoader().getResourceAsStream(this.fileName));
 			List l = document.selectNodes("/beans/bean");
 			Iterator j = l.iterator();
 			while (j.hasNext()) {
@@ -53,7 +51,7 @@ public class ClassPathApplicationContext implements BeanFactory {
 				this.className = n.attributeValue("class");
 				map.put(id, className);
 			}
-			Iterator i = document.getRootElement().elementIterator();
+			// Iterator i = document.getRootElement().elementIterator();
 			// while (i.hasNext()) {
 			// Element n = (Element) i.next();
 			// if (n.getName().equalsIgnoreCase("bean")) {
