@@ -62,6 +62,10 @@
 				<option displayName="审批" value="audit"/>
 			</component>
 		</field>
+		<field name="WAREHOUSE" description="出库仓库" displayOnly="false" javaType="string" lazyLoad="false" nullAllowed="false" >
+			<component type="combo" readOnly="true" colspan="1" displayReferenceField="NAME" referenceField="ID" referenceTable="T_DIC_WAREHOUSE_COMBO"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
 		<field name="ORDER_MEMO" description="订单备注" displayOnly="false" javaType="string" lazyLoad="false">
 			<component type="text" readOnly="false" colspan="6"/>
 			<listColumn noedit="false" noquery="false"/>
@@ -71,7 +75,7 @@
 
 		<queryFilter>
 			<pluggedFilter methodName="exp" parameter="
-				{ and t_1.BILL_STATUS1&lt;&gt;'init' and (t_1.Bill_status is null or t_1.BILL_STATUS&lt;&gt;'audit')}
+				{ and t_1.BILL_STATUS1&lt;&gt;'init' and (t_1.Bill_status is null or t_1.BILL_STATUS&lt;&gt;'audit') and t_1.WAREHOUSE='}&amp;GetUser(WAREHOUSEID)&amp;{'}
 			"/>
 		</queryFilter>
 		<javascript hostPage="query"><![CDATA[
@@ -101,7 +105,9 @@
 		<pluginInterceptor methodName="initDB" pluginName="initDB" type="before" ><![CDATA[
 create or replace view V_WM_OUT_FK_QUERY as 
 		(
-			select concat(t_1.ORDER_ID,'_',t_1.SUBORDERID) as ID,t_1.ORDER_ID_SUB,t_1.SUBORDERID,t_1.ORDER_ID,t_2.OUT_TYPE,t_2.MEMBER_ID,t_2.SHIP_NAME,t_2.SHIP_ADDR,t_2.SHIP_TEL,t_2.SHIP_MOBILE,
+			select concat(t_1.ORDER_ID,'_',t_1.SUBORDERID) as ID,t_1.ORDER_ID_SUB,t_1.SUBORDERID,t_1.ORDER_ID,
+			t_1.WAREHOUSE,
+			t_2.OUT_TYPE,t_2.MEMBER_ID,t_2.SHIP_NAME,t_2.SHIP_ADDR,t_2.SHIP_TEL,t_2.SHIP_MOBILE,
 			t_2.FINAL_AMOUNT,t_2.SHIPPING,t_2.ORDER_MEMO,t_1.BILL_STATUS1, t_1.BILL_STATUS from t_wm_outpredtl t_1 
 			LEFT JOIN t_wm_outpart t_2 on t_1.ORDER_ID=t_2.ORDER_ID GROUP BY t_1.SUBORDERID,t_1.ORDER_ID
 		)

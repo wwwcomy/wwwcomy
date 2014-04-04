@@ -62,6 +62,10 @@
 				<option displayName="审批" value="audit"/>
 			</component>
 		</field>
+		<field name="WAREHOUSE" description="出库仓库" displayOnly="false" javaType="string" lazyLoad="false" nullAllowed="false" >
+			<component type="combo" readOnly="true" colspan="1" displayReferenceField="NAME" referenceField="ID" referenceTable="T_DIC_WAREHOUSE_COMBO"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
 		<field name="ORDER_MEMO" description="订单备注" displayOnly="false" javaType="string" lazyLoad="false">
 			<component type="text" readOnly="false" colspan="6"/>
 			<listColumn noedit="false" noquery="false"/>
@@ -71,7 +75,7 @@
 
 		<queryFilter>
 			<pluggedFilter methodName="exp" parameter="
-				{ and t_1.BILL_STATUS1&lt;&gt;'init' and t_1.BILL_STATUS='audit'}
+				{ and t_1.BILL_STATUS1&lt;&gt;'init' and t_1.BILL_STATUS='audit'  and t_1.WAREHOUSE='}&amp;GetUser(WAREHOUSEID)&amp;{'}
 			"/>
 		</queryFilter>
 		<javascript hostPage="query"><![CDATA[
