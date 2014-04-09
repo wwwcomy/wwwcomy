@@ -1,4 +1,4 @@
-package nio.echo;
+package com.iteye.wwwcomy.lxn.nio;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
