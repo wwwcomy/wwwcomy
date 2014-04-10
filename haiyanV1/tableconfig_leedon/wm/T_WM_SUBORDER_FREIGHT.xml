@@ -10,7 +10,7 @@
 			<component type="text" readOnly="true"/>
 		</field>
 		<field name="SUBORDER_SHIPCOST" description="子订单运费" javaType="bigDecimal">
-			<component type="text" readOnly="false"/>
+			<component type="text" readOnly="false" minFractionDigit="3" maxFractionDigit="3"/>
 			<listColumn noedit="false" noquery="false"/>
 		</field>
 	</table>

@@ -68,3 +68,5 @@ insert into M_PRODUCT_WAREHOUSE(ID,PRODUCT,WAREHOUSE) (select concat(t_1.ID,'_',
 4. 出库相关： 出库里面点一次新增，T_WM_OUTPART 表 WAREHOUSE字段设置为可空，添加BILL_STATUS1字段
 	访问一次http://localhost:8087/haiyan/query.do?__opr_data=T_WM_OUTPREPART用于生成T_WM_OUTPREPART的新表结构
 5.运行ViewSQL.sql生成所有视图
+
+6.新增加了T_WM_SUBORDER_FREIGHT子订单运费的记录，注意生成
