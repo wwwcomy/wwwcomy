@@ -21,6 +21,31 @@ void refreshDB() throws Throwable {
 	dbm.executeUpdatePre(sql1, new Object[]{form.get("ORDER_ID")}, null);
 	dbm.executeUpdatePre(sql2, new Object[]{form.get("ORDER_ID")}, null);
 }
+//设置子订单的运费价格
+void setSuborderFreight(){
+	String orderID = form.get("ID");
+	String subOrderID = form.get("SUBORDER_ID");
+	String subOrderShipCost = form.get("SUBORDER_SHIPCOST");
+	String freightID = orderID+subOrderID;
+	Table freightTable = ConfigUtil.getTable("T_WM_SUBORDER_FREIGHT");
+	
+	String checkSql =  "select ID from T_WM_SUBORDER_FREIGHT where concat(ORDER_ID,SUBORDER_ID)='"+freightID+"'";
+	String[][] result = context.getDBM().getResultStrArray(checkSql, 1, null);
+	if (result.length>0) {
+		String id = "";
+		id = TypeConvert.toString(result[0][0]);
+		Qbq3Form freightForm = context.getDBM().findByPK(freightTable, id, context);
+		freightForm.set("SUBORDER_SHIPCOST",subOrderShipCost);
+		context.getDBM().update(freightTable, freightForm, context, null);
+	} else {
+		Qbq3Form freightForm = new MapForm();
+		freightForm.set("ORDER_ID",orderID);
+		freightForm.set("SUBORDER_ID",subOrderID);
+		freightForm.set("SUBORDER_SHIPCOST",subOrderShipCost);
+		context.getDBM().insert(freightTable, freightForm, context, null);
+	}
+}
 setSum();
 //先设置实际出库数量，再刷新表
 refreshDB();
+setSuborderFreight();

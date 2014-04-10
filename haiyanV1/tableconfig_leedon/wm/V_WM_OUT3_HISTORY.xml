@@ -130,6 +130,10 @@
 		<field name="SUBORDER_ID" description="子订单ID" javaType="string" displayOnly="true" >
 			<component type="text" readOnly="true"/>
 		</field>
+		<field name="SUBORDER_SHIPCOST" description="子订单运费" javaType="bigDecimal" displayOnly="true"  lazyLoad="false">
+			<component type="text" readOnly="false"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
 		<field name="HYVERSION" description="HYVERSION" javaType="string">
 			<component type="hidden" readOnly="false" />
 			<listColumn noedit="false" noquery="false"/>
@@ -163,6 +167,7 @@
 			+SetCreate(WAREHOUSE,GetUser(WAREHOUSEID),__WAREHOUSE__NAME,GetUser(WAREHOUSENAME))
 			+if(SubStr(Get(ORDER_ID),0,2)={CK},SetCreate(ORDER_ID_INT,0),SetCreate(ORDER_ID_INT,get(ORDER_ID)))
 			+set(SUBORDER_ID,getpara({SUBORDER_ID}))
+			+bsh(GET_FREIGHT.bsh)
 			" pluginName="edit" type="after"/>
 		<pluginInterceptor methodName="exp" parameter="
 			if(SubStr(Get(ORDER_ID),0,2)={CK},Set(ORDER_ID_INT,0),Set(ORDER_ID_INT,get(ORDER_ID)))
@@ -216,8 +221,9 @@
 		<!-- 
 		<pluginOperation name="addView" oprName="新增" hostPage="edit" tblevel="1" img="add" action="ShowBill({new.do?__opr_data=T_WM_OUTPART},{新增出库单},{T_WM_OUTPART})+brk()"/>
 		 -->
+		 <!--
 		<pluginOperation name="saveView" oprName="保存" hostPage="edit" tblevel="1" img="save" action="Plugin({},{saveView},{SUBGRID},{SUBGRID1})+brk()"/>
-		
+		-->
 		<pluginOperation name="printInvoice" oprName="配货单打印" hostPage="edit" tblevel="1" action="
 			Plugin({},{printInvoice})+brk()"/>
 		<pluginOperation name="printPacking" oprName="装箱单打印" hostPage="edit" tblevel="1" action="Plugin({},{printPacking})+brk()"/>

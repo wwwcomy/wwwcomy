@@ -1,0 +1,17 @@
+void setFreight() {
+	String orderID = form.get("ID");
+	String subOrderID = form.get("SUBORDER_ID");
+	String subOrderShipCost = form.get("SUBORDER_SHIPCOST");
+	String freightID = orderID+subOrderID;
+	Table freightTable = ConfigUtil.getTable("T_WM_SUBORDER_FREIGHT");
+	
+	String checkSql =  "select SUBORDER_SHIPCOST from T_WM_SUBORDER_FREIGHT where concat(ORDER_ID,SUBORDER_ID)='"+freightID+"'";
+	String[][] result = context.getDBM().getResultStrArray(checkSql, 1, null);
+	if (result.length>0) {
+		form.set("SUBORDER_SHIPCOST",result[0][0]);
+	} else {
+		form.set("SUBORDER_SHIPCOST","0.0");
+	}
+}
+
+setFreight();
