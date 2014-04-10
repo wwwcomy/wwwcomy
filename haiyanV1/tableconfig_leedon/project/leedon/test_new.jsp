@@ -188,7 +188,7 @@ try {
 		  ,'ORDER_ID' // 订单号
 		  ,'SUBORDERID' // 子订单号
 		  ,'ORDER_ID_SUB' // 订单-子订单号
-		  ,'OUT_SUB_CODE' //订单-子订单-商品号用于退货
+		  ,'OUT_SUB_CODE' //订单-子订单-商品CODE号用于退货
 		  ,'PRODUCTID' // 产品ID
 		  ,'PRODUCT_ID' // 产品ID2
 		  ,'OUT_COUNT' // 订单数
@@ -240,7 +240,7 @@ try {
 				,BILL_STATUS1:BillStatus1
 			});
 			rm.each(function(row, index) { // 行维度 T_WM_SDBPRODUCT
-				var YCK=this.getYCK(index).innerHTML*1,PID=row['ID'],
+				var YCK=this.getYCK(index).innerHTML*1,PID=row['ID'],PCODE=row['CODE'],
 				supp = row['SUPPLIER'],inPrice=row['IN_PRICE'],outPrice,outAllPrice;
 				var i;
 				for(i=0;i<this.ym.length;i++){
@@ -256,7 +256,7 @@ try {
 					,ORDER_ID:this.ORDER_ID
 					,SUBORDERID:OID
 					,ORDER_ID_SUB:""+this.ORDER_ID+OID
-					,OUT_SUB_CODE:""+this.ORDER_ID+OID+PID
+					,OUT_SUB_CODE:""+this.ORDER_ID+OID+PCODE
 					,WAREHOUSE:WID
 					,PRODUCTID:PID
 					,OUT_PCOUNT:0
