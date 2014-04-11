@@ -1,6 +1,6 @@
 package com.iteye.wwwcomy.designpattern.factory;
 
-public class Broom implements moveable {
+public class Broom implements Moveable {
 
 	@Override
 	public void run() {

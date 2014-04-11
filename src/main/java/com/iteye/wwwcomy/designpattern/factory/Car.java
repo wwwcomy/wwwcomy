@@ -1,7 +1,7 @@
 package com.iteye.wwwcomy.designpattern.factory;
 
 
-public class Car implements moveable {
+public class Car implements Moveable {
 
 	private static Car instance;
 

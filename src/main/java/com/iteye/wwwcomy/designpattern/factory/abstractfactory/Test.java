@@ -1,6 +1,6 @@
 package com.iteye.wwwcomy.designpattern.factory.abstractfactory;
 
-import com.iteye.wwwcomy.designpattern.factory.moveable;
+import com.iteye.wwwcomy.designpattern.factory.Moveable;
 
 public class Test {
 
@@ -16,7 +16,7 @@ public class Test {
 		// Car c = factory.createCar();
 
 		BeanFactory f = new ClassPathApplicationContext("applicationContext.xml");
-		moveable m = (moveable) f.getBean("v");
+		Moveable m = (Moveable) f.getBean("v");
 		m.run();
 	}
 }

@@ -1,6 +1,6 @@
 package com.iteye.wwwcomy.designpattern.factory;
 
-public class Plane implements moveable {
+public class Plane implements Moveable {
 
 	@Override
 	public void run() {

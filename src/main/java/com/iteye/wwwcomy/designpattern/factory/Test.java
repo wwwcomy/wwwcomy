@@ -7,7 +7,7 @@ public class Test {
 		// Car ce = Car.getInstance();
 		// if (c == ce)
 		VehicleFactory factory = new BroomFactory();
-		moveable m = factory.create();
+		Moveable m = factory.create();
 		m.run();
 	}
 }

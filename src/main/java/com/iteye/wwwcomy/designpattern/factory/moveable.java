@@ -1,5 +1,5 @@
 package com.iteye.wwwcomy.designpattern.factory;
 
-public interface moveable {
+public interface Moveable {
 	void run();
 }
