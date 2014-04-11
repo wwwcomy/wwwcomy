@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<beans>
-	<bean id="v" class="test.designpattern.springfactory.Car">
-	</bean>
-	<bean id="v2" class="test.designpattern.springfactory.Plane">
-	</bean>
-	<bean1 id="v1" class="test.designpattern.springfactory.Plane">
-	</bean1>
-</beans>
