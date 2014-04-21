@@ -152,16 +152,22 @@ try {
 			<td class="td1" rowspan=3>分配数</td>
 			<td class="td1" rowspan=3>实出数</td>
 			<%int size = SUBORDERS_COLS.size();%>
-			<%for(int i=0;i<size;i++){
+			<%
+			Map map1 = new HashMap();
+			map1.put("init","初始");
+			map1.put("send","下发");
+			map1.put("foraudit","待审批");
+			map1.put("audit","审批");
+			for(int i=0;i<size;i++){
 				Qbq3Form frm=(Qbq3Form)SUBORDERS_COLS.get(i);%>
 				<td class="td2" colspan=3 >子订单:<%=(i+1)%>(<%=StringUtil.isEmpty(frm.get("SUBORDERID"))?("00"+(i+1)):frm.get("SUBORDERID")%>,
-				<%=StringUtil.isEmpty(frm.get("BILL_STATUS1"))?"init":frm.get("BILL_STATUS1")%>)</td>
+				<%=StringUtil.isEmpty(frm.get("BILL_STATUS1"))?"初始":map1.get(frm.get("BILL_STATUS1"))%>)</td>
 			<%}%>
 		</tr>
 		<tr>
 			<%for(int i=0;i<size;i++){
 				Qbq3Form frm=(Qbq3Form)SUBORDERS_COLS.get(i);%>
-				<td class="td2" colspan=3 >仓库:<%=frm.get("NAME")%>(<%=frm.get("WAREHOUSE")%>)</td>
+				<td class="td2" colspan=3 >仓库:<%=frm.get("NAME")%></td>
 			<%}%>
 		</tr>
 		<tr>
@@ -273,10 +279,14 @@ try {
 				});
 			}, this);
 			var dom=this.getGridEl().dom;
-			dom.children[0].children[0].innerHTML+='<td class="td2" colspan=3>子订单:'+cm.length+'('+OID+','+BillStatus1+')</td>';
-			dom.children[0].children[1].innerHTML+='<td class="td2" colspan=3>仓库:'+WNAME+'('+WID+')</td>';
+			dom.children[0].children[0].innerHTML+='<td class="td2" colspan=3>子订单:'+cm.length+'('+OID+','+this.statusMap[BillStatus1]+')</td>';
+			dom.children[0].children[1].innerHTML+='<td class="td2" colspan=3>仓库:'+WNAME+'</td>';
 			dom.children[0].children[2].innerHTML+='<td class="td1">库存</td><td class="td1">分配</td><td class="td1">实出</td>';
 		}
+		,statusMap:{"init":"初始",
+			"send":"下发",
+			"foraudit":"待审批" ,
+			"audit":"审批"}
 		,change:function(PID,OID,WID,rowIndex,colIndex,that) {
 			var rm=this.rm, cm=this.cm, dm=this.dm, vm=this.vm, dataIndex=this.mapData[PID][OID]['ROWINDEX']>=0?this.mapData[PID][OID]['ROWINDEX']:rowIndex;
 			var val = that.value;
