@@ -1,7 +1,20 @@
 package com.iteye.wwwcomy.thread;
 
+import java.util.concurrent.BrokenBarrierException;
+import java.util.concurrent.CyclicBarrier;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
 public class RaceCondition implements Runnable {
 	Counter counter;
+	final static CyclicBarrier cb = new CyclicBarrier(2, new Runnable() {
+
+		@Override
+		public void run() {
+			System.out.println(Thread.currentThread().getName() + "执行");
+
+		}
+	});
 
 	RaceCondition() {
 	}
@@ -16,11 +29,14 @@ public class RaceCondition implements Runnable {
 	 */
 	public static void main(String[] args) throws Exception {
 		Counter counter = new Counter();
+		ExecutorService service = Executors.newCachedThreadPool();
 		Thread t1 = new Thread(new RaceCondition(counter));
 		Thread t2 = new Thread(new RaceCondition(counter));
-		t1.start();
-		t2.start();
-		Thread.sleep(3000);
+		service.execute(t1);
+		service.execute(t2);
+//		t1.start();
+//		t2.start();
+		service.shutdown();
 		System.out.println(counter.count);
 	}
 
@@ -28,7 +44,18 @@ public class RaceCondition implements Runnable {
 	public void run() {
 		for (int i = 0; i < 5000000; i++)
 			counter.add(1);
-		System.out.println("complete");
+		try {
+			System.out.println("before");
+			cb.await();
+			System.out.println("complete");
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (BrokenBarrierException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+		}
 	}
 }
 
