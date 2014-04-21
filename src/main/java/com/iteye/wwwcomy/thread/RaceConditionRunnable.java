@@ -5,21 +5,24 @@ import java.util.concurrent.CyclicBarrier;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-public class RaceCondition implements Runnable {
+/**
+ * 主线程也调用cb.await()之后就能保证主线程在子线程执行完成之后再执行了！
+ * @author wwwcomy
+ *
+ */
+public class RaceConditionRunnable implements Runnable {
 	Counter counter;
-	final static CyclicBarrier cb = new CyclicBarrier(2, new Runnable() {
-
+	final static CyclicBarrier cb = new CyclicBarrier(3, new Runnable() {
 		@Override
 		public void run() {
 			System.out.println(Thread.currentThread().getName() + "执行");
-
 		}
 	});
 
-	RaceCondition() {
+	RaceConditionRunnable() {
 	}
 
-	RaceCondition(Counter counter) {
+	RaceConditionRunnable(Counter counter) {
 		this.counter = counter;
 	}
 
@@ -30,12 +33,11 @@ public class RaceCondition implements Runnable {
 	public static void main(String[] args) throws Exception {
 		Counter counter = new Counter();
 		ExecutorService service = Executors.newCachedThreadPool();
-		Thread t1 = new Thread(new RaceCondition(counter));
-		Thread t2 = new Thread(new RaceCondition(counter));
+		Thread t1 = new Thread(new RaceConditionRunnable(counter));
+		Thread t2 = new Thread(new RaceConditionRunnable(counter));
 		service.execute(t1);
 		service.execute(t2);
-//		t1.start();
-//		t2.start();
+		cb.await();
 		service.shutdown();
 		System.out.println(counter.count);
 	}
@@ -49,10 +51,8 @@ public class RaceCondition implements Runnable {
 			cb.await();
 			System.out.println("complete");
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (BrokenBarrierException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} finally {
 		}
