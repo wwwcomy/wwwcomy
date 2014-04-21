@@ -61,6 +61,13 @@
 			<component type="text" readOnly="false" colspan="6"/>
 			<listColumn noedit="false" noquery="false"/>
 		</field>
+		<field name="SUBORDER_ID" description="子订单ID" javaType="string" displayOnly="true" >
+			<component type="text" readOnly="true"/>
+		</field>
+		<field name="SUBORDER_SHIPCOST" description="子订单运费" javaType="bigDecimal" displayOnly="true"  lazyLoad="false">
+			<component type="text" readOnly="false"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
 		<field name="SHIP_AREA" description="SHIP_AREA" javaType="string" lazyLoad="false">
 			<component type="text" readOnly="false" colspan="6"/>
 			<listColumn noedit="false" noquery="false"/>
@@ -126,13 +133,6 @@
 			<component type="date" readOnly="true"/>
 			<queryCondition type="region"/>
 			<listColumn noquery="true" nowrap="true"/>
-		</field>
-		<field name="SUBORDER_ID" description="子订单ID" javaType="string" displayOnly="true" >
-			<component type="text" readOnly="true"/>
-		</field>
-		<field name="SUBORDER_SHIPCOST" description="子订单运费" javaType="bigDecimal" displayOnly="true"  lazyLoad="false">
-			<component type="text" readOnly="false"/>
-			<listColumn noedit="false" noquery="false"/>
 		</field>
 		<field name="HYVERSION" description="HYVERSION" javaType="string">
 			<component type="hidden" readOnly="false" />

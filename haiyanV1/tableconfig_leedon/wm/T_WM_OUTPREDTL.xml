@@ -14,6 +14,7 @@
 		</field>
 		<field name="SUBORDERID" description="子订单ID" javaType="string">
 			<component type="readOnlyText"/>
+			<listColumn noedit="false" noquery="false" width="60"/>
 		</field>
 		<field name="OUT_SUB_CODE" description="出库:子订单:商品号" javaType="string" length="500">
 			<component type="readOnlyText"/>
@@ -24,10 +25,6 @@
 		</field>
 		<field name="OUT_CODE" description="出库:商品号" javaType="string" length="500">
 			<component type="readOnlyText"/>
-		</field>
-		<field name="PRODUCTID" description="EDP商品" javaType="string" >
-			<component type="combo" readOnly="false" displayReferenceField="WMCODE,NAME" referenceField="ID" referenceTable="T_WM_SDBPRODUCT" associatedFields="WMCODE,NAME,PACKING_NUM,SUPP_CODE,IN_PRICE"/>
-			<listColumn noedit="false" noquery="false"/>
 		</field>
 		<field name="PRODUCT_ID" description="SDB商品ID" javaType="string" >
 			<component type="hidden" readOnly="false" />
@@ -58,16 +55,8 @@
 			<component type="button" readOnly="true"/><!--renderer="renderUnAudit" -->
 			<listColumn noedit="true" noquery="true" width="70"/>
 		</field>
-		<field name="OUT_COUNT" description="订单数量" javaType="bigDecimal" defaultValue="0">
+		<field name="OUT_PCOUNT" description="订单分配数量" javaType="bigDecimal" defaultValue="0">
 			<component type="text" readOnly="true"/>
-			<listColumn noedit="false" noquery="false"/>
-		</field>
-		<field name="OUT_PCOUNT" description="(额度)分配数量" javaType="bigDecimal" defaultValue="0">
-			<component type="text" readOnly="true"/>
-			<listColumn noedit="false" noquery="false"/>
-		</field>
-		<field name="PRO_COUNT" description="(SDB表)应出库数量" javaType="bigDecimal" defaultValue="0">
-			<component type="text" readOnly="false"/>
 			<listColumn noedit="false" noquery="false"/>
 		</field>
 		<field name="OUT_RCOUNT" description="实际出库数量" javaType="bigDecimal" defaultValue="0">
@@ -146,6 +135,18 @@
 				<option displayName="待批" value="init"/>
 				<option displayName="审批确认" value="audit"/>
 			</component>
+		</field>
+		<field name="PRODUCTID" description="EDP商品" javaType="string" >
+			<component type="combo" readOnly="false" displayReferenceField="WMCODE,NAME" referenceField="ID" referenceTable="T_WM_SDBPRODUCT" associatedFields="WMCODE,NAME,PACKING_NUM,SUPP_CODE,IN_PRICE"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="OUT_COUNT" description="订单数量" javaType="bigDecimal" defaultValue="0">
+			<component type="text" readOnly="true"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="PRO_COUNT" description="SDB总订单数量" javaType="bigDecimal" defaultValue="0">
+			<component type="text" readOnly="false"/>
+			<listColumn noedit="false" noquery="false"/>
 		</field>
 		<field name="BILL_STATUS1" javaType="string" description="单据状态" defaultValue="init">
 			<component type="dropdown" readOnly="true">
