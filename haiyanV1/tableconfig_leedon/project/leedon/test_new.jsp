@@ -256,7 +256,7 @@ try {
 					,ORDER_ID:this.ORDER_ID
 					,SUBORDERID:OID
 					,ORDER_ID_SUB:""+this.ORDER_ID+OID
-					,OUT_SUB_CODE:""+this.ORDER_ID+OID+PCODE
+					,OUT_SUB_CODE:""+this.ORDER_ID+OID+"__"+PCODE
 					,WAREHOUSE:WID
 					,PRODUCTID:PID
 					,OUT_PCOUNT:0
