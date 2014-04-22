@@ -181,13 +181,13 @@
 		<!--
 		<pluginInterceptor methodName="bsh" parameter="V_WM_OUT.bsh" pluginName="saveViewBatch" type="after" />
 		-->
-		<pluginOperation name="saveView1" oprName="保存(V)" hostPage="edit" tblevel="1" img="save" action="Plugin({},{saveView1},{SUBGRID},{SUBFRAME})+brk()"/>
+		<pluginOperation name="saveView1" oprName="保存(V)" hostPage="edit" tblevel="1" img="save" action="Plugin({},{saveView1},{SUBGRID},{SUBFRAME})+showmask2(true)+brk()"/>
 		<!--
 		<pluginOperation name="unaudit" oprName="取消审核" hostPage="edit" action="If(Confirm({请确认是否要取消审核?}),Save({},{unaudit}),true)+brk()"/>
 		 -->
 		 <pluginOperation name="addView" oprName="新增" hostPage="query" tblevel="1" img="add" action="ShowBill({new.do?__opr_data=T_WM_OUTPART2},{新增出库单},{T_WM_OUTPART2})+brk()"/>
 		 <pluginOperation name="auditSend" oprName="下发" hostPage="edit" tblevel="1" img="settings" action="
-			If(Confirm({确认下发?}),changestatus()+Plugin({},{saveView1},{SUBGRID},{SUBFRAME})+plugin({},{auditSend})+brk(),brk())"/>
+			If(Confirm({确认下发?}),changestatus()+Plugin({},{saveView1},{SUBGRID},{SUBFRAME})+plugin({},{auditSend})+showmask2(true)+brk(),brk())"/>
 		<Operation queryPageDelete="false" queryPageAdd="false" save="false" saveAndAdd="false" saveAndAddCopy="false"/>
 	</table>
 </Haiyan>

@@ -544,6 +544,8 @@ try {
 			data.BILL_STATUS1='send';
 		},GRID0);
 	};
+
+	window.parent.showMask2(false);
 	</script>
 </body>
 </html>
