@@ -178,6 +178,17 @@
 			+SetCreateTime(AUDIT_TIME,{yyyy-MM-dd HH:mm:ss})
 			+Save({T_WM_OUTPART},GetForm())
 			" pluginName="auditSend" type="before"/>
+		<pluginInterceptor methodName="bsh" pluginName="refreshDB" type="after"><![CDATA[
+			void refreshDB() throws Throwable {
+				String sql1 = "delete from T_WM_OUTPRE";
+				String sql2 = "insert into  T_WM_OUTPRE(NAME,ITEM_ID,ORDER_ID,OUT_CODE,ITEM_ID_PK,PRODUCTID,PRODUCT_ID,WMCODE,SUPP_CODE,OUT_COUNT,OUT_RCOUNT,OUT_PCOUNT,CONTRA_INPRICE,IN_PRICE,OUT_PRICE,PRO_COUNT,OUT_ALL_PRICE,PACKING_NUM,CAPACITYNUM,WEIGHTNUM,SUPPLIER,WAREHOUSE,All_CAPACITYNUM,All_WEIGHTNUM,REMAINDER_NUM,LOGISTICS_NAME,LOGISTICS_CODE,LOGISTICS_MEMO,HYVERSION,BILL_STATUS) (select NAME,ITEM_ID,ORDER_ID,OUT_CODE,ITEM_ID_PK,PRODUCTID,PRODUCT_ID,WMCODE,SUPP_CODE,OUT_COUNT,OUT_RCOUNT,OUT_PCOUNT,CONTRA_INPRICE,IN_PRICE,OUT_PRICE,PRO_COUNT,OUT_ALL_PRICE,PACKING_NUM,CAPACITYNUM,WEIGHTNUM,SUPPLIER,WAREHOUSE,All_CAPACITYNUM,All_WEIGHTNUM,REMAINDER_NUM,LOGISTICS_NAME,LOGISTICS_CODE,LOGISTICS_MEMO,HYVERSION,BILL_STATUS from V_WM_OUTPRE)";
+				final DBManager dbm = context.getDBM();
+				dbm.executeUpdate(sql1, null);
+				dbm.executeUpdate(sql2, null);
+			}
+			refreshDB();
+		]]></pluginInterceptor>
+		<pluginOperation name="refreshDB" oprName="刷新应出库明细" hostPage="query" tblevel="1" img="refresh" action="plugin({},{refreshDB})+brk()"/>
 		<!--
 		<pluginInterceptor methodName="bsh" parameter="V_WM_OUT.bsh" pluginName="saveViewBatch" type="after" />
 		-->
@@ -185,8 +196,8 @@
 		<!--
 		<pluginOperation name="unaudit" oprName="取消审核" hostPage="edit" action="If(Confirm({请确认是否要取消审核?}),Save({},{unaudit}),true)+brk()"/>
 		 -->
-		 <pluginOperation name="addView" oprName="新增" hostPage="query" tblevel="1" img="add" action="ShowBill({new.do?__opr_data=T_WM_OUTPART2},{新增出库单},{T_WM_OUTPART2})+brk()"/>
-		 <pluginOperation name="auditSend" oprName="下发" hostPage="edit" tblevel="1" img="settings" action="
+		<pluginOperation name="addView" oprName="新增" hostPage="query" tblevel="1" img="add" action="ShowBill({new.do?__opr_data=T_WM_OUTPART2},{新增出库单},{T_WM_OUTPART2})+brk()"/>
+		<pluginOperation name="auditSend" oprName="下发" hostPage="edit" tblevel="1" img="settings" action="
 			If(Confirm({确认下发?}),changestatus()+Plugin({},{saveView1},{SUBGRID},{SUBFRAME})+plugin({},{auditSend})+showmask2(true)+brk(),brk())"/>
 		<Operation queryPageDelete="false" queryPageAdd="false" save="false" saveAndAdd="false" saveAndAddCopy="false"/>
 	</table>
