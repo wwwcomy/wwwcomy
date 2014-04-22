@@ -133,7 +133,7 @@
 			<component type="hidden" readOnly="false" />
 			<listColumn noedit="false" noquery="false"/>
 		</field>
-		<!-- -->
+		<!--
 		<queryFilter>
 			<pluggedFilter methodName="exp" parameter="
 			If(InRole(sp,wm),
@@ -141,6 +141,7 @@
 				{ and t_1.ID in (select ORDER_ID from T_WM_OUTPRE  where PRODUCTID in (select ID from T_WM_SDBPRODUCT where WAREHOUSE='}&amp;GetUser(WAREHOUSEID)&amp;{')) }
 			)"/>
 		</queryFilter>
+		 -->
 		<!-- -->
 		<role name="user wm sp pe ac">
 			<disOperation name="add"/>
