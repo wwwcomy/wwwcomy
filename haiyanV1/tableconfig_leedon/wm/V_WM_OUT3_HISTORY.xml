@@ -195,15 +195,15 @@
 			" pluginName="auditOut" type="before"/>
 		
 		<pluginInterceptor methodName="exp" parameter="
-			WriteJS({Hy.showBill('http://www.yidepin.com/tools/order_print.php?order_id=','配货单打印','test')})" 
+			WriteJS({Hy.showBill('http://www.yidepin.com/tools/order_print.php?order_id=}&amp;Get(ORDER_ID)&amp;{&amp;suborder_id=}&amp;Get(SUBORDER_ID)&amp;{','配货单打印','test')})" 
 			pluginName="printInvoice" type="after"/>
 		
 		<pluginInterceptor methodName="exp" parameter="
-			WriteJS({Hy.showBill('http://www.yidepin.com/tools/out_print.php?order_id=}&amp;Get(ORDER_ID)&amp;{','装箱单打印','test')})" 
+			WriteJS({Hy.showBill('http://www.yidepin.com/tools/out_print.php?order_id=}&amp;Get(ORDER_ID)&amp;{&amp;suborder_id=}&amp;Get(SUBORDER_ID)&amp;{','装箱单打印','test')})" 
 			pluginName="printPacking" type="after"/>
 			
 		<pluginInterceptor methodName="exp" parameter="
-			WriteJS({Hy.showBill('http://www.yidepin.com/tools/print/waybill.php?syso_id=}&amp;GetUser(ID)&amp;{&amp;wh_id=}&amp;Get(WAREHOUSE)&amp;{&amp;order_id=}&amp;Get(ORDER_ID)&amp;{','快递单打印','test')})" 
+			WriteJS({Hy.showBill('http://www.yidepin.com/tools/print/waybill.php?syso_id=}&amp;GetUser(ID)&amp;{&amp;wh_id=}&amp;Get(WAREHOUSE)&amp;{&amp;order_id=}&amp;Get(ORDER_ID)&amp;{&amp;suborder_id=}&amp;Get(SUBORDER_ID)&amp;{','快递单打印','test')})" 
 			pluginName="printExpress" type="after"/>
 		<!-- 
 		<pluginInterceptor methodName="exp" parameter="
