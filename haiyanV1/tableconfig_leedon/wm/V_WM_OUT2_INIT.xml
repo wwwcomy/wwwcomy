@@ -145,7 +145,7 @@
 			)"/>
 			-->
 			<pluggedFilter methodName="exp" parameter="
-				{ and t_1.BILL_STATUS &lt;&gt; 'audit' and t_1.BILL_STATUS1 is null or BILL_STATUS1='init'}
+				{ and (t_1.BILL_STATUS is null or t_1.BILL_STATUS &lt;&gt; 'audit') and (t_1.BILL_STATUS1 is null or BILL_STATUS1='init')}
 			"/>
 			<pluggedFilter methodName="exp" parameter="
 			If(InRole(sp,wm),
