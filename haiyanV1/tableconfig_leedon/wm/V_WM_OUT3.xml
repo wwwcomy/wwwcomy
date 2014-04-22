@@ -169,7 +169,7 @@
 			if(SubStr(Get(ORDER_ID),0,2)={CK},Set(ORDER_ID_INT,0),Set(ORDER_ID_INT,get(ORDER_ID)))
 			+Save({T_WM_OUTPART},GetForm())
 			" pluginName="saveView" />
-		<pluginInterceptor methodName="bsh" parameter="V_WM_OUT.bsh" pluginName="saveViewBatch" type="after" />
+		<pluginInterceptor methodName="bsh" parameter="V_WM_OUT3.bsh" pluginName="saveViewBatch" type="after" />
 		<!-- -->
 		<pluginInterceptor methodName="exp" parameter="
 			if(SubStr(Get(ORDER_ID),0,2)={CK},Set(ORDER_ID_INT,0),Set(ORDER_ID_INT,get(ORDER_ID)))
