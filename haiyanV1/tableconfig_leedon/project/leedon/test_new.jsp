@@ -84,6 +84,7 @@ try {
 		dfrm = new MapForm();
 		dfrm.set("ORDER_ID",ORDER_ID);
 		dfrm.set("SUBORDERID",frm.get("SUBORDERID"));
+		dfrm.set("BILL_STATUS",frm.get("BILL_STATUS"));
 		dfrm.set("BILL_STATUS1",frm.get("BILL_STATUS1"));
 		dfrm.set("WAREHOUSE", frm.get("WAREHOUSE"));
 
@@ -159,9 +160,24 @@ try {
 			map1.put("foraudit","待审批");
 			map1.put("audit","审批");
 			for(int i=0;i<size;i++){
+				String status="";
 				Qbq3Form frm=(Qbq3Form)SUBORDERS_COLS.get(i);%>
 				<td class="td2" colspan=3 >子订单:<%=(i+1)%>(<%=StringUtil.isEmpty(frm.get("SUBORDERID"))?("00"+(i+1)):frm.get("SUBORDERID")%>,
-				<%=StringUtil.isEmpty(frm.get("BILL_STATUS1"))?"初始":map1.get(frm.get("BILL_STATUS1"))%>)</td>
+				<%
+					String bStatus=frm.get("BILL_STATUS");
+					String bStatus1=frm.get("BILL_STATUS1");
+					if(StringUtil.isEmpty(bStatus1)|| bStatus1.equalsIgnoreCase("init")){
+						status="init";
+					}
+					else if(bStatus1.equalsIgnoreCase("send")){
+						if(bStatus.equalsIgnoreCase("audit"))
+							status="audit";
+						else
+							status="send";
+					}
+				%>
+				<%=map1.get(status)%>
+				)</td>
 			<%}%>
 		</tr>
 		<tr>
