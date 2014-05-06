@@ -145,7 +145,10 @@
 			)"/>
 			-->
 			<pluggedFilter methodName="exp" parameter="
-				{ and t_1.BILL_STATUS = 'audit' and t_1.order_id in (select order_id from t_wm_outpredtl  GROUP BY order_id having count(distinct BILL_STATUS) = 1)}
+				{ and t_1.BILL_STATUS = 'audit' and t_1.order_id in (
+				select order_id  from
+				(select order_id from t_wm_outpredtl  GROUP BY order_id having count(distinct BILL_STATUS) = 1) as TMP
+				)}
 			"/>
 			<pluggedFilter methodName="exp" parameter="
 			If(InRole(sp,wm),

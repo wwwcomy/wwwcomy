@@ -70,3 +70,4 @@ insert into M_PRODUCT_WAREHOUSE(ID,PRODUCT,WAREHOUSE) (select concat(t_1.ID,'_',
 5.运行ViewSQL.sql生成所有视图
 
 6.新增加了T_WM_SUBORDER_FREIGHT子订单运费的记录，注意生成
+7.索引：T_WM_OUTPART和T_WM_OUTPREDTL的ORDER_ID字段添加索引
