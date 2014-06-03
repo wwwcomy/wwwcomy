@@ -11,6 +11,7 @@ import java.io.*;
  * 4.Tomcat对不同的项目肯定是使用不同的ClassLoader实例的，
  * 这样能保证不同的Context在不同的类命名空间运行，具体见WebappClassLoader
  * 
+ * @see http://www.cnblogs.com/zhguang/p/3154584.html
  * @author wwwcomy
  * 
  */
