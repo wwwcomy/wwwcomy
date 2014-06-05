@@ -1,0 +1,101 @@
+<?xml version="1.0"?>
+<!DOCTYPE Configure PUBLIC "-//Mort Bay Consulting//DTD Configure//EN" "http://jetty.mortbay.org/configure.dtd">
+<Configure id="Server" class="org.eclipse.jetty.server.Server">
+	<Set name="ThreadPool">
+		<New class="org.eclipse.jetty.util.thread.QueuedThreadPool">
+			<Set name="minThreads">2</Set>
+			<Set name="maxThreads">100</Set>
+		</New>
+	</Set>
+
+	<Call name="addConnector">
+	  <Arg>
+		  <New class="org.eclipse.jetty.server.nio.SelectChannelConnector">
+			<Set name="host"><SystemProperty name="jetty.host" default="0.0.0.0" /></Set>
+			<Set name="port"><SystemProperty name="jetty.port" default="8080" /></Set>
+			<Set name="maxIdleTime">30000</Set>
+			<Set name="Acceptors">3</Set>
+			<Set name="statsOn">false</Set>
+			<Set name="confidentialPort">8443</Set>
+			<Set name="lowResourcesConnections">5000</Set>
+			<Set name="lowResourcesMaxIdleTime">5000</Set>
+		  </New>
+	  </Arg>
+	</Call> 
+
+	<Set name="sessionIdManager">
+		<New class="org.eclipse.jetty.server.session.HashSessionIdManager">
+			<Set name="workerName">node1</Set>
+		</New>
+	</Set>
+
+	<Set name="handler">
+		<New id="Handlers" class="org.eclipse.jetty.server.handler.HandlerCollection">
+			<Set name="handlers">
+				<Array type="org.eclipse.jetty.server.Handler">
+					<Item>
+						<New id="Contexts" class="org.eclipse.jetty.server.handler.HandlerCollection"/>
+					</Item>
+					<Item>
+						<New id="DefaultHandler" class="org.eclipse.jetty.server.handler.DefaultHandler"/>
+					</Item>
+					<Item>
+						<New id="RequestLog" class="org.eclipse.jetty.server.handler.RequestLogHandler"/>
+					</Item>
+				</Array>
+			</Set>
+		</New>
+	</Set>
+
+	<!-- =========================================================== -->
+	<!-- Deploy A single app                                         -->
+	<!-- =========================================================== -->
+	<Ref id="Contexts">
+		<Call name="addHandler">
+			<Arg>
+				<New class="org.eclipse.jetty.webapp.WebAppContext">
+					<!-- 
+					<Set name="contextPath"><SystemProperty name="jetty.contextPath" default="/yigo" /></Set>  
+					-->
+					<!--  
+					<Set name="descriptor"><SystemProperty name="jetty.descriptor" default="/web.xml" /></Set>
+					<Set name="war">D:\opt\tomcat6\webapps-demo\altbase\</Set>
+					<Set name="parentLoaderPriority">true</Set>
+					-->
+					<!-- Support multi static resource paths -->
+					<!-- 
+					<Set name="baseResource">
+					  	<New class="org.eclipse.jetty.util.resource.ResourceCollection">
+							<Arg>
+								<Array type="java.lang.String">
+							    	<Item><SystemProperty name="jetty.resource" default="/." /></Item>
+							  	</Array> 
+							</Arg>
+					  	</New>
+					</Set>  
+					-->
+				</New>
+			</Arg>
+		</Call> 
+	</Ref>
+	<!--
+	<Ref id="RequestLog">
+	  <Set name="requestLog">
+		<New id="RequestLogImpl" class="org.eclipse.jetty.server.NCSARequestLog">
+		  <Set name="filename"><SystemProperty name="jetty.logs" default="./logs"/>/yyyy_mm_dd.request.log</Set>
+		  <Set name="filenameDateFormat">yyyy_MM_dd</Set>
+		  <Set name="retainDays">90</Set>
+		  <Set name="append">true</Set>
+		  <Set name="extended">false</Set>
+		  <Set name="logCookies">false</Set>
+		  <Set name="LogTimeZone">GMT</Set>
+		</New>
+	  </Set>
+	</Ref>
+	-->
+	<Set name="stopAtShutdown">true</Set>
+	<Set name="sendServerVersion">true</Set>
+	<Set name="sendDateHeader">true</Set>
+	<Set name="gracefulShutdown">1000</Set>
+
+</Configure>
