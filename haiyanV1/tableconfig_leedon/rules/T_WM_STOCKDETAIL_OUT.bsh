@@ -27,10 +27,10 @@ void newRemoveKC() throws Throwable {
 	String orderID = form.get("ORDER_ID");
 	String outType = form.get("OUT_TYPE");
 	String ID = form.get("ID");
-	String subOrderID = form.get("SUBORDER_ID");
-	
-	if(StringUtil.isBlankOrNull(orderID)||StringUtil.isBlankOrNull(outType)){
-		throw new Warning("出库ID和出库类型不能为空");
+	String subOrderID = context.getParameter("SUBORDER_ID"); 
+			//form.get("SUBORDER_ID");
+	if(StringUtil.isBlankOrNull(orderID)||StringUtil.isBlankOrNull(outType)||StringUtil.isBlankOrNull(subOrderID)){
+		throw new Warning("出库ID,出库类型或者子订单ID不能为空");
 	}
 	
 	if(orderID.startsWith("CK_")&&("reject".equals(outType)||"loss".equals(outType))){
