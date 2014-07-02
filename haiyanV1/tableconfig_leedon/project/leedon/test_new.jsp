@@ -45,7 +45,13 @@ try {
 			JSONObject json = new JSONObject();
 			json.put("PRODUCTID", bean.get("PRODUCTID"));
 			json.put("OUT_CODE", bean.get("OUT_CODE"));
-			PRODUCTID.add(bean.get("PRODUCTID"));
+			if(StringUtil.isEmpty(bean.get("PRODUCTID"))){
+				out.print("商品不存在:"+bean.get("NAME"));
+				out.print("<script>window.parent.showMask2(false);</script>");
+				return;
+			}
+			else
+				PRODUCTID.add(bean.get("PRODUCTID"));
 		}
 	}
 	out.print("PRODUCTID:"+PRODUCTID);
