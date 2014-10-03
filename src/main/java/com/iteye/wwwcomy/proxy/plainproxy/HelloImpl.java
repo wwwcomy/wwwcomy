@@ -12,4 +12,8 @@ public class HelloImpl implements Hello {
 		System.out.println("This is the String printed by HelloImpl as " + p);
 	}
 
+	public void foo() {
+		System.out.println("This is foo");
+	}
+
 }
