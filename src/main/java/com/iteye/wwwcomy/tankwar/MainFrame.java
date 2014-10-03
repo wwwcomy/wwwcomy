@@ -65,10 +65,10 @@ class WarFrame extends Frame {
 		super(title);
 		this.width = x;
 		this.height = y;
-		// for (int i = 0; i < 10; i++) {
-		// Tank t = new Tank(this, true, 1, Color.PINK, 730, (i + 1) * 55);
-		// tankList.add(t);
-		//	}
+		 for (int i = 0; i < 10; i++) {
+		 Tank t = new Tank(this, true, 1, Color.PINK, 730, (i + 1) * 55);
+		 tankList.add(t);
+			}
 	}
 
 	/*
@@ -133,7 +133,7 @@ class WarFrame extends Frame {
 		this.addKeyListener(new KeyMoniter());
 		setVisible(true);
 		// setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		nc.connect("127.0.0.1", TankServer.port);
+		// nc.connect("127.0.0.1", TankServer.port);
 	}
 
 	private class KeyMoniter extends KeyAdapter {
