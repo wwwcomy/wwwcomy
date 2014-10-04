@@ -34,6 +34,11 @@ public class MainFrame extends JFrame {
 					return;
 				if (cardHolder.getSelectedCard() != null) {
 					Card selectedCard = cardHolder.getSelectedCard();
+					if (card == selectedCard) {
+						cardHolder.setSelectedCard(null);
+						frame.repaint();
+						return;
+					}
 					boolean destroy = cardHolder.judgeSame(selectedCard, card);
 					if (destroy) {
 						System.out.println("Matched!");

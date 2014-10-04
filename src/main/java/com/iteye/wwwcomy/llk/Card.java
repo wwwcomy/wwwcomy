@@ -9,6 +9,7 @@ public class Card {
 	private int x;
 	private int y;
 
+	private boolean selected = false;
 	private int value;
 
 	public Card(int x, int y, int value) {
@@ -55,5 +56,13 @@ public class Card {
 	@Override
 	public String toString() {
 		return "Card:" + value + ",X=" + this.x + "," + "Y=" + this.y;
+	}
+
+	public boolean isSelected() {
+		return selected;
+	}
+
+	public void setSelected(boolean selected) {
+		this.selected = selected;
 	}
 }

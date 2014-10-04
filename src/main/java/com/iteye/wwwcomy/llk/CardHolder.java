@@ -2,14 +2,15 @@ package com.iteye.wwwcomy.llk;
 
 import java.awt.Color;
 import java.awt.Graphics;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Random;
 
 public class CardHolder {
-	private List<Card> cards;
+	private static final int size = 10;
+	private Card[][] cards;
 
 	private Card selectedCard;
+
+	private IReachable reachable;
 
 	public CardHolder() {
 		init();
@@ -17,28 +18,32 @@ public class CardHolder {
 
 	public void init() {
 		if (cards == null)
-			cards = new ArrayList<Card>();
-		for (int i = 0; i < 10; i++) {
-			for (int j = 0; j < 10; j = j + 2) {
+			cards = new Card[size][size];
+		for (int i = 0; i < size; i++) {
+			for (int j = 0; j < size; j = j + 2) {
 				int value = new Random().nextInt(10);
-				cards.add(new Card(i, j, value));
-				cards.add(new Card(i, j + 1, value));
+				cards[i][j] = new Card(i, j, value);
+				cards[i][j + 1] = new Card(i, j + 1, value);
 			}
 		}
-
+		reachable = new DefaultReachableStrategy();
 	}
 
-	public List<Card> getCards() {
+	public Card[][] getCards() {
 		return cards;
 	}
 
-	public void setCards(List<Card> cards) {
+	public void setCards(Card[][] cards) {
 		this.cards = cards;
 	}
 
 	public void draw(Graphics g) {
-		for (Card card : cards) {
-			card.draw(g);
+		for (int i = 0; i < size; i++) {
+			for (int j = 0; j < size; j++) {
+				Card card = cards[i][j];
+				if (card != null)
+					card.draw(g);
+			}
 		}
 		if (selectedCard != null) {
 			Color c = g.getColor();
@@ -51,11 +56,8 @@ public class CardHolder {
 	public Card getCardByLocation(int x, int y) {
 		int stepX = (x / Card.width) - 1;
 		int stepY = (y / Card.height) - 1;
-		for (Card card : cards) {
-			if (card.getX() == stepX && card.getY() == stepY)
-				return card;
-		}
-		return null;
+		Card card = cards[stepX][stepY];
+		return card;
 	}
 
 	public Card getSelectedCard() {
@@ -67,12 +69,20 @@ public class CardHolder {
 	}
 
 	public boolean judgeSame(Card selectedCard, Card card) {
-		if (selectedCard.getValue() == card.getValue())
-			return true;
-		return false;
+		return reachable.reach(cards, selectedCard, card);
 	}
-	
-	public boolean removeCard(Card card){
-		return cards.remove(card);
+
+	public void removeCard(Card card) {
+		int x = card.getX();
+		int y = card.getY();
+		cards[x][y] = null;
+	}
+
+	public IReachable getReachable() {
+		return reachable;
+	}
+
+	public void setReachable(IReachable reachable) {
+		this.reachable = reachable;
 	}
 }
