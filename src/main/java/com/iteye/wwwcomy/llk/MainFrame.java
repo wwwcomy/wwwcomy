@@ -66,23 +66,19 @@ public class MainFrame extends JFrame {
 		});
 		frame.setJMenuBar(new MainFrameMenuBar(cardHolder, this));
 		frame.setVisible(true);
-		// new Thread(new PaintThread()).start();
 	}
 
 	Image offScreen = null;
 
 	@Override
 	public void paint(Graphics g) {
-
 		offScreen = this.createImage(width, height);
-		Graphics g2=offScreen.getGraphics();  
-
+		Graphics g2 = offScreen.getGraphics();
 		super.paint(g2);
+		g2.setColor(Color.black);
+		g2.fill3DRect(0, 50, width, height, true);
 		cardHolder.draw(g2);
-		
 		g.drawImage(offScreen, 0, 0, null);
-		
-		
 	}
 
 }
