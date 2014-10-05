@@ -5,7 +5,7 @@ import java.awt.Graphics;
 import java.util.Random;
 
 public class CardHolder {
-	private static final int size = 10;
+	public static final int size = 10;
 	private Card[][] cards;
 
 	private Card selectedCard;

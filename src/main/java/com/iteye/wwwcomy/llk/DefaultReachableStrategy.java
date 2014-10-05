@@ -1,5 +1,8 @@
 package com.iteye.wwwcomy.llk;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class DefaultReachableStrategy implements IReachable {
 
 	@Override
@@ -12,9 +15,105 @@ public class DefaultReachableStrategy implements IReachable {
 			int c1y = c1.getY();
 			int c2x = c2.getX();
 			int c2y = c2.getY();
+			// 同行同列
 			result = judgeSameRowOrCol(cards, c1x, c1y, c2x, c2y);
 			if (!result)
+				// 单个转角
 				result = judgeSingleAngle(cards, c1x, c1y, c2x, c2y);
+			if (!result)
+				// 双转角
+				result = judgeTwoAngle(cards, c1x, c1y, c2x, c2y);
+		}
+		return result;
+	}
+
+	private boolean judgeTwoAngle(Card[][] cards, int c1x, int c1y, int c2x, int c2y) {
+		List<Integer> blankHC1List = getHorizontalIndex(cards, c1x, c1y);
+		List<Integer> blankHC2List = getHorizontalIndex(cards, c2x, c2y);
+		blankHC1List.retainAll(blankHC2List);
+		if (blankHC1List.size() > 0) {
+			if (blankHC1List.remove(Integer.valueOf(-1)) || blankHC1List.remove(Integer.valueOf(CardHolder.size)))
+				return true;
+			boolean bigger = (c1y >= c2y ? true : false);
+			if (!bigger) {
+				int tmp = c1y;
+				c1y = c2y;
+				c2y = tmp;
+			}
+			for (Integer x : blankHC1List) {
+				if (judgeCol(cards, c2y, c1y + 1, x))
+					return true;
+			}
+		}
+
+		List<Integer> blankVC1List = getVerticalIndex(cards, c1x, c1y);
+		List<Integer> blankVC2List = getVerticalIndex(cards, c2x, c2y);
+		blankVC1List.retainAll(blankVC2List);
+		if (blankVC1List.size() > 0) {
+			if (blankVC1List.remove(Integer.valueOf(-1)) || blankVC1List.remove(Integer.valueOf(CardHolder.size)))
+				return true;
+			boolean bigger = (c1x >= c2x ? true : false);
+			if (!bigger) {
+				int tmp = c1x;
+				c1x = c2x;
+				c2x = tmp;
+			}
+			for (Integer y : blankVC1List) {
+				if (judgeRow(cards, c2x, c1x + 1, y))
+					return true;
+			}
+		}
+		return false;
+	}
+
+	private List<Integer> getVerticalIndex(Card[][] cards, int x, int y) {
+		List<Integer> result = new ArrayList<Integer>();
+		if (y == 0)
+			result.add(-1);
+		if (y == CardHolder.size - 1)
+			result.add(CardHolder.size);
+		for (int i = y - 1; i >= 0; i--) {
+			if (cards[x][i] == null) {
+				result.add(i);
+				if (i == 0)
+					result.add(-1);
+			} else
+				break;
+		}
+
+		for (int i = y + 1; i < CardHolder.size; i++) {
+			if (cards[x][i] == null) {
+				result.add(i);
+				if (i == CardHolder.size - 1)
+					result.add(CardHolder.size);
+			} else
+				break;
+		}
+		return result;
+	}
+
+	private List<Integer> getHorizontalIndex(Card[][] cards, int x, int y) {
+		List<Integer> result = new ArrayList<Integer>();
+		if (x == 0)
+			result.add(-1);
+		if (x == CardHolder.size - 1)
+			result.add(CardHolder.size);
+		for (int i = x - 1; i >= 0; i--) {
+			if (cards[i][y] == null) {
+				result.add(i);
+				if (i == 0)
+					result.add(-1);
+			} else
+				break;
+		}
+
+		for (int i = x + 1; i < CardHolder.size; i++) {
+			if (cards[i][y] == null) {
+				result.add(i);
+				if (i == CardHolder.size - 1)
+					result.add(CardHolder.size);
+			} else
+				break;
 		}
 		return result;
 	}
