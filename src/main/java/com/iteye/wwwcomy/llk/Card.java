@@ -3,6 +3,12 @@ package com.iteye.wwwcomy.llk;
 import java.awt.Font;
 import java.awt.Graphics;
 
+/**
+ * POJO of card
+ * 
+ * @author wwwcomy
+ * 
+ */
 public class Card {
 	public final static int width = 50;
 	public final static int height = 50;

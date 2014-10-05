@@ -47,7 +47,7 @@ public class CardHolder {
 					g.setColor(Color.red);
 					card.draw(g);
 					g.setColor(c);
-				} 
+				}
 			}
 		}
 		if (selectedCard != null) {
@@ -86,6 +86,9 @@ public class CardHolder {
 		cards[x][y] = null;
 	}
 
+	/**
+	 * 重排 TODO: 少的时候基本排不了，算法略有问题
+	 */
 	public void makeCardsRandom() {
 		Random r = new Random();
 		for (int i = 0; i < size; i++) {

@@ -36,8 +36,10 @@ public class MainFrame extends JFrame {
 
 		frame.addMouseListener(new MouseAdapter() {
 
+			// 这里使用mouseClicked有时会触发不了
+			// 事件委托
 			@Override
-			public void mouseClicked(MouseEvent e) {
+			public void mousePressed(MouseEvent e) {
 				int x = e.getX();
 				int y = e.getY();
 				Card card = cardHolder.getCardByLocation(x, y);
@@ -70,6 +72,9 @@ public class MainFrame extends JFrame {
 
 	Image offScreen = null;
 
+	/*
+	 * 绘制，使用paintComponents貌似没起作用
+	 */
 	@Override
 	public void paint(Graphics g) {
 		offScreen = this.createImage(width, height);

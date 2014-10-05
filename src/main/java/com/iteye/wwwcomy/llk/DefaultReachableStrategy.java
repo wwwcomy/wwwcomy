@@ -28,7 +28,7 @@ public class DefaultReachableStrategy implements IReachable {
 	}
 
 	private boolean judgeTwoAngle(Card[][] cards, int c1x, int c1y, int c2x, int c2y) {
-		// 水平延伸
+		// 水平延伸,交集为可纵向检查连通的点
 		List<Integer> blankHC1List = getHorizontalIndex(cards, c1x, c1y);
 		List<Integer> blankHC2List = getHorizontalIndex(cards, c2x, c2y);
 		blankHC1List.retainAll(blankHC2List);
@@ -47,7 +47,7 @@ public class DefaultReachableStrategy implements IReachable {
 			}
 		}
 
-		// 垂直延伸
+		// 垂直延伸,交集为可横向检查连通的点
 		List<Integer> blankVC1List = getVerticalIndex(cards, c1x, c1y);
 		List<Integer> blankVC2List = getVerticalIndex(cards, c2x, c2y);
 		blankVC1List.retainAll(blankVC2List);
@@ -68,6 +68,14 @@ public class DefaultReachableStrategy implements IReachable {
 		return false;
 	}
 
+	/**
+	 * 获取纵向相连接的空点
+	 * 
+	 * @param cards
+	 * @param x
+	 * @param y
+	 * @return
+	 */
 	private List<Integer> getVerticalIndex(Card[][] cards, int x, int y) {
 		List<Integer> result = new ArrayList<Integer>();
 		if (y == 0)
@@ -94,6 +102,14 @@ public class DefaultReachableStrategy implements IReachable {
 		return result;
 	}
 
+	/**
+	 * 获取横向可连接的空点
+	 * 
+	 * @param cards
+	 * @param x
+	 * @param y
+	 * @return
+	 */
 	private List<Integer> getHorizontalIndex(Card[][] cards, int x, int y) {
 		List<Integer> result = new ArrayList<Integer>();
 		if (x == 0)
@@ -120,6 +136,16 @@ public class DefaultReachableStrategy implements IReachable {
 		return result;
 	}
 
+	/**
+	 * 单转角，四个点形成一个矩形，判断两个边是不是连通即可
+	 * 
+	 * @param cards
+	 * @param c1x
+	 * @param c1y
+	 * @param c2x
+	 * @param c2y
+	 * @return
+	 */
 	private boolean judgeSingleAngle(Card[][] cards, int c1x, int c1y, int c2x, int c2y) {
 		boolean c1xBigger = (c1x >= c2x ? true : false);
 		boolean c1yBigger = (c1y >= c2y ? true : false);
@@ -161,6 +187,15 @@ public class DefaultReachableStrategy implements IReachable {
 		return false;
 	}
 
+	/**
+	 * 判断从smallX到largeX-1这一行区间是不是空的，如果是空的则表示是可连通的
+	 * 
+	 * @param cards
+	 * @param smallX
+	 * @param largeX
+	 * @param y
+	 * @return
+	 */
 	private boolean judgeRow(Card[][] cards, int smallX, int largeX, int y) {
 		if (smallX > largeX)
 			throw new UnsupportedOperationException("Wrong args");
@@ -171,6 +206,15 @@ public class DefaultReachableStrategy implements IReachable {
 		return true;
 	}
 
+	/**
+	 * 判断从smallY到largeY-1这一列区间是不是空的，如果是空的则表示是可连通的
+	 * 
+	 * @param cards
+	 * @param smallY
+	 * @param largeY
+	 * @param x
+	 * @return
+	 */
 	private boolean judgeCol(Card[][] cards, int smallY, int largeY, int x) {
 		if (smallY > largeY)
 			throw new UnsupportedOperationException("Wrong args");
