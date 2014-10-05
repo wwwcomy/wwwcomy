@@ -80,17 +80,4 @@ public class MainFrame extends JFrame {
 		g.setColor(c);
 	}
 
-	class PaintThread extends Thread {
-		@Override
-		public void run() {
-			while (true) {
-				frame.repaint();
-				try {
-					Thread.sleep(200);
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
-			}
-		}
-	}
 }
