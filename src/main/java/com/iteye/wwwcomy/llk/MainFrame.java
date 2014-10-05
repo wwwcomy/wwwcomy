@@ -26,7 +26,6 @@ public class MainFrame extends JFrame {
 	}
 
 	private void start() {
-
 		frame.setBackground(Color.black);
 		setSize(width, height);
 		frame.addWindowListener(new WindowAdapter() {
@@ -65,6 +64,7 @@ public class MainFrame extends JFrame {
 				frame.repaint();
 			}
 		});
+		frame.setJMenuBar(new MainFrameMenuBar(cardHolder, this));
 		frame.setVisible(true);
 		// new Thread(new PaintThread()).start();
 	}
@@ -73,10 +73,9 @@ public class MainFrame extends JFrame {
 
 	@Override
 	public void paint(Graphics g) {
-//		g.fillRect(0, 0, getWidth(), getHeight());
+		// g.fillRect(0, 0, getWidth(), getHeight());
 		g.setColor(Color.black);
 		cardHolder.draw(g);
-
 	}
 
 	class PaintThread extends Thread {

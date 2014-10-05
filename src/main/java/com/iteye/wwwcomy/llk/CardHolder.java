@@ -27,6 +27,7 @@ public class CardHolder {
 			}
 		}
 		reachable = new DefaultReachableStrategy();
+		makeCardsRandom();
 	}
 
 	public Card[][] getCards() {
@@ -42,12 +43,11 @@ public class CardHolder {
 			for (int j = 0; j < size; j++) {
 				Card card = cards[i][j];
 				Color c = g.getColor();
-				if (card != null){
+				if (card != null) {
 					g.setColor(Color.red);
 					card.draw(g);
 					g.setColor(c);
-				}
-				else{
+				} else {
 					int drawX = (i + 1) * Card.width;
 					int drawY = (j + 1) * Card.height;
 					g.fillRect(drawX, drawY, Card.width, Card.height);
@@ -65,8 +65,11 @@ public class CardHolder {
 	public Card getCardByLocation(int x, int y) {
 		int stepX = (x / Card.width) - 1;
 		int stepY = (y / Card.height) - 1;
-		Card card = cards[stepX][stepY];
-		return card;
+		if (stepX >= 0 && stepX < size && stepY >= 0 && stepY < size) {
+			Card card = cards[stepX][stepY];
+			return card;
+		}
+		return null;
 	}
 
 	public Card getSelectedCard() {
@@ -85,6 +88,28 @@ public class CardHolder {
 		int x = card.getX();
 		int y = card.getY();
 		cards[x][y] = null;
+	}
+
+	public void makeCardsRandom() {
+		Random r = new Random();
+		for (int i = 0; i < size; i++) {
+			for (int j = 0; j < size; j++) {
+				if (cards[i][j] != null) {
+					Card initCard = cards[i][j];
+					int randomX = r.nextInt(size);
+					int randomY = r.nextInt(size);
+					Card toCard = cards[randomX][randomY];
+					if (toCard != null) {
+						cards[i][j] = toCard;
+						cards[randomX][randomY] = initCard;
+						initCard.setX(randomX);
+						initCard.setY(randomY);
+						toCard.setX(i);
+						toCard.setY(j);
+					}
+				}
+			}
+		}
 	}
 
 	public IReachable getReachable() {
