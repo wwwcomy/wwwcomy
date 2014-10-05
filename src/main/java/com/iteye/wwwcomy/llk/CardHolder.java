@@ -43,6 +43,9 @@ public class CardHolder {
 				Card card = cards[i][j];
 				Color c = g.getColor();
 				if (card != null){
+					g.setColor(Color.red);
+					card.draw(g);
+					g.setColor(c);
 				}
 				else{
 					int drawX = (i + 1) * Card.width;
