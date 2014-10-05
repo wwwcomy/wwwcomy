@@ -41,8 +41,14 @@ public class CardHolder {
 		for (int i = 0; i < size; i++) {
 			for (int j = 0; j < size; j++) {
 				Card card = cards[i][j];
-				if (card != null)
-					card.draw(g);
+				Color c = g.getColor();
+				if (card != null){
+				}
+				else{
+					int drawX = (i + 1) * Card.width;
+					int drawY = (j + 1) * Card.height;
+					g.fillRect(drawX, drawY, Card.width, Card.height);
+				}
 			}
 		}
 		if (selectedCard != null) {
