@@ -73,12 +73,16 @@ public class MainFrame extends JFrame {
 
 	@Override
 	public void paint(Graphics g) {
-		super.paint(g);
-		Color c = g.getColor();
-		g.setColor(Color.black);
-		g.fillRect(0, 50, getWidth(), getHeight());
-		cardHolder.draw(g);
-		g.setColor(c);
+
+		offScreen = this.createImage(width, height);
+		Graphics g2=offScreen.getGraphics();  
+
+		super.paint(g2);
+		cardHolder.draw(g2);
+		
+		g.drawImage(offScreen, 0, 0, null);
+		
+		
 	}
 
 }

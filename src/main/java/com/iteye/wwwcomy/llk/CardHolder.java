@@ -47,11 +47,7 @@ public class CardHolder {
 					g.setColor(Color.red);
 					card.draw(g);
 					g.setColor(c);
-				} else {
-					int drawX = (i + 1) * Card.width;
-					int drawY = (j + 1) * Card.height;
-					g.fillRect(drawX, drawY, Card.width, Card.height);
-				}
+				} 
 			}
 		}
 		if (selectedCard != null) {
