@@ -2,6 +2,7 @@ package com.iteye.wwwcomy.llk;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Image;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
@@ -12,11 +13,21 @@ import javax.swing.JFrame;
 public class MainFrame extends JFrame {
 	private static final long serialVersionUID = 1L;
 
+	private static final int width = 800;
+	private static final int height = 600;
+
 	private static CardHolder cardHolder = new CardHolder();
 
+	public static MainFrame frame;
+
 	public static void main(String[] args) {
-		final MainFrame frame = new MainFrame();
-		frame.setSize(800, 600);
+		frame = new MainFrame();
+		frame.start();
+	}
+
+	private void start() {
+
+		setSize(width, height);
 		frame.addWindowListener(new WindowAdapter() {
 			public void windowClosing(WindowEvent e) {
 				System.exit(0);
@@ -54,14 +65,30 @@ public class MainFrame extends JFrame {
 			}
 		});
 		frame.setVisible(true);
+		// new Thread(new PaintThread()).start();
 	}
+
+	Image offScreen = null;
 
 	@Override
 	public void paint(Graphics g) {
-		Color c = g.getColor();
 		g.fillRect(0, 0, getWidth(), getHeight());
 		g.setColor(Color.red);
 		cardHolder.draw(g);
-		g.setColor(c);
+
+	}
+
+	class PaintThread extends Thread {
+		@Override
+		public void run() {
+			while (true) {
+				frame.repaint();
+				try {
+					Thread.sleep(200);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+			}
+		}
 	}
 }

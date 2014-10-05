@@ -28,6 +28,7 @@ public class DefaultReachableStrategy implements IReachable {
 	}
 
 	private boolean judgeTwoAngle(Card[][] cards, int c1x, int c1y, int c2x, int c2y) {
+		// 水平延伸
 		List<Integer> blankHC1List = getHorizontalIndex(cards, c1x, c1y);
 		List<Integer> blankHC2List = getHorizontalIndex(cards, c2x, c2y);
 		blankHC1List.retainAll(blankHC2List);
@@ -46,6 +47,7 @@ public class DefaultReachableStrategy implements IReachable {
 			}
 		}
 
+		// 垂直延伸
 		List<Integer> blankVC1List = getVerticalIndex(cards, c1x, c1y);
 		List<Integer> blankVC2List = getVerticalIndex(cards, c2x, c2y);
 		blankVC1List.retainAll(blankVC2List);
