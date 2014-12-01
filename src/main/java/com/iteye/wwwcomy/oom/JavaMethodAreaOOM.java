@@ -16,7 +16,7 @@ public class JavaMethodAreaOOM {
 
 	public static void main(String[] args) throws InterruptedException {
 		while (true) {
-			Thread.sleep(20);
+			//Thread.sleep(20);
 			Enhancer enhancer = new Enhancer();
 			enhancer.setSuperclass(OOMObject.class);
 			enhancer.setUseCache(false);
