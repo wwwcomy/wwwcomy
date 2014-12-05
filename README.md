@@ -1,4 +1,4 @@
 wwwcomy
 =======
 
-Including several testing code &amp; algorism.
+Including several testing code &amp; algorithm.
