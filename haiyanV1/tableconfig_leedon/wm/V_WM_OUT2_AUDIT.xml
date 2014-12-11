@@ -145,10 +145,7 @@
 			)"/>
 			-->
 			<pluggedFilter methodName="exp" parameter="
-				{ and t_1.BILL_STATUS = 'audit' and t_1.order_id in (
-				select order_id  from
-				(select order_id from t_wm_outpredtl  GROUP BY order_id having count(distinct BILL_STATUS) = 1) as TMP
-				)}
+				{ and t_1.BILL_STATUS='audit' and t_1.ORDER_ID in (select ORDER_ID from T_ORDER_AUDITEDIDS) }
 			"/>
 			<pluggedFilter methodName="exp" parameter="
 			If(InRole(sp,wm),
@@ -191,7 +188,18 @@
 			}
 			refreshDB();
 		]]></pluginInterceptor>
+		<pluginInterceptor methodName="bsh" pluginName="refreshDB2" type="after"><![CDATA[
+			void refreshDB2() throws Throwable {
+				String sql1 = "delete from T_ORDER_AUDITEDIDS";
+				String sql2 = "insert into T_ORDER_AUDITEDIDS(ORDER_ID) (select distinct(order_id) from t_wm_outpredtl  GROUP BY order_id having count(distinct BILL_STATUS) = 1) ";
+				final DBManager dbm = context.getDBM();
+				dbm.executeUpdate(sql1, null);
+				dbm.executeUpdate(sql2, null);
+			}
+			refreshDB2();
+		]]></pluginInterceptor>
 		<pluginOperation name="refreshDB" oprName="刷新应出库明细" hostPage="query" tblevel="1" img="refresh" action="plugin({},{refreshDB})+brk()"/>
+		<pluginOperation name="refreshDB2" oprName="刷新已审批出库明细" hostPage="query" tblevel="1" img="refresh" action="plugin({},{refreshDB2})+brk()"/>
 		<!--
 		<pluginInterceptor methodName="bsh" parameter="V_WM_OUT.bsh" pluginName="saveViewBatch" type="after" />
 		-->
