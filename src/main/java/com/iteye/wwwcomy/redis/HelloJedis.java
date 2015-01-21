@@ -19,8 +19,6 @@ import redis.clients.jedis.JedisPool;
 public class HelloJedis {
     static JedisPool pool = new JedisPool("localhost", 6379);
     static Jedis jedis = pool.getResource();
-    static {
-    }
 
     public static void main(String[] args) throws Throwable {
         test();
@@ -81,7 +79,6 @@ public class HelloJedis {
         // 添加
         jedis.sadd("sname", "minxr");
         jedis.sadd("sname", "jarorwar");
-        jedis.sadd("sname", "闵晓荣");
         jedis.sadd("sanme", "noname");
         // 移除noname
         jedis.srem("sname", "noname");
