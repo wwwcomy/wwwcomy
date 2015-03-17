@@ -9,6 +9,8 @@
 		diskPersistent="false" diskExpiryThreadIntervalSeconds="120">
 		<cacheEventListenerFactory
 			class="net.sf.ehcache.distribution.RMICacheReplicatorFactory" />
+		<cacheEventListenerFactory
+			class="com.iteye.wwwcomy.ehcache.MyCacheEventListenerFactory" />
 	</cache>
 	<cacheManagerPeerProviderFactory
 		class="net.sf.ehcache.distribution.RMICacheManagerPeerProviderFactory"

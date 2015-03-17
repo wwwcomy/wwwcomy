@@ -15,7 +15,7 @@ public class TestEhCache2 {
 
         Cache cache = manager.getCache("testC");
         while (true) {
-            Thread.sleep(500);
+            Thread.sleep(2000);
             System.out.println("Cache in Memory: " + cache.getMemoryStoreSize());
         }
     }
