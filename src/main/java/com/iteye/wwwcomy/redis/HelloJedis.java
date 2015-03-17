@@ -7,6 +7,7 @@ import java.util.Map;
 
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
+import redis.clients.jedis.JedisPoolConfig;
 
 /**
  * Hello World for redis client
@@ -25,6 +26,7 @@ public class HelloJedis {
     }
 
     private static void test() throws Throwable {
+        JedisPoolConfig poolConfig = new JedisPoolConfig();
         System.out.println(jedis.get("key"));
         jedis.set("key", "中文WTF");
         System.out.println("After update...");

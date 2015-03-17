@@ -16,7 +16,7 @@ public class JavaassistTest {
 		CtClass cc = pool.get("com.iteye.wwwcomy.javaassist.Base");
 		CtMethod cm = cc.getDeclaredMethod("add");
 		cm.insertBefore("{System.out.println(\"hello javaassist!\");}");
-		cc.writeFile("D:/cloudrepository/wwwcomy/trunk/target/classes/");
+		cc.writeFile("C:\\software\\github\\trunk\\target\\classes");
 		
 		Base base = new Base(1);
 		base.add(2);
