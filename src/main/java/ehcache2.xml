@@ -18,5 +18,5 @@
 	<!--RMI监听40001端口 -->
 	<cacheManagerPeerListenerFactory
 		class="net.sf.ehcache.distribution.RMICacheManagerPeerListenerFactory"
-		properties="hostName=172.17.68.99,port=40002,socketTimeoutMillis=2000" />
+		properties="hostName=172.17.68.99,port=40002,socketTimeoutMillis=2000" />123
 </ehcache>
