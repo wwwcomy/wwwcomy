@@ -37,18 +37,18 @@ public class LdapTest {
 		}
 
 		attrs.put(objclass);
-		String uid = "zhangsan";
+		String uid = "zhangsan2";
 		// 这里加上root会报错
-		String userDN = "uid=" + uid + "," + "o=org2";
+		String userDN = "uid=" + uid + "," + "ou=users";
 		// 密码处理
 		// attrs.put("uid", uid);
 		attrs.put("cn", uid);
 		attrs.put("sn", uid);
 		attrs.put("uid", uid);
-		attrs.put("displayName", "张三");
+		attrs.put("displayName", "张三2");
 		attrs.put("mail", "zhangsan@163.com");
 		// attrs.put("description", ""); // 如果设置属性为空貌似会报错
-		attrs.put("userPassword", "zhangsan".getBytes("UTF-8"));
+		attrs.put("userPassword", "12345".getBytes("UTF-8"));
 		newCtx.createSubcontext(userDN, attrs);
 		newCtx.close();
 	}

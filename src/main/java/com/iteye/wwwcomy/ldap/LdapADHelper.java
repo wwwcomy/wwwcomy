@@ -14,11 +14,18 @@ import javax.naming.ldap.LdapContext;
 import com.sun.org.apache.xerces.internal.impl.dv.util.Base64;
 
 /**
+ * 
+ * Windows Active Directory is not the same when connecting to openLDAP, root is
+ * not needed, the user name should add the suffix of the domain. not needed,
+ * 
  * @author liuxingn
  *
  */
 @SuppressWarnings("restriction")
-public class LdapHelper {
+public class LdapADHelper {
+
+	// private static String ldapURL = "ldap://16.187.134.34:10389/";
+	private static String ldapURL = "ldap://16.187.188.127:389/";
 
 	private static LdapContext ctx;
 
@@ -30,14 +37,12 @@ public class LdapHelper {
 					String account = "cn=person2,o=organization1"; // binddn
 					String password = "1"; // bindpwd
 
-					account = "uid=admin,ou=system"; // binddn
-					password = "secret"; // bindpwd
+					account = "testl@kserver1.com"; // binddn
+					password = "1qaz@WSX"; // bindpwd
 
-					String root = "dc=example,dc=com"; // root
-					root = "ou=system";
 					Hashtable env = new Hashtable();
 					env.put(Context.INITIAL_CONTEXT_FACTORY, "com.sun.jndi.ldap.LdapCtxFactory");
-					env.put(Context.PROVIDER_URL, "ldap://16.187.134.34:10389/" + root);
+					env.put(Context.PROVIDER_URL, ldapURL);
 					env.put(Context.SECURITY_AUTHENTICATION, "simple");
 					// This account should be followed by root DN
 					// + "," + root
