@@ -67,7 +67,11 @@
 			<listColumn noquery="true"/>
 		</field>
 		<field name="TMP_OUTPRICE" description="临时出库价格存储" displayOnly="true" javaType="bigDecimal" lazyLoad="false">
-			<component type="text" readOnly="false" colspan="6" maxFractionDigit="3" minFractionDigit="3"/>
+			<component type="text" readOnly="false" colspan="3" maxFractionDigit="3" minFractionDigit="3"/>
+			<listColumn noedit="false" noquery="false"/>
+		</field>
+		<field name="TMP_REFRESHDB" description="刷新批次库存" displayOnly="true" javaType="string" lazyLoad="false">
+			<component type="button" readOnly="false" colspan="3" action="plugin({},{refreshDB3})+brk()"/>
 			<listColumn noedit="false" noquery="false"/>
 		</field>
 		<field name="SUBGRID2" javaType="string" description="----------------------------------------------------------------出库预处理----------------------------------------------------------------" displayOnly="true">
@@ -159,6 +163,16 @@
 			}
 		]]></javascript>
 		<!-- -->
+		<pluginInterceptor methodName="bsh" pluginName="refreshDB3" type="after"><![CDATA[
+			void refreshDB() throws Throwable {
+				String sql1 = "delete from T_WM_STOCKWHEREBATCH";
+				String sql2 = "insert into T_WM_STOCKWHEREBATCH(ID,HEADID,PRODUCTID,PRO_NAME,PRO_WMCODE,SUPP_CODE,BATCH,PRO_CAPACITYNUM,PRO_WEIGHTNUM,WAREHOUSE,WAREWHERE,PRO_COUNT,OUT_COUNT,PRO_IN_PRICE,PRO_OUT_PRICE,SUPPLIER) (select concat(t_1.ID,t_1.BT) as ID, t_1.HEADID, t_1.PRODUCTID, t_1.PRO_NAME, t_1.PRO_WMCODE, t_1.SUPP_CODE, t_1.BATCH, t_1.PRO_CAPACITYNUM, t_1.PRO_WEIGHTNUM, t_1.WAREHOUSE, t_1.WAREWHERE,sum(t_1.PRO_COUNT*t_1.STOCKCHANGE) as PRO_COUNT, 0 as OUT_COUNT, t_1.PRO_IN_PRICE,t_1.PRO_OUT_PRICE,t_1.SUPPLIER from V_WM_STOCK1 t_1 where t_1.BT>-95 group by t_1.PRODUCTID,t_1.WAREHOUSE,t_1.WAREWHERE,t_1.BATCH order by PRO_COUNT desc)";
+				final DBManager dbm = context.getDBM();
+				dbm.executeUpdatePre(sql1, new Object[0], null);
+				dbm.executeUpdatePre(sql2, new Object[0], null);
+			}
+			refreshDB();
+		]]></pluginInterceptor>
 		<pluginInterceptor methodName="exp" parameter="
 			SetCreate(WAREHOUSE,GetUser(WAREHOUSEID))
 			+SetCreate(__WAREHOUSE__NAME,GetUser(WAREHOUSENAME))

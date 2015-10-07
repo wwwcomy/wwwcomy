@@ -49,7 +49,7 @@
 			<listColumn noedit="false" noquery="false" nowrap="true"/>
 		</field>
 		<field name="SUBGRID" javaType="string" description="商品列表" displayOnly="true">
-			<component type="grid" readOnly="false" colspan="6" style="pageSize:100;width:950;height:470;grouping:false;" displayReferenceField="ID,HEADID,PRODUCTID,PRO_NAME,SUPP_CODE,MODEL,PRO_COUNT,PRO_COUNT2,ZDKC,SPEC,PRO_CAPACITYNUM,PRO_WEIGHTNUM,P_24,PRO_PACKINGNUM,PRO_IN_PRICE,PRO_OUT_PRICE,VALIDATE_DAY,VALIDATE_END,MARKETABLE,CONTRACT_CODE" referenceField="HEADID" referenceTable="T_WM_SDBCONPRODUCT" parameter="{&amp;HEADID=}&amp;If(IsEmpty(Get({ID})),-1,Get({ID}))" />
+			<component type="grid" readOnly="false" colspan="6" style="width:950;height:470;grouping:false;pageSize:100" displayReferenceField="ID,HEADID,PRODUCTID,PRO_NAME,SUPP_CODE,MODEL,PRO_COUNT,PRO_COUNT2,ZDKC,SPEC,PRO_CAPACITYNUM,PRO_WEIGHTNUM,P_24,PRO_PACKINGNUM,PRO_IN_PRICE,PRO_OUT_PRICE,VALIDATE_DAY,VALIDATE_END,MARKETABLE,CONTRACT_CODE" referenceField="HEADID" referenceTable="T_WM_SDBCONPRODUCT" parameter="{&amp;HEADID=}&amp;If(IsEmpty(Get({ID})),-1,Get({ID}))" />
 			<!-- displayReferenceField="PRO_CODE"  action="alert(get(ID))" -->
 			<queryCondition type="none"/>
 			<listColumn noquery="true"/>

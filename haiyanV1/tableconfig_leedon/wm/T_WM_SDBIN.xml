@@ -87,9 +87,9 @@
 			<listColumn noquery="true"/>
 		</field>
 		<!-- "ID,HEADID,PRODUCTID,PRO_WH,PRE_COUNT,PRE_PACKING,PRO_PACKING_NAME,IN_TIME,IN_TYPE,PRO_COUNT,PRO_CAPACITYNUM,PRO_WEIGHTNUM,PRO_IN_PRICE,PRO_IN_COST,PRO_MEMO" -->
-		<field name="SUBGRID" javaType="string" description="----------------------------------------------------------------实际入库明细(保存后只显示前20条)-------------------------------------------" displayOnly="true">
+		<field name="SUBGRID" javaType="string" description="----------------------------------------------------------------实际入库明细(保存后只显示前50条)-------------------------------------------" displayOnly="true">
 			<component type="grid" readOnly="false" colspan="6" 
-			style="pageSize:20;width:950;height:255;plugins:undefined;view:undefined;grouping:false;" displayReferenceField="ID,HEADID,PRODUCTID,PRO_NAME,SUPP_CODE,PRO_WMCODE,PRO_WH,PRO_COUNT,BATCH,INPACK_COUNT,PRO_CAPACITYNUM,PRO_WEIGHTNUM,PRO_IN_PRICE,ALL_IN_COST,PRO_OUT_PRICE,ALL_OUT_COST" referenceField="HEADID" referenceTable="T_WM_INDETAIL" parameter="{&amp;HEADID=}&amp;If(IsEmpty(Get(ID)),-1,Get(ID))"/>
+			style="pageSize:50;width:950;height:255;plugins:undefined;view:undefined;grouping:false;" displayReferenceField="ID,HEADID,PRODUCTID,PRO_NAME,SUPP_CODE,PRO_WMCODE,PRO_WH,PRO_COUNT,BATCH,INPACK_COUNT,PRO_CAPACITYNUM,PRO_WEIGHTNUM,PRO_IN_PRICE,ALL_IN_COST,PRO_OUT_PRICE,ALL_OUT_COST" referenceField="HEADID" referenceTable="T_WM_INDETAIL" parameter="{&amp;HEADID=}&amp;If(IsEmpty(Get(ID)),-1,Get(ID))"/>
 			<!-- displayReferenceField="PRO_CODE" action="alert(get(ID))" action="If(Get(BILL_STATUS)={audit},SetVisible({audit},false,{saveAll},false),SetVisible({audit},true,{saveAll},true))" -->
 			<queryCondition type="none"/>
 			<listColumn noquery="true"/>

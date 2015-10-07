@@ -42,7 +42,7 @@
 		</field>
 		<!-- -->
 		<field name="SUBGRID2" javaType="string" description="----------------------------------------------------------------应退货明细----------------------------------------------------------------" displayOnly="true">
-			<component type="grid" readOnly="false" colspan="6" style="width:960;height:255;plugins:undefined;view:undefined;grouping:false;" displayReferenceField="ID,HEADID,OUT_CODE,ORDER_ID,WMCODE,PRO_NAME,SUPP_CODE,SUPPLIER,RETURN_RCOUNT,RETURN_COUNT,OUT_COUNT,IN_PRICE,OUT_PRICE,OUT_ALL_PRICE,EDP_RETURN_PRICE,EDP_OTHERPRICE,SUP_RETURN_PRICE,SUP_OTHERPRICE,SUP_ALL_RETURNRPRICE,EDP_ALL_RETURNRPRICE" referenceField="HEADID" referenceTable="T_WM_SDBRETURNPRE2" parameter="{&amp;HEADID=}&amp;If(IsEmpty(Get(ID)),-1,Get(ID))"/>
+			<component type="grid" readOnly="false" colspan="6" style="pageSize:100;width:960;height:255;plugins:undefined;view:undefined;grouping:false;" displayReferenceField="ID,HEADID,OUT_CODE,ORDER_ID,WMCODE,PRO_NAME,SUPP_CODE,SUPPLIER,RETURN_RCOUNT,RETURN_COUNT,OUT_COUNT,IN_PRICE,OUT_PRICE,OUT_ALL_PRICE,EDP_RETURN_PRICE,EDP_OTHERPRICE,SUP_RETURN_PRICE,SUP_OTHERPRICE,SUP_ALL_RETURNRPRICE,EDP_ALL_RETURNRPRICE" referenceField="HEADID" referenceTable="T_WM_SDBRETURNPRE2" parameter="{&amp;HEADID=}&amp;If(IsEmpty(Get(ID)),-1,Get(ID))"/>
 			<queryCondition type="none"/>
 			<listColumn noquery="true"/>
 		</field>
@@ -74,8 +74,8 @@
 			<queryCondition type="none"/>
 			<listColumn noquery="true"/>
 		</field>
-		<field name="SUBGRID" javaType="string" description="----------------------------------------------------------------实际退货明细(保存后只显示前20条)-------------------------------------------" displayOnly="true">
-			<component type="grid" readOnly="false" colspan="6" style="pageSize:20;width:950;height:255;plugins:undefined;view:undefined;grouping:false;" displayReferenceField="ID,HEADID,PRODUCTID,ORDER_ID,PRO_NAME,SUPP_CODE,PRO_WMCODE,WAREHOUSE,PRO_WH,PRO_COUNT,BATCH,INPACK_COUNT,PRO_IN_PRICE,ALL_IN_COST,PRO_OUT_PRICE,ALL_OUT_COST" referenceField="HEADID" referenceTable="T_WM_SDBRETURNDETAIL2" parameter="{&amp;HEADID=}&amp;If(IsEmpty(Get(ID)),-1,Get(ID))"/>
+		<field name="SUBGRID" javaType="string" description="----------------------------------------------------------------实际退货明细(保存后只显示前100条)-------------------------------------------" displayOnly="true">
+			<component type="grid" readOnly="false" colspan="6" style="pageSize:100;width:950;height:255;plugins:undefined;view:undefined;grouping:false;" displayReferenceField="ID,HEADID,PRODUCTID,ORDER_ID,PRO_NAME,SUPP_CODE,PRO_WMCODE,WAREHOUSE,PRO_WH,PRO_COUNT,BATCH,INPACK_COUNT,PRO_IN_PRICE,ALL_IN_COST,PRO_OUT_PRICE,ALL_OUT_COST" referenceField="HEADID" referenceTable="T_WM_SDBRETURNDETAIL2" parameter="{&amp;HEADID=}&amp;If(IsEmpty(Get(ID)),-1,Get(ID))"/>
 			<queryCondition type="none"/>
 			<listColumn noquery="true"/>
 		</field>

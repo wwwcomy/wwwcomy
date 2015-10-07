@@ -198,8 +198,16 @@
 				dbm.executeUpdate(sql2, null);
 			}
 			refreshDB();
+			void refreshDB2() throws Throwable {
+				String sql1 = "delete from T_WM_STOCKWHEREBATCH";
+				String sql2 = "insert into T_WM_STOCKWHEREBATCH(ID,HEADID,PRODUCTID,PRO_NAME,PRO_WMCODE,SUPP_CODE,BATCH,PRO_CAPACITYNUM,PRO_WEIGHTNUM,WAREHOUSE,WAREWHERE,PRO_COUNT,OUT_COUNT,PRO_IN_PRICE,PRO_OUT_PRICE,SUPPLIER) (select concat(t_1.ID,t_1.BT) as ID, t_1.HEADID, t_1.PRODUCTID, t_1.PRO_NAME, t_1.PRO_WMCODE, t_1.SUPP_CODE, t_1.BATCH, t_1.PRO_CAPACITYNUM, t_1.PRO_WEIGHTNUM, t_1.WAREHOUSE, t_1.WAREWHERE,sum(t_1.PRO_COUNT*t_1.STOCKCHANGE) as PRO_COUNT, 0 as OUT_COUNT, t_1.PRO_IN_PRICE,t_1.PRO_OUT_PRICE,t_1.SUPPLIER from V_WM_STOCK1 t_1 where t_1.BT>-95 group by t_1.PRODUCTID,t_1.WAREHOUSE,t_1.WAREWHERE,t_1.BATCH order by PRO_COUNT desc)";
+				final DBManager dbm = context.getDBM();
+				dbm.executeUpdatePre(sql1, new Object[0], null);
+				dbm.executeUpdatePre(sql2, new Object[0], null);
+			}
+			refreshDB2();
 		]]></pluginInterceptor>
-		
+
 		<pluginInterceptor methodName="exp" parameter="
 			Set(ITEM_ID,{CKItem_}&amp;GetNewID())
 			" pluginName="edit" type="after"/>
@@ -207,14 +215,18 @@
 			If(Get(BILL_STATUS)={audit},HidFlds(PRE,AUDIT,UNAUDIT)+DisFlds(OUT_COUNT,OUT_RCOUNT),true)
 			+If(Or(isEmpty(Get(ORDER_ID)),SubStr(Get(ORDER_ID),0,2)={CK}),true,DisFlds(PRODUCTID,OUT_PRICE,OUT_ALL_PRICE))
 			" pluginName="grid" />
-	
 		<pluginInterceptor methodName="exp" parameter="
 			If(SubStr(Get(ORDER_ID),0,2)={CK},Set(ITEM_ID_PK,0),Set(ITEM_ID_PK,Get(ITEM_ID)))
 			+If(IsEmpty(Get(ITEM_ID_PK)),Set(ITEM_ID_PK,Get(ITEM_ID)),true)
 			+NoCheck()+Save({T_WM_OUTPREPART},GetForm())+RunInterceptor(refreshOne)" pluginName="saveView" />
+		<pluginInterceptor methodName="exp" parameter="
+			If(SubStr(Get(ORDER_ID),0,2)={CK},Set(ITEM_ID_PK,0),Set(ITEM_ID_PK,get(ITEM_ID)))
+			+If(IsEmpty(Get(ITEM_ID_PK)),Set(ITEM_ID_PK,Get(ITEM_ID)),true)
+			+NoCheck()+Save({T_WM_OUTPREPART},GetForm())+RunInterceptor(refreshOne)" pluginName="saveView1" />
 
 		<pluginInterceptor methodName="exp" parameter="DBSQL({update T_WM_OUTDETAIL set BILL_STATUS='audit' where HEADID='}&amp;Get(ORDER_ID)&amp;{' and PRODUCTID='}&amp;Get(PRODUCTID)&amp;{'})" pluginName="audit" />
 		<pluginInterceptor methodName="exp" parameter="DBSQL({update T_WM_OUTDETAIL set BILL_STATUS='init' where HEADID='}&amp;Get(ORDER_ID)&amp;{' and PRODUCTID='}&amp;Get(PRODUCTID)&amp;{'})" pluginName="unaudit" />
+
 		<!-- -->
 		<pluginOperation name="refreshDB" oprName="重载应出库明细" hostPage="query" tblevel="1" img="refresh" action="plugin({},{refreshDB})+brk()"/>
 		<pluginOperation name="saveView" oprName="保存" hostPage="edit" tblevel="1" img="save" action="plugin({},{saveView})+brk()"/>	

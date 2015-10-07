@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Haiyan xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../haiyan.xsd">
-	<table name="V_WM_STOCK2" description="产品销售明细界面">
+	<table name="V_WM_STOCK2" description="库存汇总(产品销售明细)">
 		<id name="ID" javaType="string"/>
 		<field name="HEADID" description="单头" javaType="string">
 			<component type="hidden"/>
@@ -113,7 +113,7 @@ create or replace view V_WM_STOCK2 as
 		from (T_WM_OUTDETAIL t_1 left join V_WM_OUT t_2 on t_1.HEADID=t_2.ID) left join T_WM_SDBPRODUCT t_3 on t_3.ID=t_1.PRODUCTID
 		where t_1.BILL_STATUS='audit' and t_2.BILL_STATUS<>'reject'
 		group by PRODUCTID
-	)	
+	)
 		]]></pluginInterceptor>
 		<!-- where t_1.BILL_STATUS='audit' 预判断 还没确认的入库也要计算
 		<pluginInterceptor methodName="exp" parameter="DisBtns(add,delete,save,saveAndAdd,saveAndAddCopy);" pluginName="query" type="after"/>

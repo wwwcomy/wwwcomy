@@ -22,7 +22,7 @@ void genSupplierData(){
 	String month=null;
 	String date = new java.text.SimpleDateFormat("yyyyMMdd").format(new java.util.Date());
 	month = getMonth(date);
-	//month = "201301";
+	//month = "201405";
 	String sql = "select count(*) from T_WM_ACCOUNTSTATEMENT where SUPP_MONTH like '%"+month+"'";
 	String[][] rs1 = dbm.getResultStrArray(sql, 1, null);
 	if(rs1.length>0) {

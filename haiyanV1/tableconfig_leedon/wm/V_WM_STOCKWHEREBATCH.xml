@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Haiyan xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../haiyan.xsd">
-	<table name="V_WM_STOCKWHEREBATCH" description="库存汇总(按仓位,包括批次查询结构)">
+	<table name="V_WM_STOCKWHEREBATCH" realTable="T_WM_STOCKWHEREBATCH" description="库存汇总(按仓位,包括批次查询结构)">
 		<id name="ID" javaType="string"/>
 		<field name="HEADID" description="单头" javaType="string">
 			<component type="hidden"/>
@@ -88,8 +88,23 @@
 		<!-- 
 		<javascript hostPage="edit"><![CDATA[
 		]]></javascript>
+		,HYVERSION,BILL_STATUS
 		-->
-		<!-- 数据库中要按照库存数量排序 -->
+		<pluginInterceptor methodName="bsh" pluginName="refreshDB" type="after"><![CDATA[
+			com.haiyan.genmis.core.right.User user = context.getUser();
+			boolean admin = com.haiyan.genmis.core.right.RightUtil.isUserInRole(user, "admin");
+			if (!admin)
+				throw new Warning("没有权限");
+			void refreshDB() throws Throwable {
+				String sql1 = "delete from T_WM_STOCKWHEREBATCH";
+				String sql2 = "insert into T_WM_STOCKWHEREBATCH(ID,HEADID,PRODUCTID,PRO_NAME,PRO_WMCODE,SUPP_CODE,BATCH,PRO_CAPACITYNUM,PRO_WEIGHTNUM,WAREHOUSE,WAREWHERE,PRO_COUNT,OUT_COUNT,PRO_IN_PRICE,PRO_OUT_PRICE,SUPPLIER) (select concat(t_1.ID,t_1.BT) as ID, t_1.HEADID, t_1.PRODUCTID, t_1.PRO_NAME, t_1.PRO_WMCODE, t_1.SUPP_CODE, t_1.BATCH, t_1.PRO_CAPACITYNUM, t_1.PRO_WEIGHTNUM, t_1.WAREHOUSE, t_1.WAREWHERE,sum(t_1.PRO_COUNT*t_1.STOCKCHANGE) as PRO_COUNT, 0 as OUT_COUNT, t_1.PRO_IN_PRICE,t_1.PRO_OUT_PRICE,t_1.SUPPLIER from V_WM_STOCK1 t_1 where t_1.BT>-95 group by t_1.PRODUCTID,t_1.WAREHOUSE,t_1.WAREWHERE,t_1.BATCH order by PRO_COUNT desc)";
+				final DBManager dbm = context.getDBM();
+				dbm.executeUpdatePre(sql1, new Object[0], null);
+				dbm.executeUpdatePre(sql2, new Object[0], null);
+			}
+			refreshDB();
+		]]></pluginInterceptor>
+		<!-- 数据库中要按照库存数量排序 
 		<pluginInterceptor methodName="initDB" pluginName="initDB" type="before"><![CDATA[
 create or replace view V_WM_STOCKWHEREBATCH as 
 	(
@@ -101,11 +116,12 @@ create or replace view V_WM_STOCKWHEREBATCH as
 		where t_1.BT>-95
 		group by t_1.PRODUCTID,t_1.WAREHOUSE,t_1.WAREWHERE,t_1.BATCH order by PRO_COUNT desc
 	)
-
 		]]></pluginInterceptor>
+		-->
 		<!-- where t_1.BILL_STATUS='audit' 预判断 还没确认的入库也要计算
 		<pluginInterceptor methodName="exp" parameter="DisBtns(add,delete,save,saveAndAdd,saveAndAddCopy);" pluginName="query" type="after"/>
 		<pluginInterceptor methodName="exp" parameter="DisBtns(add,delete,save,saveAndAdd,saveAndAddCopy);" pluginName="edit" type="after"/>-->
+		<pluginOperation name="refreshDB" oprName="重载库存汇总明细" hostPage="query" tblevel="1" img="refresh" action="plugin({},{refreshDB})+brk()"/>
 		<Operation queryPageDelete="false" queryPageAdd="false" save="false" saveAndAdd="false" saveAndAddCopy="false"/>
 	</table>
 </Haiyan>

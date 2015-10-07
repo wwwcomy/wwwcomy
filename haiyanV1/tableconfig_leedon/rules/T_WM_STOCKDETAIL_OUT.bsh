@@ -28,7 +28,7 @@ void newRemoveKC() throws Throwable {
 	String outType = form.get("OUT_TYPE");
 	String ID = form.get("ID");
 	String subOrderID = context.getParameter("SUBORDER_ID"); 
-			//form.get("SUBORDER_ID");
+	
 	if(StringUtil.isBlankOrNull(orderID)||StringUtil.isBlankOrNull(outType)||StringUtil.isBlankOrNull(subOrderID)){
 		throw new Warning("出库ID,出库类型或者子订单ID不能为空");
 	}

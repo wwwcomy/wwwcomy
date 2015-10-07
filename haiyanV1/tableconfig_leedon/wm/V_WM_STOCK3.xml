@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Haiyan xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../haiyan.xsd">
-	<table name="V_WM_STOCK3" description="库存汇总(按仓库)">
+	<table name="V_WM_STOCK3" description="库存汇总(按仓库分仓)">
 		<id name="ID" javaType="string"/>
 		<field name="HEADID" description="单头" javaType="string">
 			<component type="hidden"/>
@@ -88,26 +88,25 @@
 		<!-- -->
 		<pluginInterceptor methodName="initDB" pluginName="initDB" type="before"><![CDATA[
 create or replace view V_WM_SDBITEMCOUNT as 
-(
-	select `t2`.`ID` AS `productid`,`t`.`product_id` AS `sdb_product_id`,`t`.`freez` AS `nums`,sum((case when (`t4`.`member_id` = 51) then `t3`.`nums` else 0 end)) AS `XD_nums`,sum((case when (`t4`.`pay_status` = _utf8'1') then `t3`.`nums` else 0 end)) AS `other_nums` from (((`sdb_products` `t` join `t_wm_pro` `t2` on((`t`.`product_id` = `t2`.`SDB_PRODUCT_ID`))) join `sdb_order_items` `t3` on((`t2`.`SDB_PRODUCT_ID` = `t3`.`product_id`))) join `sdb_orders` `t4` on((`t4`.`order_id` = `t3`.`order_id`))) where ((`t4`.`status` = _utf8'active') and (`t4`.`disabled` = _utf8'false') and ((`t4`.`pay_status` = _utf8'0') or ((`t4`.`pay_status` = _utf8'1') and (`t4`.`ship_status` = _utf8'0')))) group by `t2`.`ID`,`t`.`product_id`,`t`.`freez`
-);
+	(
+		select `t2`.`ID` AS `productid`,`t`.`product_id` AS `sdb_product_id`,`t`.`freez` AS `nums`,sum((case when (`t4`.`member_id` = 51) then `t3`.`nums` else 0 end)) AS `XD_nums`,sum((case when (`t4`.`pay_status` = _utf8'1') then `t3`.`nums` else 0 end)) AS `other_nums` from (((`sdb_products` `t` join `t_wm_pro` `t2` on((`t`.`product_id` = `t2`.`SDB_PRODUCT_ID`))) join `sdb_order_items` `t3` on((`t2`.`SDB_PRODUCT_ID` = `t3`.`product_id`))) join `sdb_orders` `t4` on((`t4`.`order_id` = `t3`.`order_id`))) where ((`t4`.`status` = _utf8'active') and (`t4`.`disabled` = _utf8'false') and ((`t4`.`pay_status` = _utf8'0') or ((`t4`.`pay_status` = _utf8'1') and (`t4`.`ship_status` = _utf8'0')))) group by `t2`.`ID`,`t`.`product_id`,`t`.`freez`
+	)
 create or replace view V_WM_IN as
-(
-	select `t_3`.`ID` AS `PRODUCTID`,`t_3`.`CODE` AS `code`,`t_3`.`SUPP_CODE` AS `supp_code`,(case when isnull(sum(`t_1`.`PRO_COUNT`)) then 0 else sum(`t_1`.`PRO_COUNT`) end) AS `PRO_IN_SUM` from (`t_wm_pro` `t_3` left join (`t_wm_sdbinpre` `t_1` join `t_wm_sdbin` `t_2` on(((`t_1`.`HEADID` = `t_2`.`ID`) and (`t_2`.`BILL_STATUS` = _utf8'init')))) on((`t_3`.`ID` = `t_1`.`PRODUCTID`))) group by `t_3`.`ID`
-);
+	(
+		select `t_3`.`ID` AS `PRODUCTID`,`t_3`.`CODE` AS `code`,`t_3`.`SUPP_CODE` AS `supp_code`,(case when isnull(sum(`t_1`.`PRO_COUNT`)) then 0 else sum(`t_1`.`PRO_COUNT`) end) AS `PRO_IN_SUM` from (`t_wm_pro` `t_3` left join (`t_wm_sdbinpre` `t_1` join `t_wm_sdbin` `t_2` on(((`t_1`.`HEADID` = `t_2`.`ID`) and (`t_2`.`BILL_STATUS` = _utf8'init')))) on((`t_3`.`ID` = `t_1`.`PRODUCTID`))) group by `t_3`.`ID`
+	)
 create or replace view V_WM_STOCK3 as 
 	(
 		select concat(t_1.ID,t_1.STOCKCHANGE) as ID,t_1.HEADID,t_1.PRODUCTID,t_1.PRO_WMCODE, t_1.PRO_NAME,t_3.supp_code as supp_code,t_1.PRO_CAPACITYNUM,t_1.PRO_WEIGHTNUM,
 		sum(t_1.PRO_COUNT*t_1.STOCKCHANGE) as PRO_COUNT, t_2.NUMS as ORDER_COUNT,t_2.XD_nums AS XD_ORDER_COUNT,t_2.other_nums AS OTHER_ORDER_COUNT,
 		t_3.PRO_IN_SUM as PRO_IN_SUM,
-        t_1.WAREHOUSE, t_1.SUPPLIER
+		t_1.WAREHOUSE, t_1.SUPPLIER
 		from V_WM_STOCK1 t_1 
 		left join V_WM_SDBITEMCOUNT t_2 on t_1.PRODUCTID=t_2.PRODUCTID
 		left join V_WM_IN t_3 on t_1.PRODUCTID=t_3.PRODUCTID
 		where t_1.BT>-95
 		group by t_1.PRODUCTID,t_1.WAREHOUSE
 	)
-
 		]]></pluginInterceptor>
 		<Operation queryPageDelete="false" queryPageAdd="false" save="false" saveAndAdd="false" saveAndAddCopy="false"/>
 	</table>

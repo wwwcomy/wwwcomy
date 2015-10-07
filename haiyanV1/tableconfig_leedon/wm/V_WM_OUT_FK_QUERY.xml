@@ -79,7 +79,7 @@
 
 		<queryFilter>
 			<pluggedFilter methodName="exp" parameter="
-				{ and t_1.BILL_STATUS1&lt;&gt;'init' and (t_1.Bill_status is null or t_1.BILL_STATUS&lt;&gt;'audit') and t_1.WAREHOUSE='}&amp;GetUser(WAREHOUSEID)&amp;{'}
+				{ and t_1.BILL_STATUS1&lt;&gt;'init' and (t_1.Bill_status is null or t_1.BILL_STATUS&lt;&gt;'audit') and (t_1.ORDER_MEMO is null or t_1.ORDER_MEMO not like '作废%') and t_1.WAREHOUSE='}&amp;GetUser(WAREHOUSEID)&amp;{'}
 			"/>
 		</queryFilter>
 		<javascript hostPage="query"><![CDATA[

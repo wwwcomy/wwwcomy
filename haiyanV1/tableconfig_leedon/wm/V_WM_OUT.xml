@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Haiyan xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../haiyan.xsd">
-	<table name="V_WM_OUT" description="出库单" colspan="6">
+	<table name="V_WM_OUT" description="出库单(所有)" colspan="6">
 		<id name="ID" javaType="string"/><!-- 值和ORDER_ID一样 -->
 		<field name="ORDER_ID" description="SDB订单号" javaType="string" lazyLoad="false">
 			<component type="text" readOnly="true" colspan="1"/>
@@ -261,11 +261,9 @@ create or replace view V_WM_OUT as
 		<pluginInterceptor methodName="exp" parameter="
 			WriteJS({Hy.showBill('http://www.yidepin.com/tools/order_print.php?order_id=','配货单打印','test')})" 
 			pluginName="printInvoice" type="after"/>
-		
 		<pluginInterceptor methodName="exp" parameter="
 			WriteJS({Hy.showBill('http://www.yidepin.com/tools/out_print.php?order_id=}&amp;Get(ORDER_ID)&amp;{','装箱单打印','test')})" 
 			pluginName="printPacking" type="after"/>
-			
 		<pluginInterceptor methodName="exp" parameter="
 			WriteJS({Hy.showBill('http://www.yidepin.com/tools/print/waybill.php?syso_id=}&amp;GetUser(ID)&amp;{&amp;wh_id=}&amp;Get(WAREHOUSE)&amp;{&amp;order_id=}&amp;Get(ORDER_ID)&amp;{','快递单打印','test')})" 
 			pluginName="printExpress" type="after"/>
@@ -279,8 +277,10 @@ create or replace view V_WM_OUT as
 		<pluginOperation name="saveView" oprName="保存(V)" hostPage="edit" tblevel="1" img="save" action="Plugin({},{saveView},{SUBGRID},{SUBGRID1})+brk()"/>
 		<!--审批发送E-Mail-->
 		<pluginOperation name="auditOut" oprName="出库审批" hostPage="edit" tblevel="1" img="settings" action="If(Confirm({确认审批后,不可恢复,确认审批?}),plugin({},{auditOut},{SUBGRID1})+brk(),brk())"/>
+
 		<pluginOperation name="refreshDB" oprName="刷新应出库明细" hostPage="query" tblevel="1" img="refresh" action="plugin({},{refreshDB})+brk()"/>
 		<pluginOperation name="refreshDB2" oprName="刷新已审批出库明细" hostPage="query" tblevel="1" img="refresh" action="plugin({},{refreshDB2})+brk()"/>
+
 		<pluginOperation name="printInvoice" oprName="配货单打印" hostPage="edit" tblevel="1" action="Plugin({},{printInvoice})+brk()"/>
 		<pluginOperation name="printPacking" oprName="装箱单打印" hostPage="edit" tblevel="1" action="Plugin({},{printPacking})+brk()"/>
 		<pluginOperation name="printExpress" oprName="快递单打印" hostPage="edit" tblevel="1" action="Plugin({},{printExpress})+brk()"/>

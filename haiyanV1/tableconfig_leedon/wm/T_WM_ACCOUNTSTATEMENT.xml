@@ -89,8 +89,8 @@
 		<pluginOperation name="saveAll" oprName="保存" hostPage="edit" tblevel="1" img="save" action="Save({},{})+brk()"/>
 		<pluginOperation name="printAll" oprName="打印预览" hostPage="edit" action="ShowBill({queryOne.do?__opr_data=T_WM_ACCOUNTSTATEMENT&amp;ID=}&amp;Get(ID)&amp;,{对账单打印},{ACTSTMT})+brk()"/>
 		
-		<!--
-		<pluginOperation name="bshtest" oprName="测试脚本" hostPage="edit" tblevel="1" img="settings" action="
+		
+		<!--<pluginOperation name="bshtest" oprName="测试脚本" hostPage="edit" tblevel="1" img="settings" action="
 			plugin({},{bshtest})+brk()"/>
 			 -->
 		<Operation save="false" queryPageDelete="false" queryPageAdd="false" saveAndAdd="false" saveAndAddCopy="false"/>
