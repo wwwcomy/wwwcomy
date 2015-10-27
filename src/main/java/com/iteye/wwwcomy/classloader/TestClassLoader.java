@@ -89,4 +89,9 @@ public class TestClassLoader extends ClassLoader {
 		}
 	}
 
+	public Class findClass(String className, File file) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

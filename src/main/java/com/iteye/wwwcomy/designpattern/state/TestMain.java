@@ -10,5 +10,6 @@ public class TestMain {
 		machine.insertQuarter();
 		machine.turnCrank();
 		machine.ejectQuarter();
+		machine.turnCrank();
 	}
 }
