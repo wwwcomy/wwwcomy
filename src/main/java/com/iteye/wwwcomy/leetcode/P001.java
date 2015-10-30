@@ -1,9 +1,16 @@
-package com.iteye.wwwcomy.leetcode.p001;
+package com.iteye.wwwcomy.leetcode;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public class TwoSum {
+/**
+ * TwoSum
+ * 
+ * @author liuxingn
+ *
+ */
+public class P001 {
+
 	/**
 	 * Brute-force 暴力破解
 	 * 
