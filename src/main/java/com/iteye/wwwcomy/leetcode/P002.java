@@ -36,12 +36,3 @@ public class P002 {
 		return n;
 	}
 }
-
-class ListNode {
-	int val;
-	ListNode next;
-
-	ListNode(int x) {
-		val = x;
-	}
-}
