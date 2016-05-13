@@ -4,10 +4,36 @@ public class TestSort {
 
 	public static void main(String[] args) {
 		int[] testArray = { 4, 7, 2, 13, 100, 1515, 51, 31, 52, 76, 23, 1, 88 };
-		quickSort1(testArray, 0, testArray.length);
+		// quickSort1(testArray, 0, testArray.length);
+		insertSort(testArray);
 		System.out.println("------------");
 		// for (int a : testArray)
-		// System.out.print(a + "  ");
+		// System.out.print(a + " ");
+	}
+
+	/**
+	 * 直接插入排序,每次把要排序的临时值插入到已经排序好的结果中,插入的过程就是把所有比临时值大/小的元素右移
+	 * 
+	 * @param array
+	 */
+	public static void insertSort(int[] array) {
+		int tmp;
+		for (int i = 1; i < array.length; i++) {
+			tmp = array[i];
+			if (tmp < array[i - 1]) {
+				for (int j = i - 1; j >= 0; j--) {
+					if (tmp < array[j]) {
+						array[j + 1] = array[j];
+						array[j] = tmp;
+					} else {
+						break;
+					}
+				}
+			}
+		}
+		for (int a : array) {
+			System.out.print(a + "  ");
+		}
 	}
 
 	/**
@@ -85,7 +111,7 @@ public class TestSort {
 	}
 
 	public static void quickSort1(int[] a, int start, int last) {
-		int low =start;
+		int low = start;
 		int hi = last;
 		int ip = start;
 		int temp;
