@@ -3,9 +3,11 @@ package com.iteye.wwwcomy;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
+import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Random;
 
 /**
  * 
@@ -14,13 +16,57 @@ import java.util.List;
  */
 public class ShuangSeQiu {
 	public static void main(String[] args) throws Exception {
-		new ShuangSeQiu().prepareData();
+		new ShuangSeQiu().start();
 	}
 
 	private List<List<String>> history = new ArrayList<List<String>>();
 
+	public void start() throws Exception {
+		prepareData();
+		long outerCounter = 0L;
+		int counter = 0;
+		while (true) {
+			for (List<String> list : history) {
+				List<String> randomList = getRandomList();
+				outerCounter++;
+				if (outerCounter % 1000000 == 0) {
+					System.out.println("第" + outerCounter + "次随机数:" + randomList);
+				}
+				// if (outerCounter % 10000000 == 0) {
+				// randomList = new ArrayList<String>();
+				// for (String s : list) {
+				// randomList.add(s);
+				// }
+				// System.out.println("第" + outerCounter + "次随机数:" +
+				// randomList);
+				// }
+				if (!randomList.equals(list)) {
+					if (counter > 0) {
+						System.out.println("第" + counter + "次匹配失败,比对结果如下,重置ing");
+						System.out.println("随机数字:" + randomList);
+						System.out.println("第" + counter + "期的结果:" + list);
+					}
+					counter = 0;
+					break;
+				} else {
+					System.err.println("匹配成功!");
+				}
+				counter++;
+			}
+			if (counter == 0) {
+				continue;
+			}
+			break;
+		}
+		System.out.println("第" + counter + "次匹配成功,输出结果!");
+		List<String> result = new ArrayList<String>();
+		result.addAll(getRandom(33, 6));
+		result.addAll(getRandom(16, 1));
+		System.out.println(result);
+	}
+
 	private void prepareData() throws Exception {
-		String filePath = this.getClass().getClassLoader().getResource("").toString().substring(6) + "2.txt";
+		String filePath = this.getClass().getClassLoader().getResource("").toString().substring(6) + "1.txt";
 		System.out.println(filePath);
 		File f = new File(filePath);
 		BufferedReader br = new BufferedReader(new FileReader(f));
@@ -47,9 +93,26 @@ public class ShuangSeQiu {
 	 * @param j
 	 * @return
 	 */
-	private List<String> getRandom(int i, int j) {
-		List<String> result = new ArrayList<String>();
-		return null;
+	private List<String> getRandom(int range, int j) {
+		List<Integer> input = new ArrayList<Integer>();
+		for (int i = 0; i < range; i++) {
+			input.add(i);
+		}
+
+		List<String> output = new ArrayList<String>();
+
+		int end = range - 1;
+		Random random = new Random();
+		for (int i = 0; i < j; i++) {
+			int num = random.nextInt(end);
+			output.add(String.valueOf(input.get(num) + 1));
+			if (num != end) {
+				input.set(num, input.get(end));
+			}
+			end--;
+		}
+
+		return output;
 	}
 
 }
