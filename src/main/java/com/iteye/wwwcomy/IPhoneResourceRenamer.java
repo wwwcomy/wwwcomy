@@ -15,7 +15,7 @@ import com.iteye.wwwcomy.lxn.utils.DateUtil;
  */
 public class IPhoneResourceRenamer {
 
-	public final static String FOLDER_NAME = "D:\\MomPic-20160726\\";
+	public final static String FOLDER_NAME = "E:\\iphone视频20160809\\";
 
 	public static void main(String[] args) throws Exception {
 		new IPhoneResourceRenamer().beginTask();
@@ -34,6 +34,10 @@ public class IPhoneResourceRenamer {
 				long lastModifyTime = file.lastModified();
 				Date date = new Date(lastModifyTime);
 				String sDate = DateUtil.format(date, "YYYY-mm-DD");
+				if (file.getName().startsWith(sDate)) {
+					System.err.println("The file has already been named by the modified date");
+					continue;
+				}
 				String filePath = file.getCanonicalPath().substring(0, file.getCanonicalPath().lastIndexOf("\\"));
 				String newFileName = filePath + "/" + sDate + "-" + file.getName();
 				boolean r = file.renameTo(new File(newFileName));
