@@ -8,12 +8,14 @@ import com.iteye.wwwcomy.lxn.utils.DateUtil;
 /**
  * iphone照片的文件名处理,把文件名之前加上修改时间/创建时间
  * 
+ * 不递归处理所有子目录，仅单层
+ * 
  * @author wwwcomy
  *
  */
 public class IPhoneResourceRenamer {
 
-	public final static String FOLDER_NAME = "E:\\iphone视频20160521\\";
+	public final static String FOLDER_NAME = "E:\\iphone视频20160809\\";
 
 	public static void main(String[] args) throws Exception {
 		new IPhoneResourceRenamer().beginTask();
@@ -27,14 +29,20 @@ public class IPhoneResourceRenamer {
 		}
 		File[] files = folder.listFiles();
 		for (File file : files) {
-			System.out.println(file.getName());
-			long lastModifyTime = file.lastModified();
-			Date date = new Date(lastModifyTime);
-			String sDate = DateUtil.format(date, "YYYY-mm-DD");
-			String filePath = file.getCanonicalPath().substring(0, file.getCanonicalPath().lastIndexOf("\\"));
-			String newFileName = filePath + "/" + sDate + "-" + file.getName();
-			boolean r = file.renameTo(new File(newFileName));
-			System.out.println(r + "-->" + filePath + " has been moved to:" + newFileName);
+			if (!file.isDirectory()) {
+				System.out.println(file.getName());
+				long lastModifyTime = file.lastModified();
+				Date date = new Date(lastModifyTime);
+				String sDate = DateUtil.format(date, "YYYY-mm-DD");
+				if (file.getName().startsWith(sDate)) {
+					System.err.println("The file has already been named by the modified date");
+					continue;
+				}
+				String filePath = file.getCanonicalPath().substring(0, file.getCanonicalPath().lastIndexOf("\\"));
+				String newFileName = filePath + "/" + sDate + "-" + file.getName();
+				boolean r = file.renameTo(new File(newFileName));
+				System.out.println(r + "-->" + filePath + " has been moved to:" + newFileName);
+			}
 		}
 
 	}
