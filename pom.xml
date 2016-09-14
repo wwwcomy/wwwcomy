@@ -225,6 +225,11 @@
 			<artifactId>jsoup</artifactId>
 			<version>1.7.2</version>
 		</dependency>
+		<dependency>
+		    <groupId>com.miglayout</groupId>
+		    <artifactId>miglayout-swing</artifactId>
+		    <version>4.2</version>
+		</dependency>
 
 	</dependencies>
 	<!-- <repositories> <repository> <id>maven2-repository.dev.java.net</id> 
