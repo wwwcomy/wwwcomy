@@ -11,13 +11,14 @@ import java.util.List;
  * @author Liuxn
  */
 public final class ThreadPool {
-	
-	private static class HOLDER{
+
+	private static class HOLDER {
 		private static final ThreadPool instance = new ThreadPool();
 	}
-	
+
 	/* 单例 */
-	private static ThreadPool instance = HOLDER.instance;
+	// 这里不该声明的，不然ThreadPool初始化时候就会初始化内部类，getInstance应该直接返回内部类里面的instance
+	// private static ThreadPool instance = HOLDER.instance;
 
 	public static final int SYSTEM_BUSY_TASK_COUNT = 150;
 	/* 默认池中线程数 */
@@ -47,7 +48,7 @@ public final class ThreadPool {
 	}
 
 	public static ThreadPool getInstance() {
-		return instance;
+		return HOLDER.instance;
 	}
 
 	/**
