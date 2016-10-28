@@ -3,7 +3,6 @@ package com.iteye.wwwcomy;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
-import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -40,8 +39,8 @@ public class ShuangSeQiu {
 				// System.out.println("第" + outerCounter + "次随机数:" +
 				// randomList);
 				// }
-				if (!randomList.equals(list)) {
-					if (counter > 0) {
+				if (!equalsIgnoreOrder(randomList, list)) {
+					if (counter > 2) {
 						System.out.println("第" + counter + "次匹配失败,比对结果如下,重置ing");
 						System.out.println("随机数字:" + randomList);
 						System.out.println("第" + counter + "期的结果:" + list);
@@ -113,6 +112,17 @@ public class ShuangSeQiu {
 		}
 
 		return output;
+	}
+
+	private boolean equalsIgnoreOrder(List<String> list1, List<String> list2) {
+		if (list1.size() != list2.size())
+			return false;
+		for (String s : list1) {
+			if (!list2.contains(s)) {
+				return false;
+			}
+		}
+		return true;
 	}
 
 }
