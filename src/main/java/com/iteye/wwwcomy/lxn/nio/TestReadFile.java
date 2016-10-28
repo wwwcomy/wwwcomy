@@ -8,6 +8,13 @@ import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
 
+/**
+ * A very good NIO start tutorial:
+ * http://www.ibm.com/developerworks/cn/education/java/j-nio/
+ * 
+ * @author wwwcomy
+ *
+ */
 public class TestReadFile {
 
 	public static void main(String[] args) throws IOException {
@@ -55,18 +62,4 @@ public class TestReadFile {
 		}
 	}
 	
-	public void nIOCopy() throws IOException {
-		FileInputStream fis = null;
-		try {
-			File inputFile = new File("d:/niotest/test.txt");
-			fis = new FileInputStream(inputFile);
-			FileChannel c = fis.getChannel();
-			ByteBuffer buffer = ByteBuffer.allocate(1024);
-			c.read(buffer);
-			System.out.println(new String(buffer.array()));
-		} catch (Exception e) {
-			e.printStackTrace();
-		} finally {
-		}
-	}
 }
