@@ -4,6 +4,8 @@ import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import javax.swing.JTextArea;
+
 /**
  * iphone照片的文件名处理,把文件名之前加上修改时间/创建时间
  * 
@@ -17,11 +19,11 @@ public class IPhoneResourceRenamer {
 	public final static String FOLDER_NAME = "F:\\iphone视频\\";
 
 	public static void main(String[] args) throws Exception {
-		new IPhoneResourceRenamer().beginTask();
+		new IPhoneResourceRenamer().beginTask(null, FOLDER_NAME);
 	}
 
-	private void beginTask() throws Exception {
-		File folder = new File(FOLDER_NAME);
+	public void beginTask(JTextArea jta, String folderName) throws Exception {
+		File folder = new File(folderName);
 		if (!folder.exists() || !folder.isDirectory()) {
 			System.err.println("Folder not right!");
 			return;
@@ -30,21 +32,37 @@ public class IPhoneResourceRenamer {
 		File[] files = folder.listFiles();
 		for (File file : files) {
 			if (!file.isDirectory()) {
-				System.out.println(file.getName());
-				long lastModifyTime = file.lastModified();
-				Date date = new Date(lastModifyTime);
-				String sDate = sdf.format(date);
-				if (file.getName().startsWith(sDate)) {
-					System.err.println("The file has already been named by the modified date");
-					continue;
+				String fileSuffix = getFileSuffix(file);
+				// only handle the mov files and jpg files
+				if ("mov".equalsIgnoreCase(fileSuffix) || "jpg".equalsIgnoreCase(fileSuffix)) {
+					printOut(jta, file.getName());
+					long lastModifyTime = file.lastModified();
+					Date date = new Date(lastModifyTime);
+					String sDate = sdf.format(date);
+					if (file.getName().startsWith(sDate)) {
+						printOut(jta, "The file has already been named by the modified date");
+						continue;
+					}
+					String filePath = file.getCanonicalPath().substring(0, file.getCanonicalPath().lastIndexOf("\\"));
+					String newFileName = filePath + "/" + sDate + "-" + file.getName();
+					boolean r = file.renameTo(new File(newFileName));
+					printOut(jta, r + "-->" + filePath + " has been moved to:" + newFileName);
 				}
-				String filePath = file.getCanonicalPath().substring(0, file.getCanonicalPath().lastIndexOf("\\"));
-				String newFileName = filePath + "/" + sDate + "-" + file.getName();
-				boolean r = file.renameTo(new File(newFileName));
-				System.out.println(r + "-->" + filePath + " has been moved to:" + newFileName);
 			}
 		}
+	}
 
+	private String getFileSuffix(File file) {
+		String fileName = file.getName();
+		return fileName.substring(fileName.lastIndexOf(".") + 1);
+	}
+
+	private void printOut(JTextArea jta, String output) {
+		if (jta != null) {
+			jta.append(output + "\n");
+		} else {
+			System.out.println(output);
+		}
 	}
 
 }
