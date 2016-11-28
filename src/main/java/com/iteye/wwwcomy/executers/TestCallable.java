@@ -8,14 +8,17 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
 /**
+ * 测试Callable接口和使用ExecutorService去运行, Future.get() method will block the calling
+ * Thread, wait until the "Callable" thread returns the result
+ * 
  * @author wwwcomy
  * 
- *         测试Callable接口和使用ExecutorService去运行
  */
 public class TestCallable {
 	public static void main(String[] args) throws Throwable {
+		System.err.println("Test Single Callable");
 		ExecutorService exec = testSingle();
-
+		System.err.println("Test List Callable");
 		testCircle(exec);
 
 		exec.shutdown();
@@ -40,6 +43,7 @@ public class TestCallable {
 
 	/**
 	 * callable 使用Executors.submit方法开启线程
+	 * 
 	 * @return
 	 * @throws InterruptedException
 	 * @throws ExecutionException
@@ -71,6 +75,7 @@ class MyCall implements Callable<Integer> {
 		for (int i = 0; i < 10; i++) {
 			start++;
 		}
+		Thread.sleep(100);
 		return start;
 	}
 
