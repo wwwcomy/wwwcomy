@@ -7,8 +7,12 @@ public class TestSort {
 		// quickSort1(testArray, 0, testArray.length);
 		int[] result = mergeSort(testArray);
 		System.out.println("------------");
-		for (int a : result)
+		for (int a : result) {
 			System.out.print(a + " ");
+		}
+		System.out.println("------------");
+
+		selectSort(new int[] { 4, 7, 2, 13, 100, 1515, 51, 31, 52, 76, 23, 1, 88 });
 	}
 
 	/**
@@ -55,29 +59,38 @@ public class TestSort {
 				}
 			}
 		}
-		for (int a : array)
+		System.out.println("The result of bubble sort is:");
+		for (int a : array) {
 			System.out.print(a + "  ");
+		}
 	}
 
 	/**
-	 * 选择排序，每次选择最小的一个放在最前面
+	 * 选择排序，每次选择最小/大的一个放在最前面。
+	 * 和冒泡排序的区别在于，选择排序不需要每次比较都进行交换，但是比较次数的复杂度和冒泡排序是一样的,依旧是O(N^2)
 	 * 
 	 * @param array
 	 */
 	public static void selectSort(int[] array) {
 		int length = array.length;
-		int tmp;
+		int temp;
 		for (int i = 0; i < length - 2; i++) {
+			int tmpIndex = i;
 			for (int j = i + 1; j <= length - 1; j++) {
-				if (array[i] > array[j]) {
-					tmp = array[i];
-					array[i] = array[j];
-					array[j] = tmp;
+				if (array[tmpIndex] > array[j]) {
+					tmpIndex = j;
 				}
 			}
+			if (tmpIndex != i) {
+				temp = array[i];
+				array[i] = array[tmpIndex];
+				array[tmpIndex] = temp;
+			}
 		}
-		for (int a : array)
+		System.out.println("The result of select sort is:");
+		for (int a : array) {
 			System.out.print(a + "  ");
+		}
 	}
 
 	public static void quickSort(int[] a, int lo0, int hi0) {
