@@ -72,6 +72,19 @@ public class BinaryTreeNode {
 		return sb.toString();
 	}
 
+	/**
+	 * 后序遍历
+	 * 
+	 * @return 先序遍历结果
+	 */
+	String postOrderTraversal() {
+		StringBuilder sb = new StringBuilder();
+		traversalSubTree(this.getLeft(), sb, 3);
+		traversalSubTree(this.getRight(), sb, 3);
+		sb.append(this.value.toString());
+		return sb.toString();
+	}
+
 	private void traversalSubTree(BinaryTreeNode binaryTreeNode, StringBuilder sb, int mode) {
 		if (binaryTreeNode == null)
 			return;
@@ -80,7 +93,7 @@ public class BinaryTreeNode {
 		} else if (mode == 2) {
 			sb.append(binaryTreeNode.inOrderTraversal());
 		} else if (mode == 3) {
-			// sb.append(binaryTreeNode.postOrderTraversal());
+			sb.append(binaryTreeNode.postOrderTraversal());
 		}
 	}
 
@@ -108,5 +121,6 @@ public class BinaryTreeNode {
 		I.setRight(J);
 		System.out.println(A.preOrderTraversal());
 		System.out.println(A.inOrderTraversal());
+		System.out.println(A.postOrderTraversal());
 	}
 }
