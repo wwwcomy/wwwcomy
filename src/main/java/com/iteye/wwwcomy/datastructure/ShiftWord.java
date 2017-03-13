@@ -23,9 +23,8 @@ public class ShiftWord {
 		doArr2(c, c.length);
 	}
 
-	@SuppressWarnings({ "rawtypes" })
-	private static void arrange(char[] chars) {
-		List result = doArr(chars, chars.length);
+	public static void arrange(char[] chars) {
+		List<char[]> result = doArr(chars, chars.length);
 		int i = 1;
 		for (Object o : result) {
 			System.out.print(i++ + " ");
@@ -44,9 +43,8 @@ public class ShiftWord {
 	 * @param size
 	 * @return
 	 */
-	@SuppressWarnings({ "unchecked", "rawtypes" })
-	private static List doArr(char[] chars, int size) {
-		ArrayList list = new ArrayList();
+	private static List<char[]> doArr(char[] chars, int size) {
+		List<char[]> list = new ArrayList<char[]>();
 		if (size == 1) {
 			list.add(chars);
 			return list;
@@ -59,7 +57,7 @@ public class ShiftWord {
 			if (i < chars.length - 1) {
 				System.arraycopy(chars, i + 1, innerInput, i, chars.length - i - 1);
 			}
-			List innerResult = doArr(innerInput, size - 1);
+			List<char[]> innerResult = doArr(innerInput, size - 1);
 			// with the recursive calculated results, we should add that result
 			// as a suffix of the previous chars[i]
 			for (Object o : innerResult) {
