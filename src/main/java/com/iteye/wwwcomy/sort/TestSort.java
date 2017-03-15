@@ -175,6 +175,12 @@ public class TestSort {
 		}
 	}
 
+	/**
+	 * 按大小顺序依次融合两个数组中的每一个元素
+	 * @param a1
+	 * @param a2
+	 * @return
+	 */
 	private static int[] merge(int[] a1, int[] a2) {
 		int[] result = new int[a1.length + a2.length];
 		int i = 0;
