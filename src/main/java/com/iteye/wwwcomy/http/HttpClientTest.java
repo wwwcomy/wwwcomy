@@ -40,7 +40,7 @@ public class HttpClientTest {
 		ResponseHandler responseHandler = new BasicResponseHandler();
 		String responseBody;
 		try {
-			responseBody = client.execute(get, responseHandler);
+			responseBody = client.execute(get, responseHandler).toString();
 			System.out.println(responseBody);
 		} catch (Throwable e) {
 			// TODO Auto-generated catch block
@@ -64,7 +64,7 @@ public class HttpClientTest {
 			httpPost.setEntity(new UrlEncodedFormEntity(params, "UTF-8"));
 			ResponseHandler responseHandler = new BasicResponseHandler();
 			String responseBody;
-			responseBody = client.execute(httpPost, responseHandler);
+			responseBody = client.execute(httpPost, responseHandler).toString();
 			System.out.println(responseBody);
 		} catch (ClientProtocolException e) {
 			// TODO Auto-generated catch block
