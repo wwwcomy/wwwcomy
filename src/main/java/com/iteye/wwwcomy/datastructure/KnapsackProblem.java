@@ -10,40 +10,55 @@ public class KnapsackProblem {
 
 	public static void main(String[] args) {
 		int weight = 20;
-		int[] objects = new int[] { 11, 8, 7, 6, 5 };
-		solve(weight, objects);
+		int[] objects = new int[] { 11, 8, 7, 6, 5, 22, 33 };
+		solution1(weight, objects);
 	}
 
-	private static int[] solve(int weight, int[] objects) {
+	/**
+	 * My first solution, ugly and only can find one best solution.
+	 * 
+	 * @param weight
+	 * @param objects
+	 * @return
+	 */
+	private static boolean solution1(int weight, int[] objects) {
 		if (objects.length == 1) {
 			if (weight - objects[0] == 0) {
-				System.out.println("got the answer");
-				return objects;
+				System.out.println("got the answer:" + objects[0]);
+				return true;
 			} else if (weight - objects[0] > 0) {
-				return null;
+				System.out.println("-----");
+				return false;
 				// not the best answer
 			} else {
-				return null;
+				System.out.println("-----");
+				return false;
 				// ignore as the object's weight is too high
 			}
 		}
 		for (int i = 0; i < objects.length; i++) {
-
 			int nextTargetWeight = weight - objects[i];
 			if (nextTargetWeight < 0) {
 				int[] tmp = new int[objects.length - 1];
 				System.arraycopy(objects, 1, tmp, 0, objects.length - 1);
-				solve(weight, tmp);
+				boolean result = solution1(weight, tmp);
+				if (result) {
+					return result;
+				}
 			} else if (nextTargetWeight == 0) {
 				System.out.println("one best solution:" + objects[i]);
-				return null;
+				return true;
 			} else if (nextTargetWeight > 0) {
 				int[] tmp = new int[objects.length - 1];
 				System.arraycopy(objects, 1, tmp, 0, objects.length - 1);
-				solve(nextTargetWeight, tmp);
+				boolean result = solution1(nextTargetWeight, tmp);
+				if (result) {
+					System.out.println(objects[i]);
+					return result;
+				}
 			}
 		}
-		return null;
+		return false;
 	}
 
 }
