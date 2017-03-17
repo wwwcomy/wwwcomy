@@ -1,18 +1,35 @@
 package com.iteye.wwwcomy.sort;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class TestSort {
 
 	public static void main(String[] args) {
 		int[] testArray = { 4, 7, 2, 13, 100, 1515, 51, 31, 52, 76, 23, 1, 88 };
 		// quickSort1(testArray, 0, testArray.length);
 		int[] result = mergeSort(testArray);
-		System.out.println("------------");
+		System.out.println("mergeSort:");
 		for (int a : result) {
 			System.out.print(a + " ");
 		}
+		System.out.println();
 		System.out.println("------------");
 
+		System.out.println("selectSort:");
 		selectSort(new int[] { 4, 7, 2, 13, 100, 1515, 51, 31, 52, 76, 23, 1, 88 });
+		System.out.println();
+		System.out.println("------------");
+
+		System.out.println("shellSort:");
+		shellSort(new int[] { 4, 7, 2, 13, 100, 1515, 51, 31, 52, 76, 23, 1, 88 });
+		System.out.println();
+		System.out.println("------------");
+
+		System.out.println("shellSort1:");
+		shellSort1(new int[] { 4, 7, 2, 13, 100, 1515, 51, 31, 52, 76, 23, 1, 88 });
+		System.out.println();
+		System.out.println("------------");
 	}
 
 	/**
@@ -40,6 +57,96 @@ public class TestSort {
 		for (int a : array) {
 			System.out.print(a + "  ");
 		}
+	}
+
+	public static void shellSort1(int[] data) {
+		// 计算出最大的h值
+		int h = 1;
+		while (h <= data.length / 3) {
+			h = h * 3 + 1;
+		}
+		while (h > 0) {
+			for (int i = h; i < data.length; i += h) {
+				if (data[i] < data[i - h]) {
+					int tmp = data[i];
+					int j = i - h;
+					while (j >= 0 && data[j] > tmp) {
+						data[j + h] = data[j];
+						j -= h;
+					}
+					data[j + h] = tmp;
+				}
+			}
+			// 计算出下一个h值
+			h = (h - 1) / 3;
+		}
+		for (int i : data) {
+			System.out.print(i + " ");
+		}
+	}
+
+	/**
+	 * 希尔排序，原理基于插入排序，但是引入了新的“间隔排序”原则，这意味着原本在普通插入排序要移动很多位的操作在希尔排序中的前面几次排序就已经移动好了
+	 * 
+	 * @param is
+	 */
+	private static void shellSort(int[] array) {
+		// get the interval array, at least one condition: the last element of
+		// the array should be 1
+		int[] stepArray = getIntervalArray(array);
+		// for (int h : stepArray) {
+		// System.out.print(h + " ");
+		// }
+
+		for (int k = 0; k < stepArray.length; k++) {
+			int h = stepArray[k];
+			int tmp;
+			// the below logic remains nearly the same as insertSort. Only the
+			// steps are different. Step h will come from big values to small
+			// ones(1)
+			for (int i = h; i < array.length; i = i + h) {
+				tmp = array[i];
+				if (tmp < array[i - h]) {
+					for (int j = i - h; j >= 0; j = j - h) {
+						if (tmp < array[j]) {
+							array[j + h] = array[j];
+							array[j] = tmp;
+						} else {
+							break;
+						}
+					}
+				}
+			}
+		}
+
+		for (int i : array) {
+			System.out.print(i + " ");
+		}
+	}
+
+	/**
+	 * Get the interval array of 'h' sequence,usually use the 'Knuth sequence'
+	 * known as 1,4,13,40,121,364... h=h*3+1
+	 * 
+	 * @param is
+	 * @return
+	 */
+	private static int[] getIntervalArray(int[] is) {
+		List<Integer> list = new ArrayList<>();
+		int h = 1;
+		list.add(h);
+		while (h <= is.length / 3) {
+			h = h * 3 + 1;
+			list.add(h);
+		}
+		// change the list to array...
+		int[] s = new int[list.size()];
+		int j = 0;
+		for (Integer i : list) {
+			s[j] = i;
+			j++;
+		}
+		return s;
 	}
 
 	/**
@@ -177,6 +284,7 @@ public class TestSort {
 
 	/**
 	 * 按大小顺序依次融合两个数组中的每一个元素
+	 * 
 	 * @param a1
 	 * @param a2
 	 * @return
