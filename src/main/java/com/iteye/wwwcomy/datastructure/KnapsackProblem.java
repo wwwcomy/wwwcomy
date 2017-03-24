@@ -1,7 +1,7 @@
 package com.iteye.wwwcomy.datastructure;
 
 /**
- * 背包问题
+ * 背包问题, use the dynamic programming (2 dimension arrays)
  * 
  * @author wwwcomy
  *

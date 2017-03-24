@@ -30,6 +30,12 @@ public class TestSort {
 		shellSort1(new int[] { 4, 7, 2, 13, 100, 1515, 51, 31, 52, 76, 23, 1, 88 });
 		System.out.println();
 		System.out.println("------------");
+
+		System.out.println("quickSort1:");
+		int[] arr1 = new int[] { 4, 7, 2, 13, 100, 1515, 51, 31, 52, 76, 23, 1, 88 };
+		quickSort1(arr1, 0, arr1.length);
+		System.out.println();
+		System.out.println("------------");
 	}
 
 	/**
@@ -198,38 +204,6 @@ public class TestSort {
 		for (int a : array) {
 			System.out.print(a + "  ");
 		}
-	}
-
-	public static void quickSort(int[] a, int lo0, int hi0) {
-		int lo = lo0;
-		int hi = hi0;
-		if (lo >= hi)
-			return;
-		// 确定指针方向的逻辑变量
-		boolean transfer = true;
-
-		while (lo != hi) {
-			if (a[lo] > a[hi]) {
-				// 交换数字
-				int temp = a[lo];
-				a[lo] = a[hi];
-				a[hi] = temp;
-				// 决定下标移动，还是上标移动
-				transfer = (transfer == true) ? false : true;
-			}
-
-			// 将指针向前或者向后移动
-			if (transfer)
-				hi--;
-			else
-				lo++;
-		}
-
-		// 将数组分开两半，确定每个数字的正确位置
-		lo--;
-		hi++;
-		quickSort(a, lo0, lo);
-		quickSort(a, hi, hi0);
 	}
 
 	public static void quickSort1(int[] a, int start, int last) {
