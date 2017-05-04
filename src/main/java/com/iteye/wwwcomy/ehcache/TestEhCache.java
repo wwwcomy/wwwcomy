@@ -9,8 +9,7 @@ import net.sf.ehcache.Element;
 /**
  * EhCache Hello World. @see TestEhCache2 to find using EhCache in cluster mode.
  * 
- * @author xingnan.liu, Wincor Nixdorf International GmbH
- * @version $Revision$
+ * @author xingnan.liu
  */
 public class TestEhCache {
 

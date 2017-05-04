@@ -1,15 +1,3 @@
-/*
- * Copyright (c) 2009 Wincor Nixdorf International GmbH,
- * Heinz-Nixdorf-Ring 1, 33106 Paderborn, Germany
- * All Rights Reserved.
- *
- * This software is the confidential and proprietary information
- * of Wincor Nixdorf ("Confidential Information"). You shall not
- * disclose such Confidential Information and shall use it only in
- * accordance with the terms of the license agreement you entered
- * into with Wincor Nixdorf.
- */
-
 package com.iteye.wwwcomy.lxn.utils;
 
 import java.io.ByteArrayInputStream;

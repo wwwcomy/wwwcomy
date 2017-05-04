@@ -10,8 +10,7 @@ import net.sf.ehcache.Element;
  * For updating element in cache. when running TestEhCache2 with listener, run TestEhcache then TestEhCche3, then we
  * could see the output.
  * 
- * @author xingnan.liu, Wincor Nixdorf International GmbH
- * @version $Revision$
+ * @author xingnan.liu
  */
 public class TestEhCache3 {
 

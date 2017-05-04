@@ -76,7 +76,9 @@ public class TestC3P0OnNP3 {
             props.put("minPoolSize", 5);
             props.put("maxStatements", 0);
             props.put("testConnectionOnCheckin", false);
-            dsProView = DataSources.pooledDataSource(DataSources.unpooledDataSource(url, "pv4240_new", "Wincor2008"),
+            String userName = "user";
+            String password = "password";
+            dsProView = DataSources.pooledDataSource(DataSources.unpooledDataSource(url, userName, password),
                     props);
             conn = dsProView.getConnection();
             return conn;
