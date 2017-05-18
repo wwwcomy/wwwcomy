@@ -56,11 +56,18 @@ class MinHeap {
 		int i = 0;
 		int tmp = 0;
 		while (i < queue.length) {
+			// Heap is a kind of binary tree, it is different from binary search
+			// tree, the left child does not necessarily need to be lower than
+			// the parent node, neither does the right child.
+
+			// Heap is usually implemented by an array, the 2*i+1 is the left
+			// child, 2*i+2 is the right child of the current node.
 			int left = 2 * i + 1;
 			int right = 2 * i + 2;
 			if (left > queue.length - 1)
 				return;
-			if (queue[i] <= queue[left])
+			// In a min heap, the root must be smaller than its child nodes
+			if (queue[i] <= queue[left] && queue[i] <= queue[right])
 				return;
 			if (queue[i] > queue[left] || queue[i] > queue[right]) {
 				if (queue[left] < queue[right]) {

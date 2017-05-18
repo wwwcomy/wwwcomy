@@ -2,6 +2,12 @@ package com.iteye.wwwcomy;
 
 import java.io.File;
 
+/**
+ * Rename downloaded resources..
+ * 
+ * @author wwwcomy
+ *
+ */
 public class BatchRename {
 	public static void main(String[] args) {
 		rename("E:\\音乐\\BillBorad Top 100\\Billboard Top 100 of 2005");

@@ -1,4 +1,5 @@
 package com.iteye.wwwcomy;
+
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -17,7 +18,13 @@ import javax.swing.JTextField;
 
 import net.miginfocom.swing.MigLayout;
 
-public class MainFrame {
+/**
+ * GUI for resource renamer
+ * 
+ * @author wwwcomy
+ *
+ */
+public class MainFrameForResourceRenamer {
 
 	public static void main(String[] args) {
 		MyFrame frame = new MyFrame("Resource Renamer");
