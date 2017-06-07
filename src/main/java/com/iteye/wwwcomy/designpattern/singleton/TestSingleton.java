@@ -8,7 +8,7 @@ package com.iteye.wwwcomy.designpattern.singleton;
  */
 public class TestSingleton {
 
-	private static TestSingleton instance = null;
+	private static volatile TestSingleton instance = null;
 
 	/**
 	 * 原始的单例方法
@@ -34,6 +34,8 @@ public class TestSingleton {
 	}
 
 	private static TestSingleton syncGetInstance() {
+		// be aware of the volatile key word
+		// http://www.importnew.com/18126.html
 		synchronized (TestSingleton.class) {
 			if (instance == null) {
 				instance = new TestSingleton();
