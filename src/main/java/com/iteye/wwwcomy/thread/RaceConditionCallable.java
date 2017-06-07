@@ -57,8 +57,10 @@ public class RaceConditionCallable implements Callable<Boolean> {
 
 	@Override
 	public Boolean call() throws Exception {
-		for (int i = 0; i < 500000; i++)
+		for (int i = 0; i < 500000; i++){
 			counter.add(1);
+		}
+		System.out.println("Calling cb.await()");
 		cb.await();
 		return true;
 	}
