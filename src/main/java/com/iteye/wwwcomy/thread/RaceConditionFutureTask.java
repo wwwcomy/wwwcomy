@@ -9,9 +9,11 @@ import java.util.concurrent.FutureTask;
  * @author wwwcomy
  * 
  */
-public class RaceConditionFutureTask implements Callable<Boolean> {
+public class RaceConditionFutureTask implements Callable<Integer> {
 	Counter2 counter;
 	static CyclicBarrier cb = null;
+
+	int i = 0;
 
 	RaceConditionFutureTask() {
 	}
@@ -35,23 +37,30 @@ public class RaceConditionFutureTask implements Callable<Boolean> {
 			}
 		});
 
-		Thread t1 = new Thread(new FutureTask<>(new RaceConditionFutureTask(counter)));
-		Thread t2 = new Thread(new FutureTask<>(new RaceConditionFutureTask(counter)));
+		FutureTask<Integer> task1 = new FutureTask<>(new RaceConditionFutureTask(counter));
+		FutureTask<Integer> task2 = new FutureTask<>(new RaceConditionFutureTask(counter));
+		Thread t1 = new Thread(task1);
+		Thread t2 = new Thread(task2);
 		t1.start();
 		t2.start();
 
 		// 这句可以在其他线程结束之前就已经执行了
 		System.out.println(counter.count);
+		// 在futureTask线程未执行完之前，get方法会阻塞当前线程
+		System.out.println(task1.get());
+		System.out.println(task2.get());
 	}
 
 	@Override
-	public Boolean call() throws Exception {
+	public Integer call() throws Exception {
 		for (int i = 0; i < 500000; i++) {
 			counter.add(1);
+			this.i++;
 		}
 		System.out.println("Calling cb.await()");
 		cb.await();
-		return true;
+		Thread.sleep(1000);
+		return this.i;
 	}
 }
 
