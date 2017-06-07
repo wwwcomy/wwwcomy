@@ -11,8 +11,7 @@ package com.iteye.wwwcomy.designpattern.visitor;
  * 具体元素：Engine,Body...(被访问的具体类，抽象元素的实现类)
  * 结构对象：Car(实际上这货也可以是个具体元素，他其中包含了基本数据结构不会改变的元素，比如车肯定由轮子、发动机什么的构成)
  * 
- * @author xingnan.liu, Wincor Nixdorf International GmbH
- * @version $Revision$
+ * @author xingnan.liu
  */
 public class TestMain {
     public static void main(String[] args) {

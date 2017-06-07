@@ -13,8 +13,7 @@ import org.apache.commons.dbcp.BasicDataSourceFactory;
 /**
  * DBCP Test Code
  *
- * @author   xingnan.liu, Wincor Nixdorf International GmbH
- * @version  $Revision$
+ * @author   xingnan.liu
  */
 public class TestDBCP {
     static DataSource dataSource;
@@ -24,8 +23,10 @@ public class TestDBCP {
         try {
             prop.put("driverClassName", "oracle.jdbc.driver.OracleDriver");
             prop.put("url", "jdbc:oracle:thin:@192.168.1.135:1521:orcl");
-            prop.put("username", "pv4240_new");
-            prop.put("password", "Wincor2008");
+            String userName = "user";
+            String password = "password";
+            prop.put("username", userName);
+            prop.put("password", password);
             dataSource = BasicDataSourceFactory.createDataSource(prop);
         } catch (Exception e) {
             e.printStackTrace();

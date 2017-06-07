@@ -793,10 +793,9 @@ public class DateUtil implements Serializable {
 
 	/**
 	 * 将日期类型转化为字符串类型
-	 * 
-	 * @param timeStr
-	 * @param sFormat
-	 * @return String
+	 * @param date
+	 * @param sFormat yyyy-MM-dd HH:mm:ss
+	 * @return
 	 */
 	public static String format(java.util.Date date, String sFormat) {
 		sFormat = sFormat == null ? "yyyy-MM-dd" : sFormat;
