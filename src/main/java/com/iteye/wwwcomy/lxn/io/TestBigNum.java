@@ -68,7 +68,7 @@ public class TestBigNum {
 		FileReader fr = new FileReader(filepath + "\\12114.txt");
 		BufferedReader br = new BufferedReader(fr); // 读取获取整行数据
 		int i = 1;
-		LinkedList WriterLists = new LinkedList(); // 初始化文件流对象集合
+		LinkedList<FileWriter> WriterLists = new LinkedList<FileWriter>(); // 初始化文件流对象集合
 		for (int j = 1; j <= CountFile; j++) {
 
 			// 声明对象
@@ -81,7 +81,7 @@ public class TestBigNum {
 		while (br.ready()) {
 
 			int count = 1;// 初始化第一文件流
-			for (Iterator iterator = WriterLists.iterator(); iterator.hasNext();) {
+			for (Iterator<FileWriter> iterator = WriterLists.iterator(); iterator.hasNext();) {
 				FileWriter type = (FileWriter) iterator.next();
 				if (i == count)// 判断轮到第几个文件流写入数据了
 				{
@@ -101,7 +101,7 @@ public class TestBigNum {
 		fr.close();
 
 		// 遍历关闭所有子文件流
-		for (Iterator iterator = WriterLists.iterator(); iterator.hasNext();) {
+		for (Iterator<FileWriter> iterator = WriterLists.iterator(); iterator.hasNext();) {
 			FileWriter object = (FileWriter) iterator.next();
 			object.close();
 		}
@@ -109,9 +109,9 @@ public class TestBigNum {
 
 	// 把每个文件的数据进行排序
 	public static void singleFileDataSort(String path1, int CountFile) throws IOException {
-		LinkedList nums = null;
+		LinkedList<Integer> nums = null;
 		for (int i = 1; i <= CountFile; i++) {
-			nums = new LinkedList();
+			nums = new LinkedList<Integer>();
 			String path = path1 + "\\12" + i + ".txt";
 			try {
 				FileReader fr = new FileReader(path);

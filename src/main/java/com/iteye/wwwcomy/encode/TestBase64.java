@@ -9,6 +9,7 @@ import sun.misc.BASE64Encoder;
  * @author wwwcomy
  * 
  */
+@SuppressWarnings("restriction")
 public class TestBase64 {
 
 	public static void main(String[] args) throws Exception {

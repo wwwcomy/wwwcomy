@@ -13,8 +13,9 @@ public class ChatServer {
 	List<SocketDealer> list = new LinkedList<SocketDealer>();
 
 	public void begin() {
+		ServerSocket sSocket = null;
 		try {
-			ServerSocket sSocket = new ServerSocket(8888);
+			sSocket = new ServerSocket(8888);
 			System.out.println("Server Started...");
 			while (true) {
 				Socket s = sSocket.accept();
@@ -29,7 +30,13 @@ public class ChatServer {
 				}
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+		} finally {
+			if (sSocket != null) {
+				try {
+					sSocket.close();
+				} catch (IOException e) {
+				}
+			}
 		}
 	}
 
@@ -46,8 +53,7 @@ public class ChatServer {
 
 		private void sendMsg(String msg) throws IOException {
 			for (SocketDealer sDealer : list) {
-				DataOutputStream dos = new DataOutputStream(
-						sDealer.s.getOutputStream());
+				DataOutputStream dos = new DataOutputStream(sDealer.s.getOutputStream());
 				dos.writeUTF(msg);
 				dos.flush();
 			}

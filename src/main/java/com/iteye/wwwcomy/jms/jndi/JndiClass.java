@@ -29,7 +29,7 @@ public class JndiClass {
 	}
 
 	public static void testSimple() {
-		Hashtable env = new Hashtable();
+		Hashtable<String, String> env = new Hashtable<String, String>();
 
 		String name = "C:/aaa.txt";
 		try {

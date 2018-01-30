@@ -13,7 +13,7 @@ public class JndiContainer {
 
 	public void init() throws Exception {
 		//context初始化 文件管理
-		Hashtable env = new Hashtable();
+		Hashtable<String, String> env = new Hashtable<String, String>();
 		env.put(Context.INITIAL_CONTEXT_FACTORY,
 				"com.sun.jndi.fscontext.RefFSContextFactory");
 		env.put(Context.PROVIDER_URL, "file:/c:/sample");

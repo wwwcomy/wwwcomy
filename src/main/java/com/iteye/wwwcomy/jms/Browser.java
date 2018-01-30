@@ -64,7 +64,7 @@ public class Browser {
             // start the connection
             connection.start();
 
-            Enumeration messages = browser.getEnumeration();
+            Enumeration<?> messages = browser.getEnumeration();
             while (messages.hasMoreElements()) {
                 Message message = (Message) messages.nextElement();
                 if (message instanceof TextMessage) {

@@ -39,5 +39,6 @@ public class AddrParser {
 
 		// now that rules and actions are configured, start the parsing process
 		AddrParser abp = (AddrParser) digester.parse(AddrParser.class.getClassLoader().getResourceAsStream("com/iteye/wwwcomy/digester/address.xml"));
+		System.out.println(abp);
 	}
 }
