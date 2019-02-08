@@ -16,7 +16,8 @@ import javax.swing.JTextArea;
  */
 public class IPhoneResourceRenamer {
 
-	public final static String FOLDER_NAME = "F:\\iphone视频\\";
+	public final static String FOLDER_NAME = "E:\\iphone视频\\";
+	public static String DATE_REG = "^\\d+-\\d+-\\d+-.*";
 
 	public static void main(String[] args) throws Exception {
 		new IPhoneResourceRenamer().beginTask(null, FOLDER_NAME);
@@ -39,7 +40,7 @@ public class IPhoneResourceRenamer {
 					long lastModifyTime = file.lastModified();
 					Date date = new Date(lastModifyTime);
 					String sDate = sdf.format(date);
-					if (file.getName().startsWith(sDate)) {
+					if (file.getName().startsWith(sDate) || file.getName().matches(DATE_REG)) {
 						printOut(jta, "The file has already been named by the modified date");
 						continue;
 					}
@@ -50,6 +51,7 @@ public class IPhoneResourceRenamer {
 				}
 			}
 		}
+		printOut(jta, "====>Task Done!");
 	}
 
 	private String getFileSuffix(File file) {
