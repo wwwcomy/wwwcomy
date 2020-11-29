@@ -1,21 +1,15 @@
 package com.iteye.wwwcomy.leetcode;
 
-import java.util.Arrays;
-
 public class P080 {
 	public static void main(String[] args) {
-		int[] nums = new int[] { 1, 1, 1, 2, 2, 3 };
-		System.out.println(removeDuplicates(nums));
-		System.out.println(Arrays.toString(nums));
-		nums = new int[] { 0, 0, 1, 1, 1, 1, 2, 3, 3 };
-		System.out.println(removeDuplicates(nums));
-		System.out.println(Arrays.toString(nums));
-		nums = new int[] { 1, 1, 1, 2, 2, 2, 3, 3 };
-		System.out.println(removeDuplicates(nums));
-		System.out.println(Arrays.toString(nums));
-		nums = new int[] { 1, 1, 1, 1, 2, 2, 2, 2, 3, 3, 3 };
-		System.out.println(removeDuplicates(nums));
-		System.out.println(Arrays.toString(nums));
+		System.out.println(Math.pow(16, 0.25));
+		double d = (double) Math.pow(2, 0.1);
+		System.out.println(d);
+		System.out.println(Math.pow(1.07, 10));
+		System.out.println(Math.pow(1.9672, 0.1));
+		System.out.println(Math.pow(1.0958, 10));
+		System.out.println(Math.pow(2.5, 0.1));
+
 	}
 
 	public static int removeDuplicates(int[] nums) {
